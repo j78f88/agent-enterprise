@@ -1,0 +1,122 @@
+# project.config.yml — copy this file, rename to project.config.yml, fill in your values.
+# Then run: python3 init.py --config project.config.yml
+# Output lands in resolved/ — copy to .github/ when done.
+
+project:
+  name: "My Project"
+  language: "TypeScript"           # Primary language — used in compliance checklist
+  framework: "React + Vite"        # Framework — used in compliance checklist
+  locale: "en-AU"                  # Spelling convention used by @docs (en-AU, en-US, etc.)
+  namespace: "@org"                # Monorepo package namespace (e.g. @myorg) — used by @reviewer for import order rules
+
+paths:
+  # Sprint planning
+  sprints: "sprints/"              # Directory containing per-sprint PLAN.md and RETRO.md folders
+  sprints_doc: "SPRINTS.md"        # Root-level sprint status tracking file
+  web_app_dir: "apps/web"         # Web app root directory — used by @a11y and @perf for build commands
+  drafts: "docs/planning/drafts/"
+  archive: "docs/archive/"
+  validation: "docs/planning/validation/"
+  research: "docs/planning/research/"
+  handoffs: "docs/planning/_handoffs/"
+  engagements: "docs/planning/engagements/"
+  vision: "docs/planning/vision/"
+  # Backlog files
+  backlog_ledger: "docs/planning/BACKLOG_LEDGER.md"
+  bug_backlog: "docs/planning/BUG_BACKLOG.md"
+  bugs_screenshots: "docs/planning/bugs/screenshots/"
+  rejections: "docs/planning/HANDOFF_REJECTIONS.md"
+  non_goals: "docs/NON_GOALS.md"
+  # Planning docs
+  roadmap: "docs/planning/ROADMAP.md"
+  feature_matrix: "docs/planning/FEATURE_MATRIX.md"
+  # Architecture docs
+  decisions: "docs/architecture/DECISIONS.md"
+  future_considerations: "docs/architecture/FUTURE_CONSIDERATIONS.md"
+  design_reviews: "docs/architecture/design-reviews/"
+  architecture_doc: "docs/development/ARCHITECTURE.md"
+  # Development docs
+  technical_debt: "docs/development/TECHNICAL_DEBT.md"
+  testing_doc: "docs/development/TESTING.md"
+  # User-facing docs
+  user_guide: "docs/user/USER_GUIDE.md"
+  releases: "docs/user/RELEASES.md"
+  changelog: "docs/user/changelog.json"
+  changelog_deploy_copy: "apps/web/public/changelog.json"   # Where changelog is copied at deploy time
+  package_json: "apps/web/package.json"                     # File containing version number
+  # Agent tooling
+  copilot_instructions: ".github/copilot-instructions.md"
+  instructions_dir: ".github/instructions"                  # Used by @reviewer to reference instruction files
+  memory_architecture: ".claude/memory/architecture.md"
+  memory_conventions: ".claude/memory/conventions.md"
+
+quality:
+  # Coverage thresholds — store packages and web/app components use separate thresholds
+  coverage_store_threshold: 80     # Store/library packages — gate blocks below this
+  coverage_web_threshold: 60       # App/web components — gate blocks below this
+  e2e_regression_threshold: 5      # % E2E failure rate that triggers CRITICAL
+  bundle_warning_kb: 200           # Single chunk warning threshold (web only)
+  bundle_critical_kb: 500          # Single chunk CRITICAL threshold (web only)
+  build_warning_seconds: 60        # Build time warning
+
+platform:
+  type: "azure-swa"                # azure-swa | vercel | github-pages | netlify | none
+  test_workflow: "deploy-test.yml" # Workflow filename used in gh run list --workflow
+  prod_workflow: "deploy-prod.yml"
+  ci_workflow_display_name: "Azure Static Web Apps CI/CD"  # Display name shown in GitHub Actions UI
+  test_url: "https://your-app-test.azurestaticapps.net"
+  prod_url: "https://your-app.azurestaticapps.net"
+  e2e_runner: "playwright"         # playwright | cypress | pytest | none
+
+git:
+  main_branch: "master"            # Production branch (main or master)
+  develop_branch: "develop"        # Integration branch
+
+ids:
+  bug_prefix: "BUG"
+  item_prefix: "ITEM"
+  rejection_prefix: "REJ"
+  engagement_prefix: "ENG"
+  adr_prefix: "ADR"
+
+escalation:
+  # Item deferral thresholds
+  def_p0_threshold: 3              # Def >= this → P0 mandatory inclusion next sprint
+  def_kill_threshold: 5            # Def >= this → must resolve or kill
+  age_stale_sprints: 10            # Age >= this sprints → stale warning
+  # Debt health by sprint count
+  debt_warning_sprints: 3          # Sprints with debt growth before warning
+  debt_escalate_sprints: 5         # Sprints with debt growth before escalation
+  # Debt health by item count
+  debt_warning_items: 20           # Open debt items before warning
+  debt_escalate_items: 40          # Open debt items before escalation
+  debt_min_allocation_percent: 30  # Minimum % of sprint capacity reserved for debt
+  # Sprint composition
+  sprint_size_min: 5
+  sprint_size_max: 8
+  feature_cap_percent: 70          # Maximum % of sprint that can be new features
+  p0_overflow_percent: 50          # If P0 items exceed this % of capacity, offer overflow relief options
+
+scope_upgrade:
+  task_count: 3                    # taskCount above this triggers scope upgrade check
+  files_affected: 8                # filesAffected above this triggers scope upgrade check
+
+commands:
+  install: "pnpm install"
+  dev: "pnpm dev"
+  test: "pnpm test"
+  typecheck: "pnpm typecheck"
+  lint: "pnpm lint"
+  build: "pnpm build"
+  e2e: "pnpm test:e2e"
+  coverage: "pnpm test:coverage"
+  coverage_store: "pnpm test:coverage"   # Override for store/library package coverage (e.g. pnpm --filter @org/store test:coverage)
+  coverage_web: "pnpm test:coverage"     # Override for web/app coverage (e.g. pnpm --filter @org/web test:coverage)
+  depcheck: "npx depcheck --json"        # Used by @perf for dependency audit
+  # Cross-platform ISO timestamp — used by @sprint-lead for phase timing.
+  # Do NOT use Get-Date (PowerShell/Windows only).
+  # Windows PowerShell alternative: powershell -Command "Get-Date -Format o"
+  timestamp: "date -u +\"%Y-%m-%dT%H:%M:%SZ\""
+
+team:
+  cto_name: "Your Name"            # Used in commit approval markers: (approved by <cto_name> YYYY-MM-DD)

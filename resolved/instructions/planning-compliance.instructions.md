@@ -1,0 +1,21 @@
+---
+description: "Use when reviewing draft plans for architecture compliance, checking sprint plans against project conventions, or validating technical design decisions."
+applyTo: "docs/planning/drafts/**"
+---
+
+# Planning Compliance Checklist
+
+Before presenting any draft plan, self-check against these project rules:
+
+- **Factory pattern** — All stores use `createXStore(storage)`, never instantiate directly
+- **Store versioning** — All persisted stores have `version` + `migrate` for schema evolution
+- **ISO date strings** — All dates are ISO strings for JSON safety, never Date objects
+- **Tailwind-only** — No inline styles, no CSS modules
+- **TypeScript strict** — No `any` types in new code
+- **Testing** — 80% coverage for stores, 60% for components; specify test types needed
+- **Security** — Input validation, safe data storage, sanitized exports
+- **Accessibility** — aria labels, keyboard navigation, focus traps for modals
+- **Import order** — React → External → `@org/*` → Relative
+- **Design tokens** — Never hardcode color values (no `bg-purple-500`), use token classes
+
+Output findings as a **Compliance Notes** section in the draft plan.
