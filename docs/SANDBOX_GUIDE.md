@@ -11,8 +11,10 @@ Phase 3 sandboxing provides:
 - **Isolation**: Tasks run in Docker containers
 - **Resource limits**: CPU, memory, disk, time constraints
 - **Network policies**: Control external access
-- **Capability framework**: Fine-grained permissions
+- **Capability framework**: Fine-grained permissions (read file, write dir, network access)
 - **Audit trail**: All denied operations logged
+
+**What is a capability?** A capability is a specific permission granted to a task (e.g., "read files in src/", "write to docs/", "access npmjs.com"). Tasks start with zero capabilities; you grant only what's needed.
 
 ---
 

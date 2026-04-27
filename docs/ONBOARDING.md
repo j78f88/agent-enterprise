@@ -14,7 +14,7 @@ Step-by-step setup for a new project consuming agent-homebase.
 
 ## Step 1 — Choose your skills
 
-Not every project needs all eleven skills. Pick the ones that match your workflow:
+Each skill is a specialized agent role (e.g., `@planner` drafts sprint plans, `@qa` runs tests, `@reviewer` checks code). You don't need all of them—pick the ones your team uses. Below, "minimum viable" = solo/small teams; optional = add as you grow.
 
 **Minimum viable set (solo / small team):**
 `planner`, `sprint-lead`, `qa`, `reviewer`, `bug`
@@ -40,13 +40,17 @@ You can install all eleven and let the skill descriptions handle routing — ski
 
 ## Step 2 — Install the library
 
-**Option A — Git submodule (recommended, gives you upgrade path):**
+**Option A — Git submodule (recommended):**
+
+Links the library as a separate repo. You get updates via `git submodule update --remote`. Keeps your repo clean and upgradeable.
 
 ```bash
 git submodule add https://github.com/j78f88/agent-homebase.git skills-library
 ```
 
 **Option B — One-time copy:**
+
+Copies files once. No auto-updates, but simpler setup if you don't plan to upgrade.
 
 ```bash
 git clone https://github.com/j78f88/agent-homebase.git skills-library
@@ -66,7 +70,9 @@ cp profiles/react-web-app.config.yml project.config.yml
 # or: cp profiles/monorepo-fullstack.config.yml project.config.yml
 ```
 
-Open `project.config.yml` and fill in every `FIXME` value. The key fields to get right:
+Open `project.config.yml` and fill in every `FIXME` value. **If you skip this step, agents won't run correctly** - the system will show which values are missing (marked with ⚠) when you run `init.py`.
+
+The key fields to get right:
 
 - `paths.*` — where your planning docs live
 - `commands.*` — your actual test/build/lint commands

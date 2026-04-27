@@ -1,6 +1,8 @@
 # Skill Execution Flow
 
-How agent-homebase skills orchestrate work. This document shows execution sequences, dependencies, and the FSM state machine.
+How agent-homebase skills orchestrate work. This document shows execution sequences, dependencies, and sprint state transitions.
+
+**Why thin orchestration?** Single-purpose skills avoid context exhaustion. Each agent focuses on one job (planning, QA, review). `@sprint-lead` coordinates without reading source code, keeping its context window free for orchestration logic.
 
 ---
 
@@ -38,14 +40,14 @@ sequenceDiagram
     User->>SL: "run Sprint N" or "autopilot Sprint N"
     
     rect rgb(240, 248, 255)
-        Note over SL: Phase 1: Kickoff
+        Note over SL: Stage 1: Kickoff
         SL->>SL: Read PLAN.md
         SL->>SL: Build task list
         SL->>SL: Commit: "docs: Sprint N — kick off"
     end
     
     rect rgb(255, 250, 240)
-        Note over SL,SUB: Phase 2: Implementation
+        Note over SL,SUB: Stage 2: Implementation
         loop For each task
             SL->>SUB: Delegate task
             SUB-->>SL: Return: files changed, summary
@@ -54,7 +56,7 @@ sequenceDiagram
     end
     
     rect rgb(240, 255, 240)
-        Note over SL,QA: Phase 3: Quality Gates
+        Note over SL,QA: Stage 3: Quality Gates
         SL->>QA: Run quality pipeline
         QA-->>SL: typecheck, lint, test, coverage results
         alt Coverage < threshold
@@ -65,7 +67,7 @@ sequenceDiagram
     end
     
     rect rgb(255, 240, 245)
-        Note over SL,RV: Phase 4: Code Review
+        Note over SL,RV: Stage 4: Code Review
         SL->>RV: Review all changes
         RV-->>SL: Findings + recommendations
         alt Has CRITICAL findings
@@ -76,7 +78,7 @@ sequenceDiagram
     end
     
     rect rgb(240, 240, 255)
-        Note over SL,DOCS: Phase 5: Documentation
+        Note over SL,DOCS: Stage 5: Documentation
         SL->>DOCS: Update docs
         DOCS-->>SL: Docs updated
         opt A11Y gate enabled
@@ -91,7 +93,7 @@ sequenceDiagram
     end
     
     rect rgb(255, 255, 240)
-        Note over SL: Phase 6: Retrospective
+        Note over SL: Stage 6: Retrospective
         SL->>SL: Write RETRO.md
         SL->>SL: Update SPRINTS.md
         SL->>SL: Commit: "docs: Sprint N — retrospective"
@@ -127,25 +129,25 @@ stateDiagram-v2
     SHIPPED --> [*]
     
     note right of PLANNING
-        Phase 1: Kickoff
+        Stage 1: Kickoff
         Read PLAN.md
         Build task list
     end note
     
     note right of IMPLEMENTATION
-        Phase 2: Implementation
+        Stage 2: Implementation
         Delegate to subagents
         One commit per task
     end note
     
     note right of VALIDATION
-        Phase 3-4: Quality + Review
+        Stage 3-4: Quality + Review
         Run @qa, @reviewer
         Fix loop if needed
     end note
     
     note right of SHIPPED
-        Phase 5-6: Docs + Retro
+        Stage 5-6: Docs + Retro
         Update docs, write RETRO.md
         Push to remote
     end note

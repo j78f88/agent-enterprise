@@ -22,6 +22,64 @@ agent-homebase uses [Open Policy Agent (OPA)](https://www.openpolicyagent.org/) 
 
 ---
 
+## When Policies Run
+
+Policies are enforced at three points:
+
+1. **Config validation** (during `init.py`): Security policy validates file paths don't use path traversal
+2. **Pre-sprint composition** (before `@sprint-lead` execution): Composition policy validates feature/bug balance meets constraints
+3. **Runtime command validation** (before `@qa` runs commands): Security policy validates commands against whitelist
+
+**Violation behavior**: 
+- Config validation violations **block** initialization (exit with error)
+- Composition violations **warn** and log to sprint plan (execution continues)
+- Command violations **block** command execution (sprint status becomes `blocked`)
+
+---
+
+## Rego Primer
+
+If you're new to Rego, here are the key concepts used in our policies:
+
+### Basic Syntax
+
+**`violation[msg]`** — Defines a rule that triggers a policy violation. If the conditions inside the block are true, the violation fires.
+
+**`sprintf()`** — Formats strings with placeholders. Example: `sprintf("Value is %v", [myValue])` produces `"Value is 42"`.
+
+**`regex.match()`** — Tests if a string matches a pattern. Example: `regex.match("^rm ", cmd)` checks if `cmd` starts with "rm ".
+
+**`contains()`** — Checks if a string contains a substring. Example: `contains(path, "../")` checks for path traversal.
+
+**`input.*`** — References fields from the JSON input passed to the policy. Example: `input.composition[_]` iterates over the composition array.
+
+**`[_]`** — Array iterator. `input.composition[_]` means "for each item in the composition array".
+
+### Example Policy Explained
+
+```rego
+# Rule: Command must not contain semicolons (command chaining)
+violation[msg] {
+    contains(input.command, ";")  # Condition: if command contains ";"
+    
+    msg := sprintf(
+        "COMMAND_CHAINING: %s contains semicolon",
+        [input.command]
+    )
+}
+```
+
+If you run this policy with `{"command": "npm test; rm -rf /"}`, it returns:
+```json
+{
+  "violation": ["COMMAND_CHAINING: npm test; rm -rf / contains semicolon"]
+}
+```
+
+For more, see the [OPA documentation](https://www.openpolicyagent.org/docs/latest/policy-language/).
+
+---
+
 ## Composition Policy
 
 ### Priority Ordering

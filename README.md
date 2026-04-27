@@ -1,6 +1,6 @@
 # agent-homebase
 
-A portable skills library for software delivery. Eleven agent skills covering product validation, sprint planning, execution, quality gates, and documentation — extracted from real delivery methodology and designed to work in any project via a single config file.
+A reusable skills library with 11 specialized agent roles (product validation, sprint planning, QA, code review, architecture, and more) extracted from professional delivery teams. Drop into any project via a single config file—copy the skills you need, fill in your `project.config.yml`, and invoke agents directly. No workflow modification required.
 
 Works in **GitHub Copilot (VS Code)** and **Claude Code / Cowork** without modification.
 
@@ -10,7 +10,7 @@ Works in **GitHub Copilot (VS Code)** and **Claude Code / Cowork** without modif
 
 | Skill | Role |
 |-------|------|
-| `pm` | Validates features using a 5-test echo-chamber filter |
+| `pm` | Validates features through 5 structured tests to prevent scope creep and misalignment |
 | `planner` | Scopes requirements and drafts sprint plans |
 | `sprint-lead` | Orchestrates sprint execution end-to-end |
 | `qa` | Runs typecheck, lint, tests, coverage, and E2E |

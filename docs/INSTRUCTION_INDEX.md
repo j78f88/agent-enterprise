@@ -37,7 +37,7 @@ Located in `instructions/generic/`. These enforce cross-project standards and do
 
 ## Configurable Instructions
 
-Located in `instructions/configurable/`. These contain `{{tokens}}` that are resolved by `init.py` using your `project.config.yml`.
+Located in `instructions/configurable/`. These instructions contain template variables (e.g., `{{paths.backlog_ledger}}`, `{{quality.coverage_threshold}}`) that `init.py` replaces with project-specific values from your `project.config.yml`. This allows instructions to reference your actual file paths, commands, and thresholds without modification.
 
 | File | Required | Purpose | Key Tokens Used |
 |------|----------|---------|-----------------|

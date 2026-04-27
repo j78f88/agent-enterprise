@@ -72,6 +72,24 @@ Four phases add capabilities incrementally:
 
 **Why?** Not every project needs full durability. Start simple, add phases as needed.
 
+### When to Use Each Phase
+
+**Phase 0** (Security): Always required. Protects against dangerous commands and path traversal.
+
+**Phase 1** (Contracts): Always required. Ensures agents return predictable data for orchestration.
+
+**Phase 2** (Durability): Use for sprints longer than 4 hours or when interruptions are likely. Enables checkpoint/resume.
+- **Skip if**: Short sprints (<1 hour), disposable work
+- **Use if**: Multi-day sprints, unstable network, need audit trail
+
+**Phase 3** (Sandboxing): Use when running untrusted code or limiting resource usage.
+- **Skip if**: Trusted codebase, local development only
+- **Use if**: CI/CD pipelines, unknown dependencies, resource quotas required
+
+**Phase 4** (Determinism): Use when reproducibility is critical (debugging, audits, compliance).
+- **Skip if**: Results don't need to be bit-for-bit identical
+- **Use if**: Regulatory requirements, troubleshooting non-deterministic failures
+
 ---
 
 ## Why 4 Phases?
@@ -210,6 +228,31 @@ Returns with multiple artifacts, metadata, provenance. Used by orchestrators.
 - Tier 1 agents shouldn't need to specify artifact paths
 - Tier 3 metadata is irrelevant for simple validations
 - Validation can be stricter when tier is known
+
+### When to Use Each Tier
+
+**Use Tier 1** when:
+- Agent performs analysis only (no files created)
+- Returns findings, recommendations, or validation results
+- Examples: `@pm` validating requirements, `@qa` checking coverage, `@reviewer` suggesting improvements
+
+**Use Tier 2** when:
+- Agent creates **one** artifact (document, code file, report)
+- Artifact needs to be tracked for downstream processing
+- Examples: `@planner` creating draft plan, `@docs` updating README, `@bug` writing bug report
+
+**Use Tier 3** when:
+- Agent orchestrates multiple subagents
+- Need to track provenance (which subagents ran, how many retries)
+- Need metadata (duration, commit count, coverage delta)
+- Examples: `@sprint-lead` completing sprint, `@architect` generating multi-file solution
+
+**Decision matrix**:
+| Created Files | Orchestrates Others | Recommended Tier |
+|---------------|---------------------|------------------|
+| 0 | No | Tier 1 |
+| 1 | No | Tier 2 |
+| 0+ | Yes | Tier 3 |
 
 ---
 

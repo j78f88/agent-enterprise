@@ -60,12 +60,19 @@ paths:
   memory_conventions: ".claude/memory/conventions.md"
 
 quality:
-  coverage_store_threshold: 85
-  coverage_web_threshold: 70
-  e2e_regression_threshold: 3
-  bundle_warning_kb: 150
-  bundle_critical_kb: 400
-  build_warning_seconds: 45
+  # Code coverage thresholds (percentage) - @qa validates against these
+  coverage_store_threshold: 85   # Backend/store layer minimum coverage
+  coverage_web_threshold: 70     # Frontend/UI layer minimum coverage
+  
+  # E2E regression tolerance - max failed tests before blocking
+  e2e_regression_threshold: 3    # If >3 E2E tests fail, sprint blocks
+  
+  # Bundle size alerts (kilobytes) - @perf checks against these
+  bundle_warning_kb: 150         # Warning threshold for bundle size
+  bundle_critical_kb: 400        # Critical threshold - blocks if exceeded
+  
+  # Build performance (seconds)
+  build_warning_seconds: 45      # Warn if build takes >45 seconds
 
 platform:
   type: "vercel"
@@ -81,25 +88,33 @@ git:
   develop_branch: "develop"
 
 ids:
-  bug_prefix: "BUG"
-  item_prefix: "TM"
-  rejection_prefix: "REJ"
-  engagement_prefix: "ENG"
-  adr_prefix: "ADR"
+  # Prefixes for generated IDs in planning documents
+  bug_prefix: "BUG"              # Bug IDs: BUG-001, BUG-002...
+  item_prefix: "TM"              # Backlog item IDs: TM-001, TM-002...
+  rejection_prefix: "REJ"        # Rejection IDs: REJ-001, REJ-002...
+  engagement_prefix: "ENG"       # Engagement IDs: ENG-001, ENG-002...
+  adr_prefix: "ADR"              # Architecture Decision Record IDs
 
 escalation:
-  def_p0_threshold: 3
-  def_kill_threshold: 5
-  age_stale_sprints: 8
-  debt_warning_sprints: 2
-  debt_escalate_sprints: 4
-  debt_warning_items: 15
-  debt_escalate_items: 30
-  debt_min_allocation_percent: 25
-  sprint_size_min: 4
-  sprint_size_max: 7
-  feature_cap_percent: 65
-  p0_overflow_percent: 40
+  # Defect thresholds - how many defects trigger escalation
+  def_p0_threshold: 3            # Escalate if ≥3 P0 bugs exist
+  def_kill_threshold: 5          # Kill sprint if ≥5 critical defects
+  
+  # Sprint age limits (number of sprints)
+  age_stale_sprints: 8           # Mark sprint stale if inactive for 8 sprints
+  
+  # Technical debt tracking
+  debt_warning_sprints: 2        # Warn if debt unaddressed for 2 sprints
+  debt_escalate_sprints: 4       # Escalate if debt unaddressed for 4 sprints
+  debt_warning_items: 15         # Warn if ≥15 debt items exist
+  debt_escalate_items: 30        # Escalate if ≥30 debt items exist
+  debt_min_allocation_percent: 25  # Minimum % of sprint capacity for debt
+  
+  # Sprint composition constraints
+  sprint_size_min: 4             # Minimum items per sprint
+  sprint_size_max: 7             # Maximum items per sprint
+  feature_cap_percent: 65        # Max % of sprint allocated to features
+  p0_overflow_percent: 40        # Allow P0s to overflow feature cap by this %
 
 scope_upgrade:
   task_count: 4

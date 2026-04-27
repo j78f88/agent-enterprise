@@ -159,16 +159,17 @@ SECURITY: Potential secret found in config value
 
 ---
 
-## FSM / State Issues
+## Sprint State Issues
 
 ### ❌ "Invalid state transition from X to Y"
 
-**Cause:** The FSM orchestrator received an unexpected phase change.
+**Cause:** Your sprint tried to jump between phases out of order.
 
 **Solution:**
-1. Check `{{paths.sprints_doc}}` for the current sprint status
-2. Valid transitions: INITIAL → PLANNING → APPROVED → IMPLEMENTATION → COMPLETE → VALIDATION → PASSED → SHIPPED
-3. Manually update the sprint status if needed
+1. Check your sprint's PLAN.md for the current status line
+2. Sprints follow this sequence: Planning → Implementation → Quality/Review → Documentation → Shipped
+3. If the sprint is in an unexpected state, manually edit the status line in PLAN.md to match reality
+4. See [SKILL_FLOW.md](SKILL_FLOW.md) for the full state diagram
 
 ---
 
