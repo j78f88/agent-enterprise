@@ -4,6 +4,11 @@ Single source of truth for all backlog item status. Detail and context live in B
 
 | ID | Type | Source | Age | Def | Sprint | Status | Blocked | Draft | Notes |
 |----|------|--------|-----|-----|--------|--------|---------|-------|-------|
+| ITEM-001 | feature | User feedback | 0 | 0 | 1 | open | | drafts/auth-flow.md | OAuth integration |
+| ITEM-002 | bug | BUG-001 | 1 | 0 | 1 | assigned | | | Login redirect broken |
+| ITEM-003 | debt | Code review | 2 | 1 | 2 | open | Waiting on ITEM-001 | | Refactor auth module |
+| ITEM-004 | feature | Roadmap | 0 | 0 | — | open | | | Dashboard widgets |
+| ITEM-005 | carry-over | Sprint 1 | 1 | 1 | 2 | assigned | | | API rate limiting |
 
 <!-- 
 Column guide:

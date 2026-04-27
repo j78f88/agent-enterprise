@@ -130,6 +130,51 @@ Create `.github/copilot-instructions.md` with project-level context: what the pr
 
 ---
 
+## Step 9 — Verify your setup
+
+Run these checks to confirm everything is working:
+
+### 9.1 Check resolved files exist
+
+```bash
+# Skills should be in place
+ls ../.github/agents/
+# Expected: architect/ bug/ docs/ a11y/ perf/ planner/ pm/ qa/ reviewer/ researcher/ sprint-lead/
+
+# Instructions should be in place
+ls ../.github/instructions/
+# Expected: Multiple .instructions.md files
+```
+
+### 9.2 Verify no unresolved tokens
+
+```bash
+# Search for leftover {{tokens}} — should return nothing
+grep -r "{{" ../.github/agents/ ../.github/instructions/ || echo "✓ No unresolved tokens"
+```
+
+### 9.3 Test the library (optional but recommended)
+
+```bash
+cd skills-library
+pytest tests/ -v
+# Expected: All tests pass (69+ tests)
+```
+
+### 9.4 Quick smoke test
+
+In VS Code with Copilot Chat:
+1. Open your project (not the skills-library)
+2. Type `@planner` and hit Enter
+3. If the agent responds, your setup is working
+
+**Troubleshooting:** If the agent isn't found:
+- Reload VS Code: `Ctrl+Shift+P` → "Developer: Reload Window"
+- Check files are in the correct location (`.github/agents/`, not `.github/skills/`)
+- See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for common issues
+
+---
+
 ## Upgrading
 
 When the library is updated:

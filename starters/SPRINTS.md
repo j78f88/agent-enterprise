@@ -1,23 +1,63 @@
 # Sprint Tracking
 
-**Current: Sprint 1** — Planning
+**Current: Sprint 2** — In Progress
 
 ---
 
-## Sprint 1 — [Title]
+## Sprint 2 — Authentication Improvements
 
-**Status:** Planning
-**Type:** Feature | Bug | Debt | Mixed
-**Started:** YYYY-MM-DD
+**Status:** In Progress  
+**Type:** Mixed (Feature + Bug)  
+**Started:** 2026-04-27  
 **Completed:** —
 
 ### Goals
 
-- [ ] Goal 1
+- [x] Fix Safari login redirect (BUG-001)
+- [ ] Implement API rate limiting
+- [ ] Add session timeout handling
 
 ### Tasks
 
-- [ ] Task 1
+- [x] Diagnose Safari cookie issue
+- [x] Update OAuth callback handler
+- [ ] Add rate limit middleware
+- [ ] Implement graceful session expiry
+- [ ] Write integration tests
+
+### Notes
+
+- Safari fix merged in PR #142
+- Rate limiting blocked on Redis setup
+
+---
+
+## Sprint 1 — Initial Setup
+
+**Status:** Complete  
+**Type:** Feature  
+**Started:** 2026-04-15  
+**Completed:** 2026-04-22
+
+### Goals
+
+- [x] Set up project scaffolding
+- [x] Configure CI/CD pipeline
+- [x] Implement basic authentication
+
+### Tasks
+
+- [x] Initialize monorepo structure
+- [x] Configure ESLint + Prettier
+- [x] Set up GitHub Actions
+- [x] Implement OAuth login flow
+- [x] Add user session management
+
+### Retro Summary
+
+- **Velocity:** 5 story points
+- **Carry-over:** 1 item (API rate limiting)
+- **Process notes:** Need to allocate time for infrastructure setup
 
 ---
 

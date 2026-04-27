@@ -1,0 +1,144 @@
+# Example Project Configuration
+#
+# This is a FILLED-IN example showing real values for a React + TypeScript monorepo.
+# Copy this to project.config.yml and adjust for your project.
+#
+# Run: python3 init.py --config project.config.yml
+
+project:
+  name: "Task Manager Pro"
+  language: "TypeScript"
+  framework: "React + Vite"
+  locale: "en-US"
+  namespace: "@taskmanager"
+
+paths:
+  # Sprint planning
+  sprints: "sprints/"
+  sprints_doc: "SPRINTS.md"
+  web_app_dir: "apps/web"
+  drafts: "docs/planning/drafts/"
+  archive: "docs/archive/"
+  validation: "docs/planning/validation/"
+  research: "docs/planning/research/"
+  handoffs: "docs/planning/_handoffs/"
+  engagements: "docs/planning/engagements/"
+  vision: "docs/planning/vision/"
+  
+  # Backlog files
+  backlog_ledger: "docs/planning/BACKLOG_LEDGER.md"
+  bug_backlog: "docs/planning/BUG_BACKLOG.md"
+  bugs_screenshots: "docs/planning/bugs/screenshots/"
+  rejections: "docs/planning/HANDOFF_REJECTIONS.md"
+  non_goals: "docs/NON_GOALS.md"
+  
+  # Planning docs
+  roadmap: "docs/planning/ROADMAP.md"
+  feature_matrix: "docs/planning/FEATURE_MATRIX.md"
+  
+  # Architecture docs
+  decisions: "docs/architecture/DECISIONS.md"
+  future_considerations: "docs/architecture/FUTURE_CONSIDERATIONS.md"
+  design_reviews: "docs/architecture/design-reviews/"
+  architecture_doc: "docs/development/ARCHITECTURE.md"
+  
+  # Development docs
+  technical_debt: "docs/development/TECHNICAL_DEBT.md"
+  testing_doc: "docs/development/TESTING.md"
+  
+  # User-facing docs
+  user_guide: "docs/user/USER_GUIDE.md"
+  releases: "docs/user/RELEASES.md"
+  changelog: "docs/user/changelog.json"
+  changelog_deploy_copy: "apps/web/public/changelog.json"
+  package_json: "apps/web/package.json"
+  
+  # Agent tooling
+  copilot_instructions: ".github/copilot-instructions.md"
+  instructions_dir: ".github/instructions"
+  memory_architecture: ".claude/memory/architecture.md"
+  memory_conventions: ".claude/memory/conventions.md"
+
+quality:
+  coverage_store_threshold: 85
+  coverage_web_threshold: 70
+  e2e_regression_threshold: 3
+  bundle_warning_kb: 150
+  bundle_critical_kb: 400
+  build_warning_seconds: 45
+
+platform:
+  type: "vercel"
+  test_workflow: "preview.yml"
+  prod_workflow: "production.yml"
+  ci_workflow_display_name: "Vercel Preview"
+  test_url: "https://taskmanager-preview.vercel.app"
+  prod_url: "https://taskmanager.app"
+  e2e_runner: "playwright"
+
+git:
+  main_branch: "main"
+  develop_branch: "develop"
+
+ids:
+  bug_prefix: "BUG"
+  item_prefix: "TM"
+  rejection_prefix: "REJ"
+  engagement_prefix: "ENG"
+  adr_prefix: "ADR"
+
+escalation:
+  def_p0_threshold: 3
+  def_kill_threshold: 5
+  age_stale_sprints: 8
+  debt_warning_sprints: 2
+  debt_escalate_sprints: 4
+  debt_warning_items: 15
+  debt_escalate_items: 30
+  debt_min_allocation_percent: 25
+  sprint_size_min: 4
+  sprint_size_max: 7
+  feature_cap_percent: 65
+  p0_overflow_percent: 40
+
+scope_upgrade:
+  task_count: 4
+  files_affected: 10
+
+commands:
+  install: "pnpm install"
+  dev: "pnpm dev"
+  test: "pnpm test"
+  typecheck: "pnpm typecheck"
+  lint: "pnpm lint"
+  build: "pnpm build"
+  e2e: "pnpm test:e2e"
+  coverage: "pnpm test:coverage"
+  coverage_store: "pnpm --filter @taskmanager/store test:coverage"
+  coverage_web: "pnpm --filter @taskmanager/web test:coverage"
+  depcheck: "npx depcheck --json"
+  timestamp: "date -u +\"%Y-%m-%dT%H:%M:%SZ\""
+
+team:
+  cto_name: "Alex Chen"
+
+security:
+  audit_log_enabled: true
+  audit_log_path: ".agent-state/security-audit.jsonl"
+  secret_scanning: true
+  command_whitelist_enforced: true
+  path_validation: true
+  sandbox_enabled: false
+  supply_chain_verification: false
+
+observability:
+  enabled: true
+  backend: "none"
+  endpoint: ""
+  sample_rate: 1.0
+  log_level: "info"
+  event_log_path: ".agent-state/events.jsonl"
+  cost_tracking: false
+  metrics_port: 9090
+  session_replay: false
+  flame_graphs: false
