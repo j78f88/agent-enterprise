@@ -106,6 +106,36 @@ cp -r resolved/instructions/* ../.github/instructions/
 
 ---
 
+## Documentation
+
+| Guide | Description |
+|-------|-------------|
+| [ONBOARDING.md](docs/ONBOARDING.md) | Step-by-step setup guide |
+| [TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) | Common issues and solutions |
+| [SKILL_FLOW.md](docs/SKILL_FLOW.md) | Skill execution diagrams and FSM states |
+| [INSTRUCTION_INDEX.md](docs/INSTRUCTION_INDEX.md) | Master index of all 23 instruction files |
+| [ARCHITECTURE.md](docs/ARCHITECTURE.md) | Design decisions and rationale |
+| [CONTRIBUTING.md](docs/CONTRIBUTING.md) | How to add skills and instructions |
+
+### Phase Guides
+
+| Guide | Description |
+|-------|-------------|
+| [DETERMINISM_GUIDE.md](docs/DETERMINISM_GUIDE.md) | Lamport timestamps, prompt versioning, replay |
+| [CHECKPOINT_GUIDE.md](docs/CHECKPOINT_GUIDE.md) | Checkpoint-restart system |
+| [SANDBOX_GUIDE.md](docs/SANDBOX_GUIDE.md) | Container isolation and capabilities |
+| [MIGRATION_GUIDE.md](docs/MIGRATION_GUIDE.md) | Markdown to SQLite migration |
+
+### Examples
+
+| File | Description |
+|------|-------------|
+| [EXAMPLE_PROJECT_CONFIG.yml](docs/EXAMPLE_PROJECT_CONFIG.yml) | Filled-in config example |
+| [EXAMPLE_SPRINT_FLOW.md](docs/EXAMPLE_SPRINT_FLOW.md) | Complete sprint walkthrough |
+| [EXAMPLE_SKILL_OUTPUTS.md](docs/EXAMPLE_SKILL_OUTPUTS.md) | Sample return values per tier |
+
+---
+
 ## What's not included
 
 `@delivery-lead` — the engagement orchestration layer — is intentionally excluded. It represents a personal workflow preference sitting on top of these skills. Consuming projects build their own version, or none at all.

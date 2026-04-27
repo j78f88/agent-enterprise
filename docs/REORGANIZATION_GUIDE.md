@@ -238,8 +238,8 @@ The `init.py` script and resolved output structure remain unchanged.
 
 ## Questions?
 
-- See [docs/ONBOARDING.md](docs/ONBOARDING.md) for usage guide
-- See [docs/PHASE_4_IMPLEMENTATION_SUMMARY.md](docs/PHASE_4_IMPLEMENTATION_SUMMARY.md) for architecture details
+- See [ONBOARDING.md](ONBOARDING.md) for usage guide
+- See [PHASE_4_IMPLEMENTATION_SUMMARY.md](PHASE_4_IMPLEMENTATION_SUMMARY.md) for architecture details
 - Open an issue if you encounter import problems
 
 ---

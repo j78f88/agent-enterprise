@@ -265,6 +265,6 @@ pytest tests/ -v
 
 ## Cross-References
 
-- [TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) — General troubleshooting
-- [DETERMINISM_GUIDE.md](docs/DETERMINISM_GUIDE.md) — Writing deterministic tests
-- [CONTRIBUTING.md](docs/CONTRIBUTING.md) — Test requirements for contributions
+- [TROUBLESHOOTING.md](../docs/TROUBLESHOOTING.md) — General troubleshooting
+- [DETERMINISM_GUIDE.md](../docs/DETERMINISM_GUIDE.md) — Writing deterministic tests
+- [CONTRIBUTING.md](../docs/CONTRIBUTING.md) — Test requirements for contributions
