@@ -1,147 +1,349 @@
-# agent-homebase
+<div align="center">
 
-A reusable skills library with 11 specialized agent roles (product validation, sprint planning, QA, code review, architecture, and more) extracted from professional delivery teams. Drop into any project via a single config file—copy the skills you need, fill in your `project.config.yml`, and invoke agents directly. No workflow modification required.
+<h1>🏠 agent-homebase</h1>
 
-Works in **GitHub Copilot (VS Code)** and **Claude Code / Cowork** without modification.
+<h3>The operating system your AI coding assistant is missing</h3>
 
----
+<p><strong>11 agent roles · 23 governance rules · 1 config file · 5 minutes to ship better code</strong></p>
 
-## What's included
+[![GitHub stars](https://img.shields.io/github/stars/j78f88/agent-homebase?style=social)](https://github.com/j78f88/agent-homebase/stargazers)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Copilot](https://img.shields.io/badge/GitHub%20Copilot-Ready-blue?logo=github)](https://github.com/features/copilot)
+[![Claude](https://img.shields.io/badge/Claude%20Code-Ready-orange)](https://claude.ai)
 
-| Skill | Role |
-|-------|------|
-| `pm` | Validates features through 5 structured tests to prevent scope creep and misalignment |
-| `planner` | Scopes requirements and drafts sprint plans |
-| `sprint-lead` | Orchestrates sprint execution end-to-end |
-| `qa` | Runs typecheck, lint, tests, coverage, and E2E |
-| `reviewer` | Reviews code for patterns, security, and quality |
-| `architect` | Designs approaches and writes ADRs |
-| `researcher` | Surfaces external patterns with citations and failure modes |
-| `bug` | Captures bugs fast into a structured backlog |
-| `docs` | Maintains all project documentation post-sprint |
-| `a11y` | WCAG 2.1 AA accessibility audit |
-| `perf` | Bundle size, build time, and dependency audit |
+<br />
 
-Plus 18 supporting instruction files covering governance, escalation, severity, commit conventions, retrospective format, and more.
+**[Quick Start](#-quick-start)** · **[What You Get](#-what-you-get)** · **[Why This Works](#-why-it-works)** · **[Full Docs](docs/ONBOARDING.md)**
+
+<br />
 
 ---
 
-## Quick start
+*Copilot and Claude are powerful. But without structure, they're chaos machines.*  
+*agent-homebase turns your AI assistant into a professional delivery team.*
+
+---
+
+</div>
+
+## 🔥 The Problem Everyone Ignores
+
+You're using GitHub Copilot or Claude Code. They're fast. They're capable.
+
+**They also:**
+- Forget your project conventions after every session
+- Ship code without tests, reviews, or documentation
+- Require you to manually coordinate planning → coding → QA
+- Lose all learned patterns when context resets
+- Make inconsistent decisions across identical problems
+
+You have a **powerful tool** with **no process**. That's not engineering—that's gambling.
+
+---
+
+## 💡 The Solution: A Professional Delivery Team in Your Config
+
+**agent-homebase** is a battle-tested skills library extracted from real production teams.
+
+One config file transforms chaotic AI assistance into a structured software pipeline:
+
+```
+Your feature request
+        ↓
+   @planner      → Scopes requirements, estimates complexity
+        ↓
+   @pm           → Validates against project goals (prevents scope creep)
+        ↓
+   @sprint-lead  → Orchestrates full implementation cycle
+        ↓
+   @qa           → Enforces tests, coverage, linting (blocks failures)
+        ↓
+   @reviewer     → Catches security issues, anti-patterns, code smells
+        ↓
+   @docs         → Updates documentation automatically
+        ↓
+   Deployed code — tested, reviewed, documented
+```
+
+---
+
+## 🎯 What You Get
+
+### 11 Specialized Agent Roles
+
+| Agent | What It Does |
+|:------|:-------------|
+| 🎯 **@pm** | Validates features through 5 structured tests—prevents scope creep before code is written |
+| 📋 **@planner** | Scopes requirements, drafts sprint plans, estimates complexity |
+| 🎬 **@sprint-lead** | Orchestrates complete sprint execution with zero manual coordination |
+| ✅ **@qa** | Runs typecheck, lint, tests, coverage—blocks deploys on failures |
+| 🔍 **@reviewer** | Reviews for patterns, security, performance—flags issues by severity |
+| 🏗️ **@architect** | Designs approaches, writes ADRs, makes structural decisions |
+| 📚 **@researcher** | Surfaces prior art with citations, identifies failure modes |
+| 🐛 **@bug** | Captures bugs into structured, prioritized backlog |
+| 📖 **@docs** | Keeps documentation in sync after every sprint |
+| ♿ **@a11y** | WCAG 2.1 AA accessibility audits |
+| ⚡ **@perf** | Bundle size, build time, dependency analysis |
+
+### 23 Governance Rules
+
+- Commit message conventions  
+- Severity classification (CRITICAL / WARNING / SUGGESTION)  
+- Escalation paths for blocked work  
+- Quality gate thresholds  
+- Sprint retrospective format  
+- Handoff contracts between agents  
+- Security policies & validation  
+- *...and 16 more*
+
+### 3 Ready-to-Use Profiles
+
+| Profile | For |
+|:--------|:----|
+| **[react-web-app](profiles/react-web-app.config.yml)** | React + Vite single-page apps |
+| **[monorepo-fullstack](profiles/monorepo-fullstack.config.yml)** | TypeScript monorepo (pnpm + Vite + Expo) |
+| **[python-api](profiles/python-api.config.yml)** | FastAPI / Flask / Django backends |
+
+---
+
+## 📊 Before & After
+
+<table>
+<tr>
+<th width="50%">❌ Without agent-homebase</th>
+<th width="50%">✅ With agent-homebase</th>
+</tr>
+<tr>
+<td>
+
+```
+You: "Add user authentication"
+
+Agent: [writes 200 lines immediately]
+       • No tests
+       • Hardcodes API keys
+       • Uses deprecated patterns
+       • Forgets your Auth0 setup
+
+You: "Wait, we use Auth0..."
+
+Agent: [rewrites everything]
+       • Still no tests
+       • Documentation? What docs?
+```
+
+</td>
+<td>
+
+```
+You: "@planner add user auth"
+
+@planner: Scoped 4 tasks (~8 files)
+          Using Auth0 per config
+          Complexity: Medium
+
+You: "@sprint-lead run Sprint 12"
+
+@sprint-lead:
+  ✓ Implementation complete
+  ✓ Tests passing (91% coverage)
+  ✓ Security review: 0 criticals
+  ✓ Docs updated
+  ✓ Pushed to feature branch
+```
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🚀 Quick Start
+
+**Setup in 5 minutes:**
 
 ```bash
-# 1. Clone or install as a submodule
+# 1. Add to your project
 git submodule add https://github.com/j78f88/agent-homebase.git skills-library
 cd skills-library
 
-# 2. Copy and fill in the config
-cp config/project.config.example.yml project.config.yml
-# Edit project.config.yml with your paths, thresholds, and commands
+# 2. Choose your profile
+cp profiles/react-web-app.config.yml project.config.yml
+# Edit project.config.yml with your paths, commands, thresholds
 
-# 3. Run substitution
+# 3. Generate resolved files
 python3 init.py --config project.config.yml
 
-# 4. Copy output to your project
+# 4. Copy to your project
 cp -r resolved/skills/* ../.github/agents/
 cp -r resolved/instructions/* ../.github/instructions/
 
-# 5. Copy starter planning files (first-time setup only)
-cp starters/BACKLOG_LEDGER.md ../docs/planning/
-cp starters/BUG_BACKLOG.md ../docs/planning/
-cp starters/HANDOFF_REJECTIONS.md ../docs/planning/
+# 5. Initialize planning files (first time only)
 cp starters/SPRINTS.md ../
-cp starters/NON_GOALS.md ../docs/
-cp starters/memory-architecture.md ../.claude/memory/architecture.md
-cp starters/memory-conventions.md ../.claude/memory/conventions.md
+cp starters/BACKLOG_LEDGER.md ../docs/planning/
 ```
 
-See [docs/ONBOARDING.md](docs/ONBOARDING.md) for full step-by-step guidance.
+**Then use naturally:**
+```
+@planner scope the dark mode feature
+@sprint-lead run Sprint 3
+@qa check coverage for auth module
+@reviewer look at the last 3 commits
+```
+
+📖 **[Complete setup guide →](docs/ONBOARDING.md)**
 
 ---
 
-## Project Structure
+## 🧠 Why It Works
+
+### Thin Orchestration Architecture
+
+```
+@sprint-lead (coordinator)
+    │
+    ├── Reads plans
+    ├── Tracks state  
+    ├── Manages workflow
+    │
+    └── Delegates ALL implementation to:
+            ├── Unnamed subagents → write code
+            ├── @qa → validate quality
+            ├── @reviewer → check patterns
+            └── @docs → update documentation
+```
+
+**The secret:** `@sprint-lead` never reads source code. It coordinates. This keeps context windows clear for what actually matters.
+
+### Contract-First Design
+
+Every agent returns **structured data** following JSON schemas:
+
+```json
+{
+  "tier": 1,
+  "agent": "qa",
+  "status": "blocked",
+  "summary": "2/5 quality gates failed",
+  "blockerReason": "Coverage at 72% (threshold: 85%)",
+  "findings": [...]
+}
+```
+
+When `@qa` returns `status: blocked`, `@sprint-lead` knows exactly what to do. No guessing. No hallucinating.
+
+### Progressive Reliability (Optional)
+
+| Phase | Adds | When to Enable |
+|:------|:-----|:---------------|
+| **0-1** | Security validation, JSON Schema contracts | Always (default) |
+| **2** | SQLite checkpoints, resume from any point | Long sprints, unstable networks |
+| **3** | Docker sandboxing, resource limits | CI/CD, untrusted code |
+| **4** | Deterministic replay, Lamport timestamps | Compliance, debugging |
+
+Most projects only need Phase 0-1. Add phases as reliability requirements grow.
+
+📖 **[Architecture deep-dive →](docs/ARCHITECTURE.md)**
+
+---
+
+## 🤔 Is This For You?
+
+<table>
+<tr>
+<th>✅ Perfect fit</th>
+<th>❌ Not for you</th>
+</tr>
+<tr>
+<td>
+
+- You use Copilot/Claude for real development
+- You're tired of re-explaining context every session
+- You want consistent quality without babysitting
+- You value process but don't want to build from scratch
+
+</td>
+<td>
+
+- You only use AI for quick code snippets
+- You prefer completely unstructured exploration
+- Your project changes too fast for conventions
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🌍 Compatibility
+
+| Platform | Status |
+|:---------|:-------|
+| GitHub Copilot (VS Code agent mode) | ✅ Full support |
+| Claude Code / Cowork | ✅ Full support |
+| Any `.instructions.md` system | ✅ Compatible |
+
+---
+
+## 📁 Project Structure
 
 ```
 agent-homebase/
-├── src/                          # Source code (multi-phase architecture)
-│   ├── phase1_verification/      # Formal verification (schemas, policies)
-│   ├── phase2_durability/        # Durable execution (SQLite, checkpoints)
-│   ├── phase3_isolation/         # Sandboxing & isolation (Docker, capabilities)
-│   └── phase4_determinism/       # Determinism & replay (logical time, versioning)
-├── docs/                         # Documentation and implementation guides
-├── config/                       # Configuration templates
-├── tests/                        # Integration tests
-├── instructions/                 # Governance and workflow instructions
-├── skills/                       # Agent skill definitions
-├── profiles/                     # Pre-configured project templates
-├── schemas/                      # JSON schemas for validation
-├── policies/                     # Rego policy files
-└── starters/                     # Starter files for new projects
-```
-
-See [docs/PHASE_4_IMPLEMENTATION_SUMMARY.md](docs/PHASE_4_IMPLEMENTATION_SUMMARY.md) for architecture details.
-
----
-
-## Profiles
-
-Pre-filled configs for common project types in `profiles/`:
-
-- `monorepo-fullstack.config.yml` — TypeScript monorepo (pnpm + Vite + Expo) — reference implementation
-- `react-web-app.config.yml` — Single-package React + Vite app
-- `python-api.config.yml` — Python API (FastAPI / Flask / Django)
-
----
-
-## Upgrading
-
-If installed as a submodule:
-
-```bash
-git submodule update --remote skills-library
-cd skills-library
-python3 init.py --config project.config.yml
-cp -r resolved/skills/* ../.github/agents/
-cp -r resolved/instructions/* ../.github/instructions/
+├── skills/           # 11 agent definitions
+├── instructions/     # 23 governance rules
+│   ├── configurable/ # Project-specific (paths, thresholds)
+│   └── generic/      # Universal (contracts, severity)
+├── profiles/         # Ready-to-use configs
+├── starters/         # Sprint/backlog starter files
+├── schemas/          # JSON return validation
+├── policies/         # Rego policy rules
+├── docs/             # Complete documentation
+└── src/              # Phase implementations (Python)
 ```
 
 ---
 
-## Documentation
+## 📚 Documentation
 
-| Guide | Description |
-|-------|-------------|
-| [ONBOARDING.md](docs/ONBOARDING.md) | Step-by-step setup guide |
-| [TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) | Common issues and solutions |
-| [SKILL_FLOW.md](docs/SKILL_FLOW.md) | Skill execution diagrams and FSM states |
-| [INSTRUCTION_INDEX.md](docs/INSTRUCTION_INDEX.md) | Master index of all 23 instruction files |
-| [ARCHITECTURE.md](docs/ARCHITECTURE.md) | Design decisions and rationale |
-| [CONTRIBUTING.md](docs/CONTRIBUTING.md) | How to add skills and instructions |
-
-### Phase Guides
-
-| Guide | Description |
-|-------|-------------|
-| [DETERMINISM_GUIDE.md](docs/DETERMINISM_GUIDE.md) | Lamport timestamps, prompt versioning, replay |
-| [CHECKPOINT_GUIDE.md](docs/CHECKPOINT_GUIDE.md) | Checkpoint-restart system |
-| [SANDBOX_GUIDE.md](docs/SANDBOX_GUIDE.md) | Container isolation and capabilities |
-| [MIGRATION_GUIDE.md](docs/MIGRATION_GUIDE.md) | Markdown to SQLite migration |
-
-### Examples
-
-| File | Description |
-|------|-------------|
-| [EXAMPLE_PROJECT_CONFIG.yml](docs/EXAMPLE_PROJECT_CONFIG.yml) | Filled-in config example |
-| [EXAMPLE_SPRINT_FLOW.md](docs/EXAMPLE_SPRINT_FLOW.md) | Complete sprint walkthrough |
-| [EXAMPLE_SKILL_OUTPUTS.md](docs/EXAMPLE_SKILL_OUTPUTS.md) | Sample return values per tier |
+| Guide | What You'll Learn |
+|:------|:------------------|
+| **[Onboarding](docs/ONBOARDING.md)** | Step-by-step setup (start here) |
+| **[Architecture](docs/ARCHITECTURE.md)** | Design decisions & rationale |
+| **[Skill Flow](docs/SKILL_FLOW.md)** | How agents orchestrate work |
+| **[Example Sprint](docs/EXAMPLE_SPRINT_FLOW.md)** | Complete sprint walkthrough |
+| **[Customization](docs/CUSTOMIZATION.md)** | Adapting skills for your needs |
+| **[Troubleshooting](docs/TROUBLESHOOTING.md)** | Common issues & fixes |
 
 ---
 
-## What's not included
+## 🤝 Contributing
 
-`@delivery-lead` — the engagement orchestration layer — is intentionally excluded. It represents a personal workflow preference sitting on top of these skills. Consuming projects build their own version, or none at all.
+Contributions welcome. See **[CONTRIBUTING.md](docs/CONTRIBUTING.md)**.
 
 ---
 
-## License
+## 📄 License
 
-MIT
+MIT © 2026
+
+---
+
+<div align="center">
+
+<br />
+
+### Your AI assistant has the power.
+
+### Give it the process.
+
+<br />
+
+**[⭐ Star on GitHub](https://github.com/j78f88/agent-homebase)** · **[📖 Get Started](docs/ONBOARDING.md)** · **[🐛 Report Issue](https://github.com/j78f88/agent-homebase/issues)**
+
+<br />
+
+---
+
+<sub>Extracted from real production teams. Battle-tested on TypeScript, Python, React, and monorepo projects.</sub>
+
+</div>
