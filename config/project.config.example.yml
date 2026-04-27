@@ -120,3 +120,61 @@ commands:
 
 team:
   cto_name: "Your Name"            # Used in commit approval markers: (approved by <cto_name> YYYY-MM-DD)
+
+# =============================================================================
+# Phase 0 Enhancements — Production-Grade Agent Systems
+# =============================================================================
+
+# Security Model Configuration
+security:
+  audit_log_enabled: true
+  audit_log_path: ".agent-state/security-audit.jsonl"
+  secret_scanning: true             # Scan for secrets in configs
+  command_whitelist_enforced: true  # Enforce command whitelist in init.py
+  path_validation: true             # Validate paths for traversal attacks
+  sandbox_enabled: false            # (Roadmap: Phase 3) Container-based sandboxing
+  supply_chain_verification: false  # (Roadmap: Phase 3) Cryptographic signing
+
+# Observability & Tracing Configuration
+observability:
+  enabled: true
+  backend: "jaeger"                 # jaeger | tempo | honeycomb | none
+  endpoint: "http://localhost:4318" # OTLP endpoint for trace export
+  sample_rate: 1.0                  # 1.0 = trace everything, 0.1 = 10% sampling
+  log_level: "info"                 # debug | info | warn | error
+  event_log_path: ".agent-state/events.jsonl"
+  cost_tracking: true               # Track LLM costs per agent/phase
+  metrics_port: 9090                # Prometheus metrics endpoint
+  session_replay: true              # Enable session replay capability
+  flame_graphs: true                # Generate flame graphs for profiling
+
+# State Management & Durable Execution
+state_management:
+  backend: "sqlite"                 # sqlite | postgres (future)
+  database_path: ".agent-state/agent-state.db"
+  enable_dual_write: false          # true during migration from markdown
+  checkpoint_frequency: "phase"     # phase | task | manual
+  auto_vacuum: true                 # SQLite auto-vacuum
+  wal_mode: true                    # Write-Ahead Logging for concurrency
+  export_markdown: true             # Generate human-readable markdown views
+
+# Determinism Guarantees
+determinism:
+  enforce_temperature_zero: true    # Block LLM calls with temperature != 0
+  use_logical_time: true            # Use Lamport timestamps instead of wall-clock
+  prompt_versioning: true           # Hash prompts for version tracking
+  composition_snapshots: true       # Store composition inputs for replay
+  verify_replay: true               # Run determinism tests in CI/CD
+  seed: 42                          # RNG seed for any stochastic operations
+  sorted_filesystem_ops: true       # Enforce sorted directory traversals
+
+# Chaos Engineering & Resilience Testing (Phase 7)
+chaos:
+  enabled: false                    # Enable failure injection in testing
+  failure_rate: 0.01                # 1% of operations randomly fail
+  scenarios:
+    - network_partition
+    - out_of_memory
+    - disk_full
+    - malformed_subagent_return
+    - llm_timeout

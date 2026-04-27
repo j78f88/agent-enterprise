@@ -26,6 +26,172 @@ except ImportError:
     print("ERROR: PyYAML not installed. Run: pip install pyyaml")
     sys.exit(1)
 
+# =============================================================================
+# SECURITY VALIDATION — Phase 0 Enhancement
+# =============================================================================
+
+class SecurityValidator:
+    """Validates config values for security vulnerabilities."""
+    
+    # Whitelist of allowed command prefixes
+    ALLOWED_COMMANDS = {
+        # Node/JavaScript
+        'npm', 'pnpm', 'yarn', 'node', 'npx',
+        # Python
+        'python', 'python3', 'pytest', 'pip', 'uv',
+        # Rust
+        'cargo',
+        # Go
+        'go',
+        # .NET
+        'dotnet',
+        # Java
+        'mvn', 'gradle',
+        # Build tools
+        'make', 'cmake',
+        # Test runners
+        'jest', 'vitest', 'mocha',
+        # Linters/formatters
+        'eslint', 'prettier', 'ruff', 'black',
+        # Type checkers
+        'tsc', 'mypy', 'pyright',
+        # Version control
+        'git', 'gh',
+        # Time command (safe)
+        'date', 'powershell -c "Get-Date"',
+    }
+    
+    # Dangerous command patterns
+    DANGEROUS_PATTERNS = [
+        r';\s*rm\s',           # Command chaining with rm
+        r'\|\s*rm\s',          # Piping to rm
+        r'&&\s*rm\s',          # Command chaining
+        r'`.*`',               # Command substitution
+        r'\$\(',               # Command substitution
+        r'>\s*/dev',           # Writing to /dev
+        r'curl.*\|.*sh',       # Curl pipe to shell
+        r'wget.*\|.*sh',       # Wget pipe to shell
+    ]
+    
+    # Secret patterns to detect
+    SECRET_PATTERNS = [
+        (r'api[_-]?key\s*[:=]\s*["\']?[a-zA-Z0-9]{20,}', 'API key'),
+        (r'secret\s*[:=]\s*["\']?[a-zA-Z0-9]{20,}', 'Secret'),
+        (r'password\s*[:=]\s*["\']?[a-zA-Z0-9]{8,}', 'Password'),
+        (r'token\s*[:=]\s*["\']?[a-zA-Z0-9]{20,}', 'Token'),
+        (r'sk-[a-zA-Z0-9]{20,}', 'OpenAI API key'),
+        (r'ghp_[a-zA-Z0-9]{36,}', 'GitHub personal access token'),
+    ]
+    
+    @classmethod
+    def validate_command(cls, command: str, key: str) -> list[str]:
+        """Validate a command for security issues. Returns list of errors."""
+        errors = []
+        
+        if not command or command.strip() == '':
+            return errors
+        
+        # Check for dangerous patterns
+        for pattern in cls.DANGEROUS_PATTERNS:
+            if re.search(pattern, command, re.IGNORECASE):
+                errors.append(
+                    f"CRITICAL: Dangerous pattern detected in '{key}': {pattern}\n"
+                    f"  Command: {command}"
+                )
+        
+        # Check if command starts with allowed prefix
+        command_lower = command.strip().lower()
+        is_allowed = False
+        for allowed in cls.ALLOWED_COMMANDS:
+            if command_lower.startswith(allowed.lower()):
+                is_allowed = True
+                break
+        
+        if not is_allowed and not errors:  # Only warn if not already flagged as dangerous
+            errors.append(
+                f"WARNING: Command '{key}' not in whitelist: {command}\n"
+                f"  Allowed commands: {', '.join(sorted(cls.ALLOWED_COMMANDS))}"
+            )
+        
+        return errors
+    
+    @classmethod
+    def validate_path(cls, path: str, key: str) -> list[str]:
+        """Validate a path for traversal attacks. Returns list of errors."""
+        errors = []
+        
+        if not path or path.strip() == '':
+            return errors
+        
+        # Check for path traversal
+        if '..' in path:
+            errors.append(
+                f"CRITICAL: Path traversal detected in '{key}': {path}\n"
+                f"  Paths must not contain '..'"
+            )
+        
+        # Check for absolute paths (should be relative to project root)
+        if path.startswith('/') or (len(path) > 2 and path[1] == ':'):
+            errors.append(
+                f"WARNING: Absolute path in '{key}': {path}\n"
+                f"  Consider using relative paths from project root"
+            )
+        
+        return errors
+    
+    @classmethod
+    def detect_secrets(cls, text: str) -> list[tuple[str, str]]:
+        """Detect potential secrets in text. Returns list of (pattern_desc, match)."""
+        secrets = []
+        for pattern, desc in cls.SECRET_PATTERNS:
+            matches = re.finditer(pattern, text, re.IGNORECASE)
+            for match in matches:
+                secrets.append((desc, match.group(0)))
+        return secrets
+    
+    @classmethod
+    def validate_config(cls, config: dict) -> tuple[list[str], list[str]]:
+        """
+        Validate entire config for security issues.
+        Returns (errors, warnings) where errors should block execution.
+        """
+        errors = []
+        warnings = []
+        
+        # Validate all command tokens
+        if 'commands' in config:
+            for cmd_key, cmd_value in config['commands'].items():
+                if isinstance(cmd_value, str):
+                    issues = cls.validate_command(cmd_value, f'commands.{cmd_key}')
+                    for issue in issues:
+                        if 'CRITICAL' in issue:
+                            errors.append(issue)
+                        else:
+                            warnings.append(issue)
+        
+        # Validate all path tokens
+        if 'paths' in config:
+            for path_key, path_value in config['paths'].items():
+                if isinstance(path_value, str):
+                    issues = cls.validate_path(path_value, f'paths.{path_key}')
+                    for issue in issues:
+                        if 'CRITICAL' in issue:
+                            errors.append(issue)
+                        else:
+                            warnings.append(issue)
+        
+        # Detect secrets in config values
+        config_str = yaml.dump(config)
+        secrets = cls.detect_secrets(config_str)
+        if secrets:
+            errors.append(
+                f"CRITICAL: Potential secrets detected in config:\n" +
+                '\n'.join(f"  - {desc}: {match[:20]}..." for desc, match in secrets) +
+                "\n  NEVER store secrets in config files. Use environment variables or secret managers."
+            )
+        
+        return errors, warnings
+
 
 def flatten(d: dict, prefix: str = "") -> dict:
     """Flatten a nested dict to dot-notation keys.
@@ -81,6 +247,29 @@ def main():
 
     with open(config_path) as f:
         config = yaml.safe_load(f)
+
+    # =============================================================================
+    # Security Validation — Phase 0
+    # =============================================================================
+    print("Running security validation...")
+    sec_errors, sec_warnings = SecurityValidator.validate_config(config)
+    
+    if sec_warnings:
+        print("\n⚠️  SECURITY WARNINGS:")
+        for warning in sec_warnings:
+            print(f"\n{warning}")
+        print()
+    
+    if sec_errors:
+        print("\n🚨 SECURITY ERRORS (blocking):")
+        for error in sec_errors:
+            print(f"\n{error}")
+        print("\n❌ Config validation FAILED due to security errors.")
+        print("   Fix the issues above and try again.")
+        sys.exit(1)
+    
+    print("✓ Security validation passed")
+    print()
 
     tokens = flatten(config)
     print(f"Loaded {len(tokens)} config tokens from {config_path}")

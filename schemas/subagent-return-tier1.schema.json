@@ -1,0 +1,82 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://agent-homebase/schemas/subagent-return-tier1.schema.json",
+  "title": "Subagent Return Schema - Tier 1 (Analysis Only)",
+  "description": "Schema for subagent returns that produce no artifacts (WRITE:ANALYSIS-ONLY)",
+  "type": "object",
+  "required": ["tier", "agent", "status", "summary", "findings"],
+  "properties": {
+    "tier": {
+      "type": "integer",
+      "const": 1,
+      "description": "Return tier identifier"
+    },
+    "agent": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Agent name (e.g., 'planner', 'pm')",
+      "examples": ["planner", "pm", "architect", "researcher"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["complete", "blocked", "needs-input"],
+      "description": "Execution status"
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 500,
+      "description": "1-2 sentence result summary"
+    },
+    "findings": {
+      "type": "array",
+      "description": "Array of findings (may be empty)",
+      "items": {
+        "type": "object",
+        "required": ["severity", "description", "recommendation"],
+        "properties": {
+          "severity": {
+            "type": "string",
+            "enum": ["CRITICAL", "WARNING", "SUGGESTION"],
+            "description": "Finding severity level"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 5,
+            "description": "Finding description"
+          },
+          "recommendation": {
+            "type": "string",
+            "minLength": 5,
+            "description": "Recommended action"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "flaggedDecisions": {
+      "type": "array",
+      "description": "Decisions requiring human confirmation",
+      "items": {
+        "type": "string",
+        "minLength": 5
+      }
+    },
+    "blockerReason": {
+      "type": "string",
+      "minLength": 5,
+      "description": "Reason for blockage (required if status=blocked)"
+    }
+  },
+  "additionalProperties": false,
+  "if": {
+    "properties": {
+      "status": {
+        "const": "blocked"
+      }
+    }
+  },
+  "then": {
+    "required": ["blockerReason"]
+  }
+}

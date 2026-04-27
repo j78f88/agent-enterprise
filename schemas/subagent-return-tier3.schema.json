@@ -1,0 +1,148 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://agent-homebase/schemas/subagent-return-tier3.schema.json",
+  "title": "Subagent Return Schema - Tier 3 (Composition)",
+  "description": "Schema for sprint composition recommendations",
+  "type": "object",
+  "required": ["tier", "agent", "status", "summary", "sprintNumber", "composition", "constraints"],
+  "properties": {
+    "tier": {
+      "type": "integer",
+      "const": 3,
+      "description": "Return tier identifier"
+    },
+    "agent": {
+      "type": "string",
+      "const": "planner",
+      "description": "Agent name (always 'planner' for composition)"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["complete", "blocked", "needs-input"],
+      "description": "Execution status"
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 500,
+      "description": "1-2 sentence composition summary"
+    },
+    "sprintNumber": {
+      "type": "string",
+      "pattern": "^\\d{3,4}$",
+      "description": "Target sprint number (e.g., '042', '123')",
+      "examples": ["042", "123", "001"]
+    },
+    "composition": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Ordered list of items recommended for inclusion",
+      "items": {
+        "type": "object",
+        "required": ["itemId", "type", "tier", "score", "rationale"],
+        "properties": {
+          "itemId": {
+            "type": "string",
+            "pattern": "^ITEM-\\d{3}$",
+            "description": "Ledger item ID",
+            "examples": ["ITEM-001", "ITEM-042"]
+          },
+          "type": {
+            "type": "string",
+            "description": "Ledger item type (feature, bug, debt, spike, etc.)"
+          },
+          "tier": {
+            "type": "string",
+            "enum": ["P0", "P1", "P2", "P3", "P4", "P5", "P6"],
+            "description": "Priority tier"
+          },
+          "score": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100,
+            "description": "Intra-tier score (0-100)"
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 10,
+            "description": "Why this item was included"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "excluded": {
+      "type": "array",
+      "description": "Items considered but excluded",
+      "items": {
+        "type": "object",
+        "required": ["itemId", "reason"],
+        "properties": {
+          "itemId": {
+            "type": "string",
+            "pattern": "^ITEM-\\d{3}$"
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 10,
+            "description": "Why this item was excluded"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "required": ["featurePercent", "bugCount", "debtPressure", "capacityUsed"],
+      "properties": {
+        "featurePercent": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Percentage of capacity allocated to features"
+        },
+        "bugCount": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of bug items included"
+        },
+        "debtPressure": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Current debt pressure score"
+        },
+        "capacityUsed": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Percentage of estimated capacity used"
+        }
+      },
+      "additionalProperties": false
+    },
+    "flaggedDecisions": {
+      "type": "array",
+      "description": "Decisions requiring human confirmation",
+      "items": {
+        "type": "string",
+        "minLength": 5
+      }
+    },
+    "blockerReason": {
+      "type": "string",
+      "minLength": 5,
+      "description": "Reason for blockage (required if status=blocked)"
+    }
+  },
+  "additionalProperties": false,
+  "if": {
+    "properties": {
+      "status": {
+        "const": "blocked"
+      }
+    }
+  },
+  "then": {
+    "required": ["blockerReason"]
+  }
+}

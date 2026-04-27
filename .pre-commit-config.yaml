@@ -1,0 +1,71 @@
+# Pre-commit Configuration
+# Install: pip install pre-commit && pre-commit install
+# Run manually: pre-commit run --all-files
+
+repos:
+  # Security validation
+  - repo: local
+    hooks:
+      - id: security-validation
+        name: Security Validation
+        entry: python3 .git/hooks/pre-commit
+        language: system
+        pass_filenames: false
+        stages: [commit]
+
+  # YAML validation
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: check-yaml
+        name: Check YAML syntax
+        args: ['--safe']
+      
+      - id: check-json
+        name: Check JSON syntax
+      
+      - id: check-merge-conflict
+        name: Check for merge conflicts
+      
+      - id: trailing-whitespace
+        name: Trim trailing whitespace
+      
+      - id: end-of-file-fixer
+        name: Fix end of files
+      
+      - id: check-added-large-files
+        name: Check for large files
+        args: ['--maxkb=1000']
+
+  # Secret scanning
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+      - id: detect-secrets
+        name: Detect secrets
+        args: ['--baseline', '.secrets.baseline']
+        exclude: package-lock.json
+
+  # Python formatting (if Python files present)
+  - repo: https://github.com/psf/black
+    rev: 23.12.1
+    hooks:
+      - id: black
+        name: Format Python code
+        language_version: python3
+
+  # Python linting
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.0.0
+    hooks:
+      - id: flake8
+        name: Lint Python code
+        args: ['--max-line-length=120']
+
+  # Markdown linting
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.38.0
+    hooks:
+      - id: markdownlint
+        name: Lint Markdown files
+        args: ['--fix']

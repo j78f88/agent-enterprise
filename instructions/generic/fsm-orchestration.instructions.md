@@ -1,0 +1,645 @@
+# Sprint Orchestration FSM
+
+**Phase 1 — Formal State Machine Model**
+
+This document defines the formal Finite State Machine (FSM) for sprint orchestration, ensuring deterministic state transitions and verifiable workflow execution.
+
+---
+
+## FSM Purpose
+
+The orchestration FSM provides:
+1. **Deterministic state transitions** — No ambiguous next states
+2. **Verifiable invariants** — Formal properties that always hold
+3. **Exhaustive error handling** — Every state has failure transitions
+4. **Audit trail** — Complete state transition history
+5. **Resume capability** — Restart from any state after interruption
+
+---
+
+## State Diagram
+
+```
+                    ┌─────────────┐
+                    │   INITIAL   │
+                    └──────┬──────┘
+                           │
+                           ↓
+                  ┌────────────────┐
+                  │  PLANNING      │ ← Compose sprint
+                  └───────┬────────┘
+                          │
+                     ┌────┴────┐
+                     ↓         ↓
+              ┌──────────┐   ┌──────────┐
+              │ APPROVED │   │ REJECTED │ → PLANNING (re-compose)
+              └─────┬────┘   └──────────┘
+                    │
+                    ↓
+           ┌────────────────┐
+           │ IMPLEMENTATION │ ← Execute tasks
+           └───────┬────────┘
+                   │
+              ┌────┴────┐
+              ↓         ↓
+       ┌──────────┐   ┌──────────┐
+       │ BLOCKED  │   │ COMPLETE │
+       └─────┬────┘   └─────┬────┘
+             │              │
+             │              ↓
+             │      ┌───────────────┐
+             │      │  VALIDATION   │ ← PM review
+             │      └──────┬────────┘
+             │             │
+             │        ┌────┴────┐
+             │        ↓         ↓
+             │   ┌─────────┐ ┌──────────┐
+             │   │ PASSED  │ │ REJECTED │ → IMPLEMENTATION
+             │   └────┬────┘ └──────────┘
+             │        │
+             │        ↓
+             │   ┌─────────┐
+             └──→│ SHIPPED │ ← Final state
+                 └─────────┘
+```
+
+---
+
+## State Definitions
+
+### INITIAL
+**Description:** Sprint not yet planned  
+**Entry Actions:** None  
+**Exit Actions:** Create checkpoint  
+**Invariants:**
+- No sprint metadata exists
+- Ledger has open items
+
+**Transitions:**
+- `plan()` → PLANNING
+
+---
+
+### PLANNING
+**Description:** Composing sprint items  
+**Entry Actions:**
+- Load ledger
+- Load constraints
+- Invoke @planner subagent
+
+**Exit Actions:**
+- Store composition proposal
+- Create checkpoint
+
+**Invariants:**
+- Composition matches constraints
+- All P0 items included
+- Composition passes policy validation
+
+**Transitions:**
+- `approve()` → APPROVED (if composition valid)
+- `reject()` → REJECTED (if composition invalid)
+- `error()` → PLANNING (retry on error)
+
+**Timeout:** 10 minutes (composition should complete quickly)
+
+---
+
+### APPROVED
+**Description:** Composition approved by user  
+**Entry Actions:**
+- Write sprint document
+- Commit to git
+- Update ledger (status: `assigned`)
+
+**Exit Actions:**
+- Create checkpoint
+
+**Invariants:**
+- Sprint document committed
+- Ledger updated atomically
+
+**Transitions:**
+- `start_implementation()` → IMPLEMENTATION
+
+---
+
+### REJECTED
+**Description:** Composition rejected by user  
+**Entry Actions:**
+- Log rejection reason
+- Update composition constraints
+
+**Exit Actions:**
+- Create checkpoint
+
+**Invariants:**
+- Rejection reason recorded
+
+**Transitions:**
+- `replan()` → PLANNING (with updated constraints)
+
+---
+
+### IMPLEMENTATION
+**Description:** Executing sprint tasks  
+**Entry Actions:**
+- Load sprint plan
+- Initialize task queue
+
+**Exit Actions:**
+- Create checkpoint (periodic)
+
+**Invariants:**
+- All tasks have status: {pending, in-progress, complete, blocked}
+- At most one task in-progress per agent
+- No task transitions without agent return
+
+**Transitions:**
+- `all_tasks_complete()` → COMPLETE
+- `blocked()` → BLOCKED (if task blocked)
+- `error()` → BLOCKED (on unrecoverable error)
+
+**Checkpoint Frequency:** After each task completion
+
+---
+
+### BLOCKED
+**Description:** Sprint execution blocked  
+**Entry Actions:**
+- Record blocker details
+- Create EXIT POINT for user
+
+**Exit Actions:**
+- Create checkpoint
+
+**Invariants:**
+- Blocker reason documented
+- User notified
+
+**Transitions:**
+- `resolve()` → IMPLEMENTATION (after user unblocks)
+- `abandon()` → SHIPPED (mark sprint incomplete)
+
+---
+
+### COMPLETE
+**Description:** All tasks complete, awaiting validation  
+**Entry Actions:**
+- Trigger test suite
+- Generate completion report
+
+**Exit Actions:**
+- Create checkpoint
+
+**Invariants:**
+- All tasks status = complete
+- No open blockers
+
+**Transitions:**
+- `validate()` → VALIDATION
+
+---
+
+### VALIDATION
+**Description:** PM reviewing deliverables  
+**Entry Actions:**
+- Invoke @pm subagent
+- Run quality checks (coverage, lint, type-check)
+
+**Exit Actions:**
+- Store validation result
+- Create checkpoint
+
+**Invariants:**
+- Validation report generated
+- All quality gates checked
+
+**Transitions:**
+- `pass()` → PASSED (if validation succeeds)
+- `fail()` → REJECTED (if validation fails)
+- `error()` → VALIDATION (retry on error)
+
+**Timeout:** 15 minutes
+
+---
+
+### PASSED
+**Description:** Validation passed, ready to ship  
+**Entry Actions:**
+- Tag git commit
+- Update ledger (status: `complete`)
+
+**Exit Actions:**
+- Create final checkpoint
+
+**Invariants:**
+- Git tag created
+- Ledger updated
+
+**Transitions:**
+- `ship()` → SHIPPED
+
+---
+
+### SHIPPED
+**Description:** Sprint complete and shipped (terminal state)  
+**Entry Actions:**
+- Generate retro report
+- Archive sprint data
+- Clean up checkpoints
+
+**Exit Actions:**
+- Create final checkpoint
+
+**Invariants:**
+- Sprint marked complete
+- All ledger items closed or carried forward
+
+**Transitions:**
+- None (terminal state)
+
+---
+
+## FSM Implementation
+
+### State Class
+
+```python
+from enum import Enum, auto
+from dataclasses import dataclass
+from typing import Optional, Dict, Any, Callable
+from datetime import datetime
+
+
+class SprintState(Enum):
+    """Sprint orchestration states."""
+    INITIAL = auto()
+    PLANNING = auto()
+    APPROVED = auto()
+    REJECTED = auto()
+    IMPLEMENTATION = auto()
+    BLOCKED = auto()
+    COMPLETE = auto()
+    VALIDATION = auto()
+    PASSED = auto()
+    SHIPPED = auto()
+
+
+@dataclass
+class StateTransition:
+    """Record of a state transition."""
+    from_state: SprintState
+    to_state: SprintState
+    trigger: str
+    timestamp: datetime
+    logical_time: int
+    checkpoint_id: str
+    metadata: Dict[str, Any]
+
+
+class SprintFSM:
+    """
+    Finite State Machine for sprint orchestration.
+    
+    Enforces valid state transitions and maintains audit trail.
+    """
+    
+    # Valid transitions: {from_state: {trigger: to_state}}
+    TRANSITIONS = {
+        SprintState.INITIAL: {
+            "plan": SprintState.PLANNING,
+        },
+        SprintState.PLANNING: {
+            "approve": SprintState.APPROVED,
+            "reject": SprintState.REJECTED,
+            "error": SprintState.PLANNING,  # Retry
+        },
+        SprintState.APPROVED: {
+            "start_implementation": SprintState.IMPLEMENTATION,
+        },
+        SprintState.REJECTED: {
+            "replan": SprintState.PLANNING,
+        },
+        SprintState.IMPLEMENTATION: {
+            "all_tasks_complete": SprintState.COMPLETE,
+            "blocked": SprintState.BLOCKED,
+            "error": SprintState.BLOCKED,
+        },
+        SprintState.BLOCKED: {
+            "resolve": SprintState.IMPLEMENTATION,
+            "abandon": SprintState.SHIPPED,  # Incomplete
+        },
+        SprintState.COMPLETE: {
+            "validate": SprintState.VALIDATION,
+        },
+        SprintState.VALIDATION: {
+            "pass": SprintState.PASSED,
+            "fail": SprintState.REJECTED,
+            "error": SprintState.VALIDATION,  # Retry
+        },
+        SprintState.PASSED: {
+            "ship": SprintState.SHIPPED,
+        },
+        SprintState.SHIPPED: {},  # Terminal state
+    }
+    
+    def __init__(self, sprint_id: str, initial_state: SprintState = SprintState.INITIAL):
+        """
+        Initialize FSM.
+        
+        Args:
+            sprint_id: Unique sprint identifier
+            initial_state: Starting state (for resume)
+        """
+        self.sprint_id = sprint_id
+        self.current_state = initial_state
+        self.history: list[StateTransition] = []
+        self.logical_clock = 0
+    
+    def can_transition(self, trigger: str) -> bool:
+        """Check if trigger is valid for current state."""
+        return trigger in self.TRANSITIONS.get(self.current_state, {})
+    
+    def transition(
+        self,
+        trigger: str,
+        metadata: Optional[Dict[str, Any]] = None
+    ) -> StateTransition:
+        """
+        Perform state transition.
+        
+        Args:
+            trigger: Event triggering transition
+            metadata: Additional context for transition
+        
+        Returns:
+            StateTransition record
+        
+        Raises:
+            ValueError: If transition is invalid
+        """
+        if not self.can_transition(trigger):
+            raise ValueError(
+                f"Invalid transition: {trigger} from state {self.current_state.name}. "
+                f"Valid triggers: {list(self.TRANSITIONS.get(self.current_state, {}).keys())}"
+            )
+        
+        # Get next state
+        next_state = self.TRANSITIONS[self.current_state][trigger]
+        
+        # Create transition record
+        self.logical_clock += 1
+        transition = StateTransition(
+            from_state=self.current_state,
+            to_state=next_state,
+            trigger=trigger,
+            timestamp=datetime.now(),
+            logical_time=self.logical_clock,
+            checkpoint_id=f"{self.sprint_id}-{next_state.name.lower()}",
+            metadata=metadata or {}
+        )
+        
+        # Update state
+        self.current_state = next_state
+        self.history.append(transition)
+        
+        return transition
+    
+    def get_valid_triggers(self) -> list[str]:
+        """Get valid triggers for current state."""
+        return list(self.TRANSITIONS.get(self.current_state, {}).keys())
+    
+    def is_terminal(self) -> bool:
+        """Check if in terminal state."""
+        return len(self.TRANSITIONS.get(self.current_state, {})) == 0
+    
+    def visualize(self) -> str:
+        """Generate ASCII visualization of state history."""
+        if not self.history:
+            return f"Current state: {self.current_state.name}"
+        
+        lines = [f"Sprint {self.sprint_id} State History:"]
+        lines.append(f"  INITIAL → {self.history[0].to_state.name}")
+        
+        for i, transition in enumerate(self.history[1:], 1):
+            lines.append(
+                f"  {transition.from_state.name} "
+                f"--[{transition.trigger}]--> "
+                f"{transition.to_state.name} "
+                f"(t={transition.logical_time})"
+            )
+        
+        lines.append(f"\nCurrent state: {self.current_state.name}")
+        lines.append(f"Valid triggers: {self.get_valid_triggers()}")
+        
+        return "\n".join(lines)
+```
+
+---
+
+## Invariant Verification
+
+### Invariant Checks
+
+```python
+class InvariantViolation(Exception):
+    """Raised when FSM invariant is violated."""
+    pass
+
+
+def verify_invariants(fsm: SprintFSM, context: Dict[str, Any]):
+    """
+    Verify FSM invariants for current state.
+    
+    Args:
+        fsm: The FSM instance
+        context: Runtime context (ledger, tasks, etc.)
+    
+    Raises:
+        InvariantViolation: If any invariant is violated
+    """
+    state = fsm.current_state
+    
+    if state == SprintState.PLANNING:
+        # Must have ledger loaded
+        if not context.get("ledger"):
+            raise InvariantViolation("PLANNING state requires ledger to be loaded")
+    
+    elif state == SprintState.APPROVED:
+        # Must have composition
+        if not context.get("composition"):
+            raise InvariantViolation("APPROVED state requires valid composition")
+        
+        # Composition must pass policies
+        if not context.get("policy_passed"):
+            raise InvariantViolation("Composition must pass policy validation")
+    
+    elif state == SprintState.IMPLEMENTATION:
+        # All tasks must have valid status
+        tasks = context.get("tasks", [])
+        valid_statuses = {"pending", "in-progress", "complete", "blocked"}
+        
+        for task in tasks:
+            if task.get("status") not in valid_statuses:
+                raise InvariantViolation(
+                    f"Task {task['id']} has invalid status: {task.get('status')}"
+                )
+        
+        # At most one task in-progress per agent
+        in_progress = [t for t in tasks if t.get("status") == "in-progress"]
+        agents = [t.get("agent") for t in in_progress]
+        
+        if len(agents) != len(set(agents)):
+            raise InvariantViolation(
+                "Multiple tasks in-progress for same agent (violates serial execution)"
+            )
+    
+    elif state == SprintState.COMPLETE:
+        # All tasks must be complete
+        tasks = context.get("tasks", [])
+        incomplete = [t for t in tasks if t.get("status") != "complete"]
+        
+        if incomplete:
+            raise InvariantViolation(
+                f"{len(incomplete)} tasks not complete: {[t['id'] for t in incomplete]}"
+            )
+    
+    elif state == SprintState.SHIPPED:
+        # Must have git tag
+        if not context.get("git_tag"):
+            raise InvariantViolation("SHIPPED state requires git tag")
+        
+        # Ledger must be updated
+        if not context.get("ledger_updated"):
+            raise InvariantViolation("SHIPPED state requires ledger update")
+```
+
+---
+
+## FSM Integration
+
+### Orchestrator Class
+
+```python
+class SprintOrchestrator:
+    """
+    High-level orchestrator using FSM for state management.
+    """
+    
+    def __init__(self, sprint_id: str, db_conn):
+        self.sprint_id = sprint_id
+        self.db = db_conn
+        self.fsm = SprintFSM(sprint_id)
+        self.context = {}
+    
+    def run(self):
+        """Execute sprint orchestration."""
+        while not self.fsm.is_terminal():
+            state = self.fsm.current_state
+            
+            # Verify invariants
+            verify_invariants(self.fsm, self.context)
+            
+            # Execute state-specific logic
+            if state == SprintState.INITIAL:
+                self._handle_initial()
+            elif state == SprintState.PLANNING:
+                self._handle_planning()
+            elif state == SprintState.APPROVED:
+                self._handle_approved()
+            # ... etc for all states
+            
+            # Create checkpoint after each state
+            self._create_checkpoint()
+    
+    def _handle_planning(self):
+        """Handle PLANNING state."""
+        # Load ledger
+        self.context["ledger"] = self.db.load_ledger()
+        
+        # Invoke planner
+        composition = invoke_planner(self.context["ledger"])
+        self.context["composition"] = composition
+        
+        # Validate composition
+        policy_result = validate_policies(composition)
+        self.context["policy_passed"] = policy_result.allow
+        
+        # Transition based on result
+        if policy_result.allow:
+            self.fsm.transition("approve", {
+                "composition": composition,
+                "policy_summary": policy_result.summary
+            })
+        else:
+            self.fsm.transition("reject", {
+                "violations": policy_result.violations
+            })
+    
+    def _create_checkpoint(self):
+        """Create checkpoint for current state."""
+        transition = self.fsm.history[-1] if self.fsm.history else None
+        
+        checkpoint = {
+            "sprint_id": self.sprint_id,
+            "state": self.fsm.current_state.name,
+            "logical_time": self.fsm.logical_clock,
+            "context": self.context,
+            "last_transition": transition
+        }
+        
+        self.db.create_checkpoint(checkpoint)
+```
+
+---
+
+## Testing FSM
+
+```python
+def test_fsm_transitions():
+    """Test valid FSM transitions."""
+    fsm = SprintFSM("sprint-042")
+    
+    # Valid flow
+    assert fsm.current_state == SprintState.INITIAL
+    
+    fsm.transition("plan")
+    assert fsm.current_state == SprintState.PLANNING
+    
+    fsm.transition("approve")
+    assert fsm.current_state == SprintState.APPROVED
+    
+    fsm.transition("start_implementation")
+    assert fsm.current_state == SprintState.IMPLEMENTATION
+    
+    # Verify history
+    assert len(fsm.history) == 3
+    assert fsm.history[0].trigger == "plan"
+    assert fsm.history[-1].to_state == SprintState.IMPLEMENTATION
+
+
+def test_invalid_transitions():
+    """Test invalid transitions raise errors."""
+    fsm = SprintFSM("sprint-042")
+    
+    # Cannot go directly to IMPLEMENTATION from INITIAL
+    with pytest.raises(ValueError, match="Invalid transition"):
+        fsm.transition("start_implementation")
+
+
+def test_terminal_state():
+    """Test terminal state behavior."""
+    fsm = SprintFSM("sprint-042", initial_state=SprintState.SHIPPED)
+    
+    assert fsm.is_terminal()
+    assert fsm.get_valid_triggers() == []
+```
+
+---
+
+## References
+
+- [Finite State Machines](https://en.wikipedia.org/wiki/Finite-state_machine)
+- [Temporal Workflows](https://docs.temporal.io/workflows)
+- [Formal Verification](https://en.wikipedia.org/wiki/Formal_verification)

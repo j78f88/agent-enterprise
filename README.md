@@ -34,7 +34,7 @@ git submodule add https://github.com/j78f88/agent-homebase.git skills-library
 cd skills-library
 
 # 2. Copy and fill in the config
-cp project.config.example.yml project.config.yml
+cp config/project.config.example.yml project.config.yml
 # Edit project.config.yml with your paths, thresholds, and commands
 
 # 3. Run substitution
@@ -54,7 +54,31 @@ cp starters/memory-architecture.md ../.claude/memory/architecture.md
 cp starters/memory-conventions.md ../.claude/memory/conventions.md
 ```
 
-See [ONBOARDING.md](ONBOARDING.md) for full step-by-step guidance.
+See [docs/ONBOARDING.md](docs/ONBOARDING.md) for full step-by-step guidance.
+
+---
+
+## Project Structure
+
+```
+agent-homebase/
+├── src/                          # Source code (multi-phase architecture)
+│   ├── phase1_verification/      # Formal verification (schemas, policies)
+│   ├── phase2_durability/        # Durable execution (SQLite, checkpoints)
+│   ├── phase3_isolation/         # Sandboxing & isolation (Docker, capabilities)
+│   └── phase4_determinism/       # Determinism & replay (logical time, versioning)
+├── docs/                         # Documentation and implementation guides
+├── config/                       # Configuration templates
+├── tests/                        # Integration tests
+├── instructions/                 # Governance and workflow instructions
+├── skills/                       # Agent skill definitions
+├── profiles/                     # Pre-configured project templates
+├── schemas/                      # JSON schemas for validation
+├── policies/                     # Rego policy files
+└── starters/                     # Starter files for new projects
+```
+
+See [docs/PHASE_4_IMPLEMENTATION_SUMMARY.md](docs/PHASE_4_IMPLEMENTATION_SUMMARY.md) for architecture details.
 
 ---
 
