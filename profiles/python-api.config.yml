@@ -3,6 +3,9 @@
 # Replace placeholder values (marked with FIXME) before running init.py.
 # Note: bundle size checks in @perf are not applicable — set thresholds to 0.
 
+editor:
+  target: "both"                    # "vscode" | "claude-code" | "both"
+
 project:
   name: "My Python API"            # FIXME
   language: "Python"

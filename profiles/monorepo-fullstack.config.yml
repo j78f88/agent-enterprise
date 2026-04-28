@@ -3,6 +3,9 @@
 # Use as a reference when onboarding the library to a similar TypeScript monorepo.
 # Copy to project.config.yml and replace project.name, namespace, URLs, and repo with your values.
 
+editor:
+  target: "both"                    # "vscode" | "claude-code" | "both"
+
 project:
   name: "DIY Project Helper"
   language: "TypeScript"

@@ -4,7 +4,7 @@ Shared rule for all agents that report findings. Defines the three severity leve
 
 ## Definitions
 
-| Level      | Definition                    | Action (code-touching agents: @qa, @reviewer, @a11y, @perf) | Action (@docs)                                        |
+| Level      | Definition                    | Action (code-touching agents: @qa, @reviewer, @a11y, @perf, @security) | Action (@docs)                                        |
 | ---------- | ----------------------------- | ------------------------------------------------------------ | ----------------------------------------------------- |
 | CRITICAL   | Blocks gate, must be resolved | Blocks sprint advancement and git push                       | Must resolve in same session; does **not** block push |
 | WARNING    | Does not block                | Logged to `docs/development/TECHNICAL_DEBT.md` with sprint number + agent source | Fix or defer in session                            |

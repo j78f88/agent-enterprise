@@ -6,11 +6,30 @@ Design decisions and rationale for agent-homebase.
 
 ## Overview
 
-agent-homebase is a library of agent skills, instructions, and supporting infrastructure for VS Code Copilot agent mode. It provides:
+agent-homebase is a library of agent skills, instructions, and supporting infrastructure for VS Code Copilot agent mode and Claude Code. It provides:
 
-- **11 specialized skills** for software delivery workflows
-- **23 instruction files** for governance and contracts
+- **12 specialized skills** for software delivery workflows (canonical source of truth)
+- **12 agent wrappers** for VS Code (generated from skills with tool restrictions and subagent delegation)
+- **24 instruction files** for governance and contracts
 - **4-phase implementation** for production-grade execution
+
+### Dual-Platform Architecture
+
+Skills are the single source of truth. When `editor.target` includes `"vscode"`, `init.py` generates thin `.agent.md` wrappers that provide native tool restrictions, context isolation, and model selection. Claude Code users consume skills directly.
+
+```
+skills/                ← canonical source (both platforms)
+  architect/architect.skill.md
+  qa/qa.skill.md
+  ...
+
+resolved/              ← generated output
+  skills/              ← always generated (resolved as SKILL.md per VS Code convention)
+  agents/              ← generated only when editor.target includes "vscode"
+  instructions/        ← always generated
+```
+
+**Best pattern:** Agent delegates to skill. Agent provides persona + tool boundary. Skill provides procedural knowledge + bundled assets.
 
 ---
 
@@ -28,6 +47,7 @@ Orchestrators (`@sprint-lead`) delegate ALL heavy work to subagents:
     └── Delegates to:
         ├── Unnamed subagents (implementation)
         ├── @qa (quality gates)
+        ├── @security (vulnerability audit)
         ├── @reviewer (code review)
         └── @docs (documentation)
 ```

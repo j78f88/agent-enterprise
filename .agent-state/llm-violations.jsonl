@@ -1,0 +1,4 @@
+{"timestamp": "2026-04-28T12:49:25.864936+00:00", "type": "non_zero_temperature", "temperature": 0.8, "params": {"temperature": 0.8}, "message": "Temperature 0.8 violates determinism requirement"}
+{"timestamp": "2026-04-28T12:50:03.000124+00:00", "type": "non_zero_temperature", "temperature": 0.8, "params": {"temperature": 0.8}, "message": "Temperature 0.8 violates determinism requirement"}
+{"timestamp": "2026-04-28T12:51:36.914893+00:00", "type": "non_zero_temperature", "temperature": 0.8, "params": {"temperature": 0.8}, "message": "Temperature 0.8 violates determinism requirement"}
+{"timestamp": "2026-04-28T12:54:51.955718+00:00", "type": "non_zero_temperature", "temperature": 0.8, "params": {"temperature": 0.8}, "message": "Temperature 0.8 violates determinism requirement"}

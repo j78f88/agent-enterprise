@@ -21,8 +21,8 @@ These three cover 80% of what you need to understand agent behavior.
 | Category | Count | Purpose |
 |----------|-------|---------|
 | **Generic** | 10 | Cross-project standards — apply to all projects |
-| **Configurable** | 13 | Project-specific behavior — use `{{tokens}}` from config |
-| **Total** | 23 | |
+| **Configurable** | 14 | Project-specific behavior — use `{{tokens}}` from config |
+| **Total** | 24 | |
 
 ---
 
@@ -39,7 +39,7 @@ Located in `instructions/generic/`. These enforce cross-project standards and do
 | `determinism-guarantees.instructions.md` | ○ | Reproducibility requirements for replay | Phase 4 components |
 | `fsm-orchestration.instructions.md` | ✅ | State machine workflow and transitions | @sprint-lead |
 | `observability.instructions.md` | ○ | Logging, tracing, and metrics standards | All skills |
-| `security-model.instructions.md` | ✅ | Security assessment, secret handling, audit | @reviewer, init.py |
+| `security-model.instructions.md` | ✅ | Security assessment, secret handling, audit | @reviewer, @security, init.py |
 | `state-management.instructions.md` | ○ | State handling patterns and persistence | @sprint-lead |
 | `subagent-return-schemas.instructions.md` | ✅ | Agent return value contracts (Tier 1/2/3) | All skills |
 
@@ -64,6 +64,7 @@ Located in `instructions/configurable/`. These instructions contain template var
 | `planning-preflight.instructions.md` | ✅ | Pre-sprint validation checklist | `quality.*`, `platform.*` |
 | `retro-report.instructions.md` | ✅ | Retrospective format, metrics, process ledger | `paths.sprints` |
 | `severity-levels.instructions.md` | ✅ | Severity definitions (CRITICAL/WARNING/SUGGESTION) | (none) |
+| `security-audit.instructions.md` | ○ | Security audit scheduling, changelog governance, hash registry, SBOM governance, license compliance, remediation decision tree, git history baseline | `paths.security_*`, `paths.sbom_output`, `security.*`, `commands.sbom_generate`, `commands.sast`, `commands.secret_scan_history`, `commands.license_check`, `commands.container_scan`, `commands.iac_scan` |
 | `sprint-docs-format.instructions.md` | ✅ | PLAN.md structure and quality gates | `paths.sprints`, `paths.sprints_doc` |
 | `validation-framework.instructions.md` | ○ | Quality validation rules and thresholds | `quality.*` |
 
@@ -114,6 +115,7 @@ Instructions that govern documentation:
 Instructions that govern technical implementation:
 
 - `security-model.instructions.md` — Security requirements
+- `security-audit.instructions.md` — Security audit procedures, scheduling, changelog governance
 - `state-management.instructions.md` — State persistence
 - `determinism-guarantees.instructions.md` — Replay requirements
 - `observability.instructions.md` — Logging and tracing

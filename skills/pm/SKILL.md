@@ -2,6 +2,12 @@
 name: pm
 description: Validates whether features are worth building using a 5-test echo-chamber filter. Use when pressure-testing a feature idea, competitive research finding, or brainstorm output before sprint planning. Also use for roadmap prioritisation and kill/keep decisions.
 when_to_use: "validate this feature, should we build, is this worth it, roadmap priority, competitive finding to assess, brainstorm output to pressure-test"
+user-invocable: true
+agent:
+  tools: [read, search]
+  agents: []
+  model: null
+  handoffs: [planner]
 ---
 
 # Product Manager

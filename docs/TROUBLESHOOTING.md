@@ -124,7 +124,7 @@ SECURITY: Potential secret found in config value
 **Cause:** The skill is declared in `agents:` frontmatter but the file doesn't exist.
 
 **Solution:**
-1. Check all 11 skill folders exist: `architect`, `planner`, `sprint-lead`, `pm`, `qa`, `reviewer`, `researcher`, `bug`, `docs`, `a11y`, `perf`
+1. Check all 12 skill folders exist: `architect`, `planner`, `sprint-lead`, `pm`, `qa`, `reviewer`, `researcher`, `bug`, `docs`, `a11y`, `perf`, `security`
 2. Copy any missing skills:
    ```bash
    cp -r resolved/skills/MISSING_SKILL ../.github/agents/

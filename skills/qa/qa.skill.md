@@ -3,6 +3,11 @@ name: qa
 description: Runs the full quality pipeline — typecheck, lint, unit tests, coverage, and E2E. Use after implementation to validate a sprint or check for regressions. Reports gate pass/fail with exact numbers and coverage percentages against configured thresholds.
 when_to_use: "run QA, check quality, run tests, validate sprint, check coverage, run the pipeline, quality check"
 user-invocable: true
+agent:
+  tools: [read, search, execute, edit]
+  agents: []
+  model: null
+  handoffs: []
 ---
 
 # QA Agent

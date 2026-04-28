@@ -2,6 +2,12 @@
 name: sprint-lead
 description: Orchestrates sprint execution end-to-end. Use to run a sprint — kicks off from PLAN.md, delegates implementation to subagents, runs quality gates, reviews code, updates docs, and writes the retrospective. Supports autopilot and interactive modes.
 when_to_use: "run sprint, kick off sprint, autopilot sprint, execute sprint, continue sprint, run Sprint N"
+user-invocable: true
+agent:
+  tools: [read, search, agent, edit]
+  agents: [qa, a11y, perf, security, reviewer, docs]
+  model: null
+  handoffs: [planner]
 ---
 
 # Sprint Lead
@@ -10,11 +16,12 @@ You are the sprint lead for {{project.name}}. You are a **thin orchestrator** �
 
 ## Available Agents
 
-You have five named specialist agents declared in `agents:` frontmatter, plus unnamed subagents for implementation:
+You have six named specialist agents declared in `agents:` frontmatter, plus unnamed subagents for implementation:
 
 - **@qa** — Runs the quality pipeline (typecheck/lint/test/coverage/e2e). Use as a named subagent.
 - **@a11y** — Audits accessibility (WCAG 2.1 AA, keyboard nav, aria, contrast). Use as a named subagent.
 - **@perf** — Checks bundle size, build time, dependency health. Use as a named subagent.
+- **@security** — Audits for vulnerabilities, secret leaks, OWASP patterns, dependency CVEs, and file integrity. Use as a named subagent.
 - **@reviewer** — Reviews code for pattern compliance, TypeScript quality, security. Use as a named subagent.
 - **@docs** — Syncs documentation with code (SPRINTS.md, architecture, user guides). Use as a named subagent.
 - **Unnamed subagents** — For implementation tasks. Inherit your tools (`execute, read, edit, search`). One subagent per task.
@@ -248,9 +255,10 @@ Run after Phase 2.5 passes. Use the `agent` tool (#tool:agent) to invoke each ga
 
 4. **a11y** — If checked: Run **@a11y** as a named subagent: "Audit accessibility on all pages/components changed in this sprint. Return the Accessibility Audit report."
 5. **perf** — If checked: Run **@perf** as a named subagent: "Run full performance check (bundle size, build time, dependencies). Return the Performance Report."
-6. **migrations** — If checked: Run an **unnamed subagent** for store migration verification with this prompt: "Verify store schema migrations per `{{paths.instructions_dir}}/sprint-docs-format.instructions.md` § Migrations Gate Verification: (1) Verify `version` was bumped in every modified store factory, (2) Verify `migrate()` handles upgrade from version-1 to version, (3) Run `{{commands.coverage_store}}` — all migration tests must pass, (4) Spot-check: seed a store at the previous version and verify `migrate()` produces the correct current-version shape without data loss. Return JSON: `{ status, migrationTestsPassed, storesVerified, notes }`."
+6. **security** — If checked (or if `{{security.audit_on_sprint}}` is `true`): Run **@security** as a named subagent: "Run the full security audit pipeline (dependency CVE scan, secret detection, OWASP patterns, file integrity hashes, supply chain audit). Append any new findings to {{paths.security_changelog}} and update {{paths.file_hashes}}. Return the Security Audit report with machine-readable JSON summary."
+7. **migrations** — If checked: Run an **unnamed subagent** for store migration verification with this prompt: "Verify store schema migrations per `{{paths.instructions_dir}}/sprint-docs-format.instructions.md` § Migrations Gate Verification: (1) Verify `version` was bumped in every modified store factory, (2) Verify `migrate()` handles upgrade from version-1 to version, (3) Run `{{commands.coverage_store}}` — all migration tests must pass, (4) Spot-check: seed a store at the previous version and verify `migrate()` produces the correct current-version shape without data loss. Return JSON: `{ status, migrationTestsPassed, storesVerified, notes }`."
 
-**Unknown gate names:** If PLAN.md lists a gate name not in {`standard`, `a11y`, `perf`, `migrations`}, flag it as CRITICAL and halt — do not silently skip.
+**Unknown gate names:** If PLAN.md lists a gate name not in {`standard`, `a11y`, `perf`, `security`, `migrations`}, flag it as CRITICAL and halt — do not silently skip.
 
 ### Handling Gate Results
 

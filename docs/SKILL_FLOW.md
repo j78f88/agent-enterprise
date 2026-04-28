@@ -8,19 +8,22 @@ How agent-homebase skills orchestrate work. This document shows execution sequen
 
 ## Skill Inventory
 
-| Skill | Role | Invokes | Invoked By |
-|-------|------|---------|------------|
-| **@planner** | Scope requirements, draft sprint plans | @researcher | User, @sprint-lead |
-| **@sprint-lead** | Orchestrate sprint execution end-to-end | @qa, @a11y, @perf, @reviewer, @docs, unnamed subagents | User |
-| **@pm** | Validate features using 5-test echo-chamber | — | @planner |
-| **@qa** | Run quality pipeline (test/lint/typecheck) | — | @sprint-lead |
-| **@reviewer** | Code review for patterns, security | — | @sprint-lead |
-| **@architect** | Design approaches, ADRs | @researcher | User, @planner |
-| **@researcher** | Surface external patterns with citations | — | @planner, @architect |
-| **@bug** | Capture bugs into structured backlog | — | User, @qa |
-| **@docs** | Maintain documentation post-sprint | — | @sprint-lead |
-| **@a11y** | WCAG 2.1 AA accessibility audits | — | @sprint-lead |
-| **@perf** | Bundle size, build time, dependency audits | — | @sprint-lead |
+| Skill | Role | Invokes | Invoked By | Agent Tools (VS Code) |
+|-------|------|---------|------------|----------------------|
+| **@planner** | Scope requirements, draft sprint plans | @researcher | User, @sprint-lead | read, search, edit |
+| **@sprint-lead** | Orchestrate sprint execution end-to-end | @qa, @a11y, @perf, @security, @reviewer, @docs, unnamed subagents | User | read, search, agent, edit |
+| **@pm** | Validate features using 5-test echo-chamber | — | @planner | read, search |
+| **@qa** | Run quality pipeline (test/lint/typecheck) | — | @sprint-lead | read, search, execute, edit |
+| **@reviewer** | Code review for patterns, security | — | @sprint-lead | read, search |
+| **@architect** | Design approaches, ADRs | @researcher | User, @planner | read, search |
+| **@researcher** | Surface external patterns with citations | — | @planner, @architect | read, search, web |
+| **@bug** | Capture bugs into structured backlog | — | User, @qa | read, search, edit |
+| **@docs** | Maintain documentation post-sprint | — | @sprint-lead | read, search, edit |
+| **@a11y** | WCAG 2.1 AA accessibility audits | — | @sprint-lead | read, search, execute |
+| **@perf** | Bundle size, build time, dependency audits | — | @sprint-lead | read, search, execute |
+| **@security** | Vulnerability scans, CVE research, integrity hashes | — | @sprint-lead | read, search, execute |
+
+> **Agent Tools column:** When `editor.target` includes `"vscode"`, each skill generates a `.agent.md` wrapper with these tool restrictions in frontmatter. Read-only agents (reviewer, architect, pm) cannot edit files. Audit agents (a11y, perf, security) can execute commands but not edit code.
 
 ---
 

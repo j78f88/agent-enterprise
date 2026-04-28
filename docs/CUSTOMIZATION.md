@@ -13,6 +13,7 @@ How to customize agent-homebase for your project: tuning skills, overriding defa
 | "Need different settings per sprint" | [Sprint Overrides](#gate-behavior) |
 | "Want to add my own commands" | [Custom Commands](#custom-commands) |
 | "Starting a new project type" | [Using Profiles](#using-profiles) |
+| "VS Code vs Claude Code setup" | [Platform Selection](#platform-selection) |
 
 ---
 
@@ -50,6 +51,44 @@ git:
 ```
 
 Run `python3 init.py --quick-setup` for an interactive prompt that sets these values.
+
+---
+
+## Platform Selection
+
+Control what `init.py` generates with `editor.target`:
+
+```yaml
+editor:
+  target: "both"   # "vscode" | "claude-code" | "both"
+```
+
+| Value | Skills | Agent Wrappers | Instructions |
+|:------|:-------|:---------------|:-------------|
+| `"both"` (default) | ✅ Generated | ✅ Generated | ✅ Generated |
+| `"vscode"` | ✅ Generated (non-invocable) | ✅ Generated | ✅ Generated |
+| `"claude-code"` | ✅ Generated | ❌ Skipped | ✅ Generated |
+
+**VS Code agent wrappers** are thin `.agent.md` files with:
+- **Tool restrictions** — `reviewer` gets `[read, search]` only, enforced via frontmatter
+- **Subagent delegation** — `sprint-lead` declares `agents: [qa, a11y, perf, reviewer, docs]`
+- **Handoff hints** — `planner` declares `handoffs: [sprint-lead]`
+
+Skills remain the canonical source. Agent bodies reference `skills/<name>/SKILL.md` for detailed procedures.
+
+### Customizing Agent Metadata
+
+Each skill's `agent:` block in its `{name}.skill.md` frontmatter controls the generated wrapper:
+
+```yaml
+agent:
+  tools: [read, search, edit]    # VS Code tool restrictions
+  agents: []                      # Named subagents this agent can invoke
+  model: null                     # Model override (or null for default)
+  handoffs: [sprint-lead]         # Agents this one hands off to
+```
+
+To change tool restrictions, edit the source `skills/<name>/<name>.skill.md` and re-run `init.py`.
 
 ---
 

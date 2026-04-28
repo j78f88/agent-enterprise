@@ -54,17 +54,37 @@ skills-library/
 │   │   └── SKILL.md
 │   ├── a11y/
 │   │   └── SKILL.md
-│   └── perf/
+│   ├── perf/
+│   │   └── SKILL.md
+│   └── security/
 │       └── SKILL.md
+│
+├── agents/                       # Hand-crafted agent bodies for VS Code wrappers
+│   ├── a11y.body.md
+│   ├── architect.body.md
+│   ├── bug.body.md
+│   ├── docs.body.md
+│   ├── perf.body.md
+│   ├── planner.body.md
+│   ├── pm.body.md
+│   ├── qa.body.md
+│   ├── researcher.body.md
+│   ├── reviewer.body.md
+│   ├── security.body.md
+│   └── sprint-lead.body.md
 │
 ├── instructions/                 # Supporting instruction files
 │   ├── generic/                  # Copy as-is — no substitution needed
 │   │   ├── askquestions-contract.instructions.md
 │   │   ├── batch-report.instructions.md
-│   │   ├── subagent-return-schemas.instructions.md
-│   │   ├── severity-levels.instructions.md
 │   │   ├── commit-conventions.instructions.md
-│   │   └── contract-change-checklist.instructions.md
+│   │   ├── contract-change-checklist.instructions.md
+│   │   ├── determinism-guarantees.instructions.md
+│   │   ├── fsm-orchestration.instructions.md
+│   │   ├── observability.instructions.md
+│   │   ├── security-model.instructions.md
+│   │   ├── state-management.instructions.md
+│   │   └── subagent-return-schemas.instructions.md
 │   └── configurable/             # Require token substitution before use
 │       ├── backlog-ledger.instructions.md
 │       ├── bug-backlog-format.instructions.md
@@ -76,17 +96,21 @@ skills-library/
 │       ├── planning-compliance.instructions.md
 │       ├── planning-preflight.instructions.md
 │       ├── retro-report.instructions.md
+│       ├── security-audit.instructions.md
+│       ├── severity-levels.instructions.md
 │       ├── sprint-docs-format.instructions.md
 │       └── validation-framework.instructions.md
 │
 ├── starters/                     # Seed files for new projects
 │   ├── BACKLOG_LEDGER.md
 │   ├── BUG_BACKLOG.md
+│   ├── FILE_HASHES.md
 │   ├── HANDOFF_REJECTIONS.md
-│   ├── SPRINTS.md
-│   ├── NON_GOALS.md
 │   ├── memory-architecture.md    # Starter .claude/memory/architecture.md
-│   └── memory-conventions.md     # Starter .claude/memory/conventions.md
+│   ├── memory-conventions.md     # Starter .claude/memory/conventions.md
+│   ├── NON_GOALS.md
+│   ├── SECURITY_CHANGELOG.md
+│   └── SPRINTS.md
 │
 ├── profiles/                     # Pre-filled configs for common project types
 │   ├── react-web-app.config.yml
@@ -95,6 +119,7 @@ skills-library/
 │
 └── resolved/                     # Git-ignored — init.py writes output here
     ├── skills/
+    ├── agents/                   # VS Code agent wrappers (when editor.target includes vscode)
     └── instructions/
 ```
 

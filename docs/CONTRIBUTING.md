@@ -38,7 +38,7 @@ pytest tests/ -v
 
 ```
 agent-homebase/
-├── skills/              # Agent skill definitions (SKILL.md)
+├── skills/              # Agent skill definitions ({name}.skill.md)
 ├── instructions/        # Governance rules
 │   ├── generic/         # Cross-project standards
 │   └── configurable/    # Project-specific (uses {{tokens}})
@@ -63,7 +63,11 @@ agent-homebase/
 mkdir skills/my-skill
 ```
 
-### 2. Create SKILL.md
+### 2. Create {name}.skill.md
+
+```bash
+# File: skills/my-skill/my-skill.skill.md
+```
 
 ```markdown
 ---
@@ -130,7 +134,7 @@ Return a Tier [1/2/3] response:
 # Run token substitution
 python3 init.py --config profiles/react-web-app.config.yml
 
-# Verify resolved skill
+# Verify resolved skill (output is always SKILL.md per VS Code convention)
 cat resolved/skills/my-skill/SKILL.md
 
 # Check for unresolved tokens

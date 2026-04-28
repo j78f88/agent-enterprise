@@ -2,6 +2,9 @@
 # Then run: python3 init.py --config project.config.yml
 # Output lands in resolved/ — copy to .github/ when done.
 
+editor:
+  target: "both"                    # "vscode" | "claude-code" | "both" — controls whether agent wrappers are generated
+
 project:
   name: "My Project"
   language: "TypeScript"           # Primary language — used in compliance checklist
@@ -44,6 +47,11 @@ paths:
   changelog: "docs/user/changelog.json"
   changelog_deploy_copy: "apps/web/public/changelog.json"   # Where changelog is copied at deploy time
   package_json: "apps/web/package.json"                     # File containing version number
+  # Security docs
+  security_changelog: "docs/security/SECURITY_CHANGELOG.md"  # Append-only security finding log (owned by @security)
+  file_hashes: "docs/security/FILE_HASHES.md"                # SHA-256 integrity registry (owned by @security)
+  security_reports: "docs/security/reports/"                  # Per-audit detailed reports
+  sbom_output: "docs/security/sbom.json"                      # SBOM output file (CycloneDX/SPDX JSON)
   # Agent tooling
   copilot_instructions: ".github/copilot-instructions.md"
   instructions_dir: ".github/instructions"                  # Used by @reviewer to reference instruction files
@@ -114,6 +122,12 @@ commands:
   coverage_store: "pnpm test:coverage"   # Override for store/library package coverage (e.g. pnpm --filter @org/store test:coverage)
   coverage_web: "pnpm test:coverage"     # Override for web/app coverage (e.g. pnpm --filter @org/web test:coverage)
   depcheck: "npx depcheck --json"        # Used by @perf for dependency audit
+  sbom_generate: "syft . -o cyclonedx-json"            # SBOM generation (Syft, CycloneDX CLI, etc.)
+  sast: "npx semgrep --config auto --json"             # Static analysis (semgrep, bandit, codeql)
+  secret_scan_history: "gitleaks detect --source . --verbose --report-format json"  # Git history secret scan
+  license_check: "npx license-checker --json"          # License compliance (license-checker, pip-licenses)
+  container_scan: "trivy image --format json"          # Container scan — append image:tag to command
+  iac_scan: "checkov -d . --output json"               # IaC scanning (checkov, kics, trivy-config)
   # Cross-platform ISO timestamp — used by @sprint-lead for phase timing.
   # Do NOT use Get-Date (PowerShell/Windows only).
   # Windows PowerShell alternative: powershell -Command "Get-Date -Format o"
@@ -135,6 +149,22 @@ security:
   path_validation: true             # Validate paths for traversal attacks
   sandbox_enabled: false            # (Roadmap: Phase 3) Container-based sandboxing
   supply_chain_verification: false  # (Roadmap: Phase 3) Cryptographic signing
+  # @security agent configuration
+  audit_on_sprint: true             # Include @security as a sprint quality gate
+  audit_on_dependency_change: true  # Run dependency scan when lock files change
+  tracked_files: []                 # Additional files to track in hash registry (beyond defaults)
+  cvss_critical_threshold: 9.0     # CVSS score >= this → CRITICAL
+  cvss_warning_threshold: 7.0      # CVSS score >= this → WARNING
+  cisa_kev_check: true             # Cross-reference CISA Known Exploited Vulnerabilities catalog
+  sec_id_prefix: "SEC"             # Prefix for security changelog entry IDs
+  sbom_format: "cyclonedx"            # cyclonedx | spdx
+  scan_git_history: true              # Scan full git history for previously committed secrets
+  license_gate: false                 # If true, denied license = gate FAIL (default: WARNING only)
+  license_denylist: ["GPL-3.0-only", "AGPL-3.0-only", "SSPL-1.0"]
+  license_allowlist: ["MIT", "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause", "ISC", "0BSD"]
+  check_security_headers: true        # Check HTTP security headers (web projects only)
+  sast_tool: "semgrep"                # semgrep | bandit | eslint-security | codeql
+  iac_scanner: "checkov"              # checkov | kics | trivy-config
 
 # Observability & Tracing Configuration
 observability:

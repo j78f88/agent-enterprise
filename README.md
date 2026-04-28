@@ -4,7 +4,7 @@
 
 <h3>The operating system your AI coding assistant is missing</h3>
 
-<p><strong>11 agent roles · 23 governance rules · 1 config file · 5 minutes to ship better code</strong></p>
+<p><strong>12 agent roles · 24 governance rules · 1 config file · 5 minutes to ship better code</strong></p>
 
 [![GitHub stars](https://img.shields.io/github/stars/j78f88/agent-homebase?style=social)](https://github.com/j78f88/agent-homebase/stargazers)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -69,7 +69,7 @@ Your feature request
 
 ## 🎯 What You Get
 
-### 11 Specialized Agent Roles
+### 12 Specialized Agent Roles
 
 | Agent | What It Does |
 |:------|:-------------|
@@ -82,10 +82,11 @@ Your feature request
 | 📚 **@researcher** | Surfaces prior art with citations, identifies failure modes |
 | 🐛 **@bug** | Captures bugs into structured, prioritized backlog |
 | 📖 **@docs** | Keeps documentation in sync after every sprint |
+| 🔐 **@security** | Vulnerability scans, CVE research, secret detection, file integrity hashes, security changelog |
 | ♿ **@a11y** | WCAG 2.1 AA accessibility audits |
 | ⚡ **@perf** | Bundle size, build time, dependency analysis |
 
-### 23 Governance Rules
+### 24 Governance Rules
 
 - Commit message conventions  
 - Severity classification (CRITICAL / WARNING / SUGGESTION)  
@@ -178,6 +179,8 @@ python3 init.py --config project.config.yml
 # 4. Copy to your project
 cp -r resolved/skills/* ../.github/agents/
 cp -r resolved/instructions/* ../.github/instructions/
+# If using VS Code agents (editor.target: "vscode" or "both"):
+cp -r resolved/agents/* ../.github/agents/
 
 # 5. Initialize planning files (first time only)
 cp starters/SPRINTS.md ../
@@ -278,11 +281,23 @@ Most projects only need Phase 0-1. Add phases as reliability requirements grow.
 
 ## 🌍 Compatibility
 
-| Platform | Status |
-|:---------|:-------|
-| GitHub Copilot (VS Code agent mode) | ✅ Full support |
-| Claude Code / Cowork | ✅ Full support |
-| Any `.instructions.md` system | ✅ Compatible |
+| Platform | Status | What You Get |
+|:---------|:-------|:-------------|
+| GitHub Copilot (VS Code agent mode) | ✅ Full support | Agent wrappers with tool restrictions + skills |
+| Claude Code / Cowork | ✅ Full support | Skills with progressive context loading |
+| Any `.instructions.md` system | ✅ Compatible | Instructions work everywhere |
+
+### Platform Selection
+
+Set `editor.target` in your config to control what gets generated:
+
+| Value | Generates | Best For |
+|:------|:----------|:---------|
+| `"both"` (default) | Skills + agents + instructions | Teams on mixed platforms |
+| `"vscode"` | Agents + instructions (skills set to non-invocable) | VS Code-only teams |
+| `"claude-code"` | Skills + instructions (no agents) | Claude Code-only teams |
+
+When `editor.target` includes VS Code, `init.py` generates thin `.agent.md` wrappers in `resolved/agents/` with native tool restrictions, subagent delegation, and model selection. Skills remain the single source of truth.
 
 ---
 
@@ -290,14 +305,18 @@ Most projects only need Phase 0-1. Add phases as reliability requirements grow.
 
 ```
 agent-homebase/
-├── skills/           # 11 agent definitions
-├── instructions/     # 23 governance rules
+├── skills/           # 12 agent definitions (canonical source of truth)
+├── instructions/     # 24 governance rules
 │   ├── configurable/ # Project-specific (paths, thresholds)
 │   └── generic/      # Universal (contracts, severity)
 ├── profiles/         # Ready-to-use configs
 ├── starters/         # Sprint/backlog starter files
 ├── schemas/          # JSON return validation
 ├── policies/         # Rego policy rules
+├── resolved/         # Generated output
+│   ├── skills/       # Token-resolved skills (both platforms)
+│   ├── agents/       # VS Code agent wrappers (when editor.target includes vscode)
+│   └── instructions/ # Token-resolved instructions
 ├── docs/             # Complete documentation
 └── src/              # Phase implementations (Python)
 ```

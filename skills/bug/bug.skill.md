@@ -3,6 +3,11 @@ name: bug
 description: Captures bugs fast and appends them to the bug backlog with a sequential ID, severity, area, and reproduction steps. Use to log a reproducible issue. Takes about 30 seconds per bug. Creates a matching ledger entry automatically.
 when_to_use: "log a bug, report a bug, found a bug, something is broken, capture this issue, bug report"
 user-invocable: true
+agent:
+  tools: [read, search, edit]
+  agents: []
+  model: null
+  handoffs: []
 ---
 
 # Bug Reporter

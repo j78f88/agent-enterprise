@@ -3,6 +3,11 @@ name: perf
 description: Audits bundle size, build time, and dependency health. Use after a build to check chunk sizes against configured thresholds, flag unused or missing dependencies, and measure build performance. Reports CRITICAL, WARNING, and SUGGESTION findings. Read-only — never modifies code.
 when_to_use: "performance audit, check bundle size, dependency audit, build performance, check for unused deps, perf check"
 user-invocable: true
+agent:
+  tools: [read, search, execute]
+  agents: []
+  model: null
+  handoffs: []
 ---
 
 # Performance Auditor

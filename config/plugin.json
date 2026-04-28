@@ -1,12 +1,13 @@
 {
   "name": "agent-homebase",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "description": "Reusable agent skills for software delivery: product validation, sprint planning, execution, quality gates, and documentation.",
   "author": {
     "name": "agent-homebase contributors",
     "url": "https://github.com/j78f88"
   },
   "repository": "https://github.com/j78f88/agent-homebase",
-  "agents": "skills/",
-  "instructions": "instructions/"
+  "skills": "resolved/skills/",
+  "agents": "resolved/agents/",
+  "instructions": "resolved/instructions/"
 }

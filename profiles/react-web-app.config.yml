@@ -2,6 +2,9 @@
 # Pre-filled for a standard single-package React + Vite app on Vercel or GitHub Pages.
 # Replace placeholder values (marked with FIXME) before running init.py.
 
+editor:
+  target: "both"                    # "vscode" | "claude-code" | "both"
+
 project:
   name: "My React App"             # FIXME
   language: "TypeScript"

@@ -34,7 +34,10 @@ Each skill is a specialized agent role (e.g., `@planner` drafts sprint plans, `@
 **Add for automated documentation:**
 `docs`
 
-You can install all eleven and let the skill descriptions handle routing — skills only load when relevant. The cost of unused skills is negligible.
+**Add for vulnerability scanning and security audits:**
+`security`
+
+You can install all twelve and let the skill descriptions handle routing — skills only load when relevant. The cost of unused skills is negligible.
 
 ---
 
@@ -82,6 +85,14 @@ This prompts for the essential values (project name, repo, namespace, branch) an
 
 Open `project.config.yml` and fill in every `FIXME` value. **If you skip this step, agents won't run correctly** - the system will show which values are missing (marked with ⚠) when you run `init.py`.
 
+**Platform selection:** Set `editor.target` to control what gets generated:
+
+| Value | Generates | Best For |
+|:------|:----------|:---------|
+| `"both"` (default) | Skills + agent wrappers + instructions | Teams on mixed platforms |
+| `"vscode"` | Agent wrappers + instructions (skills set to non-invocable) | VS Code-only teams |
+| `"claude-code"` | Skills + instructions (no agent wrappers) | Claude Code-only teams |
+
 The key fields to get right:
 
 - `project.name` — your project name (e.g., "My App") — used in all agent identity prompts
@@ -111,7 +122,12 @@ Watch for `⚠` warnings — each one is a token with no config value. Fix them 
 ```bash
 cp -r resolved/skills/*        ../.github/agents/
 cp -r resolved/instructions/*  ../.github/instructions/
+
+# If using VS Code agents (editor.target: "vscode" or "both"):
+cp -r resolved/agents/*        ../.github/agents/
 ```
+
+> **Note:** When `editor.target` includes `"vscode"`, `init.py` generates thin `.agent.md` wrappers in `resolved/agents/` with native tool restrictions and subagent delegation. These go alongside skills in `.github/agents/`.
 
 ---
 
@@ -121,6 +137,7 @@ If your project doesn't already have planning infrastructure:
 
 ```bash
 mkdir -p ../docs/planning ../docs/architecture ../docs/development ../docs/user
+mkdir -p ../docs/security ../docs/security/reports
 mkdir -p ../.claude/memory
 
 cp starters/BACKLOG_LEDGER.md    ../docs/planning/
@@ -128,6 +145,8 @@ cp starters/BUG_BACKLOG.md       ../docs/planning/
 cp starters/HANDOFF_REJECTIONS.md ../docs/planning/
 cp starters/SPRINTS.md           ../
 cp starters/NON_GOALS.md         ../docs/
+cp starters/SECURITY_CHANGELOG.md ../docs/security/
+cp starters/FILE_HASHES.md       ../docs/security/
 cp starters/memory-architecture.md ../.claude/memory/architecture.md
 cp starters/memory-conventions.md  ../.claude/memory/conventions.md
 ```
@@ -157,7 +176,11 @@ Run these checks to confirm everything is working:
 ```bash
 # Skills should be in place
 ls ../.github/agents/
-# Expected: architect/ bug/ docs/ a11y/ perf/ planner/ pm/ qa/ reviewer/ researcher/ sprint-lead/
+# Expected: architect/ bug/ docs/ a11y/ perf/ planner/ pm/ qa/ reviewer/ researcher/ security/ sprint-lead/
+
+# Agent wrappers (if editor.target includes "vscode")
+ls ../.github/agents/*.agent.md
+# Expected: 12 .agent.md files (one per skill)
 
 # Instructions should be in place
 ls ../.github/instructions/
