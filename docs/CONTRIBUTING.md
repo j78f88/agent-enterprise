@@ -4,6 +4,20 @@ How to contribute to agent-homebase: adding skills, instructions, and extending 
 
 ---
 
+## Why Contribute?
+
+This library improves when real teams hit real problems. Every contribution—whether a new skill, a bug fix, or better docs—helps hundreds of projects ship cleaner agent workflows.
+
+**What makes a good contribution:**
+- 🐛 **Bug fixes** — Found an edge case? Fix it.
+- 📝 **Documentation** — Clarify something that confused you.
+- 🎯 **New skills** — Built a useful agent pattern? Share it.
+- ⚡ **Performance** — Made something faster? PR it.
+
+No contribution is too small. Typo fixes welcome.
+
+---
+
 ## Getting Started
 
 ```bash

@@ -4,6 +4,18 @@ How to customize agent-homebase for your project: tuning skills, overriding defa
 
 ---
 
+## Quick Reference: What Do You Want to Do?
+
+| Scenario | Section |
+|:---------|:--------|
+| "Tests keep failing the coverage gate" | [Tuning Quality Thresholds](#tuning-quality-thresholds) |
+| "Backlog items never escalate" | [Customizing Escalation Rules](#customizing-escalation-rules) |
+| "Need different settings per sprint" | [Sprint Overrides](#gate-behavior) |
+| "Want to add my own commands" | [Custom Commands](#custom-commands) |
+| "Starting a new project type" | [Using Profiles](#using-profiles) |
+
+---
+
 ## Configuration Hierarchy
 
 Settings cascade from defaults to project-specific:

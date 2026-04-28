@@ -4,6 +4,18 @@ Master directory of all instruction files in agent-homebase. Instructions are go
 
 ---
 
+## Start Here
+
+**New to agent-homebase?** Read these 3 instructions first:
+
+1. **[severity-levels.instructions.md](../instructions/configurable/severity-levels.instructions.md)** — How agents classify issues (CRITICAL/WARNING/SUGGESTION)
+2. **[commit-conventions.instructions.md](../instructions/generic/commit-conventions.instructions.md)** — Git commit format all agents follow
+3. **[subagent-return-schemas.instructions.md](../instructions/generic/subagent-return-schemas.instructions.md)** — How agents communicate (Tier 1/2/3 responses)
+
+These three cover 80% of what you need to understand agent behavior.
+
+---
+
 ## Overview
 
 | Category | Count | Purpose |
