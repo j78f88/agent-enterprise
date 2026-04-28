@@ -45,7 +45,7 @@ You can install all eleven and let the skill descriptions handle routing — ski
 Links the library as a separate repo. You get updates via `git submodule update --remote`. Keeps your repo clean and upgradeable.
 
 ```bash
-git submodule add https://github.com/<your-username>/agent-homebase.git skills-library
+git submodule add https://github.com/j78f88/agent-homebase.git skills-library
 ```
 
 **Option B — One-time copy:**
@@ -53,7 +53,7 @@ git submodule add https://github.com/<your-username>/agent-homebase.git skills-l
 Copies files once. No auto-updates, but simpler setup if you don't plan to upgrade.
 
 ```bash
-git clone https://github.com/<your-username>/agent-homebase.git skills-library
+git clone https://github.com/j78f88/agent-homebase.git skills-library
 rm -rf skills-library/.git   # detach from library history
 ```
 

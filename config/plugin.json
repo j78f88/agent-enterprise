@@ -4,9 +4,9 @@
   "description": "Reusable agent skills for software delivery: product validation, sprint planning, execution, quality gates, and documentation.",
   "author": {
     "name": "Your Name",
-    "url": "https://github.com/<your-username>"
+    "url": "https://github.com/j78f88"
   },
-  "repository": "https://github.com/<your-username>/agent-homebase",
+  "repository": "https://github.com/j78f88/agent-homebase",
   "agents": "skills/",
   "instructions": "instructions/"
 }
