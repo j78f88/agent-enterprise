@@ -5,6 +5,7 @@ init.py — Token substitution for agent-homebase skills library.
 Usage:
     python3 init.py --config project.config.yml
     python3 init.py --config profiles/react-web-app.config.yml
+    python3 init.py --quick-setup                 # Interactive setup for key values
 
 Output:
     resolved/skills/        — copy to .github/agents/ (or your skills directory)
@@ -207,6 +208,71 @@ def flatten(d: dict, prefix: str = "") -> dict:
     return result
 
 
+def quick_setup(config_path: Path) -> None:
+    """Interactive setup for key project config values."""
+    print("\n" + "=" * 60)
+    print("  agent-homebase Quick Setup")
+    print("=" * 60 + "\n")
+    
+    # Check if config exists
+    if not config_path.exists():
+        print(f"Config file not found: {config_path}")
+        print("Creating from example...")
+        example_path = Path("config/project.config.example.yml")
+        if not example_path.exists():
+            print(f"ERROR: Example config not found at {example_path}")
+            sys.exit(1)
+        shutil.copy(example_path, config_path)
+        print(f"✓ Created {config_path}\n")
+    
+    # Load existing config
+    with open(config_path) as f:
+        config = yaml.safe_load(f)
+    
+    # Interactive prompts for key values
+    print("Answer the following to customize your project config.\n")
+    print("Press Enter to keep current value shown in [brackets].\n")
+    
+    # Project name
+    current_name = config.get('project', {}).get('name', 'My Project')
+    new_name = input(f"Project name [{current_name}]: ").strip()
+    if new_name:
+        config.setdefault('project', {})['name'] = new_name
+    
+    # GitHub repo
+    current_repo = config.get('git', {}).get('repo', 'owner/repo')
+    new_repo = input(f"GitHub repository (owner/repo) [{current_repo}]: ").strip()
+    if new_repo:
+        config.setdefault('git', {})['repo'] = new_repo
+    
+    # Namespace
+    current_ns = config.get('project', {}).get('namespace', '@org')
+    new_ns = input(f"Monorepo namespace [{current_ns}]: ").strip()
+    if new_ns:
+        config.setdefault('project', {})['namespace'] = new_ns
+    
+    # Main branch
+    current_branch = config.get('git', {}).get('main_branch', 'main')
+    new_branch = input(f"Main branch [{current_branch}]: ").strip()
+    if new_branch:
+        config.setdefault('git', {})['main_branch'] = new_branch
+    
+    # Write updated config
+    print()
+    with open(config_path, 'w') as f:
+        yaml.dump(config, f, default_flow_style=False, sort_keys=False, allow_unicode=True)
+    
+    print(f"✓ Updated {config_path}")
+    print()
+    print("Summary of changes:")
+    print(f"  project.name:    {config.get('project', {}).get('name', 'My Project')}")
+    print(f"  git.repo:        {config.get('git', {}).get('repo', 'owner/repo')}")
+    print(f"  project.namespace: {config.get('project', {}).get('namespace', '@org')}")
+    print(f"  git.main_branch: {config.get('git', {}).get('main_branch', 'main')}")
+    print()
+    print("Next: Run `python3 init.py` to generate resolved files.")
+
+
 def substitute(text: str, tokens: dict) -> str:
     """Replace {{token}} occurrences with config values.
     Unrecognised tokens are left in place and printed as warnings.
@@ -237,9 +303,20 @@ def main():
         default="project.config.yml",
         help="Path to project config YAML (default: project.config.yml)"
     )
+    parser.add_argument(
+        "--quick-setup",
+        action="store_true",
+        help="Interactive setup for key project values (name, repo, namespace)"
+    )
     args = parser.parse_args()
 
     config_path = Path(args.config)
+    
+    # Handle quick setup mode
+    if args.quick_setup:
+        quick_setup(config_path)
+        return
+
     if not config_path.exists():
         print(f"ERROR: config file not found: {config_path}")
         print("  Copy project.config.example.yml to project.config.yml and fill it in.")

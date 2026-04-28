@@ -57,9 +57,9 @@ Located in `instructions/configurable/`. These instructions contain template var
 | `bug-backlog-format.instructions.md` | ✅ | Bug entry format and categorization | `paths.bug_backlog`, `ids.bug_prefix` |
 | `composition-rules.instructions.md` | ✅ | Sprint composition constraints (feature/bug balance) | `escalation.feature_cap_percent` |
 | `engagement-format.instructions.md` | ○ | Engagement tracking structure | `paths.engagements`, `ids.engagement_prefix` |
-| `engagement-gates.instructions.md` | ○ | Stage gates and approval criteria | `team.cto_name` |
+| `engagement-gates.instructions.md` | ○ | Stage gates and approval criteria | (none) |
 | `handoff-rejection-format.instructions.md` | ○ | Rejection entry format | `paths.rejections`, `ids.rejection_prefix` |
-| `non-goals-governance.instructions.md` | ○ | Non-goal tracking and rationale | `paths.non_goals` |
+| `non-goals-governance.instructions.md` | ○ | Non-goal tracking and rationale | `paths.non_goals`, `team.cto_name` |
 | `planning-compliance.instructions.md` | ✅ | Sprint planning rules and validation | `paths.sprints`, `commands.*` |
 | `planning-preflight.instructions.md` | ✅ | Pre-sprint validation checklist | `quality.*`, `platform.*` |
 | `retro-report.instructions.md` | ✅ | Retrospective format, metrics, process ledger | `paths.sprints` |

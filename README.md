@@ -6,7 +6,7 @@
 
 <p><strong>11 agent roles · 23 governance rules · 1 config file · 5 minutes to ship better code</strong></p>
 
-[![GitHub stars](https://img.shields.io/github/stars/j78f88/agent-homebase?style=social)](https://github.com/j78f88/agent-homebase/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/<your-username>/agent-homebase?style=social)](https://github.com/<your-username>/agent-homebase/stargazers)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Copilot](https://img.shields.io/badge/GitHub%20Copilot-Ready-blue?logo=github)](https://github.com/features/copilot)
 [![Claude](https://img.shields.io/badge/Claude%20Code-Ready-orange)](https://claude.ai)
@@ -164,12 +164,13 @@ You: "@sprint-lead run Sprint 12"
 
 ```bash
 # 1. Add to your project
-git submodule add https://github.com/j78f88/agent-homebase.git skills-library
+git submodule add https://github.com/<your-username>/agent-homebase.git skills-library
 cd skills-library
 
 # 2. Choose your profile
 cp profiles/react-web-app.config.yml project.config.yml
-# Edit project.config.yml with your paths, commands, thresholds
+# Edit project.config.yml — at minimum set project.name and git.repo
+# Or use: python3 init.py --quick-setup  (interactive)
 
 # 3. Generate resolved files
 python3 init.py --config project.config.yml
@@ -338,7 +339,7 @@ MIT © 2026
 
 <br />
 
-**[⭐ Star on GitHub](https://github.com/j78f88/agent-homebase)** · **[📖 Get Started](docs/ONBOARDING.md)** · **[🐛 Report Issue](https://github.com/j78f88/agent-homebase/issues)**
+**[⭐ Star on GitHub](https://github.com/<your-username>/agent-homebase)** · **[📖 Get Started](docs/ONBOARDING.md)** · **[🐛 Report Issue](https://github.com/<your-username>/agent-homebase/issues)**
 
 <br />
 

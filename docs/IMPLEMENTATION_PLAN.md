@@ -131,10 +131,10 @@ The plugin manifest bundles all skills into a single installable package. There 
   "version": "1.0.0",
   "description": "Reusable agent skills for software delivery: product validation, sprint planning, execution, quality gates, and documentation.",
   "author": {
-    "name": "Joshua Pope",
-    "url": "https://github.com/j78f88"
+    "name": "Your Name",
+    "url": "https://github.com/<your-username>"
   },
-  "repository": "https://github.com/j78f88/agent-homebase",
+  "repository": "https://github.com/<your-username>/agent-homebase",
   "agents": "skills/",
   "instructions": "instructions/"
 }
@@ -260,7 +260,7 @@ commands:
   timestamp: "date -u +\"%Y-%m-%dT%H:%M:%SZ\""
 
 team:
-  cto_name: "Joshua"
+  cto_name: "Your Name"  # FIXME
 ```
 
 ---
@@ -460,7 +460,7 @@ When the library is stable and you want to publish it as a standalone repo:
 git subtree split --prefix=skills-library --branch skills-library-standalone
 
 # Push directly to agent-homebase (empty repo, no initial commit)
-git push https://github.com/j78f88/agent-homebase.git skills-library-standalone:main
+git push https://github.com/<your-username>/agent-homebase.git skills-library-standalone:main
 ```
 
 That's it — two commands. The `skills-library/` folder's full commit history lands in `agent-homebase` as the `main` branch. The original DIY project repo is unaffected.
@@ -470,7 +470,7 @@ To wire up the upgrade flow after publishing, replace the local `skills-library/
 ```bash
 # From the repo root
 rm -rf skills-library/
-git submodule add https://github.com/j78f88/agent-homebase.git skills-library
+git submodule add https://github.com/<your-username>/agent-homebase.git skills-library
 git commit -m "chore: convert skills-library to submodule (agent-homebase)"
 ```
 

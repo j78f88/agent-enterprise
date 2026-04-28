@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "Reusable agent skills for software delivery: product validation, sprint planning, execution, quality gates, and documentation.",
   "author": {
-    "name": "Joshua Pope",
-    "url": "https://github.com/j78f88"
+    "name": "Your Name",
+    "url": "https://github.com/<your-username>"
   },
-  "repository": "https://github.com/j78f88/agent-homebase",
+  "repository": "https://github.com/<your-username>/agent-homebase",
   "agents": "skills/",
   "instructions": "instructions/"
 }

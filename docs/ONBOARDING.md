@@ -45,7 +45,7 @@ You can install all eleven and let the skill descriptions handle routing — ski
 Links the library as a separate repo. You get updates via `git submodule update --remote`. Keeps your repo clean and upgradeable.
 
 ```bash
-git submodule add https://github.com/j78f88/agent-homebase.git skills-library
+git submodule add https://github.com/<your-username>/agent-homebase.git skills-library
 ```
 
 **Option B — One-time copy:**
@@ -53,7 +53,7 @@ git submodule add https://github.com/j78f88/agent-homebase.git skills-library
 Copies files once. No auto-updates, but simpler setup if you don't plan to upgrade.
 
 ```bash
-git clone https://github.com/j78f88/agent-homebase.git skills-library
+git clone https://github.com/<your-username>/agent-homebase.git skills-library
 rm -rf skills-library/.git   # detach from library history
 ```
 
@@ -70,16 +70,28 @@ cp profiles/react-web-app.config.yml project.config.yml
 # or: cp profiles/monorepo-fullstack.config.yml project.config.yml
 ```
 
+**Option A — Interactive setup (recommended for first-time):**
+
+```bash
+python3 init.py --quick-setup
+```
+
+This prompts for the essential values (project name, repo, namespace, branch) and updates your config.
+
+**Option B — Manual edit:**
+
 Open `project.config.yml` and fill in every `FIXME` value. **If you skip this step, agents won't run correctly** - the system will show which values are missing (marked with ⚠) when you run `init.py`.
 
 The key fields to get right:
 
+- `project.name` — your project name (e.g., "My App") — used in all agent identity prompts
+- `team.cto_name` — your name (e.g., "Alex") — used in approval markers and skill personalization
+- `git.repo` — your GitHub repository (e.g., "owner/repo") — used for CI status checks
 - `paths.*` — where your planning docs live
 - `commands.*` — your actual test/build/lint commands
 - `quality.coverage_store_threshold` and `quality.coverage_web_threshold` — your coverage targets
 - `platform.ci_workflow_display_name` — the exact name shown in GitHub Actions UI
 - `git.main_branch` — `main` or `master`
-- `team.cto_name` — your name (used in approval markers)
 
 ---
 

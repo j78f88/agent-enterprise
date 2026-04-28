@@ -22,7 +22,7 @@ No contribution is too small. Typo fixes welcome.
 
 ```bash
 # Clone the repository
-git clone https://github.com/j78f88/agent-homebase.git
+git clone https://github.com/<your-username>/agent-homebase.git
 cd agent-homebase
 
 # Install dependencies

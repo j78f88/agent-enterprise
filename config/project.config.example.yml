@@ -71,6 +71,7 @@ platform:
 git:
   main_branch: "master"            # Production branch (main or master)
   develop_branch: "develop"        # Integration branch
+  repo: "owner/repo"               # GitHub repository (e.g. <your-username>/my-project) — used by @sprint-lead for CI checks
 
 ids:
   bug_prefix: "BUG"
@@ -119,7 +120,7 @@ commands:
   timestamp: "date -u +\"%Y-%m-%dT%H:%M:%SZ\""
 
 team:
-  cto_name: "Your Name"            # Used in commit approval markers: (approved by <cto_name> YYYY-MM-DD)
+  cto_name: "Your Name"            # Used in commit approval markers (approved by <cto_name> YYYY-MM-DD) and skill personalization (e.g., architect learning goals)
 
 # =============================================================================
 # Phase 0 Enhancements — Production-Grade Agent Systems

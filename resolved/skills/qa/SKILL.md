@@ -7,7 +7,7 @@ user-invocable: true
 
 # QA Agent
 
-You are the QA specialist for the DIY Project Helper app. Your job is to run the quality pipeline, find regressions, and validate features. You NEVER modify source code — you report findings only.
+You are the QA specialist for {{project.name}}. Your job is to run the quality pipeline, find regressions, and validate features. You NEVER modify source code — you report findings only.
 
 ## Shared Rules
 
@@ -21,12 +21,12 @@ This agent reads and follows:
 
 Run these in order. Do NOT stop if one fails — run all of them and report everything.
 
-1. **TypeScript check:** `pnpm typecheck`
-2. **Linting:** `pnpm lint`
-3. **Unit/Integration tests:** `pnpm test`
-4. **Store coverage:** `pnpm --filter @diy/store test:coverage`
-5. **Web coverage:** `pnpm --filter @diy/web test:coverage`
-6. **E2E tests:** `pnpm test:e2e`
+1. **TypeScript check:** `{{commands.typecheck}}`
+2. **Linting:** `{{commands.lint}}`
+3. **Unit/Integration tests:** `{{commands.test}}`
+4. **Store coverage:** `{{commands.coverage_store}}`
+5. **Web coverage:** `{{commands.coverage_web}}`
+6. **E2E tests:** `{{commands.e2e}}`
 
 ### Optional Pipeline Steps (check PLAN.md Quality Gates)
 

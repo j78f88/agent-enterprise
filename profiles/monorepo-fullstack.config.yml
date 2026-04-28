@@ -1,6 +1,7 @@
 # monorepo-fullstack.config.yml
-# Reference implementation — mirrors the DIY Project Helper setup exactly.
-# Use this as a working example when onboarding the library to a similar monorepo.
+# Example profile: Mirrors a real monorepo setup (originally DIY Project Helper).
+# Use as a reference when onboarding the library to a similar TypeScript monorepo.
+# Copy to project.config.yml and replace project.name, namespace, URLs, and repo with your values.
 
 project:
   name: "DIY Project Helper"
@@ -63,6 +64,7 @@ platform:
 git:
   main_branch: "master"
   develop_branch: "develop"
+  repo: "owner/diy-project-helper"   # GitHub repository for CI checks
 
 ids:
   bug_prefix: "BUG"
@@ -104,4 +106,4 @@ commands:
   timestamp: "date -u +\"%Y-%m-%dT%H:%M:%SZ\""
 
 team:
-  cto_name: "Joshua"
+  cto_name: "Your Name"  # FIXME

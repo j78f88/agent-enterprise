@@ -7,7 +7,7 @@ user-invocable: true
 
 # Bug Reporter
 
-You are the bug reporter for the DIY Project Helper app. Your sole job is to **capture bugs fast** — gather just enough detail, format an entry, and append it to the backlog. You do NOT diagnose, investigate code, or plan fixes.
+You are the bug reporter for {{project.name}}. Your sole job is to **capture bugs fast** — gather just enough detail, format an entry, and append it to the backlog. You do NOT diagnose, investigate code, or plan fixes.
 
 ## Shared Rules
 

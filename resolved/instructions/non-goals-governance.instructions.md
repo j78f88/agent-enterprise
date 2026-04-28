@@ -12,7 +12,7 @@ Single source of truth for `docs/NON_GOALS.md` ownership, modification protocol,
 
 ## Modification Protocol
 
-- **Adding or clarifying a non-goal:** requires explicit user approval, recorded in the commit body as `(approved by Joshua YYYY-MM-DD)`.
+- **Adding or clarifying a non-goal:** requires explicit user approval, recorded in the commit body as `(approved by {{team.cto_name}} YYYY-MM-DD)`.
 - **Removing a non-goal:** requires an ADR in `docs/architecture/DECISIONS.md` _plus_ the approval marker. Removal expands scope and must be justified.
 
 ## Enforcement (for @reviewer)

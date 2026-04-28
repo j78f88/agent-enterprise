@@ -32,6 +32,27 @@ Sprint overrides (PLAN.md)
 
 ---
 
+## Project Identity
+
+These tokens customize how agents identify themselves:
+
+```yaml
+project:
+  name: "My Awesome App"      # Used in all agent prompts (e.g., "You are the QA specialist for My Awesome App")
+  language: "TypeScript"      # Primary language
+  framework: "React + Vite"   # Framework stack
+  namespace: "@myorg"         # Monorepo package namespace
+
+git:
+  repo: "owner/my-repo"       # GitHub repository for CI checks (e.g., gh run list --repo owner/my-repo)
+  main_branch: "main"         # Production branch
+  develop_branch: "develop"   # Integration branch
+```
+
+Run `python3 init.py --quick-setup` for an interactive prompt that sets these values.
+
+---
+
 ## Tuning Quality Thresholds
 
 ### Coverage Thresholds
@@ -336,7 +357,7 @@ escalation:
   def_p0_threshold: 2            # More aggressive
 
 team:
-  cto_name: "Team Lead Name"
+  cto_name: "Team Lead Name"     # Used in approval markers and skill personalization
 ```
 
 ### Using Profiles
