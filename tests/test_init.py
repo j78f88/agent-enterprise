@@ -501,7 +501,7 @@ class TestSuppressSkillInvocability:
 
     def test_does_not_modify_source_skills(self, resolved_tree):
         """Source skills/ should never be modified — only resolved copies."""
-        source_path = Path(__file__).parent.parent / "skills" / "architect" / "SKILL.md"
+        source_path = Path(__file__).parent.parent / "skills" / "architect" / "architect.skill.md"
         if source_path.exists():
             original = source_path.read_text(encoding="utf-8")
             suppress_skill_invocability(resolved_tree, ["architect"])
@@ -584,7 +584,10 @@ class TestEndToEndResolution:
         skills_dir = Path(__file__).parent.parent / "skills"
 
         for skill_dir in sorted(skills_dir.iterdir()):
-            skill_md = skill_dir / "SKILL.md"
+            # Find skill file — {name}.skill.md or SKILL.md
+            skill_md = skill_dir / f"{skill_dir.name}.skill.md"
+            if not skill_md.exists():
+                skill_md = skill_dir / "SKILL.md"
             if not skill_md.exists():
                 continue
             fm, _ = parse_frontmatter(skill_md.read_text(encoding="utf-8"))

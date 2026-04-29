@@ -19,7 +19,7 @@ from datetime import datetime, timezone
 
 # Import Phase 2 components
 import sys
-sys.path.insert(0, str(Path(__file__).parent.parent))
+sys.path.insert(0, str(Path(__file__).parent.parent / "src" / "phase2_durability"))
 
 from db import Database, LedgerItem, Bug, Sprint, transactional
 from migrate import MigrationManager, MarkdownLedgerParser
@@ -247,6 +247,24 @@ class TestMigration:
 class TestCheckpoint:
     """Test checkpoint-restart system."""
     
+    @pytest.fixture(autouse=True)
+    def seed_sprint(self, test_db):
+        """Create the sprint record that checkpoints reference via FK."""
+        with test_db.transaction():
+            test_db.add_sprint(Sprint(
+                sprint_id="test-sprint",
+                sprint_number=1,
+                status="in-progress",
+                plan_path="sprints/1/PLAN.md",
+                retro_path=None,
+                kickoff_commit_sha=None,
+                completion_commit_sha=None,
+                started_at=datetime.now(timezone.utc).isoformat(),
+                completed_at=None,
+                forecast_complexity=None,
+                actual_complexity=None,
+            ))
+
     def test_create_checkpoint(self, test_db, temp_dir):
         """Test checkpoint creation."""
         cm = CheckpointManager(test_db, "test-sprint", str(temp_dir))

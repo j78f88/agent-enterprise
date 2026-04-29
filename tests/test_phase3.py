@@ -20,7 +20,10 @@ from unittest.mock import Mock, patch
 
 # Import Phase 3 components
 import sys
-sys.path.insert(0, str(Path(__file__).parent.parent))
+_phase3_dir = str(Path(__file__).parent.parent / "src" / "phase3_isolation")
+_phase2_dir = str(Path(__file__).parent.parent / "src" / "phase2_durability")
+sys.path.insert(0, _phase3_dir)
+sys.path.insert(0, _phase2_dir)
 
 # Only import Docker-dependent modules if Docker is available
 try:
@@ -40,7 +43,7 @@ from capabilities import (
 from checkpoint import CheckpointState, CheckpointManager
 from sandbox_checkpoint import SandboxCheckpointManager
 from workflow import WorkflowEngine, Workflow, Task, TaskStatus, RetryPolicy
-from db import Database
+from db import Database, Sprint
 
 
 # =============================================================================
@@ -118,7 +121,7 @@ class TestCapabilities:
     def test_network_capability(self):
         """Test network capability matching."""
         cap = Capability(
-            type=CapabilityType.NETWORK_HTTPS.value,
+            type=CapabilityType.NETWORK_HTTP.value,
             scope="api.example.com"
         )
         
@@ -378,6 +381,15 @@ class TestSandboxCheckpoint:
     def test_resume_from_checkpoint_with_sandboxes(self, test_db, temp_dir):
         """Test resuming from checkpoint with sandbox state."""
         # This is a simplified test without actually recreating sandboxes
+        # Seed the sprint record so FK constraint is satisfied
+        with test_db.transaction():
+            test_db.add_sprint(Sprint(
+                sprint_id="test-sprint", sprint_number=1, status="in-progress",
+                plan_path="sprints/1/PLAN.md", retro_path=None,
+                kickoff_commit_sha=None, completion_commit_sha=None,
+                started_at=None, completed_at=None,
+                forecast_complexity=None, actual_complexity=None,
+            ))
         checkpoint_mgr = CheckpointManager(test_db, "test-sprint", str(temp_dir))
         
         # Create checkpoint with mock sandbox state
@@ -464,6 +476,8 @@ class TestWorkflowWithSandbox:
     @pytest.mark.docker
     def test_workflow_sandboxed_task(self, test_db, temp_dir):
         """Test workflow with sandboxed task (requires Docker)."""
+        if not DOCKER_AVAILABLE:
+            pytest.skip("Docker SDK not available")
         from sandbox import SandboxManager
         
         sandbox_mgr = SandboxManager(

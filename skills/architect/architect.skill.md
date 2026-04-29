@@ -102,18 +102,18 @@ The general engineering concepts behind this decision (e.g., "Dependency Inversi
 
 ## Available Slash Commands
 
-_None yet with a canonical workflow. See Stubbed below — stub files exist so the `/` picker surfaces them, but each stub redirects to either workflow-design or an ad-hoc run. Promote a stub to Available once the ad-hoc flow has been run 2-3 times and the shape has stabilised._
+_None yet with a canonical workflow. See Aspirational below — no prompt files exist yet. When the first real need arises, create the prompt file and promote it. Promote to Available once the ad-hoc flow has been run 2-3 times and the shape has stabilised._
 
-## Stubbed Slash Commands (prompt file exists, workflow is placeholder)
+## Aspirational Slash Commands (no prompt file yet)
 
-Invoking any of these triggers a branch: "design the workflow now" vs "ad-hoc run this time." The stub prompts enforce this — the agent must not invent a canonical flow on invocation.
+Invoking any of these triggers a branch: "design the workflow now" vs "ad-hoc run this time." Do not invent a canonical flow on invocation.
 
 - `/write-adr <title>` — guided ADR creation for a new decision
 - `/review-approach <feature>` — pressure-test a proposed technical approach before it becomes a sprint
 - `/design-critique <component-or-file>` — structured critique of existing code's design choices
 - `/supersede-adr <ADR-NNN>` — mark an old ADR superseded and write the replacement
 
-When one is invoked, follow the stub's instructions. Do not bluff a workflow.
+When one is invoked, follow the ad-hoc branch. Do not bluff a workflow.
 
 ---
 

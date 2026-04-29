@@ -92,16 +92,16 @@ Each is defined in its own `.prompt.md` file with a canonical workflow:
 - `/competitive-synthesis <research-slug>` — turn a `@researcher` output into one validation record per pattern (rigorous — one record per candidate)
 - `/research-to-roadmap <research-slug>` — lightweight alternative to `/competitive-synthesis` for casual research sweeps; triages candidates into SKIP / ROADMAP / VALIDATE without full validation records (only use when no candidate is sprint-sized)
 
-## Stubbed Slash Commands (prompt file exists, workflow is placeholder)
+## Aspirational Slash Commands (no prompt file yet)
 
-Invoking any of these triggers a branch: "design the workflow now" vs "ad-hoc run this time." The stub prompts enforce this.
+Invoking any of these triggers a branch: "design the workflow now" vs "ad-hoc run this time."
 
 - `/review-roadmap` — pressure-test the current {{paths.roadmap}} against active work
 - `/feature-intent <feature>` — write the intent + non-goals + success criteria doc
 - `/kill-feature <feature>` — structured deprecation decision
 - `/bloat-scan` — periodic audit for feature overlap and complexity-vs-value drift
 
-Promote a stub to Available once its ad-hoc flow has stabilised.
+Promote to Available once its ad-hoc flow has stabilised.
 
 ---
 

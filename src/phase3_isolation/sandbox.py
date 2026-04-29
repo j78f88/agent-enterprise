@@ -374,7 +374,7 @@ class SandboxManager:
             sandbox_id=sandbox_id,
             created_at=time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
             status=SandboxStatus.CREATING.value,
-            capabilities=[],  # Will be populated in Phase 3.2
+            capabilities=[cap.to_dict() if hasattr(cap, 'to_dict') else cap for cap in capabilities],
             resource_limits=resource_limits,
             network_policy=network_policy.value,
             container_name=f"agent-sandbox-{sandbox_id}"
@@ -493,8 +493,30 @@ class SandboxManager:
         if sandbox.sandbox_id not in self.active_sandboxes:
             raise ValueError(f"Sandbox {sandbox.sandbox_id} not found or not active")
         
-        # TODO Phase 3.2: Check capabilities before execution
-        # For now, execute directly
+        # Enforce capabilities before execution
+        if sandbox.state.capabilities:
+            from capabilities import Capability, CapabilityEnforcer, Action
+            caps = [
+                Capability.from_dict(c) if isinstance(c, dict) else c
+                for c in sandbox.state.capabilities
+            ]
+            enforcer = CapabilityEnforcer(capabilities=caps)
+            action = Action.exec_command(command)
+            check = enforcer.check(action)
+            if not check.granted:
+                sandbox.state.capability_violations.append({
+                    'command': command,
+                    'reason': check.reason,
+                    'timestamp': time.time()
+                })
+                self._save_state(sandbox.state)
+                return ExecutionResult(
+                    stdout='',
+                    stderr=f'Capability denied: {check.reason}',
+                    exit_code=126,
+                    execution_time_seconds=0.0,
+                    violations=[{'command': command, 'reason': check.reason}]
+                )
         
         result = sandbox.execute(command, timeout, environment)
         

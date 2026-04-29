@@ -13,7 +13,7 @@ from pathlib import Path
 
 # Import validators
 import sys
-sys.path.insert(0, str(Path(__file__).parent.parent))
+sys.path.insert(0, str(Path(__file__).parent.parent / "src" / "phase1_verification"))
 
 from validator import SubagentReturnValidator, WritePermit, format_validation_errors
 from policy_engine import PolicyEngine
@@ -25,7 +25,8 @@ class TestSubagentReturnValidation:
     @pytest.fixture
     def validator(self):
         """Create validator instance."""
-        return SubagentReturnValidator()
+        schema_dir = Path(__file__).parent.parent / "schemas"
+        return SubagentReturnValidator(schema_dir=schema_dir)
     
     def test_tier1_valid(self, validator):
         """Test valid Tier 1 return."""
