@@ -4,8 +4,9 @@
 
 <h3>The operating system your AI coding assistant is missing</h3>
 
-<p><strong>12 agent roles · 24 governance rules · 1 config file · 5 minutes to ship better code</strong></p>
+<p><strong>12 agents · 14 security checks · dual-platform · 5 minutes to production-grade AI</strong></p>
 
+[![CI](https://github.com/j78f88/agent-homebase/actions/workflows/ci.yml/badge.svg)](https://github.com/j78f88/agent-homebase/actions/workflows/ci.yml)
 [![GitHub stars](https://img.shields.io/github/stars/j78f88/agent-homebase?style=social)](https://github.com/j78f88/agent-homebase/stargazers)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Copilot](https://img.shields.io/badge/GitHub%20Copilot-Ready-blue?logo=github)](https://github.com/features/copilot)
@@ -82,9 +83,32 @@ Your feature request
 | 📚 **@researcher** | Surfaces prior art with citations, identifies failure modes |
 | 🐛 **@bug** | Captures bugs into structured, prioritized backlog |
 | 📖 **@docs** | Keeps documentation in sync after every sprint |
-| 🔐 **@security** | Vulnerability scans, CVE research, secret detection, file integrity hashes, security changelog |
+| 🔐 **@security** | 14 automated security checks — see [details below](#-security-built-in-not-bolted-on) |
 | ♿ **@a11y** | WCAG 2.1 AA accessibility audits |
 | ⚡ **@perf** | Bundle size, build time, dependency analysis |
+
+### 🔐 Security: Built In, Not Bolted On
+
+`@security` runs **14 automated checks** as a sprint gate or on demand:
+
+| Check | What It Catches |
+|:------|:----------------|
+| Dependency CVE scan | Known vulnerabilities in your packages |
+| Active exploit research | CISA KEV catalog, proof-of-concept detection |
+| Secret detection | API keys, tokens, passwords in source |
+| OWASP pattern matching | Injection, XSS, auth failures |
+| File integrity hashes | Unauthorized changes to tracked files |
+| SBOM generation | Full software bill of materials |
+| SAST scanning | Static analysis security findings |
+| Git history secret scan | Secrets in old commits |
+| License compliance | Denylist/allowlist enforcement |
+| HTTP security headers | Missing CSP, HSTS, X-Frame-Options |
+| Container image scan | Vulnerabilities in Docker images |
+| IaC scanning | Misconfigurations in infrastructure code |
+| Supply chain audit | Dependency provenance verification |
+| Security changelog | Append-only finding log (SEC-NNN entries) |
+
+Every finding gets an **OWASP remediation classification**: patched, delayed, no-fix, or zero-day — with timelines and effort tags.
 
 ### 24 Governance Rules
 
@@ -148,7 +172,7 @@ You: "@sprint-lead run Sprint 12"
 @sprint-lead:
   ✓ Implementation complete
   ✓ Tests passing (91% coverage)
-  ✓ Security review: 0 criticals
+  ✓ 14 security checks passed, 0 CVEs
   ✓ Docs updated
   ✓ Pushed to feature branch
 ```
@@ -171,10 +195,10 @@ cd skills-library
 # 2. Choose your profile
 cp profiles/react-web-app.config.yml project.config.yml
 # Edit project.config.yml — at minimum set project.name and git.repo
-# Or use: python3 init.py --quick-setup  (interactive)
+# Or use: python init.py --quick-setup  (interactive)
 
 # 3. Generate resolved files
-python3 init.py --config project.config.yml
+python init.py --config project.config.yml
 
 # 4. Copy to your project
 cp -r resolved/skills/* ../.github/agents/
@@ -247,6 +271,10 @@ When `@qa` returns `status: blocked`, `@sprint-lead` knows exactly what to do. N
 
 Most projects only need Phase 0-1. Add phases as reliability requirements grow.
 
+### Tested & CI-Verified
+
+The library ships with a test suite covering contract validation, init.py generation, checkpoint durability, sandbox capabilities, and determinism guarantees — verified on every push across Python 3.10 and 3.12.
+
 📖 **[Architecture deep-dive →](docs/ARCHITECTURE.md)**
 
 ---
@@ -310,7 +338,7 @@ agent-homebase/
 │   ├── configurable/ # Project-specific (paths, thresholds)
 │   └── generic/      # Universal (contracts, severity)
 ├── profiles/         # Ready-to-use configs
-├── starters/         # Sprint/backlog starter files
+├── starters/         # 9 starter templates (sprints, backlog, security changelog, file hashes)
 ├── schemas/          # JSON return validation
 ├── policies/         # Rego policy rules
 ├── resolved/         # Generated output
