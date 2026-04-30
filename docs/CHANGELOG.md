@@ -1,5 +1,27 @@
 # Changelog
 
+## 1.4.0 — 2026-04-30
+
+### Added
+- **@onboarding skill** — guided first-time setup agent that walks deployers through profile selection, config filling, skill selection, token resolution, file deployment, seeding, and verification. Self-removes after setup is complete.
+- `lifecycle: setup-only` frontmatter field — skills with this value are excluded from `resolved/` output when `setup_complete: true` in config. Stale resolved output is cleaned automatically.
+- `setup_complete` config field in `project.config.example.yml` (default: `false`).
+- `agents/onboarding.body.md` — lean agent wrapper body for the onboarding skill.
+
+### Changed
+- **docs.skill.md** — full review and update:
+  - Added Subagent Mode section (sprint-lead invokes @docs as subagent; was undocumented).
+  - Added Anti-Patterns section with 7 docs-specific patterns.
+  - Added Interaction Style section with `askQuestions` decision points.
+  - Added `subagent-return-schemas.instructions.md` to Shared Rules.
+  - Replaced hardcoded "Australian English" with `{{project.locale}}` token.
+  - Removed project-specific references (Wizard steps, `.github/` paths, `UpdateNotification`, feature matrix exclusions, emoji heading markers).
+  - Fixed broken step numbering in Sync Workflow (was: 1-5, 5-8, 7-10, 11, 12; now: sequential 1-15).
+  - Converted user_guide mega-paragraph into scannable checklist.
+  - Added section separators (`---`) for visual consistency.
+  - Simplified README validation to be project-agnostic.
+- `init.py` — reads `setup_complete` from config; skips `lifecycle: setup-only` skills and cleans stale resolved output during resolution.
+
 ## 1.3.0 — 2026-04-28
 
 ### Added
