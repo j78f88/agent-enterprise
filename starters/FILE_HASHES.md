@@ -12,7 +12,7 @@ Updated by: @security (initial)
 Tracked file categories:
   1. Lock files — package-lock.json, yarn.lock, pnpm-lock.yaml, etc.
   2. Agent config — copilot-instructions.md, all instruction files
-  3. Skill definitions — all SKILL.md files
+  3. Skill definitions — all {name}.skill.md files (resolved as SKILL.md)
   4. CI/CD — .github/workflows/*.yml, Dockerfile, docker-compose.yml
   5. Security policy — policies/*.rego, SECURITY_CHANGELOG.md
   6. Entry points — init.py, index.html

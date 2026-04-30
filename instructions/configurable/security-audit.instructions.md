@@ -117,7 +117,7 @@ The minimum tracked file set:
 
 1. **Lock files** — `package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`, `Pipfile.lock`, `poetry.lock`
 2. **Agent configuration** — `{{paths.copilot_instructions}}`, all files in `{{paths.instructions_dir}}/`
-3. **Skill definitions** — all SKILL.md files
+3. **Skill definitions** — all `{name}.skill.md` files (resolved as `SKILL.md`)
 4. **CI/CD** — `.github/workflows/*.yml`, `Dockerfile`, `docker-compose.yml`
 5. **Security policy** — `policies/*.rego`, `{{paths.security_changelog}}`
 6. **Entry points** — `init.py`, `{{paths.web_app_dir}}/index.html` (if exists)

@@ -345,13 +345,13 @@ def resume_sprint(sprint_id: str):
 
 **Non-deterministic:**
 ```python
-for skill_md in Path("skills").rglob("SKILL.md"):  # ❌ Order undefined
+for skill_md in Path("skills").rglob("*.skill.md"):  # ❌ Order undefined
     process_skill(skill_md)
 ```
 
 **Deterministic:**
 ```python
-for skill_md in sorted(Path("skills").rglob("SKILL.md")):  # ✓ Lexicographic order
+for skill_md in sorted(Path("skills").rglob("*.skill.md")):  # ✓ Lexicographic order
     process_skill(skill_md)
 ```
 

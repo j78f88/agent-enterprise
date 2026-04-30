@@ -20,11 +20,10 @@
 - SKILL_FLOW.md updated with agent wrapper column in skill inventory.
 
 ### Corrections (previously undocumented)
-- **Fixed**: Skill resolution in `init.py` only matched `*.skill.md` filenames, missing all skills using the `SKILL.md` naming convention (11 of 12 skills). Now checks `SKILL.md` first, falls back to `*.skill.md`.
+- **Fixed**: Skill source files renamed from `SKILL.md` to `{name}.skill.md` (e.g., `architect.skill.md`) for unique identification in editor tabs and file pickers. `init.py` resolves these to `SKILL.md` in output per VS Code convention.
 - 5 generic instruction files added across v1.0–v1.2 but not recorded in prior changelog entries: `determinism-guarantees.instructions.md`, `fsm-orchestration.instructions.md`, `observability.instructions.md`, `security-model.instructions.md`, `state-management.instructions.md`.
 - `severity-levels.instructions.md` moved from `instructions/generic/` to `instructions/configurable/`.
 - `user-invocable: true` added to `docs`, `planner`, `pm`, and `sprint-lead` skills (was missing from frontmatter).
-- `skills/perf/perf.skill.md` renamed to `skills/perf/SKILL.md` for consistency with all other skills.
 - Instruction count corrected across all documentation: 10 generic + 14 configurable = 24 total (was incorrectly stated as 23).
 - Agent/skill count corrected: 12 roles (was incorrectly stated as 11 in several docs — missed updating after `@security` was added in v1.1.0).
 - ONBOARDING.md updated to list `@security` in skill selection guidance.

@@ -16,12 +16,12 @@ Keep skills as the canonical single-source-of-truth. Add a hybrid agent layer: `
 
 ```
 skills/                ← canonical source (both platforms)
-  architect/SKILL.md
-  qa/SKILL.md
+  architect/architect.skill.md
+  qa/qa.skill.md
   ...
 
 resolved/              ← generated output
-  skills/              ← always generated (works on both platforms)
+  skills/              ← always generated (resolved as SKILL.md per VS Code convention)
   agents/              ← generated only when editor.target includes "vscode"
   instructions/        ← always generated
 ```
@@ -67,7 +67,7 @@ resolved/              ← generated output
 
 ### Phase 2: Agent Metadata in Skills ✅
 
-**Files:** All `skills/*/SKILL.md` (12 files — including `security`)
+**Files:** All `skills/*/{name}.skill.md` (12 files — including `security`)
 
 Done — all 12 skills already have the `agent:` block in frontmatter. Example:
 
@@ -105,7 +105,7 @@ Hybrid approach — generate frontmatter from skill metadata, use hand-crafted b
 Each `agents/<name>.body.md` file should:
 
 - **Include:** Identity paragraph, core constraints, output format/template
-- **Reference:** `"For detailed workflow procedures, see skills/<name>/SKILL.md"`
+- **Reference:** `"For detailed workflow procedures, see skills/<name>/SKILL.md"` (points to resolved output)
 - **Drop:** `## Subagent Mode` (native agent behavior), `## Documents You Own` / `## Shared Rules` (inline critical rules only), `## Session Lifecycle`
 - **Target:** Under ~100 lines per agent body (context budget)
 - **Use `{{token}}` placeholders** — resolved by init.py at build time, same as skills
@@ -135,8 +135,8 @@ Each `agents/<name>.body.md` file should:
 
 Implementation:
 1. `generate_agents()` tracks which skills produced agents
-2. Post-generation pass updates `resolved/skills/*/SKILL.md` frontmatter to add `user-invocable: false`
-3. Source `skills/*/SKILL.md` files are never modified — only resolved copies
+2. Post-generation pass updates resolved skill frontmatter to add `user-invocable: false`
+3. Source `skills/*/{name}.skill.md` files are never modified — only resolved copies
 
 ### Phase 7: Documentation
 
@@ -185,7 +185,7 @@ Implementation:
 
 | File | Role | Change Needed |
 |------|------|---------------|
-| `skills/*/SKILL.md` (12) | Canonical source | ✅ Already have `agent:` frontmatter block |
+| `skills/*/{name}.skill.md` (12) | Canonical source | ✅ Already have `agent:` frontmatter block |
 | `agents/*.body.md` (12) | Hand-crafted agent bodies | New — one per skill, ≤100 lines each |
 | `init.py` | Template resolution engine | Add `generate_agents()`, editor target validation, conditional skill visibility |
 | `config/project.config.example.yml` | Config schema | Add `editor.target` field |

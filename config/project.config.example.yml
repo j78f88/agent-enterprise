@@ -2,6 +2,8 @@
 # Then run: python3 init.py --config project.config.yml
 # Output lands in resolved/ — copy to .github/ when done.
 
+setup_complete: false                   # Set to true after onboarding — excludes the onboarding skill from future builds
+
 editor:
   target: "both"                    # "vscode" | "claude-code" | "both" — controls whether agent wrappers are generated
 

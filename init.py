@@ -609,6 +609,7 @@ def main():
     warning_count = 0
 
     # --- Skills (SKILL.md or {name}.skill.md files → resolved as SKILL.md) ---
+    setup_complete = config.get('setup_complete', False)
     skills_src = Path("skills")
     if skills_src.exists():
         for skill_dir in sorted(skills_src.iterdir()):
@@ -621,10 +622,21 @@ def main():
                 skill_md = candidates[0] if candidates else None
             if not skill_md or not skill_md.exists():
                 continue
+
+            # Skip setup-only skills when setup is complete
+            original = skill_md.read_text(encoding="utf-8")
+            fm, _ = parse_frontmatter(original)
+            if fm.get('lifecycle') == 'setup-only' and setup_complete:
+                print(f"  skipped (setup complete): {skill_dir.name}")
+                # Clean stale resolved output if it exists
+                stale_dir = output / "skills" / skill_dir.name
+                if stale_dir.exists():
+                    shutil.rmtree(stale_dir)
+                continue
+
             # Output as SKILL.md (VS Code convention) regardless of source filename
             dest = output / "skills" / skill_dir.name / "SKILL.md"
             dest.parent.mkdir(parents=True, exist_ok=True)
-            original = skill_md.read_text(encoding="utf-8")
             resolved = substitute(original, tokens)
             dest.write_text(resolved, encoding="utf-8")
             unresolved = re.findall(r"\{\{[^}]+\}\}", resolved)

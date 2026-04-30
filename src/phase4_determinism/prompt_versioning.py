@@ -325,8 +325,8 @@ class SkillTemplateHasher:
         
         hashes = {}
         
-        # Find all SKILL.md files
-        for skill_file in sorted(skills_path.rglob("SKILL.md")):
+        # Find all skill files ({name}.skill.md or SKILL.md)
+        for skill_file in sorted(skills_path.rglob("*.skill.md")):
             # Get skill name from parent directory
             skill_name = skill_file.parent.name
             

@@ -33,31 +33,31 @@ skills-library/
 ├── project.config.example.yml    # Config template — consuming projects fill this in
 ├── init.py                       # Token substitution script
 │
-├── skills/                       # One folder per skill — SKILL.md format
+├── skills/                       # One folder per skill — {name}.skill.md format
 │   ├── pm/
-│   │   └── SKILL.md
+│   │   └── pm.skill.md
 │   ├── planner/
-│   │   └── SKILL.md
+│   │   └── planner.skill.md
 │   ├── sprint-lead/
-│   │   └── SKILL.md
+│   │   └── sprint-lead.skill.md
 │   ├── qa/
-│   │   └── SKILL.md
+│   │   └── qa.skill.md
 │   ├── reviewer/
-│   │   └── SKILL.md
+│   │   └── reviewer.skill.md
 │   ├── architect/
-│   │   └── SKILL.md
+│   │   └── architect.skill.md
 │   ├── researcher/
-│   │   └── SKILL.md
+│   │   └── researcher.skill.md
 │   ├── bug/
-│   │   └── SKILL.md
+│   │   └── bug.skill.md
 │   ├── docs/
-│   │   └── SKILL.md
+│   │   └── docs.skill.md
 │   ├── a11y/
-│   │   └── SKILL.md
+│   │   └── a11y.skill.md
 │   ├── perf/
-│   │   └── SKILL.md
+│   │   └── perf.skill.md
 │   └── security/
-│       └── SKILL.md
+│       └── security.skill.md
 │
 ├── agents/                       # Hand-crafted agent bodies for VS Code wrappers
 │   ├── a11y.body.md
@@ -125,9 +125,9 @@ skills-library/
 
 ---
 
-## SKILL.md Format
+## Skill File Format
 
-Every skill lives in its own folder inside `skills/`. The folder name must exactly match the `name` field in the frontmatter — this is a hard requirement of the SKILL.md spec. The description field is what the agent uses to decide when to load the skill, so write it to describe both what it does and when to invoke it, not as a tagline.
+Every skill lives in its own folder inside `skills/`. The source file is named `{name}.skill.md` (e.g., `skills/architect/architect.skill.md`) for easy identification in editors. At build time, `init.py` resolves these to `SKILL.md` in the output directory — the folder name must exactly match the `name` field in the frontmatter, as required by the VS Code SKILL.md spec. The description field is what the agent uses to decide when to load the skill, so write it to describe both what it does and when to invoke it, not as a tagline.
 
 ```markdown
 ---
@@ -346,8 +346,8 @@ def main():
     if output.exists():
         shutil.rmtree(output)
 
-    # Skills (SKILL.md files) — substitute in place
-    for skill_md in Path("skills").rglob("SKILL.md"):
+    # Skills ({name}.skill.md files) — substitute and output as SKILL.md
+    for skill_md in sorted(Path("skills").rglob("*.skill.md")):
         dest = output / skill_md
         dest.parent.mkdir(parents=True, exist_ok=True)
         dest.write_text(substitute(skill_md.read_text(), tokens))
@@ -421,7 +421,7 @@ Commit when all twelve are done: `chore: skills-library — add configurable ins
 Convert the six lowest-complexity agents into SKILL.md format. For each:
 
 1. Create the folder: `skills-library/skills/<name>/`
-2. Create `SKILL.md` with the correct frontmatter (`name` must match folder name)
+2. Create `<name>.skill.md` with the correct frontmatter (`name` must match folder name)
 3. Paste the current agent file body as the instruction content
 4. Replace all hardcoded values with `{{config.tokens}}`
 5. Write a description that covers both what it does and concrete trigger conditions
