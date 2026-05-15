@@ -235,3 +235,33 @@ Your `project.config.yml` is not overwritten — config is yours to keep.
 ## Adding a project-specific orchestration layer
 
 If you want a `@delivery-lead` style agent that sequences these skills in your own workflow, write it in `.github/agents/` alongside the resolved skills. It stays in your project and is not part of the library. The library ships the role agents; you build the coordination layer on top.
+
+---
+
+## Orchestration and external trackers
+
+By default agent-homebase is designed for **interactive use** — a human in
+VS Code (or a similar editor) invoking `@planner`, `@qa`, `@reviewer`, etc.
+The markdown ledgers (`SPRINTS.md`, `BACKLOG_LEDGER.md`, `BUG_BACKLOG.md`)
+assume a human glances at them between turns.
+
+If you want to drive the skills from an **automated dispatcher** (a process
+that picks tickets off a queue and assigns them to skills), or wire them to
+an **external issue tracker** (Linear, Jira, GitHub Issues with workflow
+automation), that integration is *not* part of this repo. It lives in a
+separate orchestration repo on top of agent-homebase.
+
+Before you build that layer, read:
+
+- [ANTI_FRAGILITY.md](../ANTI_FRAGILITY.md) — failure patterns observed the
+  first time agent-homebase was driven by an autonomous orchestrator,
+  including Ghost-Done (tickets transitioned without artifacts on disk) and
+  split-state across markdown + tracker.
+- [EXTENSION_GUIDE.md](EXTENSION_GUIDE.md) — the intended consumption model
+  for project-specific extensions and orchestration layers, including which
+  changes belong in agent-homebase versus in your own repos.
+
+The short version: keep agent-homebase generic, put orchestration in its own
+repo, put project-specific governance in your project repo, and verify that
+expected artifacts actually exist on disk before any ticket is transitioned
+to `Done`.
