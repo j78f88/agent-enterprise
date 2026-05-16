@@ -22,6 +22,8 @@ Single schema and lifecycle specification for `{{paths.rejections}}`. Mirrors th
 - **Ledger:** {{ids.item_prefix}}-NNN
 - **Context:** What was handed over (feature slug, ADR number, research doc name)
 - **Reason:** Why it can't be scoped as handed over — cite the specific conflict (ADR-NNN broken, N stores touched, missing dependency X)
+- **Fix:** One-sentence actionable step the upstream agent can take next ("Split feature into A and B", "Resolve ADR-014 ambiguity on caching", "Wait for X dependency to land")
+- **Link:** Path to the constraining doc, ADR, instruction, or ticket (e.g. `docs/adr/ADR-014.md`, `docs/sprints/sprint-007/PLAN.md#dependencies`). At least one link is required.
 - **Proposed resolution:** What the rejecting agent thinks should happen — split into N features, defer until Y, re-approach via Z
 - **Response:** (upstream agent fills in when revising — what they changed and why)
 ```
@@ -62,6 +64,8 @@ When `@planner` encounters a blocking condition while executing `/plan-feature`,
 
 - **CRITICAL:** Commit where `@planner` silently scaled down or dropped a feature scope that differs from the source `-draft-plan.md` without a corresponding {{ids.rejection_prefix}}-NNN entry.
 - **WARNING:** {{ids.rejection_prefix}} entry with no **Proposed resolution** field populated.
+- **WARNING:** new {{ids.rejection_prefix}} entry with no **Fix** field (or `Fix: TBD` left in place at commit time).
+- **WARNING:** new {{ids.rejection_prefix}} entry with no **Link** field, or with a `Link:` value that does not resolve to an existing file or anchor.
 - **SUGGESTION:** {{ids.rejection_prefix}} entry OPEN for >14 days with no **Response:** — consider supersede or close.
 
 ## Handoff Manifest Cleanup
