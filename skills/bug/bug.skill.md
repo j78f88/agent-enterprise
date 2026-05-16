@@ -128,3 +128,29 @@ Also present a copy-pasteable context block as fallback.
 - **Never assign sprint numbers or statuses beyond OPEN** — that's `/triage-bugs` territory
 - **Never write files without user confirmation** — always show the entry first
 - **Keep it fast** — aim for ~30 seconds per bug report
+
+## Common Rationalizations
+
+| Excuse | Why It's Tempting | Counter |
+| --- | --- | --- |
+| "It's a minor bug, doesn't need reproduction steps." | Repro takes effort. | Without repro you cannot prove the fix. Write the steps. |
+| "I know what's causing it." | Pattern-matching feels fast. | Pattern-match is a hypothesis. Confirm with a reproduction and a failing test. |
+| "The user can't repro it consistently, so close it." | Intermittent bugs are painful. | Intermittent often means a race or a state leak. Capture environment and timing, do not close. |
+| "Fixed by upgrading the dep; no test needed." | Upgrades feel self-validating. | Add a regression test pinning the behaviour, otherwise a future downgrade silently reintroduces the bug. |
+
+## Red Flags
+
+- Root cause listed as 'unknown' or 'flaky'.
+- No regression test added for a fixed bug.
+- Bug closed with 'cannot reproduce' and no captured environment data.
+- Severity downgraded after escalation with no new evidence.
+- Stack trace pasted but never traced to a specific line.
+
+## Verification
+
+A reviewer can confirm this skill ran correctly when:
+
+- [ ] Every bug entry has reproduction steps, expected, actual.
+- [ ] Every fix lands with a regression test that fails before and passes after.
+- [ ] Root cause names a file and a line, or explicitly states the investigation that ruled lines out.
+- [ ] Severity matches user impact, with evidence.

@@ -170,3 +170,29 @@ notes: <one-line context summary>
 ```
 
 Also present a copy-pasteable context block as fallback.
+
+## Common Rationalizations
+
+| Excuse | Why It's Tempting | Counter |
+| --- | --- | --- |
+| "We can decide the architecture later." | Defers uncomfortable trade-off discussions. | Late decisions become migrations. Decide now and write the ADR. |
+| "This is obvious, no ADR needed." | Writing ADRs is slower than coding. | Obvious to you today is opaque to a new hire next quarter. Capture the why. |
+| "The diagram is in my head." | Saves drawing time. | Heads are not version-controlled. Draw it. |
+| "We'll refactor once we see the real shape." | Premature commitment feels risky. | Without a target shape, every change is local-optimum. Sketch the target shape even if rough. |
+
+## Red Flags
+
+- ADR has no trade-off or alternatives-considered section.
+- No diagram for any stateful interaction or async boundary.
+- Component boundaries change but no migration plan is written.
+- New dependency added with no rationale or rejected alternatives.
+- 'Performance' or 'scalability' claimed with no numbers.
+
+## Verification
+
+A reviewer can confirm this skill ran correctly when:
+
+- [ ] Every ADR has Context, Decision, Consequences, Alternatives.
+- [ ] Every async or cross-process boundary has a diagram.
+- [ ] Each new dependency lists at least one rejected alternative with rationale.
+- [ ] Numbers cited (latency, throughput, size) trace to a measurement or a source.

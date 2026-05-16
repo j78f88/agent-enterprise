@@ -195,3 +195,29 @@ Run this COMPLETE workflow every time you are asked to sync/update docs. Do NOT 
 ### Step 7: Commit
 
 Commit per `{{paths.instructions_dir}}/commit-conventions.instructions.md` (e.g., `docs: sync documentation for Sprint N completion`).
+
+## Common Rationalizations
+
+| Excuse | Why It's Tempting | Counter |
+| --- | --- | --- |
+| "The code is self-documenting." | Writing prose is slow. | Code shows what; docs show why and when. Both are required. |
+| "The README is good enough." | READMEs feel comprehensive. | Check whether the README actually answers a new contributor's first three questions. Usually it does not. |
+| "Nobody reads the docs." | Discourages the effort. | People read the docs the moment something breaks. Make the failure-mode doc excellent. |
+| "Docs can lag the code by a sprint." | Docs are second-priority. | Lagging docs are wrong docs. Ship docs in the same PR as the change. |
+
+## Red Flags
+
+- README references files, commands, or scripts that do not exist.
+- Examples copy-pasted but never executed.
+- Versions or screenshots from a previous release.
+- Headings promise content the section does not deliver.
+- TODOs or 'coming soon' left in published docs.
+
+## Verification
+
+A reviewer can confirm this skill ran correctly when:
+
+- [ ] Every command in the docs has been run as written.
+- [ ] Every linked file exists in the working tree.
+- [ ] Examples reflect the current public API (verified against source).
+- [ ] Changelog updated for any user-visible change.

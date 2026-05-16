@@ -185,3 +185,27 @@ When presenting choices, always include "or tell me what you'd prefer" — the p
 - Overwriting existing project files without asking
 - Skipping verification ("it probably worked")
 - Using jargon without explaining it (ADR, REJ-NNN, write permits)
+
+## Common Rationalizations
+
+| Excuse | Why It's Tempting | Counter |
+| --- | --- | --- |
+| "They'll figure it out." | Skips the boring write-up. | Onboarding cost compounds across every new hire. Pay it once. |
+| "It works on my machine, the doc must be right." | Your machine has years of state. | Test on a clean VM or container. Anything you forgot to write down breaks there. |
+| "The README plus the wiki is enough." | Scatter feels comprehensive. | A new hire needs one path, not three. Provide a single onboarding doc that links out. |
+
+## Red Flags
+
+- Setup instructions were never run on a clean machine.
+- Jargon (ADR, REJ-NNN, write permits) used with no glossary.
+- Estimated setup time missing or wildly off from reality.
+- No 'first task you can ship' described.
+
+## Verification
+
+A reviewer can confirm this skill ran correctly when:
+
+- [ ] A volunteer who has never seen the repo follows the doc start-to-finish without asking questions.
+- [ ] Setup time measured and recorded.
+- [ ] Every acronym either expanded inline or linked to the glossary.
+- [ ] First-week milestone is concrete (a specific small task), not vague.

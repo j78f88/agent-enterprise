@@ -163,3 +163,28 @@ At the start of any session:
 6. Check `{{paths.backlog_ledger}}` for items where Type = `rejection` and Status = `open` — if any exist with `To: @pm`, read the corresponding REJ-NNN entry in `{{paths.rejections}}` for context. These are pending revisions from `@planner` that need a Response block before proceeding with new work
 7. **Check `{{paths.handoffs}}`** for manifests addressed to `@pm`. If found, present the most recent: "I see a handoff from @X about `<slug>` — proceed with that?" On acceptance, archive it to `{{paths.handoffs}}archive/`.
 8. Proceed with the requested workflow
+
+## Common Rationalizations
+
+| Excuse | Why It's Tempting | Counter |
+| --- | --- | --- |
+| "Requirements are obvious, no spec needed." | Saves writing time. | Obvious to whom? Engineers, QA, support, and design will each guess differently. Write the spec. |
+| "The stakeholder said it in standup, that's enough." | Verbal feels efficient. | Verbal requirements drift between rooms. Capture them in writing and confirm. |
+| "Edge cases can be handled in QA." | QA owns quality. | QA owns *catching* edge cases, not deciding them. Decisions belong in the spec. |
+
+## Red Flags
+
+- Acceptance criteria vague or unmeasurable ('user-friendly', 'fast').
+- No success metric stated.
+- Stakeholder list missing or incomplete.
+- Out-of-scope items not enumerated.
+- Open questions left unresolved at sprint start.
+
+## Verification
+
+A reviewer can confirm this skill ran correctly when:
+
+- [ ] Every acceptance criterion is testable (input → expected output).
+- [ ] Each spec lists explicit out-of-scope items.
+- [ ] Success metrics named, with target values.
+- [ ] Open questions either answered or assigned with a due date.

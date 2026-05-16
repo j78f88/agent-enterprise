@@ -373,3 +373,29 @@ See `{{paths.instructions_dir}}/sprint-docs-format.instructions.md` for the full
 - If a subagent returns `"blocked"`, document it and move to the next independent task
 - At every interactive EXIT POINT, always include the reminder message so the user knows the next command
 - DO NOT modify `{{paths.non_goals}}` — this file is owned by @planner. Defer any requested changes to @planner.
+
+## Common Rationalizations
+
+| Excuse | Why It's Tempting | Counter |
+| --- | --- | --- |
+| "We can skip the retro, nothing went wrong." | Retros feel ceremonial. | 'Nothing went wrong' is itself a finding worth capturing. Hold the retro. |
+| "Quality gates can run after merge." | Unblocks the team faster. | Post-merge gates are detection, not prevention. Run before merge. |
+| "The handoff was clear in chat." | Chat is fast. | Chat is not durable. Use the handoff format so the next agent has a typed contract. |
+| "Task estimates were close enough." | Estimates feel like guesses anyway. | Estimate drift is signal. Record actual vs estimated to calibrate next sprint. |
+
+## Red Flags
+
+- Tasks have no `Files:` annotations.
+- Handoff between agents is a paragraph instead of the structured format.
+- Quality gates passed but not recorded in PLAN.md.
+- Retro skipped or attended by one person.
+- Bug backlog grew during sprint without being acknowledged.
+
+## Verification
+
+A reviewer can confirm this skill ran correctly when:
+
+- [ ] PLAN.md shows every gate, with result and timestamp.
+- [ ] Every handoff uses the structured rejection/acceptance format.
+- [ ] Retro logged with at least one action item and an owner.
+- [ ] Bug backlog delta reported in the sprint summary.

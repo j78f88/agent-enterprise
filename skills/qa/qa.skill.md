@@ -101,3 +101,29 @@ After the human-readable report above, also output a fenced JSON block that `@sp
 - ONLY report against the defined thresholds ({{quality.coverage_store_threshold}}% stores, {{quality.coverage_web_threshold}}% components)
 - Be specific — include file paths, line numbers, failure messages, and concrete recommendations
 - For accessibility-specific audits, recommend using @a11y which performs deeper WCAG checks
+
+## Common Rationalizations
+
+| Excuse | Why It's Tempting | Counter |
+| --- | --- | --- |
+| "Tests are passing, no need to check coverage." | Green feels final. | Passing tests on uncovered code prove nothing. Check coverage against the threshold. |
+| "This is a refactor so no new tests needed." | Refactors are 'safe'. | Refactor is the moment to *add* tests to prove behaviour is preserved. |
+| "The test is flaky, just retry." | Retries hide the symptom. | Flake is a finding. Capture both runs and file an investigation. |
+| "Coverage dropped 0.3%, ignore it." | Small drops feel like noise. | Drops compound. Every drop without a reason is a finding. |
+
+## Red Flags
+
+- Coverage decreased and not flagged.
+- Tests mock the function under test.
+- No integration tests across module boundaries.
+- Skipped tests with no linked ticket.
+- E2E flow asserts only that the page loaded.
+
+## Verification
+
+A reviewer can confirm this skill ran correctly when:
+
+- [ ] Every gate run reports exit code, command, and numerical result.
+- [ ] Coverage compared against the threshold defined in config.
+- [ ] Any new `skip` cites a ticket.
+- [ ] Findings cite the test file and the failing assertion.

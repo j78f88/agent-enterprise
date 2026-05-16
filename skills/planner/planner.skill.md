@@ -241,3 +241,29 @@ At natural stopping points, use #tool:askQuestions to present the next action as
 **Context-aware filtering:** Only show options that are relevant. Include actual draft filenames and open bug count in the question text when available.
 
 The menu is context-aware: include actual draft filenames, suggest promotion if a draft-plan exists, suggest brainstorm-to-ideation if a brainstorm exists.
+
+## Common Rationalizations
+
+| Excuse | Why It's Tempting | Counter |
+| --- | --- | --- |
+| "This is a small feature, no sprint plan needed." | Skips the planning ceremony. | Small features still touch real files. A short PLAN.md is still a PLAN.md. |
+| "We'll figure out dependencies as we go." | Up-front graph work is dry. | Hidden dependencies are the #1 cause of mid-sprint scope blowups. Draw the graph. |
+| "Risk assessment is for big projects." | Risk feels alarmist for small work. | Even a one-line risk note (e.g. 'depends on third-party API X') saves a sprint. |
+| "It's clear from the ticket what to do." | Ticket reading feels like planning. | Tickets describe intent. Plans describe execution. Different artifact. |
+
+## Red Flags
+
+- No dependency graph between tasks.
+- No risk assessment or unknowns section.
+- Tasks without explicit `Files:` annotations or owners.
+- Sprint scope larger than the team can ship in one cadence with no slack.
+- Quality gates omitted from the plan.
+
+## Verification
+
+A reviewer can confirm this skill ran correctly when:
+
+- [ ] Every task names the files it expects to touch.
+- [ ] Dependency graph is acyclic and lists blocking edges.
+- [ ] Risks list at least one mitigation per item.
+- [ ] Quality gates are explicit, with thresholds.

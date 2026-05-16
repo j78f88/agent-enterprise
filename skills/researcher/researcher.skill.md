@@ -165,3 +165,29 @@ Also present a copy-pasteable context block as fallback.
    - If **>180 days old**: a full rerun is likely warranted, but still confirm.
 4. Confirm scope (apps, depth, time budget) before starting.
 5. **Before saving any research doc to `{{paths.research}}/`**, present the full draft to the user via `#tool:askQuestions` with options: "Save as-is", "Revise sections N/M", "Add more sources on X", "Discard". Do not save until the user approves. Exception: if the active prompt declares `batch-report.instructions.md` as its approval model, save immediately and surface the doc in the end-of-workflow summary instead.
+
+## Common Rationalizations
+
+| Excuse | Why It's Tempting | Counter |
+| --- | --- | --- |
+| "I already know the answer, no need to research." | Saves time. | Knowledge decays. Confirm against current docs and date the citation. |
+| "One vendor's blog is enough." | Convenient single source. | Single-vendor sources are biased. Triangulate across at least two independent sources. |
+| "Stack Overflow says…" | Easy to copy. | Use the official docs or RFC. SO is a starting hint, not a citation. |
+| "It's documented somewhere, just not sure where." | Vague memory feels like evidence. | Find and cite the URL. If you cannot find it, the claim is unverified. |
+
+## Red Flags
+
+- All sources from the same vendor.
+- Citations without dates.
+- 'Best practice' claimed with no source.
+- Direct quotes paraphrased without attribution.
+- Sample size of one project generalized to a 'pattern'.
+
+## Verification
+
+A reviewer can confirm this skill ran correctly when:
+
+- [ ] Every claim cites a URL, doc, RFC, or commit SHA with a date.
+- [ ] At least two independent sources for any contested claim.
+- [ ] Counter-evidence acknowledged (no cherry-picking).
+- [ ] Research doc states what would falsify the conclusion.

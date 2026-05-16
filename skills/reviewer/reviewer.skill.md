@@ -126,3 +126,29 @@ After the human-readable report above, also output a fenced JSON block that `@sp
 - Read `{{paths.copilot_instructions}}` for architecture rules and code style
 - Read `{{paths.memory_conventions}}` if it exists for additional conventions
 - Be specific — include file paths, line numbers, and concrete fixes
+
+## Common Rationalizations
+
+| Excuse | Why It's Tempting | Counter |
+| --- | --- | --- |
+| "It's a small change, no review needed." | Small feels safe. | Small changes ship the same prod outage as large ones. Review anyway. |
+| "LGTM, the author tested it." | Author testing feels sufficient. | Author testing has author blind spots. The reviewer adds an independent eye. |
+| "Style nits aren't worth flagging." | Avoids friction. | Style is a contract. Either enforce it everywhere or remove the rule, never both. |
+| "We can fix it in a follow-up." | Defers the awkward conversation. | Follow-ups rarely happen. Block the PR if the change introduces debt. |
+
+## Red Flags
+
+- PR approved with no comments on a 500-line diff.
+- Test changes deleted as 'unrelated' with no justification.
+- Security or perf-sensitive lines reviewed in <30 seconds (timestamps).
+- Reviewer accepts 'nit' acknowledgement without re-review.
+- Approval given before CI is green.
+
+## Verification
+
+A reviewer can confirm this skill ran correctly when:
+
+- [ ] Every finding cites file + line and proposes a concrete fix.
+- [ ] Test diff reviewed line-by-line, not collapsed.
+- [ ] Security/perf-sensitive paths flagged explicitly.
+- [ ] Severity matches impact, not author seniority.

@@ -614,3 +614,29 @@ When findings require code changes:
 - **DO NOT** trust `npm audit` alone — cross-reference with NVD and GitHub Security Advisories
 - **DO NOT** report test fixture fake secrets as real findings — check context first
 - **DO NOT** run destructive commands (no `npm audit fix --force` without explicit user approval)
+
+## Common Rationalizations
+
+| Excuse | Why It's Tempting | Counter |
+| --- | --- | --- |
+| "This is an internal tool, security doesn't matter." | Reduces perceived scope. | Insider threat, credential reuse, and lateral movement all apply to internal tools. |
+| "We'll add auth later." | Defers boring plumbing. | 'Later' is after the leak. Bolt-on auth is consistently worse than built-in auth. |
+| "The dep is popular, it's fine." | Popularity feels like vetting. | Popular deps are higher-value targets (event-stream, colors.js). Run the audit. |
+| "Our CVE scan is clean." | Tool output feels authoritative. | Scanners lag advisories by days. Cross-check the GitHub Advisory DB and vendor announcements. |
+
+## Red Flags
+
+- No dependency scan ran in the report window.
+- Secrets stored in env vars without a vault reference or rotation policy.
+- Findings without CVE IDs or advisory URLs.
+- CRITICAL downgraded to WARNING with no new evidence.
+- Hash registry diverges from working tree with no entry in the security changelog.
+
+## Verification
+
+A reviewer can confirm this skill ran correctly when:
+
+- [ ] Every finding cites severity, evidence (CVE / file+line / command output), and a remediation.
+- [ ] Dependency audit run with command and exit code captured.
+- [ ] Hash registry verified against working tree.
+- [ ] Security changelog appended for every CRITICAL or WARNING.

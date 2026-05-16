@@ -139,3 +139,29 @@ After the human-readable report above, also output a fenced JSON block that `@sp
 - ALWAYS report sizes in both raw and gzipped (estimate gzip as ~30% of raw)
 - Compare against previous metrics when available
 - Flag trends, not just absolute numbers
+
+## Common Rationalizations
+
+| Excuse | Why It's Tempting | Counter |
+| --- | --- | --- |
+| "We can optimize later." | Defers measurement. | Later means after users notice. Measure now and set a budget. |
+| "Premature optimization is the root of all evil." | Misquoted to justify ignoring perf. | The full Knuth quote rejects *speculative* optimization. Measurement is never premature. |
+| "It's fast on my laptop." | Your laptop is not production. | Measure on the slowest supported device and the slowest supported network. |
+| "The bundle grew but it's only a few KB." | Each PR contributes 'just a few KB'. | Track the trend. Budgets exist precisely to stop death-by-thousand-cuts. |
+
+## Red Flags
+
+- Bundle size grew >10% with no justification or budget update.
+- Profiler trace asked for and missing.
+- Reports cite 'feels fast/slow' instead of milliseconds.
+- N+1 query patterns visible in code with no perf note.
+- Caching added without invalidation strategy documented.
+
+## Verification
+
+A reviewer can confirm this skill ran correctly when:
+
+- [ ] Every claim cites a measurement, a tool, and a unit.
+- [ ] Budgets in PLAN.md are referenced for every regression.
+- [ ] Profiles or bundle analyzer reports attached or linked.
+- [ ] Findings ranked by user-visible impact, not by code aesthetics.
