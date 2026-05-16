@@ -1,5 +1,49 @@
 # Changelog
 
+## Supported versions
+
+| Version | Status                              |
+| ------- | ----------------------------------- |
+| 2.0.x   | Supported (security + bug fixes)    |
+| 1.x     | Unsupported                         |
+| < 1.0   | Unsupported                         |
+
+See [SECURITY.md](SECURITY.md) for the disclosure process and the
+support window once 2.1 ships.
+
+## Deprecation timeline
+
+| Surface                       | Deprecated in | Removed in |
+| ----------------------------- | ------------- | ---------- |
+| `scope:` frontmatter alias    | 2.0.0         | **3.0.0**  |
+| `jsonschema.RefResolver` path | 2.0.0         | **2.1.0**  |
+
+The `scope:` → `applies_to` migrator
+(`tools/migrate-frontmatter.py`) keeps working through all 2.x and
+3.x releases.
+
+## Planned for 2.1
+
+- Migrate off `jsonschema.RefResolver` to `referencing`.
+- Adopter template repository (one-line `git clone` + `init.py`).
+- PyPI distribution (`pip install agent-homebase`).
+- Authoring linter for skill/instruction/agent frontmatter (catches
+  contract violations before `init.py` runs).
+
+## Known limitations (2.0.0)
+
+- No PyPI package; install is `git clone` + `pip install -r ...`.
+- No adopter template repo yet — adopters work from `profiles/*`.
+- Windows authoring requires UTF-8-without-BOM git config; the
+  `.githooks/commit-msg` hook (installed via
+  `git config core.hooksPath .githooks`) rejects BOM commits.
+- `jsonschema.RefResolver` deprecation warning surfaces in
+  `tests/test_protocol_v1_conformance.py`. Functional; planned
+  migration in 2.1.
+- macOS is not exercised in CI; reports welcome.
+
+---
+
 ## 2.0.0 — 2026-05 — `protocol-v1` ships complete
 
 ### Added

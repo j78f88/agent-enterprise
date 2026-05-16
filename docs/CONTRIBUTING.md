@@ -25,12 +25,20 @@ No contribution is too small. Typo fixes welcome.
 git clone https://github.com/j78f88/agent-homebase.git
 cd agent-homebase
 
-# Install dependencies
-pip install pyyaml pytest pytest-cov
+# One-time: install the commit-message hook (rejects BOM + enforces
+# Conventional Commits). Works on Linux, macOS, and Git Bash on Windows.
+git config core.hooksPath .githooks
 
-# Run tests to verify setup
-pytest tests/ -v
+# Run the canonical smoke test (installs deps, builds, runs tests).
+#   Linux/macOS:
+./scripts/smoke-test.sh
+#   Windows (PowerShell):
+.\scripts\smoke-test.ps1
 ```
+
+The same `smoke-test.{sh,ps1}` script is what `.github/workflows/release.yml`
+runs in CI on every push, PR, and tag — so a green local smoke test
+means a green CI run.
 
 ---
 

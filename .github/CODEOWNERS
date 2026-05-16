@@ -1,0 +1,37 @@
+# CODEOWNERS — auto-request review by area.
+# Today there is one maintainer; entries are listed by concern so they
+# split cleanly when additional maintainers are added.
+#
+# Syntax: <path-pattern>  <owner> [<owner> ...]
+
+# Default owner for everything not matched below.
+*                                   @j78f88
+
+# Substrate contracts — schemas, validators, mode protocols.
+/schemas/                           @j78f88
+/init.py                            @j78f88
+/command-centre/01-protocols/       @j78f88
+/command-centre/decisions/          @j78f88
+
+# Reference implementations per mode.
+/command-centre/02-mode-team/                              @j78f88
+/command-centre/03-mode-orchestration/reference-impls/     @j78f88
+/command-centre/04-mode-choreography/reference-impls/      @j78f88
+
+# Authoring surface — skills, instructions, agents.
+/skills/                            @j78f88
+/instructions/                      @j78f88
+/agents/                            @j78f88
+
+# Release + CI hygiene.
+/.github/                           @j78f88
+/.githooks/                         @j78f88
+/scripts/                           @j78f88
+/CHANGELOG.md                       @j78f88
+/SECURITY.md                        @j78f88
+
+# Docs.
+/docs/                              @j78f88
+/README.md                          @j78f88
+/AGENTS.md                          @j78f88
+/CLAUDE.md                          @j78f88

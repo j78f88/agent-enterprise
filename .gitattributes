@@ -1,0 +1,4 @@
+# Force LF line endings on shell scripts and git hooks so they remain
+# executable on Linux/macOS even when committed from Windows.
+*.sh           text eol=lf
+.githooks/*    text eol=lf
