@@ -31,6 +31,15 @@ Project config (project.config.yml)  ← You edit this
 Sprint overrides (PLAN.md)
 ```
 
+> **Documenting tokens in skill or instruction prose.** When source text
+> needs to reference a `{{token}}` literally (in a checklist item,
+> example, or troubleshooting note), wrap it in Markdown backticks:
+> `` `{{paths.bug_backlog}}` ``. The `init.py` detector treats backticked
+> tokens as documentation — they are not substituted, not warned about,
+> and pass through to the resolved output unchanged. GitHub Actions
+> `${{ secrets.* }}` is also recognised as non-template syntax (the
+> leading `$` is the signal) and skipped on the same basis.
+
 ---
 
 ## Project Identity

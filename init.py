@@ -593,20 +593,80 @@ def suppress_skill_invocability(output: Path, agent_names: list[str]) -> int:
     return count
 
 
+# =============================================================================
+# Token detection helpers
+# =============================================================================
+#
+# A token is a {{name}} pair init.py is expected to resolve from config. Two
+# token-shaped strings are NOT init.py tokens and must be left alone:
+#
+#   1. GitHub Actions syntax — a literal '$' before '{{'. Skill and
+#      instruction docs frequently recommend '${{ secrets.X }}' patterns
+#      for workflow files.
+#   2. Markdown inline code spans — `{{name}}` inside backticks is doc
+#      prose talking about the template system, not a substitution site.
+#
+# `_TOKEN_RE` uses a negative lookbehind for '$'. The code-span check is
+# positional because regex alone cannot reliably scope to backtick spans.
+
+_TOKEN_RE = re.compile(r"(?<!\$)\{\{([^}]+)\}\}")
+_CODE_SPAN_RE = re.compile(r"`[^`\n]+`")
+
+
+def _code_span_ranges(text: str):
+    """Return (start, end) byte ranges of every inline code span in `text`."""
+    return [(m.start(), m.end()) for m in _CODE_SPAN_RE.finditer(text)]
+
+
+def _in_any_range(pos: int, ranges) -> bool:
+    for start, end in ranges:
+        if start <= pos < end:
+            return True
+    return False
+
+
+def find_unresolved_tokens(text: str) -> list:
+    """Return the list of {{token}} matches that should be flagged.
+
+    Excludes GitHub-Actions-style '${{...}}' (negative lookbehind in
+    `_TOKEN_RE`) and any token whose match falls inside a backticked
+    inline code span. Used by the per-file and final post-resolution
+    scans to count and report unresolved tokens without false positives.
+    """
+    code_ranges = _code_span_ranges(text)
+    return [
+        m.group(0)
+        for m in _TOKEN_RE.finditer(text)
+        if not _in_any_range(m.start(), code_ranges)
+    ]
+
+
 def substitute(text: str, tokens: dict) -> str:
     """Replace {{token}} occurrences with config values.
     Unrecognised tokens are left in place and printed as warnings.
+
+    Two kinds of token-shaped strings are deliberately ignored
+    (no substitution attempt, no warning):
+      - GitHub Actions syntax: a leading '$' before '{{' (e.g.
+        '${{ secrets.FOO }}'). init.py tokens never use a dollar prefix.
+      - Documentation literals: a '{{token}}' that appears inside a
+        Markdown inline code span (backtick-delimited). Authors wrap
+        token-shaped strings in backticks when discussing the template
+        system in prose; those references must survive unchanged.
     """
     warnings = []
+    code_ranges = _code_span_ranges(text)
 
     def replace(match):
+        if _in_any_range(match.start(), code_ranges):
+            return match.group(0)
         key = match.group(1).strip()
         if key not in tokens:
             warnings.append(key)
             return match.group(0)   # leave unreplaced — visible in output
         return tokens[key]
 
-    result = re.sub(r"\{\{([^}]+)\}\}", replace, text)
+    result = _TOKEN_RE.sub(replace, text)
 
     for w in warnings:
         print(f"  ⚠  no config value for {{{{ {w} }}}}")
@@ -709,7 +769,7 @@ def main():
             dest.parent.mkdir(parents=True, exist_ok=True)
             resolved = substitute(original, tokens)
             dest.write_text(resolved, encoding="utf-8")
-            unresolved = re.findall(r"\{\{[^}]+\}\}", resolved)
+            unresolved = find_unresolved_tokens(resolved)
             if unresolved:
                 print(f"  resolved (with warnings): {dest}")
                 warning_count += len(unresolved)
@@ -741,7 +801,7 @@ def main():
             original = instr.read_text(encoding="utf-8")
             resolved = substitute(original, tokens)
             dest.write_text(resolved, encoding="utf-8")
-            unresolved = re.findall(r"\{\{[^}]+\}\}", resolved)
+            unresolved = find_unresolved_tokens(resolved)
             if unresolved:
                 print(f"  resolved (with warnings): {dest}")
                 warning_count += len(unresolved)
@@ -790,7 +850,7 @@ def main():
     print()
     all_unresolved = []
     for md in sorted(output.rglob("*.md")):
-        matches = re.findall(r"\{\{[^}]+\}\}", md.read_text(encoding="utf-8"))
+        matches = find_unresolved_tokens(md.read_text(encoding="utf-8"))
         if matches:
             all_unresolved.append((md, matches))
 

@@ -8,7 +8,7 @@ How to run tests, understand results, and maintain test quality for agent-homeba
 
 | File | Phase | Tests | Focus |
 |------|-------|-------|-------|
-| `test_contracts.py` | Phase 1 | 27 | JSON Schema validation, Rego policies, FSM transitions |
+| `test_contracts.py` | Phase 1 | 27 | JSON Schema validation, FSM transitions |
 | `test_phase2.py` | Phase 2 | 15+ | SQLite persistence, checkpoints, migrations, workflows |
 | `test_phase3.py` | Phase 3 | 15+ | Sandbox isolation, capabilities, security layers |
 | `test_phase4.py` | Phase 4 | 27 | Determinism, Lamport timestamps, replay verification |
@@ -66,7 +66,6 @@ Tests for formal verification of agent contracts:
 - **Tier 2 validation** — Returns with single artifact
 - **Tier 3 validation** — Composition returns with metadata
 - **Write permit enforcement** — Correct paths per artifact type
-- **Rego policy evaluation** — Priority ordering, capacity, feature/bug balance
 - **FSM transitions** — Valid/invalid state changes
 
 ```python

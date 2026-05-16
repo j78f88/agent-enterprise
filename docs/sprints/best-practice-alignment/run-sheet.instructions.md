@@ -260,9 +260,53 @@ git log --oneline -1
 
 **Commit:** `docs(audit): OPA Rego policy catch-rate assessment`
 
-**On complete:** Report audit findings and recommendation. Ask owner to approve Final QA.
+**On complete:** Report audit findings and recommendation. Ask owner whether to run Step 5b (cleanup) before Step 6, or jump straight to Step 6.
 
-> **⛔ APPROVAL GATE — Step 5 → Step 6.** Wait for explicit owner approval before proceeding. Do not start the next step's tasks, edits, or verification.
+> **⛔ APPROVAL GATE — Step 5 → Step 5b / Step 6.** Wait for explicit owner approval before proceeding. The owner chooses whether Step 5b runs before Step 6, after Step 6, or is deferred to a later PR.
+
+---
+
+## Step 5b: OPA Rego Cleanup (audit follow-through)
+
+**Status:** `pending`
+**Optional:** runs only if the owner approves the audit's "drop OPA layer" recommendation.
+
+**Work package:** `docs/sprints/best-practice-alignment/05b-policy-cleanup.md`
+
+Execute the three-commit cleanup on a **separate branch** (`chore/policy-cleanup`). Do not mix these commits into the sprint branch. The work package contains the full mechanical edit table, per-commit verify blocks, and stop-and-ask triggers.
+
+**Creates:** `tools/sprint_lint.py`, `tests/test_sprint_lint.py`
+**Deletes:** `policies/composition.rego`, `policies/security.rego`, `policies/` dir, `src/phase1_verification/policy_engine.py`, `docs/POLICIES.md`
+**Edits:** `AGENTS.md`, `README.md`, `tests/README.md`, `docs/CONTRIBUTING.md`, `command centre/00-overview/architecture.md`, `command centre/00-overview/glossary.md`, `command centre/decisions/0004-shared-substrate-at-root.md`, `docs/DUAL_PLATFORM_PLAN.md`, `starters/FILE_HASHES.md`, `instructions/configurable/security-audit.instructions.md`, `src/phase1_verification/__init__.py`, `tests/test_contracts.py`
+
+**Pre-flight (mandatory):**
+
+```powershell
+$ErrorActionPreference = 'Stop'
+
+# Audit commit must be on main
+git log --oneline -5
+# Working tree must be clean of unrelated changes (do NOT git stash to hide them)
+git status --short
+# If anything unrelated is dirty, STOP and ask the owner.
+
+git switch -c chore/policy-cleanup
+
+# Record baseline test counts (used in commit 3 message)
+python -m pytest tests/ 2>&1 | Select-Object -Last 5
+```
+
+**Per-commit verify:** see the work package. Each of the three commits has its own fail-fast block (`$ErrorActionPreference='Stop'` + `throw` on regression). Commit 3 includes a leak grep with the exact allow-list and a hash-chain re-validation (no re-signing required — `starters/FILE_HASHES.md` has no chained data rows yet).
+
+**Approval gate inside the step:**
+
+> **⛔ STOP after commit 2 verify.** Confirm the `PolicyEngine` leak grep returned zero unexpected hits before proceeding to commit 3. If anything surfaced, do not proceed — ask the owner.
+
+**Test-count delta is expected.** Removing `TestPolicyEngine` reduces the skipped count. Record both the pre-cleanup and post-cleanup `X passed, Y skipped` lines in the commit 3 message. If `docs/sprints/best-practice-alignment/QA.md` hard-codes a criterion-9 baseline, update it in the same commit.
+
+**On complete:** Report the three commit SHAs, pre/post pytest numbers, and confirmation that the leak grep is clean. Open PR titled `chore: remove unused OPA Rego layer` linking `docs/POLICY_AUDIT.md`.
+
+> **⛔ APPROVAL GATE — Step 5b → Step 6.** Wait for explicit owner approval before proceeding. If Step 5b ran, Step 6's criterion 9 baseline may need updating to match the post-cleanup pytest numbers.
 
 ---
 

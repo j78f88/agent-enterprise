@@ -98,7 +98,7 @@ The rules themselves are reasonable but live entirely on paper.
 | Port the high-value composition rules (priority order, intra-tier score order, feature 50-80%, capacity ≤ 100%, ≤15 items) to a small Python validator invoked by the `planner` skill / a future `tools/lint_sprint.py`. | Eliminates OPA dependency without losing the rules. |
 | Drop `policies/security.rego` and `policies/composition.rego`. | Removes dead code and a misleading guardrail. |
 | Drop or rewrite `src/phase1_verification/policy_engine.py` and the `TestPolicyEngine` skip-suite. | Removes the unused OPA bridge and the silently-skipping tests. |
-| Update `docs/POLICIES.md`, `docs/CONTRIBUTING.md`, `command centre/00-overview/architecture.md`, `AGENTS.md`, `README.md`, `starters/FILE_HASHES.md`, and `tests/README.md` to remove references to `policies/`. | Documentation drift cleanup. |
+| Update `docs/POLICIES.md`, `docs/CONTRIBUTING.md`, `AGENTS.md`, `README.md`, `starters/FILE_HASHES.md`, and `tests/README.md` to remove references to `policies/`. (v1 `command centre/` retired separately.) | Documentation drift cleanup. |
 | Optional: keep one Rego policy as an *example* if the project wants to advertise OPA support, but mark it explicitly as a sample, not a guardrail. | Only if there's a marketing reason. |
 
 **Net effect:** loses zero real coverage, removes ~370 lines of unused Rego + the OPA binary requirement, and consolidates the security model in one place that already runs on every build.

@@ -42,6 +42,11 @@ paths:
   changelog: "docs/user/changelog.json"
   changelog_deploy_copy: "docs/user/changelog.json"   # No deploy copy needed for APIs
   package_json: "pyproject.toml"                      # Version lives here for Python projects
+  # Security docs (owned by @security)
+  security_changelog: "docs/security/SECURITY_CHANGELOG.md"
+  file_hashes: "docs/security/FILE_HASHES.md"
+  security_reports: "docs/security/reports/"
+  sbom_output: "docs/security/sbom.json"
   copilot_instructions: ".github/copilot-instructions.md"
   instructions_dir: ".github/instructions"
   memory_architecture: ".claude/memory/architecture.md"
@@ -67,6 +72,7 @@ platform:
 git:
   main_branch: "main"
   develop_branch: "develop"
+  repo: "owner/your-repo"          # FIXME — GitHub repository for CI checks
 
 ids:
   bug_prefix: "BUG"
@@ -105,7 +111,23 @@ commands:
   coverage_store: "pytest --cov=. --cov-report=term-missing"
   coverage_web: "pytest --cov=. --cov-report=term-missing"
   depcheck: "pip-audit"
+  # Security gates (used by @security)
+  sbom_generate: "cyclonedx-py -o sbom.json"
+  sast: "bandit -r . -f json"
+  secret_scan_history: "gitleaks detect --source . --verbose --report-format json"
+  license_check: "pip-licenses --format=json"
+  container_scan: "trivy image --format json"
+  iac_scan: "checkov -d . --output json"
   timestamp: "date -u +\"%Y-%m-%dT%H:%M:%SZ\""
 
 team:
   cto_name: "Your Name"            # FIXME
+
+security:
+  audit_on_sprint: true
+  sbom_format: "cyclonedx"
+  tracked_files: []
+  sast_tool: "bandit"
+  license_gate: false
+  license_denylist: ["GPL-3.0-only", "AGPL-3.0-only", "SSPL-1.0"]
+  license_allowlist: ["MIT", "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause", "ISC", "0BSD"]

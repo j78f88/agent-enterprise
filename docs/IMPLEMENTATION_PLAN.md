@@ -1,5 +1,13 @@
 # Skills Library — Implementation Plan
 
+> **[ARCHIVED — historical planning document]**
+>
+> This document captures the original plan for extracting the agent skills library from a parent monorepo (where it lived under `skills-library/` alongside `apps/` and `packages/`). That extraction is complete: agent-homebase is now its own standalone repository, and the directory layout described below no longer matches reality.
+>
+> For current architecture, see [ARCHITECTURE.md](ARCHITECTURE.md) and [DUAL_PLATFORM_PLAN.md](DUAL_PLATFORM_PLAN.md). Kept for historical reference only.
+
+---
+
 This document is the working guide for building and extracting the reusable agent skills library from the DIY project. It lives inside `skills-library/` — a top-level directory that is explicitly separate from the web app delivery pipeline (`apps/`, `packages/`).
 
 ---

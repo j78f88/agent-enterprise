@@ -40,3 +40,7 @@ resolved/
 
 # Node (if applicable)
 node_modules/
+
+# Personal context kept outside the public repo
+agent-homebase-private/
+

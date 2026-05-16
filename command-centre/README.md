@@ -1,8 +1,12 @@
-# Command Centre v2
+# Command Centre
 
-> **Status:** design workbench. Not yet released. v1 at
-> [command centre/](../command%20centre/) remains as historical
-> reference until v2 is accepted.
+> **Status:** contract design. Reference impls and conformance tests
+> are deferred until a real adopter signal materialises (see ADR
+> 0007). v1 (`command centre/`) has been retired — personal
+> harvest/onboarding notes were relocated outside the repo, and
+> the substance of v1 ADRs 0003/0004 is preserved in v2's Mode 3
+> install-contract and v2 ADR 0002. See `00-overview/design-history.md`
+> for the full reasoning trail.
 
 Workbench for designing agent-homebase as three **standalone,
 independently consumable delivery modes** (team / orchestration /
@@ -26,7 +30,7 @@ alongside the consumer's own substrate.
 ## Folder map
 
 ```
-command centre v2/
+command-centre/
   README.md                    ← this file
   PLAN.md                      ← phases and success criteria
   00-overview/                 ← design-history, three-modes, architecture, glossary, consumption-matrix

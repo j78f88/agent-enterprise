@@ -31,6 +31,17 @@ output lands in your project's `.github/` folder. Your generic skills and
 your project-specific instructions sit alongside each other and are loaded
 together by the agent runtime.
 
+### Mentioning a token literally in prose
+
+When a skill or instruction needs to *talk about* a token rather than
+expand it — for example, in a checklist item that says "verify
+`{{paths.bug_backlog}}` is writable" — wrap the token in Markdown
+backticks. The build detector treats backticked `{{tokens}}` as
+documentation: they are not substituted, not warned about, and pass
+through to the resolved output unchanged. The same rule covers
+GitHub Actions workflow examples like `${{ secrets.GITHUB_TOKEN }}`
+— the leading `$` is recognised as non-template syntax and skipped.
+
 ---
 
 ## Pattern 1 — Project profile

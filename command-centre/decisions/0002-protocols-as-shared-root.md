@@ -32,6 +32,20 @@ Modes may depend on the protocols layer. Modes may not depend on each
 other. Substrate (root `skills/`, `instructions/`, `agents/`,
 `schemas/`) may depend on the protocols layer.
 
+### Substrate-at-root rule (carried forward from v1 ADR 0004)
+
+`skills/`, `instructions/`, `agents/`, `schemas/`, `profiles/`,
+`starters/`, and `init.py` live at the **repo root** as shared
+substrate. They are not part of any one mode and are not duplicated
+into mode folders. Modes consume substrate via relative paths;
+substrate consumes the protocols layer. This keeps a single source
+of truth for the substrate, eliminates drift across modes, and
+preserves today's `init.py` resolution behaviour without rewiring.
+
+Rejected alternatives: duplicate substrate per mode (3× maintenance,
+inevitable drift); symlink from each mode (poor Windows portability,
+indirection without value).
+
 ## Consequences
 
 **Positive**

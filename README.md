@@ -27,7 +27,21 @@
 
 </div>
 
-## 🔥 The Problem Everyone Ignores
+## � Who this is for
+
+agent-homebase is built for **professional developers using AI assistants
+day-to-day** (P3) and the **framework owners** who curate substrate for
+them (P1). Enterprise platform teams (P2) and outcome-focused builders
+(P4) are served on a deferred basis — the contracts are designed with
+them in mind, but the reference implementations are not yet here.
+
+See [docs/PERSONAS.md](docs/PERSONAS.md) for the full evidence-tagged
+personas, the jobs each one is hiring the substrate to do, and the
+consumption matrix. If you do not see yourself there, the substrate
+probably does not yet serve you — and that is intentional, not an
+oversight (see [ADR 0007](command-centre/decisions/0007-personas-scope-and-deferral.md)).
+
+## �🔥 The Problem Everyone Ignores
 
 You're using GitHub Copilot or Claude Code. They're fast. They're capable.
 

@@ -3,6 +3,28 @@
 > Standalone install. Coordinated projects do not need to run Mode 1
 > or Mode 2; they only need to satisfy the project contract.
 
+## Install shape: scaffold a fresh workspace
+
+Mode 3 install **creates a fresh coordinator workspace** at a path
+the operator chooses, rather than dropping files into an existing
+repo. The workspace owns `registry.yml`, `harvest-cadence.yml`, the
+three meta-agents, and the `audit/` records.
+
+Why scaffold rather than drop-in:
+
+- **Choreography is a working environment, not config.** Dropping a
+  registry, meta-agents, and an audit log into a coordinated project
+  pollutes that project with operator-only concerns.
+- **Lifecycles differ.** Coordinated projects come and go; the
+  workspace persists across them. A workspace deserves its own home.
+- **Multiple workspaces are natural** (one per portfolio); each is
+  self-contained.
+- **Disposability.** Operators can delete and re-scaffold without
+  surgery on any coordinated project.
+
+The reference implementation pins agent-homebase via submodule
+(default) or vendored copy (`--vendor` flag) for version stability.
+
 ## Preconditions
 
 - A coordinator-owning repo (the "program of works" repo).

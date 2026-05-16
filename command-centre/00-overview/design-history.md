@@ -1,4 +1,4 @@
-# Design history — Command Centre v2
+# Design history — Command Centre
 
 > The reasoning trail from initial intent to v2 architecture. Captures
 > external research consulted, design errors found, alternatives eliminated,

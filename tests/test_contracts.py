@@ -1,7 +1,7 @@
 """
 Contract Validation Tests
 
-Tests for JSON Schema validation, Rego policies, and FSM transitions.
+Tests for JSON Schema validation and FSM transitions.
 Phase 1 - Formal Verification
 
 Run with: pytest tests/test_contracts.py -v

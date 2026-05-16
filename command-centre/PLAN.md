@@ -1,4 +1,4 @@
-# PLAN — Command Centre v2
+# PLAN — Command Centre
 
 > Generic implementation roadmap for v2. No project-specific content.
 > Pairs with [README.md](README.md) (orientation) and
@@ -80,11 +80,17 @@ Deliverables:
 Exit criteria: a new consumer can install any single mode using only
 this workbench in under one working session.
 
-### Phase 5 — v1 retirement
+### Phase 5 — v1 retirement  *(done)*
 
-Deliverables:
-- Commit removing [`command centre/`](../command%20centre/) in
-  isolation.
+Completed:
+- The bannered `command centre/` folder has been removed. Personal
+  harvest/onboarding notes were relocated to
+  `D:\VS\agent-homebase-private\command-centre-v1-personal\`
+  (see `.gitignore`); v1 ADR 0003 (scaffold-workspace) and v1 ADR
+  0004 (substrate-at-root) substance is preserved in v2's Mode 3
+  install-contract and v2 ADR 0002 respectively.
+
+Remaining (release-time):
 - Note in repo changelog pointing at the final v1 commit hash.
 - Final tag candidates: `agent-homebase@2.0.0`, `protocol-v1`,
   `mode-1-contract-v1`, `mode-2-contract-v1`, `mode-3-contract-v1`.

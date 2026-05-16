@@ -42,6 +42,11 @@ paths:
   changelog: "docs/user/changelog.json"
   changelog_deploy_copy: "apps/web/public/changelog.json"
   package_json: "apps/web/package.json"
+  # Security docs (owned by @security)
+  security_changelog: "docs/security/SECURITY_CHANGELOG.md"
+  file_hashes: "docs/security/FILE_HASHES.md"
+  security_reports: "docs/security/reports/"
+  sbom_output: "docs/security/sbom.json"
   copilot_instructions: ".github/copilot-instructions.md"
   instructions_dir: ".github/instructions"
   memory_architecture: ".claude/memory/architecture.md"
@@ -67,7 +72,7 @@ platform:
 git:
   main_branch: "master"
   develop_branch: "develop"
-  repo: "owner/diy-project-helper"   # GitHub repository for CI checks
+  repo: "owner/your-repo"            # GitHub repository for CI checks
 
 ids:
   bug_prefix: "BUG"
@@ -106,7 +111,23 @@ commands:
   coverage_store: "pnpm --filter @diy/store test:coverage"
   coverage_web: "pnpm --filter @diy/web test:coverage"
   depcheck: "npx depcheck --json"
+  # Security gates (used by @security)
+  sbom_generate: "syft . -o cyclonedx-json"
+  sast: "npx semgrep --config auto --json"
+  secret_scan_history: "gitleaks detect --source . --verbose --report-format json"
+  license_check: "npx license-checker --json"
+  container_scan: "trivy image --format json"
+  iac_scan: "checkov -d . --output json"
   timestamp: "date -u +\"%Y-%m-%dT%H:%M:%SZ\""
 
 team:
   cto_name: "Your Name"  # FIXME
+
+security:
+  audit_on_sprint: true
+  sbom_format: "cyclonedx"
+  tracked_files: []
+  sast_tool: "semgrep"
+  license_gate: false
+  license_denylist: ["GPL-3.0-only", "AGPL-3.0-only", "SSPL-1.0"]
+  license_allowlist: ["MIT", "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause", "ISC", "0BSD"]

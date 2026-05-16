@@ -26,6 +26,7 @@ from init import (
     VALID_EDITOR_TARGETS,
     flatten,
     substitute,
+    find_unresolved_tokens,
     parse_frontmatter,
     extract_agent_body,
     generate_agent_md,
@@ -249,6 +250,43 @@ class TestSubstitute:
     def test_no_tokens(self):
         result = substitute("No tokens here", {"a": "1"})
         assert result == "No tokens here"
+
+
+class TestTokenDetectorFalsePositives:
+    """Token-shaped strings that must NOT be flagged or substituted.
+
+    Regression coverage for the init.py detector exemptions:
+      - GitHub Actions '${{ secrets.* }}' has a leading '$'.
+      - Markdown inline code spans (backticked) are documentation.
+    """
+
+    def test_github_actions_secrets_not_substituted(self):
+        src = "Use ${{ secrets.GITHUB_TOKEN }} in your workflow."
+        result = substitute(src, {"secrets.GITHUB_TOKEN": "hijacked"})
+        assert result == src
+
+    def test_github_actions_secrets_not_flagged(self):
+        src = "Use ${{ secrets.GITHUB_TOKEN }} in your workflow."
+        assert find_unresolved_tokens(src) == []
+
+    def test_backticked_token_not_substituted(self):
+        src = "Check for unresolved `{{tokens}}` in output."
+        result = substitute(src, {"tokens": "REPLACED"})
+        assert result == src
+
+    def test_backticked_token_not_flagged(self):
+        src = "Check for unresolved `{{tokens}}` in output."
+        assert find_unresolved_tokens(src) == []
+
+    def test_bare_unknown_token_still_flagged(self):
+        src = "Path is {{paths.missing}}"
+        assert find_unresolved_tokens(src) == ["{{paths.missing}}"]
+
+    def test_known_token_still_resolves_outside_backticks(self):
+        src = "Hello {{project.name}}; doc reference: `{{project.name}}`."
+        result = substitute(src, {"project.name": "MyApp"})
+        assert result == "Hello MyApp; doc reference: `{{project.name}}`."
+        assert find_unresolved_tokens(result) == []
 
 
 # =============================================================================
@@ -570,15 +608,17 @@ class TestEndToEndResolution:
             assert "security" in agents_list, f"sprint-lead agents: {agents_list}"
 
     def test_no_unresolved_tokens_except_known(self):
-        """Resolved agents should have no unresolved {{tokens}} except known exceptions."""
-        import re
+        """Resolved agents should have no unresolved {{tokens}}.
+
+        Uses the production detector so documentation literals (backticked
+        token references, GitHub-Actions ${{ secrets.* }}) are correctly
+        exempted without a hard-coded allowlist.
+        """
         agents_dir = Path(__file__).parent.parent / "resolved" / "agents"
-        known_exceptions = {"secrets.*"}  # This one is expected
         for agent_file in sorted(agents_dir.glob("*.agent.md")):
             text = agent_file.read_text(encoding="utf-8")
-            unresolved = re.findall(r"\{\{([^}]+)\}\}", text)
-            unexpected = [t.strip() for t in unresolved if t.strip() not in known_exceptions]
-            assert not unexpected, f"{agent_file.name}: unresolved tokens: {unexpected}"
+            unresolved = find_unresolved_tokens(text)
+            assert not unresolved, f"{agent_file.name}: unresolved tokens: {unresolved}"
 
     def test_body_files_exist_for_all_skills(self):
         """Every skill with agent: metadata should have a hand-crafted body file."""
