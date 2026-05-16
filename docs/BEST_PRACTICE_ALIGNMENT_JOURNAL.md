@@ -226,6 +226,7 @@ Second pass added Step 5b. Two of the seven cleanup-prompt defects that drove St
 - **Cleanup work package**: [docs/sprints/best-practice-alignment/05b-policy-cleanup.md](sprints/best-practice-alignment/05b-policy-cleanup.md)
 - **Spec / adoption plan / QA**: [SPEC.md](sprints/best-practice-alignment/SPEC.md), [ADOPTION_PLAN.md](sprints/best-practice-alignment/ADOPTION_PLAN.md), [QA.md](sprints/best-practice-alignment/QA.md)
 - **Standing repo conventions referenced here**: [AGENTS.md](../AGENTS.md), [CLAUDE.md](../CLAUDE.md), [command-centre/decisions/0002-protocols-as-shared-root.md](../command-centre/decisions/0002-protocols-as-shared-root.md)
+- **Three-mode architecture rationale** (origin, errors, alternatives eliminated): [command-centre/00-overview/design-history.md](../command-centre/00-overview/design-history.md) — BPA assumes the substrate-at-root shape settled there; read it for the *why* behind the directory layout this journal patches.
 
 ---
 

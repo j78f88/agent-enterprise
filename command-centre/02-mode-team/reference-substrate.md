@@ -14,8 +14,9 @@
 | Agents library | [`agents/`](../../agents/) |
 | Profile system | [`profiles/`](../../profiles/), [`config/`](../../config/) |
 | Build step | [`init.py`](../../init.py) |
-| Validation | `init.py` + [`schemas/`](../../schemas/) + [`policies/`](../../policies/) |
+| Validation | `init.py` + [`schemas/`](../../schemas/) |
 | Build output | [`resolved/`](../../resolved/) |
+| Honesty contract *(recommended, not required by Mode 1)* | [`instructions/generic/honesty-contract.instructions.md`](../../instructions/generic/honesty-contract.instructions.md) |
 
 ## Replaceability
 
