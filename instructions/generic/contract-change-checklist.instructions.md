@@ -1,5 +1,10 @@
 ---
-applyTo: ".github/agents/**,.github/instructions/**,.github/prompts/**,docs/templates/**"
+id: instruction.contract-change-checklist
+kind: instruction
+version: 1.0.0
+applies_to: '**'
+description: contract-change-checklist instruction
+applyTo: .github/agents/**,.github/instructions/**,.github/prompts/**,docs/templates/**
 ---
 
 # Contract-Change Checklist

@@ -1,10 +1,28 @@
 ---
+id: skill.docs
+kind: skill
+version: 1.0.0
+applies_to: '**'
 name: docs
 description: Generates and maintains all project documentation after a sprint. Use after sprint completion to update SPRINTS.md, changelog, USER_GUIDE, TECHNICAL_DEBT, FEATURE_MATRIX, ARCHITECTURE, and all developer docs in one structured sync. Only documents what exists in code.
-when_to_use: "update docs, documentation sync, update changelog, post-sprint docs, write release notes, update SPRINTS.md"
+when_to_use: update docs, documentation sync, update changelog, post-sprint docs, write release notes, update SPRINTS.md
 user-invocable: true
+inputs:
+  type: object
+  required:
+  - task
+  properties:
+    task:
+      type: string
+      description: What the skill should do.
+outputs:
+- return_tier: 2
+verifier: null
 agent:
-  tools: [read, search, edit]
+  tools:
+  - read
+  - search
+  - edit
   agents: []
   model: null
   handoffs: []

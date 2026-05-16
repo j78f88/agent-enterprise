@@ -1,3 +1,11 @@
+---
+id: instruction.subagent-return-schemas
+kind: instruction
+version: 1.0.0
+applies_to: '**'
+description: subagent-return-schemas instruction
+---
+
 # Subagent Return Schemas
 
 Centralized return schemas for subagent mode invocations. Referenced declaratively by agent files — no `applyTo` pattern.

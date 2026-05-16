@@ -1,6 +1,10 @@
 ---
-description: "Use when creating, updating, or reading engagement tracking files (brief.md, gate-log.md, deployment-log.md). Defines the ENG-NNN numbering scheme, engagement folder structure, file formats, and status lifecycle."
-applyTo: "{{paths.engagements}}**"
+id: instruction.engagement-format
+kind: instruction
+version: 1.0.0
+applies_to: '**'
+description: Use when creating, updating, or reading engagement tracking files (brief.md, gate-log.md, deployment-log.md). Defines the ENG-NNN numbering scheme, engagement folder structure, file formats, and status lifecycle.
+applyTo: '{{paths.engagements}}**'
 ---
 
 # Engagement Tracking Format

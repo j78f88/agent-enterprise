@@ -1,13 +1,32 @@
 ---
+id: skill.planner
+kind: skill
+version: 1.0.0
+applies_to: '**'
 name: planner
 description: Scopes requirements and drafts sprint plans. Use when you have a validated feature, bug fix, or carry-over items ready to plan. Reads the backlog ledger, checks deferral escalation, and stages all drafts before promotion. Never writes directly to sprints/ without approval.
-when_to_use: "plan this feature, draft a sprint, write a sprint plan, scope this work, compose sprint, check the backlog, triage bugs"
+when_to_use: plan this feature, draft a sprint, write a sprint plan, scope this work, compose sprint, check the backlog, triage bugs
 user-invocable: true
+inputs:
+  type: object
+  required:
+  - task
+  properties:
+    task:
+      type: string
+      description: What the skill should do.
+outputs:
+- return_tier: 2
+verifier: null
 agent:
-  tools: [read, search, edit]
+  tools:
+  - read
+  - search
+  - edit
   agents: []
   model: null
-  handoffs: [sprint-lead]
+  handoffs:
+  - sprint-lead
 ---
 
 # Planner

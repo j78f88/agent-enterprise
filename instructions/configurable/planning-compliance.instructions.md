@@ -1,6 +1,10 @@
 ---
-description: "Use when reviewing draft plans for architecture compliance, checking sprint plans against project conventions, or validating technical design decisions."
-applyTo: "{{paths.drafts}}**"
+id: instruction.planning-compliance
+kind: instruction
+version: 1.0.0
+applies_to: '**'
+description: Use when reviewing draft plans for architecture compliance, checking sprint plans against project conventions, or validating technical design decisions.
+applyTo: '{{paths.drafts}}**'
 ---
 
 # Planning Compliance Checklist

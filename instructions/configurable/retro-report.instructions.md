@@ -1,6 +1,10 @@
 ---
-description: "Use when writing or seeding RETRO.md files, defining complexity assessments, or assembling sprint retrospectives. Defines the schema, complexity scale, forecast format, and finalized structure for sprint retrospectives."
-applyTo: "{{paths.sprints}}**/RETRO.md"
+id: instruction.retro-report
+kind: instruction
+version: 1.0.0
+applies_to: '**'
+description: Use when writing or seeding RETRO.md files, defining complexity assessments, or assembling sprint retrospectives. Defines the schema, complexity scale, forecast format, and finalized structure for sprint retrospectives.
+applyTo: '{{paths.sprints}}**/RETRO.md'
 ---
 
 # Retrospective Report Format

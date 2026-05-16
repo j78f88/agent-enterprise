@@ -1,0 +1,31 @@
+# Fixture registry for Mode 3 conformance test.
+version: "1"
+coordinator:
+  id: ref-coord
+  name: "Reference Coordinator"
+  substrate_version: "2.0.0"
+projects:
+  - id: project-team-a
+    name: "Project Team A"
+    repo: "local:./fixtures/project-team-a"
+    mode_level: team
+    substrate_version: "2.0.0"
+    contract_pins:
+      - protocol-v1
+      - mode-1-contract-v1
+    owner: "team-a"
+  - id: project-orch-b
+    name: "Project Orchestration B"
+    repo: "local:./fixtures/project-orch-b"
+    mode_level: orchestration
+    substrate_version: "1.9.0"
+    contract_pins:
+      - protocol-v1
+      - mode-1-contract-v1
+      - mode-2-contract-v1
+      - callable-contract-v1
+    owner: "team-b"
+    dispatcher:
+      impl: "file-queue-dispatcher"
+      impl_version: "1.0.0"
+      queue_source: "file"

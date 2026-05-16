@@ -1,3 +1,11 @@
+---
+id: instruction.state-management
+kind: instruction
+version: 1.0.0
+applies_to: '**'
+description: state-management instruction
+---
+
 # State Management & Durable Execution
 
 **Phase 2 — ACID Guarantees & Checkpoint-Restart**

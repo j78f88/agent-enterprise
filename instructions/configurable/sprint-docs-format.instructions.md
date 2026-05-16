@@ -1,5 +1,10 @@
 ---
-applyTo: "{{paths.sprints_doc}}"
+id: instruction.sprint-docs-format
+kind: instruction
+version: 1.0.0
+applies_to: '**'
+description: sprint-docs-format instruction
+applyTo: '{{paths.sprints_doc}}'
 ---
 
 # Sprint Documentation Format

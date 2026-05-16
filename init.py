@@ -27,6 +27,81 @@ except ImportError:
     print("ERROR: PyYAML not installed. Run: pip install pyyaml")
     sys.exit(1)
 
+try:
+    import jsonschema
+except ImportError:
+    print("ERROR: jsonschema not installed. Run: pip install jsonschema>=4.0")
+    sys.exit(1)
+
+import json
+
+# Cache loaded schemas for the duration of the run (determinism + speed).
+_SCHEMA_CACHE: dict[str, dict] = {}
+
+
+def _load_schema(name: str) -> dict:
+    """Load a JSON schema from ``schemas/`` once and cache it."""
+    if name not in _SCHEMA_CACHE:
+        path = Path(__file__).parent / "schemas" / name
+        with open(path, encoding="utf-8") as f:
+            _SCHEMA_CACHE[name] = json.load(f)
+    return _SCHEMA_CACHE[name]
+
+
+def validate_frontmatter(text: str, kind: str, path: Path) -> list[str]:
+    """Validate the YAML frontmatter of a substrate file against frontmatter-v1.
+
+    Args:
+        text: full file contents (with or without frontmatter fences).
+        kind: expected ``kind`` value (``skill``, ``instruction``, ``agent``).
+              If the frontmatter omits ``kind``, this value is asserted.
+        path: filesystem path used in error messages.
+
+    Returns:
+        A list of human-readable error strings. Empty list means valid.
+        For skills, also validates the callable manifest portion against
+        ``callable-v1.schema.json``.
+    """
+    errors: list[str] = []
+
+    if not text.lstrip().startswith("---"):
+        errors.append(f"{path}: missing YAML frontmatter (no leading '---')")
+        return errors
+
+    fm, _ = parse_frontmatter(text)
+    if not fm:
+        errors.append(f"{path}: frontmatter block is empty or unparseable")
+        return errors
+
+    # Accept ``scope:`` as a read-side alias for ``applies_to`` (ADR-0012).
+    if "applies_to" not in fm and "scope" in fm:
+        fm = dict(fm)
+        fm["applies_to"] = fm["scope"]
+
+    # Frontmatter-v1 validation.
+    try:
+        jsonschema.validate(instance=fm, schema=_load_schema("frontmatter-v1.schema.json"))
+    except jsonschema.ValidationError as e:
+        loc = "/".join(str(p) for p in e.absolute_path) or "<root>"
+        errors.append(f"{path}: frontmatter-v1 violation at {loc}: {e.message}")
+
+    # Cross-check kind matches caller expectation.
+    declared_kind = fm.get("kind")
+    if declared_kind and kind and declared_kind != kind:
+        errors.append(
+            f"{path}: kind mismatch — declared '{declared_kind}', expected '{kind}'"
+        )
+
+    # Skills additionally must satisfy the callable-v1 manifest contract.
+    if (declared_kind or kind) == "skill":
+        try:
+            jsonschema.validate(instance=fm, schema=_load_schema("callable-v1.schema.json"))
+        except jsonschema.ValidationError as e:
+            loc = "/".join(str(p) for p in e.absolute_path) or "<root>"
+            errors.append(f"{path}: callable-v1 violation at {loc}: {e.message}")
+
+    return errors
+
 # =============================================================================
 # SECURITY VALIDATION — Phase 0 Enhancement
 # =============================================================================
@@ -320,18 +395,22 @@ def _scope_as_list(scope) -> list[str]:
 
 
 def transform_frontmatter_for_target(fm: dict, target: str) -> dict:
-    """Rewrite a `scope:` field into the platform-native scoping field.
+    """Rewrite a path-scope field into the platform-native scoping field.
+
+    Reads ``applies_to`` (canonical, frontmatter-v1) or ``scope`` (legacy
+    alias, sunsets at frontmatter-v2 per ADR-0012). If both are present,
+    ``applies_to`` wins.
 
     - vscode / both: emit ``applyTo`` (comma-joined string).
     - claude-code:   emit ``paths`` (list).
     - cursor:        leave ``scope`` for the .mdc emitter.
     - all:           emit both ``applyTo`` and ``paths``.
 
-    If the source has no ``scope:`` field, the frontmatter is returned
-    unchanged. Other fields are preserved.
+    If neither field is present, the frontmatter is returned unchanged.
+    Other fields are preserved.
     """
     out = dict(fm or {})
-    scope = out.get('scope')
+    scope = out.get('applies_to', out.get('scope'))
     if scope is None:
         return out
     if target in ('vscode', 'both'):
@@ -357,7 +436,7 @@ def emit_cursor_mdc(name: str, fm: dict, body: str, out_dir: Path) -> Path:
     rule is treated as always-applied.
     """
     out_dir.mkdir(parents=True, exist_ok=True)
-    scope = fm.get('scope')
+    scope = fm.get('applies_to', fm.get('scope'))
     description = fm.get('description', '').strip() or name
     if scope is None:
         mdc_fm = {
@@ -546,7 +625,11 @@ def generate_agents(output: Path, tokens: dict) -> list[str]:
         # Hybrid: prefer hand-crafted body, fall back to extraction
         body_file = bodies_src / f"{name}.body.md"
         if body_file.exists():
-            agent_body = body_file.read_text(encoding="utf-8").strip()
+            raw = body_file.read_text(encoding="utf-8")
+            # Strip the body file's own frontmatter (added at protocol-v1) so
+            # only the prose body is rendered into the agent wrapper.
+            _body_fm, body_text = parse_frontmatter(raw)
+            agent_body = body_text.strip()
         else:
             print(f"  ⚠  no body file for {name} — using auto-extraction (agents/{name}.body.md missing)")
             agent_body = extract_agent_body(name, fm, body)
@@ -688,6 +771,11 @@ def main():
         action="store_true",
         help="Interactive setup for key project values (name, repo, namespace)"
     )
+    parser.add_argument(
+        "--allow-frontmatter-warnings",
+        action="store_true",
+        help="Lax mode: collect frontmatter-v1 / callable-v1 violations as warnings instead of aborting the build."
+    )
     args = parser.parse_args()
 
     config_path = Path(args.config)
@@ -727,6 +815,43 @@ def main():
     
     print("✓ Security validation passed")
     print()
+
+    # =============================================================================
+    # Frontmatter Validation — protocol-v1 (frontmatter-v1 + callable-v1)
+    # =============================================================================
+    print("Running frontmatter validation (protocol-v1)...")
+    fm_errors: list[str] = []
+    for skill_md in sorted(Path("skills").rglob("*.skill.md")):
+        fm_errors.extend(
+            validate_frontmatter(skill_md.read_text(encoding="utf-8"), "skill", skill_md)
+        )
+    for instr in sorted(Path("instructions").rglob("*.instructions.md")):
+        fm_errors.extend(
+            validate_frontmatter(instr.read_text(encoding="utf-8"), "instruction", instr)
+        )
+    for body in sorted(Path("agents").rglob("*.body.md")):
+        fm_errors.extend(
+            validate_frontmatter(body.read_text(encoding="utf-8"), "agent", body)
+        )
+
+    if fm_errors:
+        header = (
+            "⚠  Frontmatter validation warnings (lax mode):"
+            if args.allow_frontmatter_warnings
+            else "❌ Frontmatter validation FAILED (strict mode):"
+        )
+        print(header)
+        for err in fm_errors:
+            print(f"  - {err}")
+        if not args.allow_frontmatter_warnings:
+            print(
+                "\n  Re-run with --allow-frontmatter-warnings to convert these into warnings."
+            )
+            sys.exit(1)
+        print()
+    else:
+        print("✓ Frontmatter validation passed")
+        print()
 
     tokens = flatten(config)
     print(f"Loaded {len(tokens)} config tokens from {config_path}")

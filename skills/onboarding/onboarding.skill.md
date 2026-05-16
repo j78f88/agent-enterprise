@@ -1,11 +1,30 @@
 ---
+id: skill.onboarding
+kind: skill
+version: 1.0.0
+applies_to: '**'
 name: onboarding
 description: Guides first-time setup of agent-homebase for a new project. Walks through profile selection, config filling, token resolution, file seeding, and verification. Self-removes after setup is complete.
-when_to_use: "set up agents, configure project, first time setup, onboard, initialize, get started"
+when_to_use: set up agents, configure project, first time setup, onboard, initialize, get started
 user-invocable: true
 lifecycle: setup-only
+inputs:
+  type: object
+  required:
+  - task
+  properties:
+    task:
+      type: string
+      description: What the skill should do.
+outputs:
+- return_tier: 2
+verifier: null
 agent:
-  tools: [read, search, execute, edit]
+  tools:
+  - read
+  - search
+  - execute
+  - edit
   agents: []
   model: null
   handoffs: []

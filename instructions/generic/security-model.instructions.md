@@ -1,3 +1,11 @@
+---
+id: instruction.security-model
+kind: instruction
+version: 1.0.0
+applies_to: '**'
+description: security-model instruction
+---
+
 # Security Model
 
 **Phase 0 — Production Security Hardening**

@@ -1,13 +1,39 @@
 ---
+id: skill.sprint-lead
+kind: skill
+version: 1.0.0
+applies_to: '**'
 name: sprint-lead
 description: Orchestrates sprint execution end-to-end. Use to run a sprint — kicks off from PLAN.md, delegates implementation to subagents, runs quality gates, reviews code, updates docs, and writes the retrospective. Supports autopilot and interactive modes.
-when_to_use: "run sprint, kick off sprint, autopilot sprint, execute sprint, continue sprint, run Sprint N"
+when_to_use: run sprint, kick off sprint, autopilot sprint, execute sprint, continue sprint, run Sprint N
 user-invocable: true
+inputs:
+  type: object
+  required:
+  - task
+  properties:
+    task:
+      type: string
+      description: What the skill should do.
+outputs:
+- return_tier: 2
+verifier: null
 agent:
-  tools: [read, search, agent, edit]
-  agents: [qa, a11y, perf, security, reviewer, docs]
+  tools:
+  - read
+  - search
+  - agent
+  - edit
+  agents:
+  - qa
+  - a11y
+  - perf
+  - security
+  - reviewer
+  - docs
   model: null
-  handoffs: [planner]
+  handoffs:
+  - planner
 ---
 
 # Sprint Lead

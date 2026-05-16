@@ -1,3 +1,11 @@
+---
+id: instruction.honesty-contract
+kind: instruction
+version: 1.0.0
+applies_to: '**'
+description: honesty-contract instruction
+---
+
 # Honesty Contract
 
 Applies to every agent and every skill in this repo. These are hard rules:

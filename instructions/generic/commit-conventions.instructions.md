@@ -1,6 +1,9 @@
 ---
-description: "Conventional Commits format used by every agent and ad-hoc commit in this repo."
-scope: ".gitmessage, .github/**, docs/**"
+id: instruction.commit-conventions
+kind: instruction
+version: 1.0.0
+applies_to: .gitmessage, .github/**, docs/**
+description: Conventional Commits format used by every agent and ad-hoc commit in this repo.
 ---
 
 # Commit Conventions

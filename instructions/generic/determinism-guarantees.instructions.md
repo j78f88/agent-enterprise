@@ -1,3 +1,11 @@
+---
+id: instruction.determinism-guarantees
+kind: instruction
+version: 1.0.0
+applies_to: '**'
+description: determinism-guarantees instruction
+---
+
 # Determinism Guarantees
 
 **Phase 4 — Reproducible Agent Execution**

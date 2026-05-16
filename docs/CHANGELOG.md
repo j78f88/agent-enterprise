@@ -1,5 +1,77 @@
 # Changelog
 
+## 2.0.0 — 2026-05 — `protocol-v1` ships complete
+
+### Added
+- **Four JSON Schemas under `schemas/`** that gate the build:
+  `frontmatter-v1`, `callable-v1`, `project-v1`, `registry-v1`.
+- **`validate_frontmatter()` in `init.py`** — strict by default. Every
+  skill, instruction, and agent body is validated against
+  `frontmatter-v1`; skills additionally validated against
+  `callable-v1`. Use `--allow-frontmatter-warnings` for lax mode.
+- **`callable-v1` manifests on all 13 skills** (`inputs`, `outputs`,
+  `verifier`). Verifier callables declare `verifier: null` per ADR-0009.
+- **Mode-2 reference implementation**
+  ([`command-centre/03-mode-orchestration/reference-impls/file-queue-dispatcher/`](../command-centre/03-mode-orchestration/reference-impls/file-queue-dispatcher/))
+  — file-backed queue dispatcher with a finite-state machine, freshness
+  check, and a passing `conformance_test.py`.
+- **Mode-3 reference implementation**
+  ([`command-centre/04-mode-choreography/reference-impls/registry-coordinator/`](../command-centre/04-mode-choreography/reference-impls/registry-coordinator/))
+  — fleet coordinator that validates a registry, detects contract drift,
+  reports contract-bump impact, harvests audit JSON, and ships three
+  meta-agents (`framework-dev`, `harvest`, `audit`). Includes a passing
+  `conformance_test.py`.
+- **Conformance tests** under `tests/test_protocol_v1_conformance.py`
+  (schema self-validation, every substrate file validates, fixture
+  registry validates, both reference-impl conformance scripts run
+  clean) and unit tests under `tests/test_frontmatter_validation.py`.
+- **`tools/migrate-frontmatter.py`** — idempotent migrator that brings
+  legacy substrate into `frontmatter-v1` shape (renames `scope:` to
+  `applies_to:`, adds `id`/`kind`/`version`, seeds default
+  `callable-v1` manifest on skills missing one).
+- **`jsonschema>=4.0`** added to `requirements.txt`.
+
+### Changed
+- **`applies_to:` is canonical, `scope:` is a legacy read-only alias.**
+  Per ADR-0012. The validator accepts both on read; new files must use
+  `applies_to`. All 25 instruction files and 13 agent body files were
+  migrated.
+- **`init.py` agent generation** now parses frontmatter on
+  `agents/*.body.md` and emits only the body into generated
+  `.agent.md`, so newly-added frontmatter is not duplicated.
+- **`README.md`** rewritten around `protocol-v1`, the three modes, and
+  the four schemas.
+- **`src/__init__.py` `__version__`** bumped to `2.0.0`.
+
+### Deprecated
+- **`scope:` frontmatter field.** Still accepted on read as an alias for
+  `applies_to:`; will be removed in a future major. Run
+  `python tools/migrate-frontmatter.py` to migrate.
+
+### Removed
+- **`resolved/` and `.agent-state/` from version control.** Both are
+  build/runtime output. `.gitignore` updated; existing tracked files
+  untracked via `git rm -r --cached`.
+
+### Migration
+1. `pip install -r requirements.txt` (picks up `jsonschema`).
+2. `python tools/migrate-frontmatter.py` to rename `scope:` →
+   `applies_to:` and seed missing IDs/kinds.
+3. For any custom skills, add a `callable-v1` manifest (`inputs`,
+   `outputs`, `verifier`). See [docs/EXTENSION_GUIDE.md](EXTENSION_GUIDE.md).
+4. `python init.py --config <your-config>` — strict frontmatter
+   validation is on by default. Use `--allow-frontmatter-warnings`
+   only as a temporary escape hatch.
+
+### Verified
+- 233 pytest tests pass / 7 skipped.
+- `python init.py --config profiles/python-api.config.yml` runs twice
+  with byte-identical `resolved/` output (determinism preserved).
+- Both reference-impl `conformance_test.py` scripts pass standalone
+  and via pytest.
+
+---
+
 ## 1.4.0 — 2026-04-30
 
 ### Added

@@ -1,5 +1,10 @@
 ---
-applyTo: "{{paths.backlog_ledger}}"
+id: instruction.backlog-ledger
+kind: instruction
+version: 1.0.0
+applies_to: '**'
+description: backlog-ledger instruction
+applyTo: '{{paths.backlog_ledger}}'
 ---
 
 # Backlog Ledger — Schema & Governance

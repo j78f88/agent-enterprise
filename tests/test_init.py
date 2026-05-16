@@ -752,7 +752,11 @@ class TestEmitCursorMdc:
 
 
 class TestScopeAddedToTwoInstructions:
-    """3.1 POC: at least 2 instruction files declare `scope:` in frontmatter."""
+    """3.1 POC: at least 2 instruction files declare path-scope frontmatter.
+
+    Post protocol-v1 (ADR-0012), the canonical field is ``applies_to``;
+    ``scope`` is still accepted as a legacy alias.
+    """
 
     def test_at_least_two_instructions_have_scope(self):
         from pathlib import Path
@@ -762,6 +766,8 @@ class TestScopeAddedToTwoInstructions:
         for p in candidates:
             text = p.read_text(encoding="utf-8")
             fm, _ = parse_frontmatter(text)
-            if isinstance(fm, dict) and "scope" in fm:
+            if isinstance(fm, dict) and ("applies_to" in fm or "scope" in fm):
                 with_scope.append(p.name)
-        assert len(with_scope) >= 2, f"expected >=2 instructions with scope:, got {with_scope}"
+        assert len(with_scope) >= 2, (
+            f"expected >=2 instructions with applies_to/scope, got {with_scope}"
+        )

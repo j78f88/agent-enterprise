@@ -1,0 +1,87 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://agent-homebase/schemas/callable-v1.schema.json",
+  "title": "Callable Manifest — v1",
+  "description": "Mode-2 callable manifest contract. Defines inputs, outputs, and verifier hook for any unit of work a dispatcher can invoke. Implements command-centre/01-protocols/callable-contract.md (contract tag: callable-contract-v1).",
+  "type": "object",
+  "required": ["id", "kind", "version", "applies_to", "inputs", "outputs", "verifier"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9._-]*$",
+      "description": "Stable identifier, unique across the substrate."
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["skill", "callable"],
+      "description": "Only skills and standalone callables expose callable manifests."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+(?:[-+].+)?$"
+    },
+    "applies_to": {
+      "oneOf": [
+        { "type": "string", "minLength": 1 },
+        { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 }
+      ]
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable name."
+    },
+    "description": {
+      "type": "string",
+      "description": "One-sentence purpose, used by dispatchers for routing."
+    },
+    "inputs": {
+      "type": "object",
+      "description": "JSON Schema object describing required and optional inputs.",
+      "required": ["type"],
+      "properties": {
+        "type": { "type": "string", "const": "object" },
+        "required": { "type": "array", "items": { "type": "string" } },
+        "properties": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "outputs": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Form A (artifact paths), Form B (return tier), or both.",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "required": ["path"],
+            "properties": {
+              "path": { "type": "string", "minLength": 1 },
+              "required": { "type": "boolean" }
+            },
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "required": ["return_tier"],
+            "properties": {
+              "return_tier": { "type": "integer", "enum": [1, 2, 3] }
+            },
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    "verifier": {
+      "oneOf": [
+        { "type": "string", "minLength": 1 },
+        { "type": "null" }
+      ],
+      "description": "Reference to a verifier callable id, or null. Verifier-of-verifier is not supported; verifier callables MUST declare verifier: null (ADR-0009 base case)."
+    },
+    "runtime_hints": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

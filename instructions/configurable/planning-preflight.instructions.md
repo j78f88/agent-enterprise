@@ -1,6 +1,10 @@
 ---
-description: "Use when running pre-flight checks on planning documents, scanning project docs before drafting sprint plans, or reviewing architecture constraints for feature planning."
-applyTo: "{{paths.drafts}}**"
+id: instruction.planning-preflight
+kind: instruction
+version: 1.0.0
+applies_to: '**'
+description: Use when running pre-flight checks on planning documents, scanning project docs before drafting sprint plans, or reviewing architecture constraints for feature planning.
+applyTo: '{{paths.drafts}}**'
 ---
 
 # Planning Pre-flight Checklists

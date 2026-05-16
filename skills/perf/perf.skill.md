@@ -1,10 +1,28 @@
 ---
+id: skill.perf
+kind: skill
+version: 1.0.0
+applies_to: '**'
 name: perf
 description: Audits bundle size, build time, and dependency health. Use after a build to check chunk sizes against configured thresholds, flag unused or missing dependencies, and measure build performance. Reports CRITICAL, WARNING, and SUGGESTION findings. Read-only — never modifies code.
-when_to_use: "performance audit, check bundle size, dependency audit, build performance, check for unused deps, perf check"
+when_to_use: performance audit, check bundle size, dependency audit, build performance, check for unused deps, perf check
 user-invocable: true
+inputs:
+  type: object
+  required:
+  - task
+  properties:
+    task:
+      type: string
+      description: What the skill should do.
+outputs:
+- return_tier: 2
+verifier: null
 agent:
-  tools: [read, search, execute]
+  tools:
+  - read
+  - search
+  - execute
   agents: []
   model: null
   handoffs: []

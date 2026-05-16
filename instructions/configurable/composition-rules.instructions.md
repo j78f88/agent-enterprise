@@ -1,3 +1,11 @@
+---
+id: instruction.composition-rules
+kind: instruction
+version: 1.0.0
+applies_to: '**'
+description: composition-rules instruction
+---
+
 # Sprint Composition Rules
 
 Priority stack, scoring formula, and constraints for `/compose-sprint`. Referenced by `@planner` and `@delivery-lead`.

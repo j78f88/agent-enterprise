@@ -1,5 +1,10 @@
 ---
-applyTo: "{{paths.bug_backlog}}"
+id: instruction.bug-backlog-format
+kind: instruction
+version: 1.0.0
+applies_to: '**'
+description: bug-backlog-format instruction
+applyTo: '{{paths.bug_backlog}}'
 ---
 
 # Bug Backlog Format

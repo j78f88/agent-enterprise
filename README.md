@@ -1,412 +1,154 @@
-<div align="center">
+# agent-homebase
 
-<h1>🏠 agent-homebase</h1>
-
-<h3>The operating system your AI coding assistant is missing</h3>
-
-<p><strong>12 agents · 14 security checks · dual-platform · 5 minutes to production-grade AI</strong></p>
+**Portable, multi-agent operating system for software projects.**
 
 [![CI](https://github.com/j78f88/agent-homebase/actions/workflows/ci.yml/badge.svg)](https://github.com/j78f88/agent-homebase/actions/workflows/ci.yml)
-[![GitHub stars](https://img.shields.io/github/stars/j78f88/agent-homebase?style=social)](https://github.com/j78f88/agent-homebase/stargazers)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Copilot](https://img.shields.io/badge/GitHub%20Copilot-Ready-blue?logo=github)](https://github.com/features/copilot)
 [![Claude](https://img.shields.io/badge/Claude%20Code-Ready-orange)](https://claude.ai)
 
-<br />
+Skills, instructions, and agents authored once in plain Markdown,
+resolved with project-specific tokens by `init.py`, and emitted as
+copy-ready artifacts under `resolved/` for any compatible coding
+agent (GitHub Copilot, Claude Code, Cursor, Codex).
 
-**[Quick Start](#-quick-start)** · **[What You Get](#-what-you-get)** · **[Why This Works](#-why-it-works)** · **[Full Docs](docs/ONBOARDING.md)**
-
-<br />
-
----
-
-*Copilot and Claude are powerful. But without structure, they're chaos machines.*  
-*agent-homebase turns your AI assistant into a professional delivery team.*
+`protocol-v1` ships **complete** at `2.0.0`: contracts are frozen and
+backed by JSON Schemas, frontmatter validation, and at least one
+reference implementation per mode.
 
 ---
 
-</div>
+## Who this is for
 
-## � Who this is for
-
-agent-homebase is built for **professional developers using AI assistants
-day-to-day** (P3) and the **framework owners** who curate substrate for
-them (P1). Enterprise platform teams (P2) and outcome-focused builders
-(P4) are served on a deferred basis — the contracts are designed with
-them in mind, but the reference implementations are not yet here.
+- **P1 — Framework owner** (REAL): you curate substrate for one or more
+  teams.
+- **P3 — Pro dev with AI** (PLAUSIBLE): you ship features faster with a
+  Copilot/Claude assistant and want consistent rails.
+- **P2 — Enterprise platform engineer** (ASPIRATIONAL) and
+  **P4 — Outcome-driven builder** (DEFERRED): the contracts are designed
+  for you; reference impls land when a real signal arrives.
 
 See [docs/PERSONAS.md](docs/PERSONAS.md) for the full evidence-tagged
-personas, the jobs each one is hiring the substrate to do, and the
-consumption matrix. If you do not see yourself there, the substrate
-probably does not yet serve you — and that is intentional, not an
-oversight (see [ADR 0007](command-centre/decisions/0007-personas-scope-and-deferral.md)).
-
-## �🔥 The Problem Everyone Ignores
-
-You're using GitHub Copilot or Claude Code. They're fast. They're capable.
-
-**They also:**
-- Forget your project conventions after every session
-- Ship code without tests, reviews, or documentation
-- Require you to manually coordinate planning → coding → QA
-- Lose all learned patterns when context resets
-- Make inconsistent decisions across identical problems
-
-You have a **powerful tool** with **no process**. That's not engineering—that's gambling.
+matrix and [ADR-0008](command-centre/decisions/0008-ship-protocol-v1-complete.md)
+for the decision to ship `protocol-v1` complete.
 
 ---
 
-## 💡 The Solution: A Professional Delivery Team in Your Config
+## Quickstart
 
-**agent-homebase** is a battle-tested skills library extracted from real production teams.
-
-One config file transforms chaotic AI assistance into a structured software pipeline:
-
+```powershell
+git clone https://github.com/j78f88/agent-homebase.git
+cd agent-homebase
+pip install -r requirements.txt
+python init.py --config profiles/python-api.config.yml
+# → resolved/skills, resolved/instructions, resolved/agents
 ```
-Your feature request
-        ↓
-   @planner      → Scopes requirements, estimates complexity
-        ↓
-   @pm           → Validates against project goals (prevents scope creep)
-        ↓
-   @sprint-lead  → Orchestrates full implementation cycle
-        ↓
-   @qa           → Enforces tests, coverage, linting (blocks failures)
-        ↓
-   @reviewer     → Catches security issues, anti-patterns, code smells
-        ↓
-   @docs         → Updates documentation automatically
-        ↓
-   Deployed code — tested, reviewed, documented
-```
+
+Full walkthrough: [docs/QUICKSTART.md](docs/QUICKSTART.md).
+First-time setup: [docs/ONBOARDING.md](docs/ONBOARDING.md).
 
 ---
 
-## 🎯 What You Get
+## What you get
 
-### 12 Specialized Agent Roles
+### Three modes, three contracts
 
-| Agent | What It Does |
-|:------|:-------------|
-| 🎯 **@pm** | Validates features through 5 structured tests—prevents scope creep before code is written |
-| 📋 **@planner** | Scopes requirements, drafts sprint plans, estimates complexity |
-| 🎬 **@sprint-lead** | Orchestrates complete sprint execution with zero manual coordination |
-| ✅ **@qa** | Runs typecheck, lint, tests, coverage—blocks deploys on failures |
-| 🔍 **@reviewer** | Reviews for patterns, security, performance—flags issues by severity |
-| 🏗️ **@architect** | Designs approaches, writes ADRs, makes structural decisions |
-| 📚 **@researcher** | Surfaces prior art with citations, identifies failure modes |
-| 🐛 **@bug** | Captures bugs into structured, prioritized backlog |
-| 📖 **@docs** | Keeps documentation in sync after every sprint |
-| 🔐 **@security** | 14 automated security checks — see [details below](#-security-built-in-not-bolted-on) |
-| ♿ **@a11y** | WCAG 2.1 AA accessibility audits |
-| ⚡ **@perf** | Bundle size, build time, dependency analysis |
+| Mode | What it is | Contract | Reference impl |
+|------|------------|----------|----------------|
+| **1 — Team** | Substrate + interactive use (`@planner`, `@qa`, `@security`, …) | [`mode-1-contract-v1`](command-centre/02-mode-team/contract.md) | This repo itself |
+| **2 — Orchestration** | Dispatch a queue of work to callables; verify | [`mode-2-contract-v1`](command-centre/03-mode-orchestration/contract.md) | [`file-queue-dispatcher`](command-centre/03-mode-orchestration/reference-impls/file-queue-dispatcher/) |
+| **3 — Choreography** | Coordinate a program of works across many projects | [`mode-3-contract-v1`](command-centre/04-mode-choreography/contract.md) | [`registry-coordinator`](command-centre/04-mode-choreography/reference-impls/registry-coordinator/) |
 
-> A 13th agent, `@onboarding`, ships with the library but is **setup-only** — it guides first-time configuration and removes itself after the initial run, so it doesn't appear in your day-to-day agent roster.
+### Protocol-v1 schemas
 
-### 🔐 Security: Built In, Not Bolted On
+Every substrate file is validated at build time:
 
-`@security` runs **14 automated checks** as a sprint gate or on demand:
+| Schema | Validates |
+|--------|-----------|
+| [`schemas/frontmatter-v1.schema.json`](schemas/frontmatter-v1.schema.json) | YAML frontmatter on every skill, instruction, and agent |
+| [`schemas/callable-v1.schema.json`](schemas/callable-v1.schema.json) | The callable manifest on every skill |
+| [`schemas/project-v1.schema.json`](schemas/project-v1.schema.json) | A single project entry in a Mode-3 registry |
+| [`schemas/registry-v1.schema.json`](schemas/registry-v1.schema.json) | A full Mode-3 choreography registry |
 
-| Check | What It Catches |
-|:------|:----------------|
-| Dependency CVE scan | Known vulnerabilities in your packages |
-| Active exploit research | CISA KEV catalog, proof-of-concept detection |
-| Secret detection | API keys, tokens, passwords in source |
-| OWASP pattern matching | Injection, XSS, auth failures |
-| File integrity hashes | Unauthorized changes to tracked files |
-| SBOM generation | Full software bill of materials |
-| SAST scanning | Static analysis security findings |
-| Git history secret scan | Secrets in old commits |
-| License compliance | Denylist/allowlist enforcement |
-| HTTP security headers | Missing CSP, HSTS, X-Frame-Options |
-| Container image scan | Vulnerabilities in Docker images |
-| IaC scanning | Misconfigurations in infrastructure code |
-| Supply chain audit | Dependency provenance verification |
-| Security changelog | Append-only finding log (SEC-NNN entries) |
+Plus the three subagent-return tiers under `schemas/subagent-return-tierN.schema.json`.
 
-Every finding gets an **OWASP remediation classification**: patched, delayed, no-fix, or zero-day — with timelines and effort tags.
+### Thirteen skills, thirteen agents
 
-### 24 Governance Rules
-
-- Commit message conventions  
-- Severity classification (CRITICAL / WARNING / SUGGESTION)  
-- Escalation paths for blocked work  
-- Quality gate thresholds  
-- Sprint retrospective format  
-- Handoff contracts between agents  
-- Security policies & validation  
-- *...and 16 more*
-
-### 3 Ready-to-Use Profiles
-
-| Profile | For |
-|:--------|:----|
-| **[react-web-app](profiles/react-web-app.config.yml)** | React + Vite single-page apps |
-| **[monorepo-fullstack](profiles/monorepo-fullstack.config.yml)** | TypeScript monorepo (pnpm + Vite + Expo) |
-| **[python-api](profiles/python-api.config.yml)** | FastAPI / Flask / Django backends |
+`@a11y`, `@architect`, `@bug`, `@docs`, `@onboarding`, `@perf`,
+`@planner`, `@pm`, `@qa`, `@researcher`, `@reviewer`, `@security`,
+`@sprint-lead` — each one is a skill source under `skills/` plus an
+agent wrapper body under `agents/`. See [docs/PERSONAS.md](docs/PERSONAS.md)
+and [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for how they compose.
 
 ---
 
-## 📊 Before & After
+## Status
 
-<table>
-<tr>
-<th width="50%">❌ Without agent-homebase</th>
-<th width="50%">✅ With agent-homebase</th>
-</tr>
-<tr>
-<td>
-
-```
-You: "Add user authentication"
-
-Agent: [writes 200 lines immediately]
-       • No tests
-       • Hardcodes API keys
-       • Uses deprecated patterns
-       • Forgets your Auth0 setup
-
-You: "Wait, we use Auth0..."
-
-Agent: [rewrites everything]
-       • Still no tests
-       • Documentation? What docs?
-```
-
-</td>
-<td>
-
-```
-You: "@planner add user auth"
-
-@planner: Scoped 4 tasks (~8 files)
-          Using Auth0 per config
-          Complexity: Medium
-
-You: "@sprint-lead run Sprint 12"
-
-@sprint-lead:
-  ✓ Implementation complete
-  ✓ Tests passing (91% coverage)
-  ✓ 14 security checks passed, 0 CVEs
-  ✓ Docs updated
-  ✓ Pushed to feature branch
-```
-
-</td>
-</tr>
-</table>
+- **`protocol-v1`** — frozen at 2.0.0. Schemas enforced.
+- **`mode-1-contract-v1`** — substrate-aligned; this repo conforms.
+- **`mode-2-contract-v1`** — reference dispatcher present, conformance test green.
+- **`mode-3-contract-v1`** — reference coordinator present, conformance test green.
 
 ---
 
-## 🚀 Quick Start
-
-**Setup in 5 minutes:**
-
-```bash
-# 1. Add to your project
-git submodule add https://github.com/j78f88/agent-homebase.git skills-library
-cd skills-library
-
-# 2. Choose your profile
-cp profiles/react-web-app.config.yml project.config.yml
-# Edit project.config.yml — at minimum set project.name and git.repo
-# Or use: python init.py --quick-setup  (interactive)
-
-# 3. Generate resolved files
-python init.py --config project.config.yml
-
-# 4. Copy to your project
-cp -r resolved/skills/* ../.github/agents/
-cp -r resolved/instructions/* ../.github/instructions/
-# If using VS Code agents (editor.target: "vscode" or "both"):
-cp -r resolved/agents/* ../.github/agents/
-
-# 5. Initialize planning files (first time only)
-cp starters/SPRINTS.md ../
-cp starters/BACKLOG_LEDGER.md ../docs/planning/
-```
-
-**Then use naturally:**
-```
-@planner scope the dark mode feature
-@sprint-lead run Sprint 3
-@qa check coverage for auth module
-@reviewer look at the last 3 commits
-```
-
-📖 **[Complete setup guide →](docs/ONBOARDING.md)**
-
----
-
-## 🧠 Why It Works
-
-### Thin Orchestration Architecture
+## Architecture (1 minute)
 
 ```
-@sprint-lead (coordinator)
-    │
-    ├── Reads plans
-    ├── Tracks state  
-    ├── Manages workflow
-    │
-    └── Delegates ALL implementation to:
-            ├── Unnamed subagents → write code
-            ├── @qa → validate quality
-            ├── @reviewer → check patterns
-            └── @docs → update documentation
+skills/         author once, token-templated, callable-v1 manifests
+instructions/   shared rules, generic + configurable
+agents/         per-agent body that wraps a skill
+schemas/        JSON Schemas that gate the build
+config/         project-specific token values
+profiles/       pre-built configs (python-api, react-web-app, monorepo-fullstack)
+command-centre/ contracts (protocol-v1, mode contracts, ADRs, ref impls)
+        │
+        ▼  python init.py --config <profile>
+resolved/       deploy artifacts (skills/, instructions/, agents/)
 ```
 
-**The secret:** `@sprint-lead` never reads source code. It coordinates. This keeps context windows clear for what actually matters.
+`init.py` is the single source of truth for the build. It runs
+security validation, frontmatter validation (strict by default),
+resolves `{{tokens}}`, and writes deterministic output.
 
-### Contract-First Design
-
-Every agent returns **structured data** following JSON schemas:
-
-```json
-{
-  "tier": 1,
-  "agent": "qa",
-  "status": "blocked",
-  "summary": "2/5 quality gates failed",
-  "blockerReason": "Coverage at 72% (threshold: 85%)",
-  "findings": [...]
-}
-```
-
-When `@qa` returns `status: blocked`, `@sprint-lead` knows exactly what to do. No guessing. No hallucinating.
-
-### Progressive Reliability (Optional)
-
-| Phase | Adds | When to Enable |
-|:------|:-----|:---------------|
-| **0-1** | Security validation, JSON Schema contracts | Always (default) |
-| **2** | SQLite checkpoints, resume from any point | Long sprints, unstable networks |
-| **3** | Docker sandboxing, resource limits | CI/CD, untrusted code |
-| **4** | Deterministic replay, Lamport timestamps | Compliance, debugging |
-
-Most projects only need Phase 0-1. Add phases as reliability requirements grow.
-
-### Tested & CI-Verified
-
-The library ships with a test suite covering contract validation, init.py generation, checkpoint durability, sandbox capabilities, and determinism guarantees — verified on every push across Python 3.10 and 3.12.
-
-📖 **[Architecture deep-dive →](docs/ARCHITECTURE.md)**
+`resolved/` is build output — never edit it directly, never commit it.
 
 ---
 
-## 🤔 Is This For You?
+## Key directories
 
-<table>
-<tr>
-<th>✅ Perfect fit</th>
-<th>❌ Not for you</th>
-</tr>
-<tr>
-<td>
-
-- You use Copilot/Claude for real development
-- You're tired of re-explaining context every session
-- You want consistent quality without babysitting
-- You value process but don't want to build from scratch
-
-</td>
-<td>
-
-- You only use AI for quick code snippets
-- You prefer completely unstructured exploration
-- Your project changes too fast for conventions
-
-</td>
-</tr>
-</table>
+| Path | Purpose |
+| --- | --- |
+| `skills/` | Skill authoring sources (`*.skill.md`) with `callable-v1` manifests |
+| `instructions/generic/` | Rules that apply to every project |
+| `instructions/configurable/` | Rules that consume `{{tokens}}` |
+| `agents/` | Per-agent body wrappers (`*.body.md`) |
+| `command-centre/` | `protocol-v1` contracts, mode contracts, ADRs, reference impls |
+| `schemas/` | JSON Schemas enforced at build time |
+| `profiles/` | Pre-built configs for common stacks |
+| `config/` | Your own project config (or pick a profile) |
+| `tools/` | Helpers — including [`migrate-frontmatter.py`](tools/migrate-frontmatter.py) |
+| `tests/` | Pytest suite (conformance included) |
+| `resolved/` | **Build output. Never edit. Never commit.** |
 
 ---
 
-## 🌍 Compatibility
+## Contributing
 
-| Platform | Status | What You Get |
-|:---------|:-------|:-------------|
-| GitHub Copilot (VS Code agent mode) | ✅ Full support | Agent wrappers with tool restrictions + skills |
-| Claude Code / Cowork | ✅ Full support | Skills with progressive context loading |
-| Any `.instructions.md` system | ✅ Compatible | Instructions work everywhere |
+- Conventional Commits (`feat:`, `fix:`, `docs:`, `chore:` …).
+- Every PR must keep `python init.py --config config/project.config.example.yml`
+  green (strict frontmatter validation on by default) and the full
+  test suite green.
+- New skills follow [docs/EXTENSION_GUIDE.md](docs/EXTENSION_GUIDE.md)
+  and MUST include a `callable-v1` manifest.
+- Run `python tools/migrate-frontmatter.py` on legacy files to bring
+  them into `frontmatter-v1` shape (idempotent).
 
-### Platform Selection
-
-Set `editor.target` in your config to control what gets generated:
-
-| Value | Generates | Best For |
-|:------|:----------|:---------|
-| `"both"` (default) | Skills + agents + instructions | Teams on mixed platforms |
-| `"vscode"` | Agents + instructions (skills set to non-invocable) | VS Code-only teams |
-| `"claude-code"` | Skills + instructions (no agents) | Claude Code-only teams |
-
-When `editor.target` includes VS Code, `init.py` generates thin `.agent.md` wrappers in `resolved/agents/` with native tool restrictions, subagent delegation, and model selection. Skills remain the single source of truth.
+See [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) and
+[AGENTS.md](AGENTS.md) for the agent contract that every coding
+assistant in this repo defers to.
 
 ---
 
-## 📁 Project Structure
+## License
 
-```
-agent-homebase/
-├── skills/           # 12 agent definitions (canonical source of truth)
-├── instructions/     # 24 governance rules
-│   ├── configurable/ # Project-specific (paths, thresholds)
-│   └── generic/      # Universal (contracts, severity)
-├── profiles/         # Ready-to-use configs
-├── starters/         # 9 starter templates (sprints, backlog, security changelog, file hashes)
-├── schemas/          # JSON return validation
-├── resolved/         # Generated output
-│   ├── skills/       # Token-resolved skills (both platforms)
-│   ├── agents/       # VS Code agent wrappers (when editor.target includes vscode)
-│   └── instructions/ # Token-resolved instructions
-├── docs/             # Complete documentation
-└── src/              # Phase implementations (Python)
-```
-
----
-
-## 📚 Documentation
-
-| Guide | What You'll Learn |
-|:------|:------------------|
-| **[Onboarding](docs/ONBOARDING.md)** | Step-by-step setup (start here) |
-| **[Architecture](docs/ARCHITECTURE.md)** | Design decisions & rationale |
-| **[Skill Flow](docs/SKILL_FLOW.md)** | How agents orchestrate work |
-| **[Example Sprint](docs/EXAMPLE_SPRINT_FLOW.md)** | Complete sprint walkthrough |
-| **[Customization](docs/CUSTOMIZATION.md)** | Adapting skills for your needs |
-| **[Troubleshooting](docs/TROUBLESHOOTING.md)** | Common issues & fixes |
-
----
-
-## 🤝 Contributing
-
-Contributions welcome. See **[CONTRIBUTING.md](docs/CONTRIBUTING.md)**.
-
----
-
-## 📄 License
-
-MIT © 2026
-
----
-
-<div align="center">
-
-<br />
-
-### Your AI assistant has the power.
-
-### Give it the process.
-
-<br />
-
-**[⭐ Star on GitHub](https://github.com/j78f88/agent-homebase)** · **[📖 Get Started](docs/ONBOARDING.md)** · **[🐛 Report Issue](https://github.com/j78f88/agent-homebase/issues)**
-
-<br />
-
----
-
-<sub>Extracted from real production teams. Battle-tested on TypeScript, Python, React, and monorepo projects.</sub>
-
-</div>
+MIT — see [LICENSE](LICENSE).

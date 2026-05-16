@@ -1,5 +1,10 @@
 ---
-applyTo: "{{paths.validation}}**"
+id: instruction.validation-framework
+kind: instruction
+version: 1.0.0
+applies_to: '**'
+description: validation-framework instruction
+applyTo: '{{paths.validation}}**'
 ---
 
 # Validation Framework

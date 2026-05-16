@@ -1,6 +1,10 @@
 ---
-description: "Use when running engagement gates, checking scope upgrade thresholds, building subagent prompts for validation or planning, or determining deployment workflow details. Defines Gate 1-4 criteria, scope upgrade rules, and platform configuration."
-applyTo: ".github/agents/delivery-lead.agent.md"
+id: instruction.engagement-gates
+kind: instruction
+version: 1.0.0
+applies_to: '**'
+description: Use when running engagement gates, checking scope upgrade thresholds, building subagent prompts for validation or planning, or determining deployment workflow details. Defines Gate 1-4 criteria, scope upgrade rules, and platform configuration.
+applyTo: .github/agents/delivery-lead.agent.md
 ---
 
 # Engagement Gates

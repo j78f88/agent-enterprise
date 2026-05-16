@@ -1,10 +1,28 @@
 ---
+id: skill.bug
+kind: skill
+version: 1.0.0
+applies_to: '**'
 name: bug
 description: Captures bugs fast and appends them to the bug backlog with a sequential ID, severity, area, and reproduction steps. Use to log a reproducible issue. Takes about 30 seconds per bug. Creates a matching ledger entry automatically.
-when_to_use: "log a bug, report a bug, found a bug, something is broken, capture this issue, bug report"
+when_to_use: log a bug, report a bug, found a bug, something is broken, capture this issue, bug report
 user-invocable: true
+inputs:
+  type: object
+  required:
+  - task
+  properties:
+    task:
+      type: string
+      description: What the skill should do.
+outputs:
+- return_tier: 2
+verifier: null
 agent:
-  tools: [read, search, edit]
+  tools:
+  - read
+  - search
+  - edit
   agents: []
   model: null
   handoffs: []

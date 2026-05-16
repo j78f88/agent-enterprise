@@ -1,3 +1,11 @@
+---
+id: instruction.observability
+kind: instruction
+version: 1.0.0
+applies_to: '**'
+description: observability instruction
+---
+
 # Observability & Traceability
 
 **Phase 0 Foundation — Production-Grade Instrumentation**

@@ -1,3 +1,11 @@
+---
+id: instruction.batch-report
+kind: instruction
+version: 1.0.0
+applies_to: '**'
+description: batch-report instruction
+---
+
 # Batch Report Contract
 
 Shared rules for agent workflows that produce non-destructive artifacts (drafts, validation records, research docs, handoff manifests, rejection entries).

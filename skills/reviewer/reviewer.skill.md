@@ -1,10 +1,27 @@
 ---
+id: skill.reviewer
+kind: skill
+version: 1.0.0
+applies_to: '**'
 name: reviewer
 description: Reviews code changes for pattern compliance, security, TypeScript quality, accessibility, and planning artifact integrity. Use with a commit range or branch name. Reports CRITICAL, WARNING, and SUGGESTION findings with file and line references.
-when_to_use: "review this code, code review, review before merge, check this PR, review commit range, review branch"
+when_to_use: review this code, code review, review before merge, check this PR, review commit range, review branch
 user-invocable: true
+inputs:
+  type: object
+  required:
+  - task
+  properties:
+    task:
+      type: string
+      description: What the skill should do.
+outputs:
+- return_tier: 2
+verifier: null
 agent:
-  tools: [read, search]
+  tools:
+  - read
+  - search
   agents: []
   model: null
   handoffs: []

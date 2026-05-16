@@ -1,3 +1,11 @@
+---
+id: instruction.askquestions-contract
+kind: instruction
+version: 1.0.0
+applies_to: '**'
+description: askquestions-contract instruction
+---
+
 # askQuestions Contract
 
 Shared rules for agents that use the `vscode/askQuestions` tool (frontmatter declaration) or `#tool:askQuestions` (body invocation).

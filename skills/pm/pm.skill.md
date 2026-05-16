@@ -1,13 +1,31 @@
 ---
+id: skill.pm
+kind: skill
+version: 1.0.0
+applies_to: '**'
 name: pm
 description: Validates whether features are worth building using a 5-test echo-chamber filter. Use when pressure-testing a feature idea, competitive research finding, or brainstorm output before sprint planning. Also use for roadmap prioritisation and kill/keep decisions.
-when_to_use: "validate this feature, should we build, is this worth it, roadmap priority, competitive finding to assess, brainstorm output to pressure-test"
+when_to_use: validate this feature, should we build, is this worth it, roadmap priority, competitive finding to assess, brainstorm output to pressure-test
 user-invocable: true
+inputs:
+  type: object
+  required:
+  - task
+  properties:
+    task:
+      type: string
+      description: What the skill should do.
+outputs:
+- return_tier: 2
+verifier: null
 agent:
-  tools: [read, search]
+  tools:
+  - read
+  - search
   agents: []
   model: null
-  handoffs: [planner]
+  handoffs:
+  - planner
 ---
 
 # Product Manager

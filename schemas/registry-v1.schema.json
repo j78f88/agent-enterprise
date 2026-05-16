@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://agent-homebase/schemas/registry-v1.schema.json",
+  "title": "Choreography Registry — v1",
+  "description": "Top-level registry file consumed by Mode-3 coordinators. Implements command-centre/04-mode-choreography/registry-schema.md (part of mode-3-contract-v1).",
+  "type": "object",
+  "required": ["projects"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Registry schema version this file conforms to."
+    },
+    "coordinator": {
+      "type": "object",
+      "description": "Optional metadata about the coordinator instance that owns this registry.",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "substrate_version": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "projects": {
+      "type": "array",
+      "items": { "$ref": "project-v1.schema.json" }
+    }
+  },
+  "additionalProperties": false
+}

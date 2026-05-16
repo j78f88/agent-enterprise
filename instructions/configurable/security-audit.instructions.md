@@ -1,6 +1,9 @@
 ---
-description: "Procedures the @security agent follows for audits, changelog governance, hash registry management, and sprint gate integration."
-scope: "{{paths.security_changelog}}, {{paths.file_hashes}}"
+id: instruction.security-audit
+kind: instruction
+version: 1.0.0
+applies_to: '{{paths.security_changelog}}, {{paths.file_hashes}}'
+description: Procedures the @security agent follows for audits, changelog governance, hash registry management, and sprint gate integration.
 ---
 
 # Security Audit Procedures

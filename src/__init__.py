@@ -8,4 +8,4 @@ Source code organized by implementation phase:
 - phase4_determinism: Determinism & replay (logical time, versioning)
 """
 
-__version__ = "0.4.0"
+__version__ = "2.0.0"

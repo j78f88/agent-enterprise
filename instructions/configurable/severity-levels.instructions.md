@@ -1,3 +1,11 @@
+---
+id: instruction.severity-levels
+kind: instruction
+version: 1.0.0
+applies_to: '**'
+description: severity-levels instruction
+---
+
 # Severity Levels — Finding Classification
 
 Shared rule for all agents that report findings. Defines the three severity levels and the required action each triggers.

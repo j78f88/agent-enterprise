@@ -1,0 +1,71 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://agent-homebase/schemas/frontmatter-v1.schema.json",
+  "title": "Substrate Frontmatter — v1",
+  "description": "Required and optional YAML frontmatter for any agent-homebase substrate file (skill, instruction, agent, profile, callable, policy, schema). Implements command-centre/01-protocols/frontmatter-spec.md (contract tag: frontmatter-v1).",
+  "type": "object",
+  "required": ["id", "kind", "version", "applies_to"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9._-]*$",
+      "description": "Globally unique, stable identifier within the substrate. Lowercase, dot/dash/underscore allowed.",
+      "examples": ["skill.security", "instruction.commit-conventions", "agent.planner"]
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["skill", "instruction", "agent", "profile", "callable", "policy", "schema"],
+      "description": "Substrate file kind."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+(?:[-+].+)?$",
+      "description": "File-level semver, independent of repo semver."
+    },
+    "applies_to": {
+      "oneOf": [
+        { "type": "string", "minLength": 1 },
+        { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 }
+      ],
+      "description": "Path glob(s) where this file is active. Use \"**\" for global."
+    },
+    "scope": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "array", "items": { "type": "string" } }
+      ],
+      "description": "Alias for applies_to. Deprecated, accepted on read for one minor version (sunsets at frontmatter-v2)."
+    },
+    "description": {
+      "type": "string",
+      "description": "One-sentence purpose."
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Free-form labels."
+    },
+    "replaces": {
+      "type": "string",
+      "description": "id of a deprecated file this supersedes."
+    },
+    "depends_on": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "List of other file ids required to be present."
+    },
+    "runtime": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["copilot", "claude-code", "cursor", "codex"]
+      }
+    },
+    "owner": { "type": "string" },
+    "last_reviewed": {
+      "type": "string",
+      "format": "date"
+    }
+  },
+  "additionalProperties": true
+}

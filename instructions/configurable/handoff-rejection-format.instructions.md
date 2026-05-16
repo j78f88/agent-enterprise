@@ -1,5 +1,10 @@
 ---
-applyTo: "{{paths.rejections}}"
+id: instruction.handoff-rejection-format
+kind: instruction
+version: 1.0.0
+applies_to: '**'
+description: handoff-rejection-format instruction
+applyTo: '{{paths.rejections}}'
 ---
 
 # Handoff Rejection Format

@@ -1,13 +1,32 @@
 ---
+id: skill.researcher
+kind: skill
+version: 1.0.0
+applies_to: '**'
 name: researcher
 description: Surfaces how other apps solve a problem by searching external sources. Use when you need real-world patterns before validating a feature. Always cites sources, quantifies adoption, and includes failure modes. Never recommends — surfaces evidence only.
-when_to_use: "research how other apps, what patterns exist for, how do competitors handle, external research on, find examples of, research segment"
+when_to_use: research how other apps, what patterns exist for, how do competitors handle, external research on, find examples of, research segment
 user-invocable: true
+inputs:
+  type: object
+  required:
+  - task
+  properties:
+    task:
+      type: string
+      description: What the skill should do.
+outputs:
+- return_tier: 2
+verifier: null
 agent:
-  tools: [read, search, web]
+  tools:
+  - read
+  - search
+  - web
   agents: []
   model: null
-  handoffs: [pm]
+  handoffs:
+  - pm
 ---
 
 # Researcher

@@ -1,13 +1,31 @@
 ---
+id: skill.architect
+kind: skill
+version: 1.0.0
+applies_to: '**'
 name: architect
 description: Designs technical approaches and writes Architecture Decision Records. Use when choosing between implementation options, documenting a design decision, or pressure-testing an approach before sprint planning. Reads existing patterns from memory files and extends rather than breaks them. Never implements code.
-when_to_use: "write an ADR, design this, how should we architect, technical approach for, review this design decision, architecture for"
+when_to_use: write an ADR, design this, how should we architect, technical approach for, review this design decision, architecture for
 user-invocable: true
+inputs:
+  type: object
+  required:
+  - task
+  properties:
+    task:
+      type: string
+      description: What the skill should do.
+outputs:
+- return_tier: 2
+verifier: null
 agent:
-  tools: [read, search]
+  tools:
+  - read
+  - search
   agents: []
   model: null
-  handoffs: [planner]
+  handoffs:
+  - planner
 ---
 
 # Architect

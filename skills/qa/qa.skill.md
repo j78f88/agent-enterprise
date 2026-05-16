@@ -1,10 +1,29 @@
 ---
+id: skill.qa
+kind: skill
+version: 1.0.0
+applies_to: '**'
 name: qa
 description: Runs the full quality pipeline — typecheck, lint, unit tests, coverage, and E2E. Use after implementation to validate a sprint or check for regressions. Reports gate pass/fail with exact numbers and coverage percentages against configured thresholds.
-when_to_use: "run QA, check quality, run tests, validate sprint, check coverage, run the pipeline, quality check"
+when_to_use: run QA, check quality, run tests, validate sprint, check coverage, run the pipeline, quality check
 user-invocable: true
+inputs:
+  type: object
+  required:
+  - task
+  properties:
+    task:
+      type: string
+      description: What the skill should do.
+outputs:
+- return_tier: 2
+verifier: null
 agent:
-  tools: [read, search, execute, edit]
+  tools:
+  - read
+  - search
+  - execute
+  - edit
   agents: []
   model: null
   handoffs: []

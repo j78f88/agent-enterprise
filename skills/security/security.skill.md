@@ -1,10 +1,28 @@
 ---
+id: skill.security
+kind: skill
+version: 1.0.0
+applies_to: '**'
 name: security
 description: Audits codebase for vulnerabilities, researches active exploits, manages a security changelog, and maintains file integrity hashes. Use on a schedule, as a sprint gate, or on demand. Reports CRITICAL, WARNING, and SUGGESTION findings. Read-only by default — writes only to security docs.
-when_to_use: "security audit, check for vulnerabilities, CVE scan, dependency security, check secrets, run security, security review, hash files, integrity check, exploit research, security changelog, OWASP check, supply chain audit"
+when_to_use: security audit, check for vulnerabilities, CVE scan, dependency security, check secrets, run security, security review, hash files, integrity check, exploit research, security changelog, OWASP check, supply chain audit
 user-invocable: true
+inputs:
+  type: object
+  required:
+  - task
+  properties:
+    task:
+      type: string
+      description: What the skill should do.
+outputs:
+- return_tier: 2
+verifier: null
 agent:
-  tools: [read, search, execute]
+  tools:
+  - read
+  - search
+  - execute
   agents: []
   model: null
   handoffs: []
