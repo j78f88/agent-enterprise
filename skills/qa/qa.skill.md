@@ -21,6 +21,7 @@ This agent reads and follows:
 - `{{paths.instructions_dir}}/severity-levels.instructions.md` — severity definitions & required actions
 - `{{paths.instructions_dir}}/non-goals-governance.instructions.md` — NON_GOALS read-only rule
 - `{{paths.instructions_dir}}/sprint-docs-format.instructions.md` — Quality Gates format (for sprint validation)
+- `references/testing-patterns.md` — cross-skill testing patterns, coverage expectations, anti-patterns
 
 ## Quality Pipeline
 

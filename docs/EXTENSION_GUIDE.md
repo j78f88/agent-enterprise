@@ -143,3 +143,78 @@ that case:
 3. Open a PR. Reviewers will check that nothing project-specific leaked in.
 
 If the change cannot be made generic, it does not belong upstream.
+
+---
+
+## Skill Template
+
+Every new skill under `skills/<name>/<name>.skill.md` follows the same
+shape. The structure below is the contract; deleting or renaming sections
+will break downstream tooling and reviews.
+
+```markdown
+---
+name: <skill-name>
+description: <one-paragraph summary of what the skill does and when to use it>
+when_to_use: "<short comma-separated list of trigger phrases>"
+user-invocable: true
+agent:
+  tools: [read, search, execute]   # only the capabilities the skill actually needs
+  agents: []                       # subagents this one may dispatch
+  model: null
+  handoffs: []
+---
+
+# <Skill Title>
+
+You are the <role> for {{project.name}}. <One sentence on the mission.>
+<One sentence on the hard boundary — what this skill never does.>
+
+## Core Constraints
+
+- <Bullet of non-negotiable rules. Cite shared instructions where they apply.>
+
+## Shared Rules
+
+This agent reads and follows:
+
+- `{{paths.instructions_dir}}/severity-levels.instructions.md`
+- `references/<relevant-checklist>.md`  <!-- if applicable -->
+
+## Workflow
+
+1. <Numbered, deterministic steps. No ambiguity about ordering.>
+2. <Cite the exact commands or tool calls used at each step.>
+
+## Output Contract
+
+<Describe what the skill returns. Cite the matching subagent-return tier
+under `schemas/`.>
+
+## Common Rationalizations
+
+| Rationalization | Why it's wrong | What to do instead |
+| --- | --- | --- |
+| "It's probably fine, the test is flaky." | You have not proven flakiness; you have one failure. | Re-run, capture both runs, file an investigation if it recurs. |
+| "I'll skip the lint, it's just whitespace." | The pipeline is a contract, not a suggestion. | Run every gate. Report each result. |
+
+## Red Flags
+
+- Claims of success without a cited command or file read.
+- Severity softened on push-back without new evidence.
+- Steps in the workflow silently skipped.
+- New tokens introduced without a matching entry in `config/project.config.example.yml`.
+
+## Verification
+
+A reviewer can confirm the skill executed correctly by checking:
+
+- [ ] Every command in the workflow has a captured exit code in the report.
+- [ ] Every finding cites file + line or command + output.
+- [ ] Severity matches the action contract in `severity-levels.instructions.md`.
+- [ ] No edits outside the skill's declared write surface.
+```
+
+Keep the skill body under ~200 lines. Long reference material belongs in
+`references/` and is linked, not inlined.
+

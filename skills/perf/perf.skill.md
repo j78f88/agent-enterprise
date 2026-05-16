@@ -20,6 +20,7 @@ This agent reads and follows:
 
 - `{{paths.instructions_dir}}/severity-levels.instructions.md` — severity action contract
 - `{{paths.instructions_dir}}/non-goals-governance.instructions.md` — NON_GOALS read-only rule
+- `references/performance-checklist.md` — bundle, render, DB/network, build budgets
 
 ## Checks
 

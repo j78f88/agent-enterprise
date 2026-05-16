@@ -1,0 +1,72 @@
+# AGENTS.md
+
+Repository: **agent-homebase** — a portable, multi-agent operating system for
+software projects. Skills, instructions, and agents live as plain Markdown,
+get resolved with project-specific tokens by `init.py`, and emit copy-ready
+artifacts under `resolved/` for any compatible coding agent (Claude Code,
+GitHub Copilot, Cursor, OpenAI Codex).
+
+Read this file first. Platform-specific entry points (`CLAUDE.md`, GitHub
+Copilot's `.github/copilot-instructions.md`, Cursor's `.cursor/rules/`) all
+defer to the contracts described here.
+
+## Dev setup
+
+- Python **3.12+**
+- `pip install pyyaml`
+- `pip install -r requirements-dev.txt` (test/lint extras)
+
+## Build
+
+```powershell
+python init.py --config config/project.config.example.yml
+```
+
+Outputs go to `resolved/`. Never edit files under `resolved/` by hand —
+they are regenerated on every build.
+
+## Test
+
+```powershell
+$env:PYTHONIOENCODING='utf-8'
+python -m pytest tests/ -v
+```
+
+## Architecture (1 minute)
+
+```
+skills/         author once, token-templated
+instructions/   shared rules, generic + configurable
+agents/         per-agent body that wraps a skill
+config/         project-specific token values
+        │
+        ▼  python init.py
+resolved/       deploy artifacts (skills/, instructions/, agents/)
+```
+
+`init.py` is the single source of truth for the build. It runs security
+validation on every config value, resolves `{{tokens}}`, and writes
+deterministic output.
+
+## Key directories
+
+| Path | Purpose |
+| --- | --- |
+| `skills/` | Skill authoring sources (`*.skill.md`) |
+| `instructions/generic/` | Rules that apply to every project |
+| `instructions/configurable/` | Rules that consume `{{tokens}}` |
+| `agents/` | Per-agent body wrappers (`*.body.md`) |
+| `references/` | Cross-skill checklists (testing, security, a11y, perf) |
+| `config/` | Project token configs |
+| `profiles/` | Pre-built configs for common stacks |
+| `policies/` | OPA Rego guardrails |
+| `schemas/` | Subagent-return JSON schemas |
+| `starters/` | Bootstrap docs copied into adopter projects |
+| `tests/` | Pytest suite |
+
+## PR conventions
+
+- Conventional Commits (`feat:`, `fix:`, `docs:`, `chore:` …).
+- Every PR must keep `python init.py` green and the test suite green.
+- Do not commit anything inside `resolved/` — it is build output.
+- New skills follow the template in `docs/EXTENSION_GUIDE.md`.
