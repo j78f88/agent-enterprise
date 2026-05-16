@@ -48,7 +48,6 @@ agent-homebase/
 │   ├── phase3_isolation/
 │   └── phase4_determinism/
 ├── schemas/             # JSON Schema definitions
-├── policies/            # Rego policy files
 ├── tests/               # Test suites
 └── docs/                # Documentation
 ```
@@ -271,53 +270,6 @@ pytest tests/test_myfeature.py -v
 
 # With coverage
 pytest tests/ --cov=src --cov-report=html
-```
-
----
-
-## Adding Rego Policies
-
-### Policy File Structure
-
-```rego
-# policies/my-policy.rego
-
-package my_policy
-
-# Import common utilities
-import data.common
-
-# Define violations
-violation[msg] {
-    # Condition that triggers violation
-    input.some_field > 100
-    
-    msg := sprintf(
-        "VIOLATION: some_field is %v, must be <= 100",
-        [input.some_field]
-    )
-}
-
-# Define warnings
-warning[msg] {
-    input.some_field > 80
-    input.some_field <= 100
-    
-    msg := sprintf(
-        "WARNING: some_field is %v, approaching limit",
-        [input.some_field]
-    )
-}
-```
-
-### Testing Policies
-
-```bash
-# Install OPA
-brew install opa  # or download from openpolicyagent.org
-
-# Test policy
-opa eval -d policies/ -i test-input.json data.my_policy.violation
 ```
 
 ---

@@ -161,7 +161,6 @@ Implementation:
 
 | # | Issue | Description | Resolution |
 |---|-------|-------------|------------|
-| 4 | No Rego policy enforcement | `policies/*.rego` not consumable by native agents | Convert critical rules to natural language in agent bodies; use hooks for validation |
 | 5 | Handoff protocol degradation | Native `handoffs` frontmatter lacks REJ-NNN lifecycle | Keep protocol in body text; native `handoffs` is ergonomic hint, not replacement |
 | 6 | Phase 2-4 infrastructure | SQLite checkpoints, Docker sandboxing, Lamport timestamps — no agent equivalent | These are external tooling consumed BY agents, not converted to agents |
 | 7 | Sprint-lead state management | Multi-phase orchestration has no native state machine | Sprint-lead continues using memory files + todo tool for state; hooks for lifecycle |
@@ -192,7 +191,6 @@ Implementation:
 | `profiles/*.config.yml` (3) | Pre-filled configs | ✅ Already have `editor.target` field |
 | `config/plugin.json` | Plugin manifest | Add `resolved/agents/` to output paths when editor.target includes vscode |
 | `instructions/` | Shared instruction files | No change — referenced by both platforms |
-| `policies/*.rego` | Policy enforcement | No change — external tooling |
 | `schemas/subagent-return-tier*.schema.json` | Return schemas | No change — soft-enforced on both platforms |
 | `resolved/` | Output directory | Gains `resolved/agents/` |
 

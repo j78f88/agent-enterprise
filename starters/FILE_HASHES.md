@@ -18,7 +18,7 @@ Tracked file categories:
   2. Agent config — copilot-instructions.md, all instruction files
   3. Skill definitions — all {name}.skill.md files (resolved as SKILL.md)
   4. CI/CD — .github/workflows/*.yml, Dockerfile, docker-compose.yml
-  5. Security policy — policies/*.rego, SECURITY_CHANGELOG.md
+  5. Security policy — SECURITY_CHANGELOG.md
   6. Entry points — init.py, index.html
 
 Update rules:

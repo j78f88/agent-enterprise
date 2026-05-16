@@ -87,6 +87,8 @@ Your feature request
 | ♿ **@a11y** | WCAG 2.1 AA accessibility audits |
 | ⚡ **@perf** | Bundle size, build time, dependency analysis |
 
+> A 13th agent, `@onboarding`, ships with the library but is **setup-only** — it guides first-time configuration and removes itself after the initial run, so it doesn't appear in your day-to-day agent roster.
+
 ### 🔐 Security: Built In, Not Bolted On
 
 `@security` runs **14 automated checks** as a sprint gate or on demand:
@@ -340,7 +342,6 @@ agent-homebase/
 ├── profiles/         # Ready-to-use configs
 ├── starters/         # 9 starter templates (sprints, backlog, security changelog, file hashes)
 ├── schemas/          # JSON return validation
-├── policies/         # Rego policy rules
 ├── resolved/         # Generated output
 │   ├── skills/       # Token-resolved skills (both platforms)
 │   ├── agents/       # VS Code agent wrappers (when editor.target includes vscode)
