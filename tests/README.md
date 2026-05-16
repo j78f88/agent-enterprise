@@ -152,7 +152,6 @@ tests/test_phase4.py::TestReplayVerification::test_trace_comparison PASSED
 | `ModuleNotFoundError: yaml` | PyYAML not installed | `pip install pyyaml` |
 | `ModuleNotFoundError: docker` | Docker SDK not installed | `pip install docker` (or skip Phase 3) |
 | `docker.errors.DockerException` | Docker not running | Start Docker Desktop |
-| `FileNotFoundError: policies/` | Wrong working directory | `cd` to agent-homebase root |
 
 ---
 

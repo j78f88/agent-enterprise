@@ -59,7 +59,6 @@ deterministic output.
 | `references/` | Cross-skill checklists (testing, security, a11y, perf) |
 | `config/` | Project token configs |
 | `profiles/` | Pre-built configs for common stacks |
-| `policies/` | OPA Rego guardrails |
 | `schemas/` | Subagent-return JSON schemas |
 | `starters/` | Bootstrap docs copied into adopter projects |
 | `tests/` | Pytest suite |
