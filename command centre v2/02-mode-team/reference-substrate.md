@@ -1,11 +1,10 @@
 # Mode 1 — Reference substrate
 
-> The in-repo example of a substrate satisfying `mode-1-contract-v1`.
+> Pointer page. The agent-homebase root *is* the reference substrate
+> satisfying `mode-1-contract-v1`. See
+> [contract.md](contract.md) for the normative contract.
 
 ## Mapping
-
-The agent-homebase root *is* the reference substrate. Mode 1
-capabilities map as follows:
 
 | Capability | Location |
 | --- | --- |
@@ -18,28 +17,11 @@ capabilities map as follows:
 | Validation | `init.py` + [`schemas/`](../../schemas/) + [`policies/`](../../policies/) |
 | Build output | [`resolved/`](../../resolved/) |
 
-## What's in scope
+## Replaceability
 
-- Token resolution from profile values.
-- Frontmatter validation per [frontmatter spec](../01-protocols/frontmatter-spec.md).
-- Schema validation of profiles and registry-shaped inputs.
-- Determinism guarantees per [docs/DETERMINISM_GUIDE.md](../../docs/DETERMINISM_GUIDE.md).
-- Multi-runtime artifact output (Copilot, Claude Code, Cursor, Codex).
-
-## What's out of scope
-
-- Runtime dispatcher behaviour (Mode 2).
-- Cross-project coordination (Mode 3).
-- Project-specific content. The substrate ships zero project content.
-- Authoring tools beyond a markdown editor and the build.
-
-## Replaceability — using a different substrate
-
-The reference substrate is one valid implementation. A consumer may:
-
-- Keep the contract, replace the build engine (e.g., Node-based).
-- Keep the build engine, replace skill/agent/instruction content.
-- Replace both, retaining only the contract tag conformance claim.
+The reference is one valid implementation. A consumer may replace the
+build engine, the substrate content, or both — only the contract-tag
+conformance claim matters.
 
 The Mode 1 contract is the API; the substrate is the implementation.
 
