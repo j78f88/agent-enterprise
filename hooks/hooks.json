@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json.schemastore.org/agent-homebase-hooks.json",
+  "version": 1,
+  "hooks": {
+    "session-start": {
+      "description": "Warn when source files under skills/ or instructions/ are newer than resolved/.",
+      "script": "hooks/session-start.sh",
+      "interpreter": "bash",
+      "blocking": false
+    }
+  }
+}

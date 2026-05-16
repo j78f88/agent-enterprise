@@ -31,6 +31,8 @@ from init import (
     generate_agent_md,
     generate_agents,
     suppress_skill_invocability,
+    transform_frontmatter_for_target,
+    emit_cursor_mdc,
 )
 
 
@@ -605,3 +607,121 @@ class TestEndToEndResolution:
             _, body = parse_frontmatter(text)
             line_count = len(body.strip().split('\n'))
             assert line_count <= 120, f"{agent_file.name}: body is {line_count} lines (max ~100)"
+
+# =============================================================================
+# 3.1 / 3.2 — Path-scoped frontmatter + Cursor emission
+# =============================================================================
+
+class TestEditorTargetsExtended:
+    """3.2: 'cursor' and 'all' must be accepted as editor targets."""
+
+    def test_cursor_is_valid_target(self):
+        assert "cursor" in VALID_EDITOR_TARGETS
+
+    def test_all_is_valid_target(self):
+        assert "all" in VALID_EDITOR_TARGETS
+
+    def test_cursor_target_passes_validator(self):
+        errors, _ = SecurityValidator.validate_config({"editor": {"target": "cursor"}})
+        assert not any("editor.target" in e for e in errors)
+
+    def test_all_target_passes_validator(self):
+        errors, _ = SecurityValidator.validate_config({"editor": {"target": "all"}})
+        assert not any("editor.target" in e for e in errors)
+
+
+class TestTransformFrontmatterForTarget:
+    """3.1: scope: in source frontmatter rewrites to platform-native field."""
+
+    def test_vscode_target_emits_applyTo_from_scope(self):
+        out = transform_frontmatter_for_target({"scope": "docs/**"}, "vscode")
+        assert out.get("applyTo") == "docs/**"
+
+    def test_both_target_emits_applyTo_from_scope(self):
+        out = transform_frontmatter_for_target({"scope": "docs/**"}, "both")
+        assert out.get("applyTo") == "docs/**"
+
+    def test_claude_code_target_emits_paths_from_scope(self):
+        out = transform_frontmatter_for_target({"scope": "docs/**"}, "claude-code")
+        assert out.get("paths") == ["docs/**"]
+
+    def test_all_target_emits_both_applyTo_and_paths(self):
+        out = transform_frontmatter_for_target({"scope": "docs/**"}, "all")
+        assert out.get("applyTo") == "docs/**"
+        assert out.get("paths") == ["docs/**"]
+
+    def test_scope_as_list_serializes_to_comma_for_vscode(self):
+        out = transform_frontmatter_for_target(
+            {"scope": ["docs/**", "src/**"]}, "vscode"
+        )
+        assert out.get("applyTo") == "docs/**, src/**"
+
+    def test_scope_as_list_preserves_list_for_claude_code(self):
+        out = transform_frontmatter_for_target(
+            {"scope": ["docs/**", "src/**"]}, "claude-code"
+        )
+        assert out.get("paths") == ["docs/**", "src/**"]
+
+    def test_no_scope_preserves_existing_applyTo(self):
+        out = transform_frontmatter_for_target(
+            {"applyTo": "docs/legacy.md"}, "vscode"
+        )
+        assert out.get("applyTo") == "docs/legacy.md"
+
+    def test_other_fields_preserved(self):
+        out = transform_frontmatter_for_target(
+            {"scope": "docs/**", "title": "X", "extra": [1, 2]}, "vscode"
+        )
+        assert out.get("title") == "X"
+        assert out.get("extra") == [1, 2]
+
+
+class TestEmitCursorMdc:
+    """3.2: emit_cursor_mdc writes .cursor/rules/*.mdc with proper frontmatter."""
+
+    def test_emits_mdc_file_for_instruction(self, tmp_path):
+        body = "# Rule\n\nDo the thing.\n"
+        fm = {"scope": "src/**", "description": "Do the thing"}
+        out_dir = tmp_path / ".cursor" / "rules"
+        emit_cursor_mdc("do-thing", fm, body, out_dir)
+
+        target = out_dir / "do-thing.mdc"
+        assert target.exists()
+        text = target.read_text(encoding="utf-8")
+        assert text.startswith("---")
+        assert "globs:" in text
+        assert "src/**" in text
+        assert "alwaysApply:" in text
+        assert "description:" in text
+        assert "# Rule" in text
+
+    def test_alwaysApply_true_when_no_scope(self, tmp_path):
+        out_dir = tmp_path / ".cursor" / "rules"
+        emit_cursor_mdc("always", {"description": "always on"}, "# always\n", out_dir)
+
+        text = (out_dir / "always.mdc").read_text(encoding="utf-8")
+        assert "alwaysApply: true" in text
+
+    def test_list_scope_joined_with_comma(self, tmp_path):
+        out_dir = tmp_path / ".cursor" / "rules"
+        emit_cursor_mdc(
+            "multi", {"scope": ["src/**", "docs/**"]}, "# multi\n", out_dir
+        )
+        text = (out_dir / "multi.mdc").read_text(encoding="utf-8")
+        assert "src/**, docs/**" in text
+
+
+class TestScopeAddedToTwoInstructions:
+    """3.1 POC: at least 2 instruction files declare `scope:` in frontmatter."""
+
+    def test_at_least_two_instructions_have_scope(self):
+        from pathlib import Path
+        root = Path(__file__).parent.parent
+        candidates = list((root / "instructions").rglob("*.md"))
+        with_scope = []
+        for p in candidates:
+            text = p.read_text(encoding="utf-8")
+            fm, _ = parse_frontmatter(text)
+            if isinstance(fm, dict) and "scope" in fm:
+                with_scope.append(p.name)
+        assert len(with_scope) >= 2, f"expected >=2 instructions with scope:, got {with_scope}"

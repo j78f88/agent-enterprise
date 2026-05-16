@@ -1,3 +1,8 @@
+---
+description: "Procedures the @security agent follows for audits, changelog governance, hash registry management, and sprint gate integration."
+scope: "{{paths.security_changelog}}, {{paths.file_hashes}}"
+---
+
 # Security Audit Procedures
 
 Shared instruction governing `@security` agent behaviour: audit scheduling, changelog governance, hash registry management, and integration with sprint gates.

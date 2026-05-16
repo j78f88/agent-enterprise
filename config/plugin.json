@@ -9,5 +9,6 @@
   "repository": "https://github.com/j78f88/agent-homebase",
   "skills": "resolved/skills/",
   "agents": "resolved/agents/",
-  "instructions": "resolved/instructions/"
+  "instructions": "resolved/instructions/",
+  "cursor_rules": ".cursor/rules/"
 }

@@ -31,7 +31,7 @@ except ImportError:
 # SECURITY VALIDATION — Phase 0 Enhancement
 # =============================================================================
 
-VALID_EDITOR_TARGETS = {'vscode', 'claude-code', 'both'}
+VALID_EDITOR_TARGETS = {'vscode', 'claude-code', 'cursor', 'both', 'all'}
 
 
 class SecurityValidator:
@@ -304,6 +304,76 @@ def parse_frontmatter(text: str) -> tuple[dict, str]:
     except yaml.YAMLError:
         fm = {}
     return fm, body
+
+
+def _scope_as_string(scope) -> str:
+    """Render a scope value as the comma-separated string VS Code / Cursor expect."""
+    if isinstance(scope, list):
+        return ", ".join(str(s) for s in scope)
+    return str(scope)
+
+
+def _scope_as_list(scope) -> list[str]:
+    if isinstance(scope, list):
+        return [str(s) for s in scope]
+    return [str(scope)]
+
+
+def transform_frontmatter_for_target(fm: dict, target: str) -> dict:
+    """Rewrite a `scope:` field into the platform-native scoping field.
+
+    - vscode / both: emit ``applyTo`` (comma-joined string).
+    - claude-code:   emit ``paths`` (list).
+    - cursor:        leave ``scope`` for the .mdc emitter.
+    - all:           emit both ``applyTo`` and ``paths``.
+
+    If the source has no ``scope:`` field, the frontmatter is returned
+    unchanged. Other fields are preserved.
+    """
+    out = dict(fm or {})
+    scope = out.get('scope')
+    if scope is None:
+        return out
+    if target in ('vscode', 'both'):
+        out['applyTo'] = _scope_as_string(scope)
+    elif target == 'claude-code':
+        out['paths'] = _scope_as_list(scope)
+    elif target == 'all':
+        out['applyTo'] = _scope_as_string(scope)
+        out['paths'] = _scope_as_list(scope)
+    # cursor: handled by emit_cursor_mdc, no rewrite here
+    return out
+
+
+def _render_frontmatter(fm: dict) -> str:
+    return "---\n" + yaml.safe_dump(fm, sort_keys=False, allow_unicode=True).strip() + "\n---\n"
+
+
+def emit_cursor_mdc(name: str, fm: dict, body: str, out_dir: Path) -> Path:
+    """Write a single ``.cursor/rules/<name>.mdc`` file.
+
+    Cursor expects frontmatter with ``description``, ``globs``, and
+    ``alwaysApply``. If the source frontmatter has no ``scope`` field, the
+    rule is treated as always-applied.
+    """
+    out_dir.mkdir(parents=True, exist_ok=True)
+    scope = fm.get('scope')
+    description = fm.get('description', '').strip() or name
+    if scope is None:
+        mdc_fm = {
+            'description': description,
+            'globs': '',
+            'alwaysApply': True,
+        }
+    else:
+        mdc_fm = {
+            'description': description,
+            'globs': _scope_as_string(scope),
+            'alwaysApply': False,
+        }
+    target = out_dir / f"{name}.mdc"
+    target.write_text(_render_frontmatter(mdc_fm) + "\n" + body.lstrip() + ("" if body.endswith("\n") else "\n"), encoding="utf-8")
+    return target
 
 
 def extract_agent_body(name: str, fm: dict, body: str) -> str:
@@ -648,6 +718,21 @@ def main():
             resolved_count += 1
 
     # --- Configurable instructions ---
+    editor_target_early = config.get('editor', {}).get('target', 'both')
+    cursor_dir = Path(".cursor") / "rules"
+    emit_cursor = editor_target_early in ('cursor', 'all')
+
+    def _apply_scope_and_emit(name: str, dest: Path, resolved_text: str) -> None:
+        """Rewrite scope→platform field in resolved text; emit .mdc if needed."""
+        fm, body = parse_frontmatter(resolved_text)
+        if fm:
+            new_fm = transform_frontmatter_for_target(fm, editor_target_early)
+            if new_fm != fm:
+                rewritten = _render_frontmatter(new_fm) + "\n" + body + ("\n" if not body.endswith("\n") else "")
+                dest.write_text(rewritten, encoding="utf-8")
+        if emit_cursor:
+            emit_cursor_mdc(name, fm or {}, body, cursor_dir)
+
     configurable_src = Path("instructions/configurable")
     if configurable_src.exists():
         for instr in sorted(configurable_src.glob("*.md")):
@@ -663,6 +748,7 @@ def main():
             else:
                 print(f"  resolved: {dest}")
             resolved_count += 1
+            _apply_scope_and_emit(instr.stem.replace('.instructions', ''), dest, resolved)
 
     # --- Generic instructions (copy as-is) ---
     generic_src = Path("instructions/generic")
@@ -673,13 +759,14 @@ def main():
             shutil.copy(instr, dest)
             print(f"  copied:   {dest}")
             copied_count += 1
+            _apply_scope_and_emit(instr.stem.replace('.instructions', ''), dest, dest.read_text(encoding="utf-8"))
 
     # --- Agent wrappers (VS Code only) ---
     editor_target = config.get('editor', {}).get('target', 'both')
     agent_count = 0
     suppressed_count = 0
 
-    if editor_target in ('vscode', 'both'):
+    if editor_target in ('vscode', 'both', 'all'):
         print()
         print("Generating agent wrappers...")
         agent_names = generate_agents(output, tokens)

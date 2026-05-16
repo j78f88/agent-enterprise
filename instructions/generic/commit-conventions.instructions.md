@@ -1,3 +1,8 @@
+---
+description: "Conventional Commits format used by every agent and ad-hoc commit in this repo."
+scope: ".gitmessage, .github/**, docs/**"
+---
+
 # Commit Conventions
 
 Single source of truth for commit message format across all agents and ad-hoc sessions.
