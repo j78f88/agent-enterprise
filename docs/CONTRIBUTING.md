@@ -281,7 +281,7 @@ Before submitting a PR:
 - [ ] **Tests pass**: `pytest tests/ -v`
 - [ ] **No unresolved tokens**: `grep -r "{{" resolved/`
 - [ ] **Documentation updated**: Update relevant docs in `docs/`
-- [ ] **CHANGELOG updated**: Add entry to `docs/CHANGELOG.md`
+- [ ] **CHANGELOG updated**: Add entry to `CHANGELOG.md`
 - [ ] **Code style**: Follow existing patterns
 - [ ] **Commit messages**: Follow `commit-conventions.instructions.md`
 

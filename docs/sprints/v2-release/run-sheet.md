@@ -1,5 +1,10 @@
 # Run sheet — `agent-homebase@2.0.0` release
 
+> **SUPERSEDED (2026-05-16):** `agent-homebase@2.0.0` and `protocol-v1`
+> shipped on commit `b943090`. This run sheet is preserved for historical
+> record only. See [CHANGELOG.md](../../../CHANGELOG.md) for the released
+> scope.
+
 > **Audience:** the executing agent (Copilot / Claude Code / etc).
 > **Mode:** agent-delivered. Time is not a constraint; correctness is.
 > **Output target:** tagged release `agent-homebase@2.0.0` with

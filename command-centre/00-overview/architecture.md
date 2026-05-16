@@ -40,7 +40,7 @@ coordination cost for every mode. See
 ## Delivery-mode folders
 
 Each mode folder has the same shape (`contract.md`,
-`install-contract.md`, `reference-impl/`, plus mode-specific files)
+`install-contract.md`, `reference-impls/`, plus mode-specific files)
 and has zero imports from sibling mode folders.
 
 ## Dependency direction

@@ -36,8 +36,8 @@ command-centre/
   00-overview/                 ← design-history, three-modes, architecture, glossary, consumption-matrix
   01-protocols/                ← shared contracts (callable, project, returns, frontmatter, versioning)
   02-mode-team/                ← Mode 1 contract + install + reference substrate
-  03-mode-orchestration/       ← Mode 2 contract + install + example + reference-impl/
-  04-mode-choreography/        ← Mode 3 contract + install + registry/meta-agents/harvest + example + reference-impl/
+  03-mode-orchestration/       ← Mode 2 contract + install + example + reference-impls/
+  04-mode-choreography/        ← Mode 3 contract + install + registry/meta-agents/harvest + example + reference-impls/
   05-promotion-contract.md     ← shared, used only by Mode 3
   decisions/                   ← ADRs 0001-0006
 ```

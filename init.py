@@ -991,7 +991,7 @@ def main():
     print(f"Summary: {resolved_count} resolved, {copied_count} copied, {agent_count} agents, {warning_count} token warnings")
     print()
     print("Next steps:")
-    print("  cp -r resolved/skills/*        .github/agents/")
+    print("  cp -r resolved/skills/*        .github/skills/")
     print("  cp -r resolved/instructions/*  .github/instructions/")
     if agent_count:
         print("  cp -r resolved/agents/*        .github/agents/")
