@@ -416,7 +416,7 @@ purely a `mode_level` enum value in that project's registry entry.
 | Refusal to absorb agent-orchestration wholesale | Pattern 7 (vendor coupling) derived from Anthropic Enterprise's own conflation warning |
 | Parallel v2 folder instead of rewrite in place | User direction — preserve v1 reasoning |
 
-See also: [docs/BEST_PRACTICE_ALIGNMENT_JOURNAL.md](../../docs/BEST_PRACTICE_ALIGNMENT_JOURNAL.md)
+See also: [docs/decisions/journal-best-practice-alignment.md](../../docs/decisions/journal-best-practice-alignment.md)
 — the companion record of substrate-level hygiene work (honesty
 contract, hash-chain audit, OPA removal, `references/` checklists)
 that sits *inside* the shape this history settles on. The journal
