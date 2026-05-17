@@ -85,7 +85,7 @@ Non-goal: application-code changes. The sprint touches Markdown skills/instructi
 
 | # | Question | **Chosen** | Why |
 |---|---|---|---|
-| D6 | Where does the OPA Rego layer end up? | **Drop it. Port the high-value composition rules to a small Python validator (`tools/sprint_lint.py`).** | Audit ([docs/POLICY_AUDIT.md](POLICY_AUDIT.md)) found zero real-world catches, ~80% overlap with `init.py`'s `SecurityValidator`, silently-skipping tests, and high false-positive risk in the unique Rego-only rules. |
+| D6 | Where does the OPA Rego layer end up? | **Drop it. Port the high-value composition rules to a small Python validator (`tools/sprint_lint.py`).** | The audit found zero real-world catches, ~80% overlap with `init.py`'s `SecurityValidator`, silently-skipping tests, and high false-positive risk in the unique Rego-only rules. |
 | D7 | Sequence the OPA cleanup as part of the sprint or as a follow-on PR? | **Follow-on PR (Step 5b), owner-choice ordering vs Step 6.** | The audit explicitly scoped the file-removal as out-of-scope; mixing it into the sprint branch would have made the green-build gate ambiguous. |
 | D8 | `applyTo` scope on the run sheet itself | **`docs/sprints/best-practice-alignment/**`** | I1 Option B during the run-sheet hardening review. Narrow scope avoids the run sheet auto-attaching to unrelated work. |
 | D9 | Do we re-sign `FILE_HASHES.md` when removing the `policies/*.rego` reference? | **No.** | The file is currently a template with zero data rows; the reference lives in an HTML comment about *categories*, not in the chain. No re-sign procedure exists in `verify-hash-chain.py` either — verify-only by design. |
@@ -109,10 +109,10 @@ Non-goal: application-code changes. The sprint touches Markdown skills/instructi
 
 | # | Rejected option | Reason for rejection |
 |---|---|---|
-| E1 | Keep the OPA Rego layer and wire it into CI | Zero real-world catches over the life of the repo; OPA binary not installed on any dev box or CI runner; tests silently skip when OPA is absent, which is *worse than no guardrail*. ([docs/POLICY_AUDIT.md](POLICY_AUDIT.md)) |
+| E1 | Keep the OPA Rego layer and wire it into CI | Zero real-world catches over the life of the repo; OPA binary not installed on any dev box or CI runner; tests silently skip when OPA is absent, which is *worse than no guardrail*. |
 | E2 | Keep `security.rego` even after dropping `composition.rego` | ~80% overlap with `init.py`'s `SecurityValidator`; the unique Rego-only rules (broad secret regex, password regex) are high false-positive. |
 | E3 | Replace OPA Rego with another policy engine (Cedar, etc.) | Adds back the external-binary dependency that was the core problem; no evidence the existing rules needed an engine at all. |
-| E4 | Stub out `docs/POLICIES.md` to a one-liner instead of deleting it | A stub would mislead — the doc describes an entire workflow that no longer exists. The audit (`docs/POLICY_AUDIT.md`) supersedes it. |
+| E4 | Stub out `docs/POLICIES.md` to a one-liner instead of deleting it | A stub would mislead — the doc describes an entire workflow that no longer exists. The audit (since deleted with this cleanup) superseded it. |
 | E5 | Merge `when_to_use` into `description` on every skill (D5 option A) | No platform forces this today; consolidating now means a forced re-author later if either field drifts. Defer until a platform forces the choice. |
 | E6 | Apply the run sheet `applyTo` to the whole workspace (`**/*`) | Would auto-attach the run sheet's verify blocks to unrelated edits; high noise. Chose narrow scope (D8). |
 | E7 | Use `git stash` in the cleanup pre-flight to hide unrelated dirty files | Real risk of conflicts on `git stash pop` given other ongoing edits in the tree; cleaner to require a clean tree and stop-and-ask if it isn't. (S1 from review.) |
@@ -146,7 +146,7 @@ Non-goal: application-code changes. The sprint touches Markdown skills/instructi
 | 02-skills | Common Rationalizations + Red Flags + Verification on all 13 skills | The 13 `.skill.md` files |
 | 03-formats | Structured rejection fields (Fix, Link) + hash-chain signing | `instructions/configurable/handoff-rejection-format.instructions.md`; `starters/FILE_HASHES.md`; `scripts/verify-hash-chain.py`; `tests/test_hash_chain.py` |
 | 04-platform | `cursor`/`all` targets, path-scoped frontmatter, lifecycle prompts, session-start hook | `init.py` changes + tests; `config/project.config.example.yml`; `config/plugin.json`; `prompts/*.prompt.md`; `hooks/session-start.sh` + `hooks/hooks.json` |
-| 05-audit | OPA Rego pressure-test → recommendation | `docs/POLICY_AUDIT.md` |
+| 05-audit | OPA Rego pressure-test → recommendation | (audit doc since deleted; findings summarised in §8 below) |
 | 05b-cleanup (optional) | Execute the audit recommendation | `tools/sprint_lint.py` + `tests/test_sprint_lint.py`; deletions of `policies/`, `src/phase1_verification/policy_engine.py`, `docs/POLICIES.md`; documentation prunes across ~10 files |
 
 The deliverables above remain permanently in the repo. The sprint scratch directory and its manual cleanup checklist (QA.md) have been removed.
@@ -157,7 +157,7 @@ The deliverables above remain permanently in the repo. The sprint scratch direct
 
 **Question.** Is the OPA Rego policy layer (`policies/composition.rego`, `policies/security.rego`, `src/phase1_verification/policy_engine.py`) earning its keep?
 
-**Method.** Inventoried every invocation site, walked git history for caught violations, ran overlap analysis against `init.py`'s `SecurityValidator`, estimated false-positive risk on the unique rules. Full method in [docs/POLICY_AUDIT.md](POLICY_AUDIT.md).
+**Method.** Inventoried every invocation site, walked git history for caught violations, ran overlap analysis against `init.py`'s `SecurityValidator`, estimated false-positive risk on the unique rules. The full audit document (`docs/POLICY_AUDIT.md`) has since been deleted; its findings are summarised below.
 
 **Findings.**
 - **Invocations:** 0 in CI, 0 in hooks, 0 in `init.py`, 0 in app code outside tests. Tests *skip* unless OPA is installed — and OPA is on no dev box or CI runner in this repo.

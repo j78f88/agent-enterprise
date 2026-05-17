@@ -404,7 +404,5 @@ Layer 4: Audit Trail (JSONL logs)
 
 ## Cross-References
 
-- [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md) — Original design document
-- [PHASE_4_IMPLEMENTATION_SUMMARY.md](PHASE_4_IMPLEMENTATION_SUMMARY.md) — Latest phase details
 - [SKILL_FLOW.md](SKILL_FLOW.md) — Execution diagrams
 - [POLICIES.md](POLICIES.md) — Policy file documentation
