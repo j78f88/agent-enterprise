@@ -1,6 +1,6 @@
 # agent-homebase
 
-**Portable, multi-agent operating system for software projects.**
+*Portable, multi-agent operating system for software projects.*
 
 [![CI](https://github.com/j78f88/agent-homebase/actions/workflows/ci.yml/badge.svg)](https://github.com/j78f88/agent-homebase/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -57,6 +57,8 @@ First-time setup: [docs/ONBOARDING.md](docs/ONBOARDING.md).
 | **1 — Team** | Substrate + interactive use (`@planner`, `@qa`, `@security`, …) | [`mode-1-contract-v1`](command-centre/02-mode-team/contract.md) | This repo itself |
 | **2 — Orchestration** | Dispatch a queue of work to callables; verify | [`mode-2-contract-v1`](command-centre/03-mode-orchestration/contract.md) | [`file-queue-dispatcher`](command-centre/03-mode-orchestration/reference-impls/file-queue-dispatcher/) |
 | **3 — Choreography** | Coordinate a program of works across many projects | [`mode-3-contract-v1`](command-centre/04-mode-choreography/contract.md) | [`registry-coordinator`](command-centre/04-mode-choreography/reference-impls/registry-coordinator/) |
+
+> **Visual reference:** open [docs/command-centre-visual.html](docs/command-centre-visual.html) in a browser for an interactive cheat sheet covering all three modes.
 
 ### Protocol-v1 schemas
 
