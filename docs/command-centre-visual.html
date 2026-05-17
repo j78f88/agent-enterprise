@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>agent-homebase — Command Centre</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<style>
+:root {
+  --bg:#1A1816;--surface:#201E1B;--surface2:#2B2825;--surface3:#352F2B;
+  --border:#3A3632;--text:#E8E8E8;--muted:#A0A0A0;--dim:#8A8A8A;
+  --strategy:#60A5FA;--planning:#F97316;--delivery:#FFB74D;--quality:#CF6679;--docs:#90A4AE;
+  --red:#CF6679;--success:#4CAF50;--warning:#FF9800;--info:#2196F3;
+  --glow:0 0 16px rgba(249,115,22,.1);
+  --radius-sm:4px;--radius:8px;--radius-lg:12px;--radius-xl:16px;
+  --font-display:'Plus Jakarta Sans',system-ui,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;font-size:15px;-webkit-font-smoothing:antialiased}
+.app{max-width:1400px;margin:0 auto;padding:20px}
+.icon{font-family:'Material Symbols Outlined';font-size:24px;vertical-align:middle;margin-right:4px;font-variation-settings:'FILL' 0,'wght' 500,'GRAD' 0,'opsz' 24}
+.icon-sm{font-size:20px}
+.icon-fill{font-variation-settings:'FILL' 1,'wght' 500,'GRAD' 0,'opsz' 24}
+
+/* Hero */
+.hero{text-align:center;padding:24px 0 16px}
+.hero h1{font-family:var(--font-display);font-size:30px;font-weight:700;background:linear-gradient(135deg,var(--planning),var(--strategy));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero .sub{color:var(--muted);font-size:15px;margin-top:6px}
+.stats{display:flex;gap:8px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:8px 16px;font-size:15px;color:var(--muted)}
+.stat b{color:var(--text);font-family:var(--font-display);font-size:20px;margin-right:4px}
+
+/* Tabs */
+.tabs{display:flex;gap:2px;background:var(--surface);border-radius:var(--radius);padding:3px;margin:16px 0;position:sticky;top:0;z-index:50;border:1px solid var(--border)}
+.tab{flex:1;padding:12px 10px;border:none;background:transparent;color:var(--muted);font-family:var(--font-display);font-size:14px;font-weight:600;cursor:pointer;border-radius:var(--radius);transition:all 250ms cubic-bezier(0,0,.2,1);text-align:center;display:flex;align-items:center;justify-content:center;gap:6px}
+.tab:hover{color:var(--text);background:var(--surface2)}
+.tab.active{background:var(--planning);color:#1A1816}
+.panel{display:none}.panel.active{display:block}
+
+/* Lanes */
+.lane-hdr{display:flex;align-items:center;gap:10px;margin:24px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.lane-dot{width:10px;height:10px;border-radius:50%}
+.lane-name{font-family:var(--font-display);font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px}
+.lane-hint{font-size:13px;color:var(--muted);margin-left:auto}
+
+/* Card grid */
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(360px,1fr))}
+.card{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--border);border-radius:var(--radius-lg);padding:18px 20px;transition:all 250ms cubic-bezier(0,0,.2,1)}
+.card:hover{border-color:var(--planning);box-shadow:var(--glow)}
+.card h3{font-family:var(--font-display);font-size:17px;margin-bottom:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.card .role{font-size:14px;color:var(--muted);margin-bottom:10px;line-height:1.6}
+.card .cmds{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:13px;color:var(--planning);background:rgba(249,115,22,.06);border-left:2px solid var(--planning);padding:6px 12px;margin:8px 0;border-radius:0 var(--radius-sm) var(--radius-sm) 0;line-height:1.8}
+.card .meta{font-size:13px;color:var(--dim);margin-top:8px}
+.card .writes{font-size:12px;color:var(--muted);margin-top:6px;padding:4px 8px;background:var(--surface2);border-radius:var(--radius-sm);display:inline-block}
+.card .writes .wlabel{color:var(--dim);text-transform:uppercase;font-size:10px;letter-spacing:.5px;font-weight:600;margin-right:4px}
+
+/* S13: subagent badge */
+.badge-sub{display:inline-block;padding:2px 7px;border-radius:var(--radius-sm);font-size:10px;font-weight:700;letter-spacing:.3px;background:rgba(96,165,250,.12);color:var(--strategy);border:1px solid rgba(96,165,250,.3);margin-left:6px;vertical-align:middle}
+
+/* S15: lifecycle badge for setup-only agents */
+.card.lifecycle-setup{border-style:dashed;border-left-style:solid}
+
+/* Want table */
+.want-tbl{width:100%;border-collapse:collapse;font-size:14px;margin:14px 0}
+.want-tbl th{background:var(--surface2);padding:10px 12px;text-align:left;font-weight:600;color:var(--muted);text-transform:uppercase;font-size:12px;letter-spacing:.5px;border:1px solid var(--border)}
+.want-tbl td{padding:9px 12px;border:1px solid var(--border);vertical-align:top}
+.want-tbl tr:hover td{background:var(--surface2)}
+.want-tbl code{background:var(--surface3);padding:2px 6px;border-radius:var(--radius-sm);font-size:13px;color:var(--planning)}
+.want-tbl .not-col{color:var(--dim);font-size:13px}
+
+/* S11: filter input */
+.filter-wrap{margin:14px 0;position:relative}
+.filter-wrap input{width:100%;padding:10px 14px 10px 38px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:14px;outline:none;transition:border-color 200ms}
+.filter-wrap input:focus{border-color:var(--planning)}
+.filter-wrap input::placeholder{color:var(--dim)}
+.filter-wrap .filter-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--dim)}
+.filter-count{font-size:12px;color:var(--dim);margin-top:6px}
+
+/* Flow diagrams */
+.flow-section{margin:24px 0}
+.flow-section h3{font-family:var(--font-display);font-size:17px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.flow{display:flex;flex-direction:column;align-items:center;gap:0;max-width:600px;margin:0 auto}
+.fn{padding:14px 20px;border-radius:var(--radius-lg);font-size:14px;font-weight:600;text-align:center;min-width:280px;max-width:500px;border:2px solid var(--border);background:var(--surface);transition:all 250ms cubic-bezier(0,0,.2,1);width:100%}
+.fn:hover{border-color:var(--planning);box-shadow:var(--glow)}
+.fn small{display:block;font-weight:400;font-size:13px;color:var(--muted);margin-top:3px}
+.farr{color:var(--dim);font-size:18px;padding:5px 0;text-align:center}
+.ff{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.ff .fn{min-width:110px;width:auto;max-width:none;font-size:13px;padding:10px 14px}
+.gate{border-color:var(--delivery)!important;background:rgba(255,183,77,.04)}
+.fn-rejected{border-color:var(--red)!important;background:rgba(207,102,121,.04)}
+
+
+
+/* Section headers */
+.sh{font-family:var(--font-display);font-size:17px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin:28px 0 14px;display:flex;align-items:center;gap:8px;color:var(--text)}
+
+/* Callout */
+.callout{border-left:3px solid var(--planning);background:rgba(249,115,22,.04);padding:12px 16px;border-radius:0 var(--radius) var(--radius) 0;margin:14px 0;font-size:14px;color:var(--muted);line-height:1.6}
+.callout strong{color:var(--text)}
+
+/* Severity table */
+.sev-tbl{width:100%;border-collapse:collapse;font-size:14px;margin:14px 0}
+.sev-tbl th{background:var(--surface2);padding:10px 12px;text-align:left;font-weight:600;color:var(--muted);text-transform:uppercase;font-size:12px;letter-spacing:.5px;border:1px solid var(--border)}
+.sev-tbl td{padding:9px 12px;border:1px solid var(--border);vertical-align:top}
+.sev-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:middle}
+
+/* Architecture tables */
+.dir-tbl{width:100%;border-collapse:collapse;font-size:14px;margin:14px 0}
+.dir-tbl th{background:var(--surface2);padding:10px 12px;text-align:left;font-weight:600;color:var(--muted);text-transform:uppercase;font-size:12px;letter-spacing:.5px;border:1px solid var(--border)}
+.dir-tbl td{padding:9px 12px;border:1px solid var(--border);vertical-align:top}
+.dir-tbl code{background:var(--surface3);padding:2px 6px;border-radius:var(--radius-sm);font-size:13px;color:var(--planning)}
+
+/* Modes tier */
+.modes-grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));margin:14px 0}
+.mode-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px 20px;transition:all 250ms cubic-bezier(0,0,.2,1)}
+.mode-card:hover{border-color:var(--planning);box-shadow:var(--glow)}
+.mode-card h4{font-family:var(--font-display);font-size:16px;margin-bottom:6px}
+.mode-card p{font-size:14px;color:var(--muted);line-height:1.6}
+
+/* Phase cards */
+.phase-grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));margin:14px 0}
+.phase-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 18px;transition:all 250ms cubic-bezier(0,0,.2,1)}
+.phase-card:hover{border-color:var(--planning);box-shadow:var(--glow)}
+.phase-card h4{font-family:var(--font-display);font-size:15px;margin-bottom:4px}
+.phase-card p{font-size:13px;color:var(--muted);line-height:1.5}
+.phase-card .req{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-top:6px}
+
+/* Three-flow grid */
+.flows-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin:14px 0}
+@media(max-width:960px){.flows-grid{grid-template-columns:1fr}}
+
+/* Handoff map */
+.handoff-map{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;margin:14px 0}
+.handoff-map h4{font-family:var(--font-display);font-size:15px;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.hm-row{display:flex;align-items:center;gap:6px;margin:6px 0;flex-wrap:wrap;font-size:13px}
+.hm-agent{font-weight:700;min-width:100px}
+.hm-arrow{color:var(--dim);font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
+.hm-target{color:var(--muted)}
+.hm-chain{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:12px 0;border-top:1px solid var(--border);margin-top:12px;font-size:13px}
+.hm-chain .hm-step{padding:6px 12px;border-radius:var(--radius);border:1px solid var(--border);font-weight:600}
+.hm-chain .hm-arr{color:var(--dim)}
+
+/* Footer */
+.footer{text-align:center;margin-top:24px;font-size:13px;color:var(--dim);padding:16px 0;border-top:1px solid var(--border)}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- ═══════ HERO ═══════ -->
+<div class="hero">
+  <h1><span class="icon" style="font-size:28px">hub</span> agent-homebase — Command Centre</h1>
+  <div class="sub">Visual reference for the multi-agent operating system</div>
+  <div class="stats">
+    <span class="stat"><span class="icon icon-sm">smart_toy</span> <b>13</b> Agents</span>
+    <span class="stat"><span class="icon icon-sm">build</span> <b>13</b> Skills</span>
+    <span class="stat"><span class="icon icon-sm">description</span> <b>25</b> Instructions</span>
+    <span class="stat"><span class="icon icon-sm">account_tree</span> <b>3</b> Modes</span>
+    <span class="stat"><span class="icon icon-sm">tune</span> <b>3</b> Profiles</span>
+  </div>
+</div>
+
+<!-- ═══════ TABS ═══════ -->
+<div class="tabs" id="tabs">
+  <button class="tab active" data-t="cheat"><span class="icon icon-sm">flash_on</span> Cheat Sheet</button>
+  <button class="tab" data-t="flow"><span class="icon icon-sm">timeline</span> Process Flow</button>
+  <button class="tab" data-t="want"><span class="icon icon-sm">search</span> I want to&hellip;</button>
+  <button class="tab" data-t="arch"><span class="icon icon-sm">architecture</span> Architecture</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     TAB 1: CHEAT SHEET
+     ═══════════════════════════════════════════════════════ -->
+<div class="panel active" id="p-cheat">
+
+<!-- W9: runtime-agnostic callout -->
+<div class="callout"><span class="icon icon-sm">info</span> <strong>Runtime-agnostic.</strong> Invocation patterns below use <code>@agent</code> shorthand. The exact syntax varies by runtime: VS Code Copilot (<code>@agent</code> in chat), Claude Code (<code>@agent</code> via CLAUDE.md), Cursor (<code>@agent</code> via rules). The skills and contracts are identical across all three.</div>
+
+<!-- STRATEGY LANE -->
+<div class="lane-hdr"><span class="lane-dot" style="background:var(--strategy)"></span><span class="lane-name" style="color:var(--strategy)"><span class="icon icon-sm">psychology</span> Strategy</span><span class="lane-hint">WHAT &amp; WHY &amp; HOW — opt-in, never implements</span></div>
+<div class="grid">
+  <!-- C4: write surface added; S13: subagent badge -->
+  <div class="card" style="border-left-color:var(--strategy)">
+    <h3><span style="color:var(--strategy)">@researcher</span><span class="badge-sub">subagent</span></h3>
+    <div class="role">External research specialist. Surfaces patterns, data models, user complaints, and failure modes from outside the codebase. Never recommends — surfaces evidence only.</div>
+    <div class="cmds">@researcher &lt;research question&gt;</div>
+    <div class="meta"><span class="icon icon-sm">arrow_forward</span> Hands off &rarr; @pm</div>
+    <div class="writes"><span class="wlabel">Writes:</span> research docs</div>
+  </div>
+  <div class="card" style="border-left-color:var(--strategy)">
+    <h3><span style="color:var(--strategy)">@pm</span><span class="badge-sub">subagent</span></h3>
+    <div class="role">Product manager. Validates whether features are worth building using the 5-test echo-chamber filter. Owns the <strong>why</strong> and the <strong>when</strong>. Never writes sprint plans.</div>
+    <div class="cmds">@pm validate this feature<br>@pm should we build &lt;idea&gt;</div>
+    <div class="meta"><span class="icon icon-sm">arrow_forward</span> Hands off &rarr; @planner</div>
+    <div class="writes"><span class="wlabel">Writes:</span> validation records</div>
+  </div>
+  <div class="card" style="border-left-color:var(--strategy)">
+    <h3><span style="color:var(--strategy)">@architect</span><span class="badge-sub">subagent</span></h3>
+    <div class="role">Technical advisor. Designs approaches, writes Architecture Decision Records. Pressure-tests before planning. Prefers the boring option. Never implements code.</div>
+    <div class="cmds">@architect write an ADR for &lt;decision&gt;<br>@architect design this &lt;approach&gt;</div>
+    <div class="meta"><span class="icon icon-sm">arrow_forward</span> Hands off &rarr; @planner</div>
+    <div class="writes"><span class="wlabel">Writes:</span> ADR drafts, architecture docs</div>
+  </div>
+</div>
+
+<!-- PLANNING LANE -->
+<div class="lane-hdr"><span class="lane-dot" style="background:var(--planning)"></span><span class="lane-name" style="color:var(--planning)"><span class="icon icon-sm">edit_note</span> Planning &amp; Capture</span><span class="lane-hint">Intent &rarr; plan &middot; drafts/ &rarr; sprints/</span></div>
+<div class="grid">
+  <div class="card" style="border-left-color:var(--planning)">
+    <h3><span style="color:var(--planning)">@planner</span><span class="badge-sub">subagent</span></h3>
+    <div class="role">Business analyst and sprint planner. Scopes requirements, drafts sprint plans, manages the backlog ledger and non-goals. Drafts in <code>drafts/</code>, promotes to <code>sprints/</code>.</div>
+    <div class="cmds">@planner plan this feature<br>@planner draft a sprint<br>@planner scope this work<br>@planner check the backlog</div>
+    <div class="meta"><span class="icon icon-sm">arrow_forward</span> Hands off &rarr; @sprint-lead &nbsp; <span class="icon icon-sm">replay</span> Rejects &rarr; @pm &middot; @architect</div>
+    <div class="writes"><span class="wlabel">Writes:</span> plans, ledger, non-goals, drafts</div>
+  </div>
+  <div class="card" style="border-left-color:var(--planning)">
+    <h3><span style="color:var(--planning)">@bug</span></h3>
+    <div class="role">Fast bug capture (~30 seconds). Appends entries to the bug backlog with sequential ID, severity, area, and reproduction steps. Never diagnoses or plans fixes.</div>
+    <div class="cmds">@bug &lt;describe the bug&gt;</div>
+    <div class="meta"><span class="icon icon-sm">arrow_forward</span> Hands off &rarr; @planner (for fix planning)</div>
+    <div class="writes"><span class="wlabel">Writes:</span> bug backlog entries, ledger entries</div>
+  </div>
+</div>
+
+<!-- DELIVERY LANE -->
+<div class="lane-hdr"><span class="lane-dot" style="background:var(--delivery)"></span><span class="lane-name" style="color:var(--delivery)"><span class="icon icon-sm">local_shipping</span> Delivery</span><span class="lane-hint">6-phase sprint orchestration</span></div>
+<div class="grid">
+  <div class="card" style="border-left-color:var(--delivery)">
+    <h3><span style="color:var(--delivery)">@sprint-lead</span></h3>
+    <div class="role">Thin orchestrator. Reads plans, delegates ALL heavy work to subagents, runs quality gates, collects results, and produces the sprint report and retrospective. Supports autopilot and interactive modes.</div>
+    <div class="cmds">@sprint-lead run sprint<br>@sprint-lead autopilot sprint<br>@sprint-lead continue Sprint N</div>
+    <div class="meta"><span class="icon icon-sm">group_work</span> Invokes &rarr; @qa &middot; @a11y &middot; @perf &middot; @security &middot; @reviewer &middot; @docs</div>
+    <div class="writes"><span class="wlabel">Writes:</span> sprint report, RETRO.md seed</div>
+  </div>
+</div>
+
+<!-- QUALITY LANE -->
+<div class="lane-hdr"><span class="lane-dot" style="background:var(--quality)"></span><span class="lane-name" style="color:var(--quality)"><span class="icon icon-sm">verified</span> Quality Gates</span><span class="lane-hint">Read-only — report findings, never modify code</span></div>
+<div class="grid">
+  <div class="card" style="border-left-color:var(--quality)">
+    <h3><span style="color:var(--quality)">@qa</span></h3>
+    <div class="role">Runs the full quality pipeline: typecheck, lint, unit tests, coverage, and E2E. Reports gate pass/fail with exact numbers against configured thresholds.</div>
+    <div class="cmds">@qa run tests<br>@qa check quality<br>@qa validate sprint</div>
+    <div class="meta"><span class="icon icon-sm">block</span> Read-only &mdash; reports only</div>
+    <div class="writes"><span class="wlabel">Writes:</span> none (read-only)</div>
+  </div>
+  <div class="card" style="border-left-color:var(--quality)">
+    <h3><span style="color:var(--quality)">@a11y</span></h3>
+    <div class="role">WCAG 2.1 AA accessibility audit. Checks keyboard navigation, ARIA semantics, colour contrast, and screen reader behaviour using automated and manual checks.</div>
+    <div class="cmds">@a11y accessibility audit<br>@a11y check a11y &lt;scope&gt;</div>
+    <div class="meta"><span class="icon icon-sm">block</span> Read-only &mdash; reports only</div>
+    <div class="writes"><span class="wlabel">Writes:</span> none (read-only)</div>
+  </div>
+  <div class="card" style="border-left-color:var(--quality)">
+    <h3><span style="color:var(--quality)">@perf</span></h3>
+    <div class="role">Audits bundle size, build time, and dependency health. Flags unused, missing, or duplicated dependencies. Reports findings against configured budgets.</div>
+    <div class="cmds">@perf performance audit<br>@perf check bundle size<br>@perf dependency audit</div>
+    <div class="meta"><span class="icon icon-sm">block</span> Read-only &mdash; reports only</div>
+    <div class="writes"><span class="wlabel">Writes:</span> none (read-only)</div>
+  </div>
+  <div class="card" style="border-left-color:var(--quality)">
+    <h3><span style="color:var(--quality)">@reviewer</span></h3>
+    <div class="role">Code review specialist. Reviews for pattern compliance, TypeScript quality, security basics, and planning artifact integrity. Primary severity-classifier.</div>
+    <div class="cmds">@reviewer review this code<br>@reviewer review branch &lt;name&gt;</div>
+    <div class="meta"><span class="icon icon-sm">block</span> Read-only &mdash; reports only</div>
+    <div class="writes"><span class="wlabel">Writes:</span> none (read-only)</div>
+  </div>
+  <!-- S14: accurate write surface for @security -->
+  <div class="card" style="border-left-color:var(--quality)">
+    <h3><span style="color:var(--quality)">@security</span></h3>
+    <div class="role">Audits codebase for vulnerabilities, researches active exploits, manages security changelog, and maintains file integrity hashes. Cites CVE IDs and advisory URLs.</div>
+    <div class="cmds">@security security audit<br>@security CVE scan<br>@security integrity check</div>
+    <div class="meta"><span class="icon icon-sm">edit_document</span> Reports + writes security docs</div>
+    <div class="writes"><span class="wlabel">Writes:</span> security changelog, hash registry, audit reports</div>
+  </div>
+</div>
+
+<!-- DOCUMENTATION LANE -->
+<div class="lane-hdr"><span class="lane-dot" style="background:var(--docs)"></span><span class="lane-name" style="color:var(--docs)"><span class="icon icon-sm">menu_book</span> Documentation</span><span class="lane-hint">Post-sprint sync &middot; only documents what exists</span></div>
+<div class="grid">
+  <div class="card" style="border-left-color:var(--docs)">
+    <h3><span style="color:var(--docs)">@docs</span></h3>
+    <div class="role">Generates and maintains all project documentation after a sprint. Updates SPRINTS.md, changelog, user guide, architecture, and all developer docs. Never invents features.</div>
+    <div class="cmds">@docs update docs<br>@docs documentation sync<br>@docs write release notes</div>
+    <div class="meta"><span class="icon icon-sm">arrow_forward</span> Invoked by @sprint-lead in Phase 5</div>
+    <div class="writes"><span class="wlabel">Writes:</span> documentation files</div>
+  </div>
+  <!-- S15: lifecycle-setup dashed border -->
+  <div class="card lifecycle-setup" style="border-left-color:var(--docs)">
+    <h3><span style="color:var(--docs)">@onboarding</span><span class="badge-sub" style="background:rgba(144,164,174,.12);color:var(--docs);border-color:rgba(144,164,174,.3)">setup-only</span></h3>
+    <div class="role">Guides first-time setup of agent-homebase for a new project. Walks through profile selection, config filling, token resolution, and verification. Self-removes after completion.</div>
+    <div class="cmds">@onboarding set up agents<br>@onboarding configure project<br>@onboarding get started</div>
+    <div class="meta"><span class="icon icon-sm">auto_delete</span> Lifecycle: setup-only (self-removes when done)</div>
+    <div class="writes"><span class="wlabel">Writes:</span> config files, seeded planning docs</div>
+  </div>
+</div>
+
+<!-- W6: Handoff Chain Map -->
+<div class="sh"><span class="icon">swap_horiz</span> Handoff Map</div>
+<div class="handoff-map">
+  <h4><span class="icon icon-sm">route</span> Primary delivery chain</h4>
+  <div class="hm-chain">
+    <span class="hm-step" style="color:var(--strategy);border-color:var(--strategy)">@researcher</span>
+    <span class="hm-arr">&rarr;</span>
+    <span class="hm-step" style="color:var(--strategy);border-color:var(--strategy)">@pm</span>
+    <span class="hm-arr">&rarr;</span>
+    <span class="hm-step" style="color:var(--planning);border-color:var(--planning)">@planner</span>
+    <span class="hm-arr">&rarr;</span>
+    <span class="hm-step" style="color:var(--delivery);border-color:var(--delivery)">@sprint-lead</span>
+    <span class="hm-arr">&rarr;</span>
+    <span class="hm-step" style="color:var(--quality);border-color:var(--quality)">gates</span>
+    <span class="hm-arr">&rarr;</span>
+    <span class="hm-step" style="color:var(--docs);border-color:var(--docs)">@docs</span>
+  </div>
+  <h4 style="margin-top:14px"><span class="icon icon-sm">account_tree</span> All handoff targets</h4>
+  <div class="hm-row"><span class="hm-agent" style="color:var(--strategy)">@researcher</span><span class="hm-arrow">&rarr;</span><span class="hm-target">@pm</span></div>
+  <div class="hm-row"><span class="hm-agent" style="color:var(--strategy)">@pm</span><span class="hm-arrow">&rarr;</span><span class="hm-target">@planner</span></div>
+  <div class="hm-row"><span class="hm-agent" style="color:var(--strategy)">@architect</span><span class="hm-arrow">&rarr;</span><span class="hm-target">@planner</span></div>
+  <div class="hm-row"><span class="hm-agent" style="color:var(--planning)">@planner</span><span class="hm-arrow">&rarr;</span><span class="hm-target">@sprint-lead &nbsp;|&nbsp; rejects back to @pm, @architect</span></div>
+  <div class="hm-row"><span class="hm-agent" style="color:var(--planning)">@bug</span><span class="hm-arrow">&rarr;</span><span class="hm-target">@planner (for fix planning)</span></div>
+  <div class="hm-row"><span class="hm-agent" style="color:var(--delivery)">@sprint-lead</span><span class="hm-arrow">&rarr;</span><span class="hm-target">@qa, @a11y, @perf, @security, @reviewer, @docs (as subagents)</span></div>
+  <div class="hm-row"><span class="hm-agent" style="color:var(--quality)">@qa</span><span class="hm-arrow">&rarr;</span><span class="hm-target">(terminal &mdash; no handoffs)</span></div>
+  <div class="hm-row"><span class="hm-agent" style="color:var(--quality)">@a11y</span><span class="hm-arrow">&rarr;</span><span class="hm-target">(terminal &mdash; no handoffs)</span></div>
+  <div class="hm-row"><span class="hm-agent" style="color:var(--quality)">@perf</span><span class="hm-arrow">&rarr;</span><span class="hm-target">(terminal &mdash; no handoffs)</span></div>
+  <div class="hm-row"><span class="hm-agent" style="color:var(--quality)">@reviewer</span><span class="hm-arrow">&rarr;</span><span class="hm-target">(terminal &mdash; no handoffs)</span></div>
+  <div class="hm-row"><span class="hm-agent" style="color:var(--quality)">@security</span><span class="hm-arrow">&rarr;</span><span class="hm-target">(terminal &mdash; no handoffs)</span></div>
+  <div class="hm-row"><span class="hm-agent" style="color:var(--docs)">@docs</span><span class="hm-arrow">&rarr;</span><span class="hm-target">(terminal &mdash; no handoffs)</span></div>
+  <div class="hm-row"><span class="hm-agent" style="color:var(--docs)">@onboarding</span><span class="hm-arrow">&rarr;</span><span class="hm-target">(terminal &mdash; self-removes)</span></div>
+</div>
+
+</div><!-- /p-cheat -->
+
+<!-- ═══════════════════════════════════════════════════════
+     TAB 2: PROCESS FLOW
+     ═══════════════════════════════════════════════════════ -->
+<div class="panel" id="p-flow">
+
+<div class="callout"><span class="icon icon-sm">info</span> <strong>Three orchestration modes.</strong> Mode 1 (Team) is the foundation — direct human-to-agent invocation. Mode 2 (Orchestration) adds automated dispatch. Mode 3 (Choreography) coordinates across multiple projects. Each mode is independent — Mode 1 has zero runtime dependency on Mode 2 or 3.</div>
+
+<div class="flows-grid">
+
+<!-- C2: Mode 1 — hub-and-spoke showing all agents, sprint path highlighted -->
+<div class="flow-section" style="margin:0">
+<h3><span class="icon">group</span> Mode 1 — Team (Interactive)</h3>
+<p style="color:var(--muted);font-size:13px;margin-bottom:14px">User invokes any agent directly. No dispatcher required.<br>Sprint path is one route of many.</p>
+<div class="flow" style="max-width:100%">
+  <div class="fn" style="border-color:var(--strategy)"><span style="color:var(--strategy)"><span class="icon icon-sm">person</span> User</span><small>Direct invocation of any agent</small></div>
+  <div class="farr">&#9660; <span style="font-size:12px">Strategy (opt-in)</span></div>
+  <div class="ff">
+    <div class="fn" style="border-color:var(--strategy);min-width:130px"><span style="color:var(--strategy)">@researcher</span><small>external patterns</small></div>
+    <div class="fn" style="border-color:var(--strategy);min-width:130px"><span style="color:var(--strategy)">@pm</span><small>validate features</small></div>
+    <div class="fn" style="border-color:var(--strategy);min-width:130px"><span style="color:var(--strategy)">@architect</span><small>ADRs &amp; design</small></div>
+  </div>
+  <div class="farr">&#9660; <span style="font-size:12px">Planning</span></div>
+  <div class="ff">
+    <div class="fn" style="border-color:var(--planning);min-width:130px"><span style="color:var(--planning)">@planner</span><small>scope &amp; plan sprints</small></div>
+    <div class="fn" style="border-color:var(--planning);min-width:130px"><span style="color:var(--planning)">@bug</span><small>capture bugs fast</small></div>
+  </div>
+  <div class="farr">&#9660; <span style="font-size:12px">Delivery</span></div>
+  <div class="ff">
+    <div class="fn" style="border-color:var(--delivery);min-width:130px"><span style="color:var(--delivery)">@sprint-lead</span><small>orchestrate 6 phases</small></div>
+  </div>
+  <div class="farr">&#9660; <span style="font-size:12px">delegates to</span></div>
+  <div class="ff">
+    <div class="fn" style="border-color:var(--quality);min-width:120px"><span style="color:var(--quality)">@qa</span><small>tests &amp; coverage</small></div>
+    <div class="fn" style="border-color:var(--quality);min-width:120px"><span style="color:var(--quality)">@a11y</span><small>WCAG audit</small></div>
+    <div class="fn" style="border-color:var(--quality);min-width:120px"><span style="color:var(--quality)">@perf</span><small>bundle &amp; deps</small></div>
+    <div class="fn" style="border-color:var(--quality);min-width:120px"><span style="color:var(--quality)">@reviewer</span><small>code patterns</small></div>
+    <div class="fn" style="border-color:var(--quality);min-width:120px"><span style="color:var(--quality)">@security</span><small>CVEs &amp; integrity</small></div>
+  </div>
+  <div class="farr">&#9660; <span style="font-size:12px">Documentation</span></div>
+  <div class="ff">
+    <div class="fn" style="border-color:var(--docs);min-width:130px"><span style="color:var(--docs)">@docs</span><small>13-point doc sync</small></div>
+    <div class="fn" style="border-color:var(--docs);min-width:130px;border-style:dashed"><span style="color:var(--docs)">@onboarding</span><small>first-time setup</small></div>
+  </div>
+</div>
+</div>
+
+<!-- W5+W7: Mode 2 — uses "Callable" + shows rejected/failed branches -->
+<div class="flow-section" style="margin:0">
+<h3><span class="icon">account_tree</span> Mode 2 — Orchestration (Dispatch)</h3>
+<p style="color:var(--muted);font-size:13px;margin-bottom:14px">File-queue dispatch with verification.<br>Anti-ghost-done guarantee.</p>
+<div class="flow" style="max-width:100%">
+  <div class="fn" style="border-color:var(--planning)"><span style="color:var(--planning)"><span class="icon icon-sm">inbox</span> Queue</span><small>Work items (issues, tickets)</small></div>
+  <div class="farr">&#9660; <span style="font-size:12px">queued &rarr; in-progress</span></div>
+  <div class="fn" style="border-color:var(--delivery)"><span style="color:var(--delivery)"><span class="icon icon-sm">route</span> Dispatcher</span><small>Resolves item &rarr; callable by ID</small></div>
+  <div class="farr">&#9660;</div>
+  <div class="ff">
+    <div class="fn" style="border-color:var(--strategy);min-width:90px"><span style="color:var(--strategy)">Callable A</span><small>skill / tool / process</small></div>
+    <div class="fn" style="border-color:var(--quality);min-width:90px"><span style="color:var(--quality)">Callable B</span><small>skill / tool / process</small></div>
+    <div class="fn" style="border-color:var(--docs);min-width:90px"><span style="color:var(--docs)">Callable C</span><small>skill / tool / process</small></div>
+  </div>
+  <div class="farr">&#9660;</div>
+  <div class="fn gate"><span class="icon icon-sm">lock</span> Verifier<small>Artifact existence + freshness + hook</small></div>
+  <div class="farr">&#9660;</div>
+  <div class="ff">
+    <div class="fn" style="border-color:var(--success);min-width:100px"><span style="color:var(--success)"><span class="icon icon-sm">check_circle</span> Done</span><small>Verifier passed</small></div>
+    <div class="fn fn-rejected" style="min-width:100px"><span style="color:var(--red)"><span class="icon icon-sm">cancel</span> Rejected</span><small>Verifier failed</small></div>
+    <div class="fn" style="border-color:var(--warning);min-width:100px"><span style="color:var(--warning)"><span class="icon icon-sm">error</span> Failed</span><small>Timeout / error</small></div>
+  </div>
+  <div style="font-size:12px;color:var(--dim);text-align:center;margin-top:8px"><span class="icon icon-sm">replay</span> Rejected &rarr; re-queued &nbsp;|&nbsp; Done requires verifier pass (anti-ghost-done)</div>
+</div>
+</div>
+
+<!-- FLOW 3: Mode 3 — Choreography -->
+<div class="flow-section" style="margin:0">
+<h3><span class="icon">public</span> Mode 3 — Choreography (Multi-project)</h3>
+<p style="color:var(--muted);font-size:13px;margin-bottom:14px">Registry-coordinator pattern across projects.<br>Runs above Mode 1 and 2.</p>
+<div class="flow" style="max-width:100%">
+  <div class="fn" style="border-color:var(--strategy)"><span style="color:var(--strategy)"><span class="icon icon-sm">storage</span> Registry</span><small>Program-of-works source of truth (single YAML)</small></div>
+  <div class="farr">&#9660;</div>
+  <div class="fn" style="border-color:var(--delivery)"><span style="color:var(--delivery)"><span class="icon icon-sm">hub</span> Coordinator</span><small>Drift detection + harvest cycles + meta-agents</small></div>
+  <div class="farr">&#9660;</div>
+  <div class="ff">
+    <div class="fn" style="border-color:var(--planning);min-width:90px"><span style="color:var(--planning)">Project A</span><small>Mode 1</small></div>
+    <div class="fn" style="border-color:var(--quality);min-width:90px"><span style="color:var(--quality)">Project B</span><small>Mode 2</small></div>
+    <div class="fn" style="border-color:var(--docs);min-width:90px"><span style="color:var(--docs)">Project C</span><small>Mode 1</small></div>
+  </div>
+  <div class="farr">&#9660;</div>
+  <div class="fn gate"><span class="icon icon-sm">lock</span> Promotion Contract<small>Harvest &rarr; evaluate &rarr; merge to substrate</small></div>
+  <div class="farr">&#9660;</div>
+  <div class="fn" style="border-color:var(--success)"><span style="color:var(--success)"><span class="icon icon-sm">check_circle</span> Aggregate</span><small>Cross-project learnings flow back</small></div>
+</div>
+</div>
+
+</div><!-- /flows-grid -->
+
+<!-- Severity Contract -->
+<div class="sh"><span class="icon">gavel</span> Severity Contract</div>
+<table class="sev-tbl">
+<thead><tr><th>Severity</th><th>Behaviour</th><th>Agent Action</th><th>Priority Order</th></tr></thead>
+<tbody>
+<tr><td><span class="sev-dot" style="background:var(--red)"></span><strong style="color:var(--red)">CRITICAL</strong></td><td>Blocks sprint advancement and push</td><td>Must be resolved before quality gate passes. Sprint cannot complete.</td><td rowspan="3" style="color:var(--muted);font-size:13px">security &gt; correctness &gt; performance &gt; style</td></tr>
+<tr><td><span class="sev-dot" style="background:var(--warning)"></span><strong style="color:var(--warning)">WARNING</strong></td><td>Logged to debt tracking, non-blocking</td><td>Recorded in sprint report. Tracked for future resolution.</td></tr>
+<tr><td><span class="sev-dot" style="background:var(--dim)"></span><strong style="color:var(--dim)">SUGGESTION</strong></td><td>Sprint report notes, optional</td><td>Nice-to-have. Included in retrospective for consideration.</td></tr>
+</tbody>
+</table>
+
+</div><!-- /p-flow -->
+
+<!-- ═══════════════════════════════════════════════════════
+     TAB 3: "I WANT TO..." LOOKUP
+     C3: added "Not this" column; W8: sorted by intent; S11: filter
+     ═══════════════════════════════════════════════════════ -->
+<div class="panel" id="p-want">
+
+<div class="callout"><span class="icon icon-sm">info</span> <strong>Intent-based routing.</strong> Find the right agent by what you want to do. The &ldquo;Not this&rdquo; column shows common misroutes and where to go instead.</div>
+
+<!-- S11: filter input -->
+<div class="filter-wrap">
+  <span class="icon icon-sm filter-icon">search</span>
+  <input type="text" id="wantFilter" placeholder="Type to filter rows&hellip;" autocomplete="off">
+</div>
+<div class="filter-count" id="filterCount"></div>
+
+<div style="overflow-x:auto">
+<table class="want-tbl" id="wantTable">
+<thead><tr><th style="width:40%">I want to&hellip;</th><th>Use this</th><th>Not this</th></tr></thead>
+<tbody>
+<!-- W8: sorted by intent category, interleaved -->
+<!-- RESEARCH -->
+<tr><td>Research how other apps solve a problem</td><td><code>@researcher</code></td><td class="not-col">Not @planner (that&rsquo;s for codebase questions)</td></tr>
+<tr><td>Find real-world patterns before validating a feature</td><td><code>@researcher</code></td><td class="not-col">Not @pm (researcher surfaces, pm validates)</td></tr>
+<tr><td>Run a competitive research sweep</td><td><code>@researcher</code></td><td class="not-col">Not @architect (research, not design)</td></tr>
+<tr><td>Surface failure modes from external sources</td><td><code>@researcher</code></td><td class="not-col">&mdash;</td></tr>
+<!-- VALIDATE -->
+<tr><td>Validate a feature idea against goals</td><td><code>@pm</code></td><td class="not-col">Not @planner (validate before planning)</td></tr>
+<tr><td>Pressure-test a competitive research finding</td><td><code>@pm</code></td><td class="not-col">Not @researcher (pm validates, researcher surfaces)</td></tr>
+<tr><td>Make a kill/keep decision on a brainstorm output</td><td><code>@pm</code></td><td class="not-col">&mdash;</td></tr>
+<tr><td>Prioritise the roadmap with structured reasoning</td><td><code>@pm</code></td><td class="not-col">Not @planner (roadmap is pm&rsquo;s domain)</td></tr>
+<!-- DESIGN -->
+<tr><td>Design system architecture</td><td><code>@architect</code></td><td class="not-col">Not @pm (&ldquo;should we build?&rdquo; = @pm)</td></tr>
+<tr><td>Write an Architecture Decision Record (ADR)</td><td><code>@architect</code></td><td class="not-col">&mdash;</td></tr>
+<tr><td>Pressure-test a technical approach before planning</td><td><code>@architect</code></td><td class="not-col">Not @sprint-lead (design first, then execute)</td></tr>
+<tr><td>Choose between implementation options</td><td><code>@architect</code></td><td class="not-col">&mdash;</td></tr>
+<!-- PLAN -->
+<tr><td>Scope a new feature into a sprint plan</td><td><code>@planner</code></td><td class="not-col">Not @pm (planner scopes, pm validates)</td></tr>
+<tr><td>Draft a sprint plan</td><td><code>@planner</code></td><td class="not-col">Not @sprint-lead (plan first, execute second)</td></tr>
+<tr><td>Compose the next sprint from backlog items</td><td><code>@planner</code></td><td class="not-col">&mdash;</td></tr>
+<tr><td>Triage bugs in the backlog</td><td><code>@planner</code></td><td class="not-col">Not @bug (bug captures, planner triages)</td></tr>
+<tr><td>Check the backlog ledger</td><td><code>@planner</code></td><td class="not-col">&mdash;</td></tr>
+<!-- CAPTURE -->
+<tr><td>Capture a bug fast</td><td><code>@bug</code></td><td class="not-col">Not @planner (planner plans fixes, bug captures)</td></tr>
+<tr><td>Log a reproducible issue</td><td><code>@bug</code></td><td class="not-col">Not @qa (qa runs pipeline, bug captures entries)</td></tr>
+<tr><td>Report broken behaviour</td><td><code>@bug</code></td><td class="not-col">&mdash;</td></tr>
+<!-- EXECUTE -->
+<tr><td>Run a full sprint end-to-end</td><td><code>@sprint-lead</code></td><td class="not-col">Not @planner (planner plans, sprint-lead executes)</td></tr>
+<tr><td>Execute a promoted sprint plan</td><td><code>@sprint-lead</code></td><td class="not-col">&mdash;</td></tr>
+<tr><td>Resume an in-progress sprint</td><td><code>@sprint-lead</code></td><td class="not-col">&mdash;</td></tr>
+<!-- CHECK -->
+<tr><td>Check test coverage and quality</td><td><code>@qa</code></td><td class="not-col">Not @reviewer (qa runs tests, reviewer reads code)</td></tr>
+<tr><td>Run the full quality pipeline</td><td><code>@qa</code></td><td class="not-col">Not @a11y / @perf / @security (those are specialist gates)</td></tr>
+<tr><td>Validate a sprint before completion</td><td><code>@qa</code></td><td class="not-col">&mdash;</td></tr>
+<tr><td>Audit accessibility (WCAG 2.1 AA)</td><td><code>@a11y</code></td><td class="not-col">Not @qa (qa is general pipeline, not a11y-specific)</td></tr>
+<tr><td>Check keyboard navigation and ARIA semantics</td><td><code>@a11y</code></td><td class="not-col">Skip for backend-only changes</td></tr>
+<tr><td>Analyse bundle size or build performance</td><td><code>@perf</code></td><td class="not-col">Not @reviewer (reviewer is code quality, not bundle size)</td></tr>
+<tr><td>Audit dependency health (unused, missing, duplicate)</td><td><code>@perf</code></td><td class="not-col">&mdash;</td></tr>
+<tr><td>Review code for patterns and quality</td><td><code>@reviewer</code></td><td class="not-col">Not @qa (reviewer reads diffs, qa runs pipelines)</td></tr>
+<tr><td>Review a commit range before merge</td><td><code>@reviewer</code></td><td class="not-col">&mdash;</td></tr>
+<tr><td>Run a security audit</td><td><code>@security</code></td><td class="not-col">Not @reviewer (reviewer checks basics, security does full audit)</td></tr>
+<tr><td>Check for CVEs and dependency vulnerabilities</td><td><code>@security</code></td><td class="not-col">Not @perf (perf is dep health, security is dep vulns)</td></tr>
+<tr><td>Verify file integrity hashes</td><td><code>@security</code></td><td class="not-col">&mdash;</td></tr>
+<!-- DOCUMENT -->
+<tr><td>Update documentation after a sprint</td><td><code>@docs</code></td><td class="not-col">Not @sprint-lead (docs writes docs, sprint-lead orchestrates)</td></tr>
+<tr><td>Write release notes or changelog entries</td><td><code>@docs</code></td><td class="not-col">&mdash;</td></tr>
+<!-- SETUP -->
+<tr><td>Set up agent-homebase for a new project</td><td><code>@onboarding</code></td><td class="not-col">Skip if already configured (setup_complete: true)</td></tr>
+<tr><td>Configure project profiles and tokens</td><td><code>@onboarding</code></td><td class="not-col">&mdash;</td></tr>
+</tbody>
+</table>
+</div>
+
+</div><!-- /p-want -->
+
+<!-- ═══════════════════════════════════════════════════════
+     TAB 4: ARCHITECTURE
+     W10: added Phase 0–4 progressive enhancement
+     S12: severity cross-reference added
+     ═══════════════════════════════════════════════════════ -->
+<div class="panel" id="p-arch">
+
+<div class="sh"><span class="icon">construction</span> Build Pipeline</div>
+<div class="callout"><span class="icon icon-sm">info</span> <strong>Single build step.</strong> <code>python init.py</code> validates security, resolves <code>{{tokens}}</code>, and produces deterministic output under <code>resolved/</code>. Never edit resolved files by hand.</div>
+
+<div class="flow" style="margin:20px auto">
+  <div class="ff" style="gap:10px">
+    <div class="fn" style="border-color:var(--strategy);min-width:100px"><span style="color:var(--strategy)">skills/</span><small>Skill sources</small></div>
+    <div class="fn" style="border-color:var(--planning);min-width:100px"><span style="color:var(--planning)">instructions/</span><small>Shared rules</small></div>
+    <div class="fn" style="border-color:var(--delivery);min-width:100px"><span style="color:var(--delivery)">agents/</span><small>Agent bodies</small></div>
+    <div class="fn" style="border-color:var(--quality);min-width:100px"><span style="color:var(--quality)">config/</span><small>Token values</small></div>
+  </div>
+  <div class="farr" style="font-size:14px;color:var(--planning);font-weight:700">&#9660; python init.py</div>
+  <div class="ff" style="gap:10px">
+    <div class="fn" style="border-color:var(--success);min-width:120px"><span style="color:var(--success)">resolved/skills/</span><small>Token-resolved</small></div>
+    <div class="fn" style="border-color:var(--success);min-width:120px"><span style="color:var(--success)">resolved/instructions/</span><small>Token-resolved</small></div>
+    <div class="fn" style="border-color:var(--success);min-width:120px"><span style="color:var(--success)">resolved/agents/</span><small>Token-resolved</small></div>
+  </div>
+</div>
+
+<!-- W10: Progressive Enhancement Phases -->
+<div class="sh"><span class="icon">stairs</span> Progressive Enhancement</div>
+<div class="callout"><span class="icon icon-sm">info</span> <strong>Four phases add capabilities incrementally.</strong> Phases 0 and 1 are always required. Phases 2&ndash;4 are opt-in based on project needs.</div>
+<div class="phase-grid">
+  <div class="phase-card" style="border-left:4px solid var(--red)">
+    <h4><span style="color:var(--red)">Phase 0 — Security</span></h4>
+    <p>Command whitelist, path traversal detection, secret scanning. Protects against dangerous commands and injection.</p>
+    <div class="req" style="color:var(--red)">Always required</div>
+  </div>
+  <div class="phase-card" style="border-left:4px solid var(--strategy)">
+    <h4><span style="color:var(--strategy)">Phase 1 — Contracts</span></h4>
+    <p>JSON Schema validation + policies. Return schemas enforce structure, FSM ensures valid state transitions.</p>
+    <div class="req" style="color:var(--strategy)">Always required</div>
+  </div>
+  <div class="phase-card" style="border-left:4px solid var(--planning)">
+    <h4><span style="color:var(--planning)">Phase 2 — Durability</span></h4>
+    <p>SQLite persistence + checkpoints. Resume from any phase boundary after interruption. Use for sprints &gt;4 hours.</p>
+    <div class="req" style="color:var(--dim)">Opt-in</div>
+  </div>
+  <div class="phase-card" style="border-left:4px solid var(--delivery)">
+    <h4><span style="color:var(--delivery)">Phase 3 — Sandboxing</span></h4>
+    <p>Docker container isolation. Resource limits (CPU, memory, time), network policies. Use for untrusted code or CI/CD.</p>
+    <div class="req" style="color:var(--dim)">Opt-in</div>
+  </div>
+  <div class="phase-card" style="border-left:4px solid var(--success)">
+    <h4><span style="color:var(--success)">Phase 4 — Determinism</span></h4>
+    <p>Same inputs produce same outputs. Temperature 0.0, logical time, seeded randomness, versioned prompts. Use for audits and compliance.</p>
+    <div class="req" style="color:var(--dim)">Opt-in</div>
+  </div>
+</div>
+
+<div class="sh"><span class="icon">folder</span> Directory Structure</div>
+<table class="dir-tbl">
+<thead><tr><th>Path</th><th>Purpose</th></tr></thead>
+<tbody>
+<tr><td><code>skills/</code></td><td>Skill authoring sources (<code>*.skill.md</code>). One skill per directory. Canonical source of truth.</td></tr>
+<tr><td><code>instructions/generic/</code></td><td>Shared rules that apply to every project. No token dependency.</td></tr>
+<tr><td><code>instructions/configurable/</code></td><td>Rules that consume <code>{{tokens}}</code> from project config.</td></tr>
+<tr><td><code>agents/</code></td><td>Per-agent body wrappers (<code>*.body.md</code>). Persona + tool boundary.</td></tr>
+<tr><td><code>references/</code></td><td>Cross-skill checklists: testing, security, accessibility, performance.</td></tr>
+<tr><td><code>config/</code></td><td>Project token configs and plugin metadata.</td></tr>
+<tr><td><code>profiles/</code></td><td>Pre-built configs for common stacks (React, Python API, monorepo).</td></tr>
+<tr><td><code>schemas/</code></td><td>JSON schemas: frontmatter, return tiers, callable contract, registry.</td></tr>
+<tr><td><code>resolved/</code></td><td>Build output. Token-substituted, ready to deploy. Never edit by hand.</td></tr>
+<tr><td><code>command-centre/</code></td><td>Orchestration mode contracts, protocols, and meta-agent definitions.</td></tr>
+<tr><td><code>starters/</code></td><td>Bootstrap docs copied into adopter projects during onboarding.</td></tr>
+<tr><td><code>tests/</code></td><td>Pytest suite for build validation.</td></tr>
+</tbody>
+</table>
+
+<div class="sh"><span class="icon">layers</span> Three Orchestration Modes</div>
+<div class="modes-grid">
+  <div class="mode-card" style="border-left:4px solid var(--strategy)">
+    <h4><span style="color:var(--strategy)">Mode 1 — Team</span></h4>
+    <p>Foundation layer. User invokes agents directly from a coding agent (Copilot, Claude Code, Cursor). Skills library + instructions + agents + profiles + build step. No dispatcher or registry required. Consumable standalone.</p>
+  </div>
+  <div class="mode-card" style="border-left:4px solid var(--planning)">
+    <h4><span style="color:var(--planning)">Mode 2 — Orchestration</span></h4>
+    <p>Dispatch layer. Takes a queue of work items and runs each to a verified result without continuous human supervision. Dispatcher resolves items to callables, invokes them, triggers verifiers, and transitions state. Anti-ghost-done guarantee: cannot transition to &ldquo;done&rdquo; without verifier pass.</p>
+  </div>
+  <div class="mode-card" style="border-left:4px solid var(--delivery)">
+    <h4><span style="color:var(--delivery)">Mode 3 — Choreography</span></h4>
+    <p>Program-of-works layer. Coordinates across multiple projects sharing substrate. Maintains a registry, detects drift, runs harvest cycles, and applies the promotion contract. Handles mixed-fleet (Mode 1 + Mode 2) by construction.</p>
+  </div>
+</div>
+
+<div class="sh"><span class="icon">schema</span> Return Tiers</div>
+<table class="dir-tbl">
+<thead><tr><th>Tier</th><th>Use</th><th>Contents</th></tr></thead>
+<tbody>
+<tr><td><strong>Tier 1</strong></td><td>Analysis only (no artifacts)</td><td><code>tier</code>, <code>agent</code>, <code>status</code>, <code>summary</code>, <code>findings[]</code>, <code>flaggedDecisions[]</code></td></tr>
+<tr><td><strong>Tier 2</strong></td><td>Standard (with artifacts)</td><td>Tier 1 + <code>artifactPath</code>, verifier output</td></tr>
+<tr><td><strong>Tier 3</strong></td><td>Composition (sprint-level)</td><td>Tier 2 + sprint metadata, ranked items, handoff fields</td></tr>
+</tbody>
+</table>
+
+<!-- S12: severity cross-reference -->
+<div class="callout"><span class="icon icon-sm">gavel</span> <strong>Severity contract</strong> (CRITICAL / WARNING / SUGGESTION) governs all quality gate findings. See the <em>Process Flow</em> tab for the full severity table and prioritisation order.</div>
+
+</div><!-- /p-arch -->
+
+<!-- ═══════ FOOTER ═══════ -->
+<!-- C1: corrected date -->
+<div class="footer">
+  <strong>agent-homebase</strong> &mdash;
+  13 agents &middot; 13 skills &middot; 25 instructions &middot; 3 modes &middot; 3 profiles
+  &middot; Generated 2026-05-17
+</div>
+
+</div><!-- /app -->
+
+<script>
+(function(){
+  /* Tab switching */
+  var tabs=document.querySelectorAll('.tab');
+  var panels=document.querySelectorAll('.panel');
+  tabs.forEach(function(t){
+    t.addEventListener('click',function(){
+      tabs.forEach(function(b){b.classList.remove('active')});
+      panels.forEach(function(p){p.classList.remove('active')});
+      t.classList.add('active');
+      document.getElementById('p-'+t.dataset.t).classList.add('active');
+    });
+  });
+
+  /* S11: "I want to..." table filter */
+  var filterInput=document.getElementById('wantFilter');
+  var table=document.getElementById('wantTable');
+  var countEl=document.getElementById('filterCount');
+  if(filterInput&&table){
+    var rows=table.querySelectorAll('tbody tr');
+    filterInput.addEventListener('input',function(){
+      var q=this.value.toLowerCase();
+      var shown=0;
+      rows.forEach(function(r){
+        var text=r.textContent.toLowerCase();
+        var match=!q||text.indexOf(q)!==-1;
+        r.style.display=match?'':'none';
+        if(match)shown++;
+      });
+      countEl.textContent=q?shown+' of '+rows.length+' rows':'';
+    });
+  }
+})();
+</script>
+</body>
+</html>
