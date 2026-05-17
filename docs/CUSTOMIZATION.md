@@ -59,7 +59,7 @@ git:
   develop_branch: "develop"   # Integration branch
 ```
 
-Run `python3 init.py --quick-setup` for an interactive prompt that sets these values.
+Run `python init.py --quick-setup` for an interactive prompt that sets these values.
 
 ---
 
@@ -415,7 +415,7 @@ team:
 cp profiles/my-team.config.yml project.config.yml
 
 # Or merge profiles
-python3 init.py --config profiles/my-team.config.yml --merge project.config.yml
+python init.py --config profiles/my-team.config.yml --merge project.config.yml
 ```
 
 ---
@@ -472,10 +472,10 @@ platform:
 
 ```bash
 # Development
-python3 init.py --config project.config.dev.yml
+python init.py --config project.config.dev.yml
 
 # Production
-python3 init.py --config project.config.prod.yml
+python init.py --config project.config.prod.yml
 ```
 
 ---

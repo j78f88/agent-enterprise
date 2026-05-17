@@ -556,21 +556,21 @@ class TestSuppressSkillInvocability:
 class TestEndToEndResolution:
 
     def test_example_config_resolves_all_skills(self):
-        """All 12 skills should resolve from example config."""
+        """All 13 skills should resolve from example config."""
         resolved = Path(__file__).parent.parent / "resolved" / "skills"
         expected_skills = [
-            "a11y", "architect", "bug", "docs", "perf", "planner",
+            "a11y", "architect", "bug", "docs", "onboarding", "perf", "planner",
             "pm", "qa", "researcher", "reviewer", "security", "sprint-lead",
         ]
         for skill_name in expected_skills:
             skill_md = resolved / skill_name / "SKILL.md"
             assert skill_md.exists(), f"Missing resolved skill: {skill_name}"
 
-    def test_all_12_agents_generated(self):
-        """All 12 agents should be generated."""
+    def test_all_13_agents_generated(self):
+        """All 13 agents should be generated."""
         agents_dir = Path(__file__).parent.parent / "resolved" / "agents"
         expected_agents = [
-            "a11y", "architect", "bug", "docs", "perf", "planner",
+            "a11y", "architect", "bug", "docs", "onboarding", "perf", "planner",
             "pm", "qa", "researcher", "reviewer", "security", "sprint-lead",
         ]
         for agent_name in expected_agents:

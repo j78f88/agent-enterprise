@@ -29,8 +29,7 @@ reference implementation per mode.
   for you; reference impls land when a real signal arrives.
 
 See [docs/PERSONAS.md](docs/PERSONAS.md) for the full evidence-tagged
-matrix and [ADR-0008](command-centre/decisions/0008-ship-protocol-v1-complete.md)
-for the decision to ship `protocol-v1` complete.
+matrix.
 
 ---
 

@@ -10,7 +10,7 @@ description: subagent-return-schemas instruction
 
 Centralized return schemas for subagent mode invocations. Referenced declaratively by agent files — no `applyTo` pattern.
 
-> **Protocol:** When `@delivery-lead` invokes a specialist agent in `[SUBAGENT-MODE]`, the specialist skips session lifecycle and returns structured data per the tier matching the write permit token.
+> **Protocol:** When `@sprint-lead` invokes a specialist agent in `[SUBAGENT-MODE]`, the specialist skips session lifecycle and returns structured data per the tier matching the write permit token.
 
 ## Write Permit Tokens
 

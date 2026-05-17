@@ -216,7 +216,7 @@ If a security violation is detected:
 
 For security vulnerabilities in agent-homebase framework itself:
 - Open a private GitHub security advisory
-- Do NOT open public issues for security bugs
+- **Do not** open public issues for security bugs
 
 ---
 

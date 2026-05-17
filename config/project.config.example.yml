@@ -1,5 +1,5 @@
 # project.config.yml — copy this file, rename to project.config.yml, fill in your values.
-# Then run: python3 init.py --config project.config.yml
+# Then run: python init.py --config project.config.yml
 # Output lands in resolved/ — copy to .github/ when done.
 
 setup_complete: false                   # Set to true after onboarding — excludes the onboarding skill from future builds

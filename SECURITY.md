@@ -4,12 +4,14 @@
 
 | Version | Status                         |
 | ------- | ------------------------------ |
-| 2.0.x   | Supported (security + bug fixes) |
+| 3.0.x   | Supported (security + bug fixes) |
+| 2.0.x   | Security fixes only            |
 | 1.x     | Unsupported                    |
 | < 1.0   | Unsupported                    |
 
-When 2.1.0 ships, 2.0.x moves to security-fix-only for six months,
-then unsupported.
+When 3.1.0 ships, 3.0.x moves to security-fix-only for six months,
+then unsupported. 2.0.x receives security fixes until six months
+after 3.0.0.
 
 ## Deprecation timeline
 

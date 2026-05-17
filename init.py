@@ -3,9 +3,9 @@
 init.py — Token substitution for agent-homebase skills library.
 
 Usage:
-    python3 init.py --config project.config.yml
-    python3 init.py --config profiles/react-web-app.config.yml
-    python3 init.py --quick-setup                 # Interactive setup for key values
+    python init.py --config project.config.yml
+    python init.py --config profiles/react-web-app.config.yml
+    python init.py --quick-setup                 # Interactive setup for key values
 
 Output:
     resolved/skills/        — copy to .github/agents/ (or your skills directory)
@@ -356,7 +356,7 @@ def quick_setup(config_path: Path) -> None:
     print(f"  project.namespace: {config.get('project', {}).get('namespace', '@org')}")
     print(f"  git.main_branch: {config.get('git', {}).get('main_branch', 'main')}")
     print()
-    print("Next: Run `python3 init.py` to generate resolved files.")
+    print("Next: Run `python init.py` to generate resolved files.")
 
 
 # =============================================================================

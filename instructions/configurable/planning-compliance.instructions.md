@@ -9,7 +9,10 @@ applyTo: '{{paths.drafts}}**'
 
 # Planning Compliance Checklist
 
-Before presenting any draft plan, self-check against these project rules:
+Before presenting any draft plan, self-check against these project rules.
+
+> **Adopter note:** The rules below are examples from a React/TypeScript
+> project. Replace them with your project's actual conventions.
 
 - **Factory pattern** — All stores use `createXStore(storage)`, never instantiate directly
 - **Store versioning** — All persisted stores have `version` + `migrate` for schema evolution

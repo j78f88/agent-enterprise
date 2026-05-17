@@ -8,7 +8,7 @@ description: composition-rules instruction
 
 # Sprint Composition Rules
 
-Priority stack, scoring formula, and constraints for `/compose-sprint`. Referenced by `@planner` and `@delivery-lead`.
+Priority stack, scoring formula, and constraints for `/compose-sprint`. Referenced by `@planner` and `@sprint-lead`.
 
 > **Calibration notice:** All thresholds in this file are initial calibrations. Tune after 3 composition cycles based on observed outcomes.
 
@@ -69,7 +69,7 @@ If P0 items alone consume > {{escalation.p0_overflow_percent}}% of sprint capaci
    - **Debt sprint:** Schedule only P0 + P1 items, no new features.
    - **Split:** Break large P0 items into smaller increments across 2 sprints.
    - **Kill:** Review P0 items for kill candidates (items that are no longer relevant).
-3. Do NOT proceed with composition until the user chooses.
+3. **Do not** proceed with composition until the user chooses.
 
 ## Debt Health Monitor
 

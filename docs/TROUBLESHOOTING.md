@@ -27,7 +27,7 @@ pip install pyyaml
 1. Open your `project.config.yml`
 2. Search for the missing token path (e.g., `some.token` → `some: token:`)
 3. Add the missing value
-4. Re-run `python3 init.py --config project.config.yml`
+4. Re-run `python init.py --config project.config.yml`
 
 **Example:** If `{{paths.sprints}}` is unresolved:
 ```yaml
@@ -101,7 +101,7 @@ SECURITY: Potential secret found in config value
 2. Re-run init and copy:
    ```bash
    cd skills-library
-   python3 init.py --config project.config.yml
+   python init.py --config project.config.yml
    cp -r resolved/skills/* ../.github/agents/
    ```
 3. Reload VS Code window: `Ctrl+Shift+P` → "Reload Window"
@@ -124,7 +124,7 @@ SECURITY: Potential secret found in config value
 **Cause:** The skill is declared in `agents:` frontmatter but the file doesn't exist.
 
 **Solution:**
-1. Check all 12 skill folders exist: `architect`, `planner`, `sprint-lead`, `pm`, `qa`, `reviewer`, `researcher`, `bug`, `docs`, `a11y`, `perf`, `security`
+1. Check all 13 skill folders exist: `architect`, `planner`, `sprint-lead`, `pm`, `qa`, `reviewer`, `researcher`, `bug`, `docs`, `a11y`, `onboarding`, `perf`, `security`
 2. Copy any missing skills:
    ```bash
    cp -r resolved/skills/MISSING_SKILL ../.github/agents/
@@ -190,10 +190,10 @@ SECURITY: Potential secret found in config value
 
 ```bash
 # Wrong — uses example config
-python3 init.py --config config/project.config.example.yml
+python init.py --config config/project.config.example.yml
 
 # Right — uses your filled-in config
-python3 init.py --config project.config.yml
+python init.py --config project.config.yml
 ```
 
 ### Copying from wrong directory

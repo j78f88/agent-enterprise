@@ -365,7 +365,7 @@ Automated bottleneck detection flags slow operations:
   "span_id": "subagent.task-3-impl",
   "duration_seconds": 1112,
   "threshold_seconds": 600,
-  "recommendation": "Task marked 'high complexity' but took 18+ minutes. Consider splitting into subtasks."
+  "recommendation": "Task marked 'high complexity' but took 18+ minutes. Split into subtasks."
 }
 ```
 

@@ -3,7 +3,7 @@
 # This is a FILLED-IN example showing real values for a React + TypeScript monorepo.
 # Copy this to project.config.yml and adjust for your project.
 #
-# Run: python3 init.py --config project.config.yml
+# Run: python init.py --config project.config.yml
 
 project:
   name: "Task Manager Pro"

@@ -6,7 +6,7 @@ Step-by-step setup for a new project consuming agent-homebase.
 
 ## Prerequisites
 
-- Python 3.8+ with PyYAML (`pip install pyyaml`)
+- Python 3.12+ with PyYAML (`pip install pyyaml`)
 - A `.github/agents/` directory in your project (create it if absent)
 - A `.github/instructions/` directory in your project (create it if absent)
 
@@ -37,7 +37,7 @@ Each skill is a specialized agent role (e.g., `@planner` drafts sprint plans, `@
 **Add for vulnerability scanning and security audits:**
 `security`
 
-You can install all twelve and let the skill descriptions handle routing — skills only load when relevant. The cost of unused skills is negligible.
+You can install all thirteen and let the skill descriptions handle routing — skills only load when relevant. The cost of unused skills is negligible.
 
 ---
 
@@ -76,7 +76,7 @@ cp profiles/react-web-app.config.yml project.config.yml
 **Option A — Interactive setup (recommended for first-time):**
 
 ```bash
-python3 init.py --quick-setup
+python init.py --quick-setup
 ```
 
 This prompts for the essential values (project name, repo, namespace, branch) and updates your config.
@@ -110,7 +110,7 @@ The key fields to get right:
 
 ```bash
 cd skills-library
-python3 init.py --config project.config.yml
+python init.py --config project.config.yml
 ```
 
 Watch for `⚠` warnings — each one is a token with no config value. Fix them in `project.config.yml` and re-run until the output shows `✓ All tokens resolved`.
@@ -176,11 +176,11 @@ Run these checks to confirm everything is working:
 ```bash
 # Skills should be in place
 ls ../.github/agents/
-# Expected: architect/ bug/ docs/ a11y/ perf/ planner/ pm/ qa/ reviewer/ researcher/ security/ sprint-lead/
+# Expected: architect/ bug/ docs/ a11y/ onboarding/ perf/ planner/ pm/ qa/ reviewer/ researcher/ security/ sprint-lead/
 
 # Agent wrappers (if editor.target includes "vscode")
 ls ../.github/agents/*.agent.md
-# Expected: 12 .agent.md files (one per skill)
+# Expected: 13 .agent.md files (one per skill)
 
 # Instructions should be in place
 ls ../.github/instructions/
@@ -223,7 +223,7 @@ When the library is updated:
 ```bash
 cd skills-library
 git pull                                  # if submodule: git submodule update --remote skills-library
-python3 init.py --config project.config.yml
+python init.py --config project.config.yml
 cp -r resolved/skills/*        ../.github/agents/
 cp -r resolved/instructions/*  ../.github/instructions/
 ```
@@ -234,34 +234,4 @@ Your `project.config.yml` is not overwritten — config is yours to keep.
 
 ## Adding a project-specific orchestration layer
 
-If you want a `@delivery-lead` style agent that sequences these skills in your own workflow, write it in `.github/agents/` alongside the resolved skills. It stays in your project and is not part of the library. The library ships the role agents; you build the coordination layer on top.
-
----
-
-## Orchestration and external trackers
-
-By default agent-homebase is designed for **interactive use** — a human in
-VS Code (or a similar editor) invoking `@planner`, `@qa`, `@reviewer`, etc.
-The markdown ledgers (`SPRINTS.md`, `BACKLOG_LEDGER.md`, `BUG_BACKLOG.md`)
-assume a human glances at them between turns.
-
-If you want to drive the skills from an **automated dispatcher** (a process
-that picks tickets off a queue and assigns them to skills), or wire them to
-an **external issue tracker** (Linear, Jira, GitHub Issues with workflow
-automation), that integration is *not* part of this repo. It lives in a
-separate orchestration repo on top of agent-homebase.
-
-Before you build that layer, read:
-
-- [ANTI_FRAGILITY.md](../ANTI_FRAGILITY.md) — failure patterns observed the
-  first time agent-homebase was driven by an autonomous orchestrator,
-  including Ghost-Done (tickets transitioned without artifacts on disk) and
-  split-state across markdown + tracker.
-- [EXTENSION_GUIDE.md](EXTENSION_GUIDE.md) — the intended consumption model
-  for project-specific extensions and orchestration layers, including which
-  changes belong in agent-homebase versus in your own repos.
-
-The short version: keep agent-homebase generic, put orchestration in its own
-repo, put project-specific governance in your project repo, and verify that
-expected artifacts actually exist on disk before any ticket is transitioned
-to `Done`.
+If you want a custom orchestrator agent that sequences these skills in your own workflow, write it in `.github/agents/` alongside the resolved skills. It stays in your project and is not part of the library. The library ships the role agents; you build the coordination layer on top.

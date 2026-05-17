@@ -41,7 +41,7 @@ Move-Item -Path "{{paths.sprints}}sprint-(N-2)" -Destination "docs/archive/sprin
 
 ## PLAN.md Per-Task File Annotations
 
-Every task group in `## Technical Tasks` MUST include a `Files:` line listing the files that task touches. This is load-bearing for subagent delegation — sprint-lead passes these paths to implementation subagents so they can self-orient without reading the entire codebase.
+Every task group in `## Technical Tasks` **must** include a `Files:` line listing the files that task touches. This is load-bearing for subagent delegation — sprint-lead passes these paths to implementation subagents so they can self-orient without reading the entire codebase.
 
 ```markdown
 ### Task Group 1: Feature Name
@@ -54,7 +54,7 @@ Files: `path/to/file.ts`, `path/to/other.tsx`
 
 - @planner populates `Files:` when writing PLAN.md (derive from global `Files to Create/Modify` section + task description).
 - Sprint-lead validates per-task `Files:` annotations exist at kickoff; flags missing ones as a blocker.
-- If a task discovers it needs additional files not listed, the subagent may access them but MUST note them in its return.
+- If a task discovers it needs additional files not listed, the subagent may access them but **must** note them in its return.
 
 ## PLAN.md Quality Gates Section
 

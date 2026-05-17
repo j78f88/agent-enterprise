@@ -4,7 +4,8 @@
 
 | Version | Status                              |
 | ------- | ----------------------------------- |
-| 2.0.x   | Supported (security + bug fixes)    |
+| 3.0.x   | Supported (security + bug fixes)    |
+| 2.0.x   | Security fixes only                 |
 | 1.x     | Unsupported                         |
 | < 1.0   | Unsupported                         |
 
@@ -41,6 +42,45 @@ The `scope:` → `applies_to` migrator
   `tests/test_protocol_v1_conformance.py`. Functional; planned
   migration in 2.1.
 - macOS is not exercised in CI; reports welcome.
+
+---
+
+## 3.0.0 — 2026-05 — v3 uplift: voice, structure, and authoring guide
+
+### Added
+- **Skill authoring guide** (`docs/SKILL_AUTHORING_GUIDE.md`) — canonical
+  reference for writing skills: section order, voice rules, prohibition
+  style, description format, and governance requirements.
+- **Domain glossary** (`CONTEXT.md`) — single source of truth for every
+  domain term used across skills, instructions, and documentation.
+- **Hard/soft dependency ADR**
+  (`docs/decisions/0001-hard-soft-instruction-dependencies.md`) —
+  classifies each instruction as hard (requires project config tokens)
+  or soft (works standalone).
+
+### Changed
+- **All 13 skills audited and rewritten** to conform to the authoring
+  guide: consistent section order, imperative voice, bold lowercase
+  prohibitions (`**never**`, `**must**`, `**do not**`).
+- **Voice unification** across documentation, instructions, and agent
+  bodies — passive voice and hedging words removed from agent-facing
+  content.
+- **Cross-references corrected** — stale file counts, dead ADR links,
+  and inconsistent build commands fixed.
+- **`src/__init__.py` `__version__`** bumped to `3.0.0`.
+- **`config/plugin.json` `version`** bumped to `3.0.0`.
+
+### Breaking
+- **Prohibition style standardised:** all skills use bold lowercase
+  keywords (`**never**`, `**must**`, `**do not**`). Agent bodies use
+  `**Never** verb phrase` at list-item start (documented convention).
+- **Skill section order standardised:** all 13 skills follow the
+  canonical template from the authoring guide.
+
+### Verified
+- 233 pytest tests pass / 7 skipped.
+- `python init.py --config config/project.config.example.yml` builds
+  clean with deterministic output.
 
 ---
 
@@ -143,8 +183,8 @@ The `scope:` → `applies_to` migrator
 ### Added
 - **Dual-platform agent generation** — `init.py` generates VS Code `.agent.md` wrappers from skill `agent:` metadata when `editor.target` includes `\"vscode\"`.
 - `editor.target` config option: `\"vscode\"` | `\"claude-code\"` | `\"both\"` (default). Added to example config and all 3 profiles.
-- `resolved/agents/` output directory with 12 generated agent wrappers.
-- `agent:` frontmatter block on all 12 skills — `tools`, `agents`, `model`, `handoffs`.
+- `resolved/agents/` output directory with 13 generated agent wrappers.
+- `agent:` frontmatter block on all 13 skills — `tools`, `agents`, `model`, `handoffs`.
 - Tool restriction mapping: `reviewer` is read-only, `architect`/`pm` are read+search, `sprint-lead` gets agent delegation, `researcher` gets web access.
 - `parse_frontmatter()`, `extract_agent_body()`, `generate_agent_md()`, `generate_agents()`, and `suppress_skill_invocability()` functions in `init.py`.
 - Editor target validation in `SecurityValidator`.

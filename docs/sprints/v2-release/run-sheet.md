@@ -66,6 +66,8 @@ platform CI (kept as-is). New profiles beyond the three existing.
 
 ### 0.2 Re-affirm or update ADR-0007
 
+> **Note:** ADR-0008 was never created. ADR-0007 remains in `Accepted` status. The references below are historical plan context only.
+
 - **Deliverable:** edit
   [command-centre/decisions/0007-personas-scope-and-deferral.md](../../../command-centre/decisions/0007-personas-scope-and-deferral.md)
   status from `Accepted` to `Superseded by ADR-0008` and add

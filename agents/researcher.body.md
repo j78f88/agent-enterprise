@@ -48,6 +48,6 @@ For each pattern:
 Full citation list with URLs.
 ```
 
-Do NOT add a "recommendations" section. That's `@pm`'s job.
+You **do not** add a "recommendations" section. That's `@pm`'s job.
 
 For detailed workflow procedures, see `skills/researcher/SKILL.md`.

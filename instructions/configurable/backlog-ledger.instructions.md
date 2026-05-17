@@ -54,16 +54,16 @@ Operations are governed by permitted actors, not file ownership. Multiple agents
 | ---------------------------------------- | ------------------------------------ | ------------------------------------------------------- |
 | Append new ITEM (type: bug)              | `@bug`                               | Same commit as {{paths.bug_backlog}} entry                        |
 | Append new ITEM (type: rejection)        | `@planner`                           | Same commit as {{paths.rejections}} entry                 |
-| Append new ITEM (type: feature)          | `@planner`, `@delivery-lead`         | When accepting a validated feature for scheduling       |
+| Append new ITEM (type: feature)          | `@planner`, `@sprint-lead`           | When accepting a validated feature for scheduling       |
 | Append new ITEM (type: carry-over)       | `@sprint-lead`                       | Post-sprint Phase 6 ledger update                       |
 | Append new ITEM (type: audit-finding)    | `@sprint-lead`, `@planner`           | From audit roadmaps or code review findings             |
 | Append new ITEM (type: research)         | `@researcher`, `@planner`            | Research follow-ups with concrete next-steps            |
 | Append new ITEM (type: debt)             | `@sprint-lead`, `@planner`           | Technical debt items from retros, audits, or reviews    |
-| Update Status: open → assigned           | `@planner`, `@delivery-lead`         | When item is scheduled into a sprint                    |
+| Update Status: open → assigned           | `@planner`, `@sprint-lead`           | When item is scheduled into a sprint                    |
 | Update Status: assigned → done           | `@sprint-lead`                       | Post-sprint Phase 6 completion                          |
-| Update Status: open/assigned → killed    | `@planner`, `@delivery-lead`         | With rationale in Notes                                 |
+| Update Status: open/assigned → killed    | `@planner`, `@sprint-lead`           | With rationale in Notes                                 |
 | Increment Def (deferral count)           | `@sprint-lead`                       | Post-sprint Phase 6 for unresolved items                |
-| Update Sprint assignment                 | `@planner`, `@delivery-lead`         | During sprint composition                               |
+| Update Sprint assignment                 | `@planner`, `@sprint-lead`           | During sprint composition                               |
 | Update Blocked field                     | Any agent discovering a dependency   | Must cite the blocking {{ids.item_prefix}}-NNN or external reference   |
 | Update Draft field                       | `@planner`                           | When a draft plan is created or removed                 |
 | Update Notes field                       | Any permitted actor for the row type | Append-only; do not overwrite existing notes            |
@@ -106,5 +106,5 @@ Cross-references:
 When an agent discovers a follow-up action during execution (e.g., a retro carry-over, an audit finding, a research follow-up):
 
 1. Append an ITEM to the ledger in the **same commit** as the source artifact update.
-2. Do NOT leave follow-ups as prose in RETRO.md, audit reports, or research docs without a corresponding ledger entry.
+2. **Do not** leave follow-ups as prose in RETRO.md, audit reports, or research docs without a corresponding ledger entry.
 3. Dedup check: before appending, scan the ledger for an existing ITEM with the same Source reference.

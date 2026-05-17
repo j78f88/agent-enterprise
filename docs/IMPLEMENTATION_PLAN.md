@@ -1,13 +1,5 @@
 # Skills Library — Implementation Plan
 
-> **[ARCHIVED — historical planning document]**
->
-> This document captures the original plan for extracting the agent skills library from a parent monorepo (where it lived under `skills-library/` alongside `apps/` and `packages/`). That extraction is complete: agent-homebase is now its own standalone repository, and the directory layout described below no longer matches reality.
->
-> For current architecture, see [ARCHITECTURE.md](ARCHITECTURE.md) and [DUAL_PLATFORM_PLAN.md](DUAL_PLATFORM_PLAN.md). Kept for historical reference only.
-
----
-
 This document is the working guide for building and extracting the reusable agent skills library from the DIY project. It lives inside `skills-library/` — a top-level directory that is explicitly separate from the web app delivery pipeline (`apps/`, `packages/`).
 
 ---
@@ -41,31 +33,31 @@ skills-library/
 ├── project.config.example.yml    # Config template — consuming projects fill this in
 ├── init.py                       # Token substitution script
 │
-├── skills/                       # One folder per skill — {name}.skill.md format
+├── skills/                       # One folder per skill — SKILL.md format
 │   ├── pm/
-│   │   └── pm.skill.md
+│   │   └── SKILL.md
 │   ├── planner/
-│   │   └── planner.skill.md
+│   │   └── SKILL.md
 │   ├── sprint-lead/
-│   │   └── sprint-lead.skill.md
+│   │   └── SKILL.md
 │   ├── qa/
-│   │   └── qa.skill.md
+│   │   └── SKILL.md
 │   ├── reviewer/
-│   │   └── reviewer.skill.md
+│   │   └── SKILL.md
 │   ├── architect/
-│   │   └── architect.skill.md
+│   │   └── SKILL.md
 │   ├── researcher/
-│   │   └── researcher.skill.md
+│   │   └── SKILL.md
 │   ├── bug/
-│   │   └── bug.skill.md
+│   │   └── SKILL.md
 │   ├── docs/
-│   │   └── docs.skill.md
+│   │   └── SKILL.md
 │   ├── a11y/
-│   │   └── a11y.skill.md
+│   │   └── SKILL.md
 │   ├── perf/
-│   │   └── perf.skill.md
+│   │   └── SKILL.md
 │   └── security/
-│       └── security.skill.md
+│       └── SKILL.md
 │
 ├── agents/                       # Hand-crafted agent bodies for VS Code wrappers
 │   ├── a11y.body.md
@@ -133,9 +125,9 @@ skills-library/
 
 ---
 
-## Skill File Format
+## SKILL.md Format
 
-Every skill lives in its own folder inside `skills/`. The source file is named `{name}.skill.md` (e.g., `skills/architect/architect.skill.md`) for easy identification in editors. At build time, `init.py` resolves these to `SKILL.md` in the output directory — the folder name must exactly match the `name` field in the frontmatter, as required by the VS Code SKILL.md spec. The description field is what the agent uses to decide when to load the skill, so write it to describe both what it does and when to invoke it, not as a tagline.
+Every skill lives in its own folder inside `skills/`. The folder name must exactly match the `name` field in the frontmatter — this is a hard requirement of the SKILL.md spec. The description field is what the agent uses to decide when to load the skill, so write it to describe both what it does and when to invoke it, not as a tagline.
 
 ```markdown
 ---
@@ -354,8 +346,8 @@ def main():
     if output.exists():
         shutil.rmtree(output)
 
-    # Skills ({name}.skill.md files) — substitute and output as SKILL.md
-    for skill_md in sorted(Path("skills").rglob("*.skill.md")):
+    # Skills (SKILL.md files) — substitute in place
+    for skill_md in Path("skills").rglob("SKILL.md"):
         dest = output / skill_md
         dest.parent.mkdir(parents=True, exist_ok=True)
         dest.write_text(substitute(skill_md.read_text(), tokens))
@@ -429,7 +421,7 @@ Commit when all twelve are done: `chore: skills-library — add configurable ins
 Convert the six lowest-complexity agents into SKILL.md format. For each:
 
 1. Create the folder: `skills-library/skills/<name>/`
-2. Create `<name>.skill.md` with the correct frontmatter (`name` must match folder name)
+2. Create `SKILL.md` with the correct frontmatter (`name` must match folder name)
 3. Paste the current agent file body as the instruction content
 4. Replace all hardcoded values with `{{config.tokens}}`
 5. Write a description that covers both what it does and concrete trigger conditions
@@ -470,7 +462,7 @@ Commit: `chore: skills-library — starters, profiles, docs`.
 
 Before calling the library ready, run through this:
 
-**Token resolution.** Run `python3 init.py --config profiles/monorepo-fullstack.config.yml` from inside `skills-library/`. The resolved output for this profile should produce files that are functionally equivalent to the current `.github/agents/` and `.github/instructions/` files. Diff them manually.
+**Token resolution.** Run `python init.py --config profiles/monorepo-fullstack.config.yml` from inside `skills-library/`. The resolved output for this profile should produce files that are functionally equivalent to the current `.github/agents/` and `.github/instructions/` files. Diff them manually.
 
 **No surviving tokens.** After resolution, `grep -r "{{" resolved/` should return nothing.
 

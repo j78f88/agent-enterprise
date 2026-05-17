@@ -27,7 +27,7 @@ For each, record a **Verdict** (PASS / FAIL / N/A) and a one-or-two-sentence **R
 
 1. **Causation vs correlation.** Is the feature *why* the source app succeeds, or is it incidental to the real driver? If Strava's retention comes from the social feed, copying "last run distance" won't move the needle.
 
-2. **Frequency match.** Does the source app's usage cadence match your project's? Consider whether your app is used daily, weekly, or project-scoped. A feature built for daily engagement warps the product when applied to low-frequency use.
+2. **Frequency match.** Does the source app's usage cadence match your project's? Check whether your app is used daily, weekly, or project-scoped. A feature built for daily engagement warps the product when applied to low-frequency use.
 
 3. **Survivorship bias.** Am I ignoring apps that shipped this feature and failed? If Gardenize built a rich data-entry feature and was abandoned by casuals while Planta won by being simpler, the winning lesson is *less* of this feature, not more.
 

@@ -113,7 +113,7 @@ Before appending a new entry, search existing entries for:
 - Same file + same line + same category (likely same finding)
 - Same package + same vulnerability description
 
-If a duplicate is found, do NOT create a new entry. Instead, add a note to the existing entry's Notes field (append, don't edit).
+If a duplicate is found, **do not** create a new entry. Instead, add a note to the existing entry's Notes field (append, don't edit).
 
 ---
 

@@ -16,7 +16,7 @@ Shared rules for agents that use the `vscode/askQuestions` tool (frontmatter dec
 - Decision points, workflow gates, and session exits
 - Any yes/no or multi-choice decision
 
-**Never render decision menus as plain text lists.** Hard rule.
+**never** render decision menus as plain text lists. Hard rule.
 
 ## When NOT to Use
 

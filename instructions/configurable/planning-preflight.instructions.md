@@ -13,7 +13,7 @@ Two scopes — use the one matching your current workflow.
 
 ## Full Pre-flight (Ideation / Feature Planning)
 
-Read each document and note findings. Do NOT skip any row.
+Read each document and note findings. **Do not** skip any row.
 
 | Document                                     | Look for                                          |
 | -------------------------------------------- | ------------------------------------------------- |

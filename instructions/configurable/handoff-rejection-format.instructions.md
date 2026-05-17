@@ -63,7 +63,7 @@ When `@planner` encounters a blocking condition while executing `/plan-feature`,
    - "Reject back to `<upstream agent>` — I'll re-invoke with {{ids.rejection_prefix}}-NNN as context"
    - "Override and proceed — update ledger Status to `killed` with override rationale in Notes"
    - "Save {{ids.rejection_prefix}} and pause — come back to it later"
-3. Do NOT proceed with the original handoff until the user chooses.
+3. **Do not** proceed with the original handoff until the user chooses.
 
 ## Enforcement (for @reviewer)
 
@@ -71,7 +71,7 @@ When `@planner` encounters a blocking condition while executing `/plan-feature`,
 - **WARNING:** {{ids.rejection_prefix}} entry with no **Proposed resolution** field populated.
 - **WARNING:** new {{ids.rejection_prefix}} entry with no **Fix** field (or `Fix: TBD` left in place at commit time).
 - **WARNING:** new {{ids.rejection_prefix}} entry with no **Link** field, or with a `Link:` value that does not resolve to an existing file or anchor.
-- **SUGGESTION:** {{ids.rejection_prefix}} entry OPEN for >14 days with no **Response:** — consider supersede or close.
+- **SUGGESTION:** {{ids.rejection_prefix}} entry OPEN for >14 days with no **Response:** — flag for supersession or closure.
 
 ## Handoff Manifest Cleanup
 

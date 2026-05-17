@@ -4,12 +4,12 @@ kind: instruction
 version: 1.0.0
 applies_to: '**'
 description: Use when running engagement gates, checking scope upgrade thresholds, building subagent prompts for validation or planning, or determining deployment workflow details. Defines Gate 1-4 criteria, scope upgrade rules, and platform configuration.
-applyTo: .github/agents/delivery-lead.agent.md
+applyTo: .github/agents/sprint-lead.agent.md
 ---
 
 # Engagement Gates
 
-Gate definitions, subagent prompt templates, scope upgrade thresholds, and platform configuration for the @delivery-lead engagement lifecycle.
+Gate definitions, subagent prompt templates, scope upgrade thresholds, and platform configuration for the @sprint-lead engagement lifecycle.
 
 ## Gate Definitions
 
@@ -82,7 +82,7 @@ Gate definitions, subagent prompt templates, scope upgrade thresholds, and platf
 
 ## Scope Upgrade Thresholds
 
-These thresholds trigger a scope upgrade prompt when an S-size engagement's planning subagent returns values exceeding them. @delivery-lead reads these values at runtime — tune by editing this section, zero agent changes needed.
+These thresholds trigger a scope upgrade prompt when an S-size engagement's planning subagent returns values exceeding them. @sprint-lead reads these values at runtime — tune by editing this section, zero agent changes needed.
 
 ```
 taskCount > {{scope_upgrade.task_count}}
@@ -91,7 +91,7 @@ multiStore: true    # touches >1 store factory
 multiArea: true     # touches >2 top-level directories (apps/, packages/, docs/)
 ```
 
-When triggered, @delivery-lead presents: "This looks bigger than S-size. Upgrade to M (adds requirements validation) or continue as S?"
+When triggered, @sprint-lead presents: "This looks bigger than S-size. Upgrade to M (adds requirements validation) or continue as S?"
 
 - Upgrade to M: run Phase 2 (validation) before continuing. Log in gate-log.
 - Continue as S: CTO override, logged as `SIZE-OVERRIDE` in gate-log.

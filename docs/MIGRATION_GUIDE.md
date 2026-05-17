@@ -33,7 +33,7 @@ Phase 2 introduces SQLite persistence as an alternative to markdown files. The m
 
 ```bash
 # Verify SQLite is available
-python3 -c "import sqlite3; print(sqlite3.sqlite_version)"
+python -c "import sqlite3; print(sqlite3.sqlite_version)"
 # Expected: 3.35.0 or higher
 
 # Backup existing markdown files

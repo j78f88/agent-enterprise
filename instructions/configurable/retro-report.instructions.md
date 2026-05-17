@@ -219,7 +219,7 @@ From @reviewer JSON summary:
 Items not completed this sprint. Each entry annotated:
 
 - **First logged: Sprint N** — when this item first appeared
-- Items carried 3+ sprints: flagged with ⚠ (e.g., "⚠ First logged: Sprint N-4 — consider escalating or dropping")
+- Items carried 3+ sprints: flagged with ⚠ (e.g., "⚠ First logged: Sprint N-4 — escalate or drop")
 
 ### Section 10: Sprint Trends
 

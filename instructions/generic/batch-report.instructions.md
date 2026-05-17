@@ -26,11 +26,11 @@ These proceed without asking for approval:
 - Handoff manifest to `docs/planning/_handoffs/`
 - REJ-NNN entry to `docs/planning/HANDOFF_REJECTIONS.md`
 
-Save as soon as the artifact is drafted. Do NOT hold files in chat awaiting approval.
+Save as soon as the artifact is drafted. You **do not** hold files in chat awaiting approval.
 
 ## Irreversible Actions — gated, require explicit approval
 
-These MUST use `#tool:askQuestions` before executing:
+These **must** use `#tool:askQuestions` before executing:
 
 - Promote draft to `sprints/`
 - Commit or merge
@@ -39,7 +39,7 @@ These MUST use `#tool:askQuestions` before executing:
 
 ## End-of-Workflow Summary
 
-After completing a workflow (or a logical batch of work), present ONE summary message. This is plain markdown — do NOT wrap it in `#tool:askQuestions`.
+After completing a workflow (or a logical batch of work), present ONE summary message. This is plain markdown — **do not** wrap it in `#tool:askQuestions`.
 
 Shape:
 
@@ -69,7 +69,7 @@ Push back on any decision, request a revision, or redirect.
 
 `askquestions-contract.instructions.md` still governs interactive UI. This contract narrows WHEN agents invoke it:
 
-| Use askQuestions                                                  | Do NOT use askQuestions                                   |
+| Use askQuestions                                                  | **Do not** use askQuestions                               |
 | ----------------------------------------------------------------- | --------------------------------------------------------- |
 | Gated actions (irreversible list above)                           | Confirming saves of non-destructive artifacts             |
 | Genuine ambiguity where no reasonable default exists              | Presenting intermediate work for approval before saving   |

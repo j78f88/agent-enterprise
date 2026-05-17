@@ -67,9 +67,9 @@ resolved/              ← generated output
 
 ### Phase 2: Agent Metadata in Skills ✅
 
-**Files:** All `skills/*/{name}.skill.md` (12 files — including `security`)
+**Files:** All `skills/*/{name}.skill.md` (13 files — including `security`)
 
-Done — all 12 skills already have the `agent:` block in frontmatter. Example:
+Done — all 13 skills already have the `agent:` block in frontmatter. Example:
 
 ```yaml
 ---
@@ -204,7 +204,7 @@ Implementation:
 4. **Bundled assets stay in skill folders** — agents reference them; no migration needed
 5. **init.py handles all platform-conditional logic** — source files are platform-agnostic
 6. **Phase 2-4 infrastructure is orthogonal** — checkpoints, sandboxing, and determinism are consumed by agents/skills, not converted to either
-7. **12 skills, not 11** — `security` is a full skill with its own agent metadata
+7. **13 skills, not 11** — `security` is a full skill with its own agent metadata
 
 ---
 

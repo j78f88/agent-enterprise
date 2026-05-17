@@ -52,7 +52,7 @@ This instruction establishes formal determinism guarantees for agent-homebase, e
 
 ### Temperature Enforcement
 
-**Rule:** All LLM calls MUST use `temperature=0.0` for deterministic sampling.
+**Rule:** All LLM calls **must** use `temperature=0.0` for deterministic sampling.
 
 **Enforcement in Skills:**
 
