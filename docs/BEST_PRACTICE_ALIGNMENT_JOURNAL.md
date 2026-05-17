@@ -3,8 +3,7 @@
 > **Purpose.** Single canonical record of the *why* behind the best-practice-alignment sprint and its OPA Rego cleanup follow-through. Captures background, influences, alternatives considered, decisions made, things deliberately rejected, and the design choices that locked in. **If a future agent or owner is about to re-open a question, check here first.**
 >
 > **Status.** Living document. Append new rows; do not rewrite history. Date entries.
-> **Sprint slug.** `best-practice-alignment` (sprint scratch in `docs/sprints/best-practice-alignment/` — slated for manual cleanup once Step 6 QA passes).
-> **Survives cleanup.** Yes — this file lives in `docs/`, not in the sprint dir, so it remains after the sprint scratch is deleted.
+> **Sprint slug.** `best-practice-alignment`. The sprint scratch directory has been removed; this journal preserves the rationale.
 > **Sprint dates.** Spec drafted 2026-05-16. Audit committed 2026-05-16. Run sheet hardened + Step 5b added 2026-05-16.
 
 ---
@@ -13,7 +12,9 @@
 
 agent-homebase is a portable multi-agent OS: skills, instructions, and agents authored as Markdown with `{{tokens}}`, compiled by `init.py` into platform-ready artifacts under `resolved/`. It was architecturally well-differentiated (compilation step, tiered subagent contracts, write permits, OPA Rego policy layer), but two rounds of external research surfaced **5 concrete gaps vs. industry convention** that were hurting adoption surface and agent adherence.
 
-**Locked baseline (recorded in [docs/sprints/best-practice-alignment/SPEC.md](sprints/best-practice-alignment/SPEC.md)):**
+### Locked baseline
+
+Pre-sprint state captured in the sprint SPEC (since deleted with the sprint scratch):
 
 | Metric | Pre-sprint |
 |---|---|
@@ -52,7 +53,7 @@ The 5 gaps that drove the sprint:
 | OpenAI Codex `AGENTS.md` | Official | `AGENTS.md` precedence model |
 | cursor.directory | Catalog | Cursor `.mdc` + `globs:` frontmatter |
 
-All citations are also captured in [docs/sprints/best-practice-alignment/ADOPTION_PLAN.md](sprints/best-practice-alignment/ADOPTION_PLAN.md) under "Sources".
+All citations were also captured in the sprint's ADOPTION_PLAN under "Sources" (sprint scratch since deleted).
 
 ---
 
@@ -117,7 +118,7 @@ Non-goal: application-code changes. The sprint touches Markdown skills/instructi
 | E7 | Use `git stash` in the cleanup pre-flight to hide unrelated dirty files | Real risk of conflicts on `git stash pop` given other ongoing edits in the tree; cleaner to require a clean tree and stop-and-ask if it isn't. (S1 from review.) |
 | E8 | Add `--re-sign` to `scripts/verify-hash-chain.py` as part of the cleanup | `FILE_HASHES.md` has no chained data rows yet; re-signing is a no-op. The audit's removal target is in an HTML comment outside the chain. Build the re-sign tool when the first real data row exists. |
 | E9 | Squash the three OPA-cleanup commits into one | Each commit has a distinct semantic (port → delete → docs); separate commits keep `git bisect` useful and the leak grep auditable. |
-| E10 | Delete the sprint scratch directory automatically when QA goes green | Explicit owner rule — manual deletion only. Codified at the top of the run sheet and in [QA.md](sprints/best-practice-alignment/QA.md). |
+| E10 | Delete the sprint scratch directory automatically when QA goes green | Explicit owner rule — manual deletion only. Codified at the top of the run sheet and in QA.md (sprint scratch since deleted). |
 | E11 | Use `Select-String -Path . -Pattern … -Recurse` for the cleanup leak grep | `Select-String -Recurse` against `.` is unreliable in PowerShell — `-Recurse` wants a directory but `-Path` with patterns is ambiguous. Switched to `Get-ChildItem -Recurse -File -Include … \| Select-String`. |
 | E12 | Roll the OPA cleanup into the sprint branch | Mixes two narratives (best-practice alignment vs. dead-code removal) and makes Step 6's pass/fail signal ambiguous. Separate PR (D7). |
 
@@ -148,7 +149,7 @@ Non-goal: application-code changes. The sprint touches Markdown skills/instructi
 | 05-audit | OPA Rego pressure-test → recommendation | `docs/POLICY_AUDIT.md` |
 | 05b-cleanup (optional) | Execute the audit recommendation | `tools/sprint_lint.py` + `tests/test_sprint_lint.py`; deletions of `policies/`, `src/phase1_verification/policy_engine.py`, `docs/POLICIES.md`; documentation prunes across ~10 files |
 
-Cleanup checklist (manual, owner-only) lives in [docs/sprints/best-practice-alignment/QA.md](sprints/best-practice-alignment/QA.md). The deliverables above remain permanently; the sprint directory itself is deleted by hand once Step 6 (and optionally Step 5b) is green.
+The deliverables above remain permanently in the repo. The sprint scratch directory and its manual cleanup checklist (QA.md) have been removed.
 
 ---
 
@@ -165,7 +166,7 @@ Cleanup checklist (manual, owner-only) lives in [docs/sprints/best-practice-alig
 - **Unique Rego-only rules:** broad secret regex (`[A-Za-z0-9_\-]{32,}`) matches commit SHAs / UUIDs / base64 fragments → high false-positive; password regex similarly weak; escalation warning is soft.
 - **Composition rules** (priority/score order, 50–80% feature mix, capacity ≤100%, P0 bug inclusion, debt pressure, age, item count) are reasonable but **have no caller**.
 
-**Decision (D6 + D7).** Drop the OPA layer. Port the 9 composition rules to `tools/sprint_lint.py` with identical message prefixes. Execute as a separate, owner-approved PR ([Step 5b work package](sprints/best-practice-alignment/05b-policy-cleanup.md)).
+**Decision (D6 + D7).** Drop the OPA layer. Port the 9 composition rules to `tools/sprint_lint.py` with identical message prefixes. Executed as a separate, owner-approved PR (Step 5b work package, sprint scratch since deleted).
 
 **What gets deleted.** `policies/composition.rego`, `policies/security.rego`, `policies/` (empty after), `src/phase1_verification/policy_engine.py`, `docs/POLICIES.md`. Plus the `TestPolicyEngine` class and one import line in `tests/test_contracts.py`, and one re-export line in `src/phase1_verification/__init__.py`.
 
@@ -179,7 +180,7 @@ Cleanup checklist (manual, owner-only) lives in [docs/sprints/best-practice-alig
 
 ## 9. Run-sheet design choices (and what got rejected during review)
 
-Two review passes hardened [run-sheet.instructions.md](sprints/best-practice-alignment/run-sheet.instructions.md):
+Two review passes hardened the sprint run sheet (sprint scratch since deleted):
 
 | Code | Issue | Resolution |
 |---|---|---|
@@ -220,11 +221,7 @@ Second pass added Step 5b. Two of the seven cleanup-prompt defects that drove St
 
 ## 11. Pointers (for the next person)
 
-- **Sprint scratch** (deleted at sprint end): [docs/sprints/best-practice-alignment/](sprints/best-practice-alignment/)
-- **Run sheet** (the executable orchestrator): [docs/sprints/best-practice-alignment/run-sheet.instructions.md](sprints/best-practice-alignment/run-sheet.instructions.md)
-- **Audit** (the data behind D6): [docs/POLICY_AUDIT.md](POLICY_AUDIT.md)
-- **Cleanup work package**: [docs/sprints/best-practice-alignment/05b-policy-cleanup.md](sprints/best-practice-alignment/05b-policy-cleanup.md)
-- **Spec / adoption plan / QA**: [SPEC.md](sprints/best-practice-alignment/SPEC.md), [ADOPTION_PLAN.md](sprints/best-practice-alignment/ADOPTION_PLAN.md), [QA.md](sprints/best-practice-alignment/QA.md)
+- **Sprint scratch, run sheet, audit, spec, adoption plan, QA, and 05b cleanup work package**: deleted with the sprint scratch directory. This journal is the surviving record.
 - **Standing repo conventions referenced here**: [AGENTS.md](../AGENTS.md), [CLAUDE.md](../CLAUDE.md), [command-centre/decisions/0002-protocols-as-shared-root.md](../command-centre/decisions/0002-protocols-as-shared-root.md)
 - **Three-mode architecture rationale** (origin, errors, alternatives eliminated): [command-centre/00-overview/design-history.md](../command-centre/00-overview/design-history.md) — BPA assumes the substrate-at-root shape settled there; read it for the *why* behind the directory layout this journal patches.
 
