@@ -165,7 +165,7 @@ The more specific these files are, the more useful the agents become. A blank co
 
 ## Step 8 — Write a copilot-instructions.md
 
-Create `.github/copilot-instructions.md` with project-level context: what the project is, its key directories, and any agent routing notes. This is the file Copilot loads before every session.
+Create `.github/copilot-instructions.md` with project-level context: what the project is, its key directories, and any agent routing notes. This is the file Copilot loads before every session. Copy `starters/copilot-instructions.md` to `.github/copilot-instructions.md` and fill in your project-specific details.
 
 ---
 
