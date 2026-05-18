@@ -108,6 +108,15 @@ pass.
 - `python init.py --config config/project.config.example.yml` builds
   clean with byte-identical output across two consecutive runs.
 
+### Changed
+- Moved `ANTI_FRAGILITY.md` and `CONTEXT.md` to `docs/` (root declutter)
+- Completed AGENTS.md Key directories table (all 17 directories)
+
+### Added
+- Per-directory READMEs for `src/`, `hooks/`, `starters/`, `tools/`
+- `starters/copilot-instructions.md` platform entry point template
+- `/tools/` entry in CODEOWNERS
+
 
 
 ### Added
