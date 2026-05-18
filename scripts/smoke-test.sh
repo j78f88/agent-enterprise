@@ -24,8 +24,10 @@ echo "--- 2/4 install dev deps ---"
 $PYTHON -m pip install --quiet -r requirements-dev.txt
 
 echo "--- 3/4 build (twice, determinism check) ---"
+rm -rf resolved
 $PYTHON init.py --config "$CONFIG" > /dev/null
 HASH_1=$(find resolved -type f -print0 | sort -z | xargs -0 sha256sum | sha256sum | cut -d' ' -f1)
+rm -rf resolved
 $PYTHON init.py --config "$CONFIG" > /dev/null
 HASH_2=$(find resolved -type f -print0 | sort -z | xargs -0 sha256sum | sha256sum | cut -d' ' -f1)
 if [ "$HASH_1" != "$HASH_2" ]; then
