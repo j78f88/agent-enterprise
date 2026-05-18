@@ -114,6 +114,9 @@ and reviews depend on the structure.
 ### 2. Opening Paragraph
 
 One to two sentences. State the agent's role, mission, and hard boundary.
+The opening paragraph is the skill's Overview — mandatory, 1–2 sentences,
+elevator pitch. It has no heading of its own; it sits between the H1 title
+and the `## When to Use` section.
 
 ```markdown
 You are the code review specialist for {{project.name}}. You review

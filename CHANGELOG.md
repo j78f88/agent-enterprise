@@ -45,7 +45,70 @@ The `scope:` → `applies_to` migrator
 
 ---
 
-## 3.0.0 — 2026-05 — v3 uplift: voice, structure, and authoring guide
+## 3.0.1 — 2026-05 — enforcement gates and heading hierarchy
+
+This release adds **no new policy**. It adds automated regression
+protection for the conventions established in 3.0.0 and normalises a
+small number of pseudo-headings that were missed by the 3.0.0 voice
+pass.
+
+### Added
+- **`tests/test_skill_length.py`** — enforces the 200-line cap on
+  `skills/*/*.skill.md` documented in `docs/SKILL_AUTHORING_GUIDE.md`.
+  Supporting files in the same skill directory are excluded from the
+  count.
+- **`tests/test_skill_description.py`** — enforces the four description
+  rules from the authoring guide: ≤ 1024 characters, capital first
+  letter, presence of a `Use <when|after|to|with|on|...>` trigger
+  sentence, and the description must not lead with the skill name.
+- **`tests/test_voice_compliance.py`** — fails on bare all-caps
+  prohibitions (`MUST`, `NEVER`, `DO NOT`) and on hedging words
+  (`consider`, `perhaps`, `might`, `may be useful`, `you could`) in
+  skill files. Code spans, link targets, and YAML frontmatter are
+  ignored.
+- **`tests/test_doc_headings.py`** — fails on standalone bold-only
+  lines (pseudo-headings) in user-facing documentation. Inline bold
+  field labels in lists and prose are unaffected. Scope: top-level
+  user-facing docs (`README.md`, `AGENTS.md`, `CLAUDE.md`,
+  `CONTEXT.md`, `CHANGELOG.md`, `ANTI_FRAGILITY.md`,
+  `CODE_OF_CONDUCT.md`, `SECURITY.md`, and every top-level
+  `docs/*.md`). Internal sprint records and the long-form
+  `sandbox-architecture.instructions.md` are out of scope by design.
+
+### Changed
+- **`skills/onboarding/onboarding.skill.md`** description gained a
+  `Use when` trigger sentence to satisfy the new description rule.
+- **`README.md`** tagline converted from bold paragraph to italic
+  subtitle.
+- **`ANTI_FRAGILITY.md`** four `**Mitigation.**` pseudo-headings
+  converted to `### Mitigation`.
+- **`docs/BEST_PRACTICE_ALIGNMENT_JOURNAL.md`** locked-baseline
+  pseudo-heading converted to `### Locked baseline`.
+- **`docs/ONBOARDING.md`** four `**Option A/B — ...**` pseudo-headings
+  converted to `### Option A/B — ...`.
+- **`docs/POLICY_AUDIT.md`** `**Proposed disposition**` pseudo-heading
+  converted to `### Proposed disposition`.
+- **`docs/SKILL_AUTHORING_GUIDE.md`** clarified that the opening
+  paragraph IS the skill Overview (mandatory, headingless, sits
+  between H1 and `## When to Use`).
+- **`CONTEXT.md`** clarified voice-rule scope: rules apply to
+  agent-facing prose, not to structured artifacts (ADRs, JSON schemas,
+  reference checklists in `references/`).
+- **`v3uplift/QA_REPORT.md`** appended a remediation-status redux
+  section: 6 of 7 critical violations closed, 1 accepted deviation
+  (CV-06, dead ADR-0008 reference in a historical sprint run-sheet).
+- **`v3uplift/JOURNEY.md`** filled in phase status table, lessons
+  learned, and "what would change" retrospective.
+- **`src/__init__.py` `__version__`** bumped to `3.0.1`.
+- **`config/plugin.json` `version`** bumped to `3.0.1`.
+
+### Verified
+- 395 pytest tests pass / 7 skipped (233 baseline + 162 parametrised
+  enforcement cases from the four new tests).
+- `python init.py --config config/project.config.example.yml` builds
+  clean with byte-identical output across two consecutive runs.
+
+
 
 ### Added
 - **Skill authoring guide** (`docs/SKILL_AUTHORING_GUIDE.md`) — canonical

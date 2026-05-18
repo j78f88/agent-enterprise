@@ -2,6 +2,8 @@
 
 Step-by-step setup for a new project consuming agent-homebase.
 
+> **Visual overview:** open [command-centre-visual.html](command-centre-visual.html) in a browser to see all agents, modes, and flows at a glance before diving in.
+
 ---
 
 ## Prerequisites
@@ -43,7 +45,7 @@ You can install all thirteen and let the skill descriptions handle routing — s
 
 ## Step 2 — Install the library
 
-**Option A — Git submodule (recommended):**
+### Option A — Git submodule (recommended)
 
 Links the library as a separate repo. You get updates via `git submodule update --remote`. Keeps your repo clean and upgradeable.
 
@@ -51,7 +53,7 @@ Links the library as a separate repo. You get updates via `git submodule update 
 git submodule add https://github.com/j78f88/agent-homebase.git skills-library
 ```
 
-**Option B — One-time copy:**
+### Option B — One-time copy
 
 Copies files once. No auto-updates, but simpler setup if you don't plan to upgrade.
 
@@ -73,7 +75,7 @@ cp profiles/react-web-app.config.yml project.config.yml
 # or: cp profiles/monorepo-fullstack.config.yml project.config.yml
 ```
 
-**Option A — Interactive setup (recommended for first-time):**
+### Option A — Interactive setup (recommended for first-time)
 
 ```bash
 python init.py --quick-setup
@@ -81,7 +83,7 @@ python init.py --quick-setup
 
 This prompts for the essential values (project name, repo, namespace, branch) and updates your config.
 
-**Option B — Manual edit:**
+### Option B — Manual edit
 
 Open `project.config.yml` and fill in every `FIXME` value. **If you skip this step, agents won't run correctly** - the system will show which values are missing (marked with ⚠) when you run `init.py`.
 

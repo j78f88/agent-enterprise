@@ -5,6 +5,12 @@ When writing skills, instructions, agents, or docs, use these terms
 exactly as defined here. When a term has an "Avoid" entry, do not use
 that word in agent-facing files.
 
+**Voice unification scope:** The voice rules in `docs/SKILL_AUTHORING_GUIDE.md`
+apply to agent-facing prose — skills, agent bodies, instructions, and
+user-facing docs. They do **not** apply to structured artifacts (ADRs,
+JSON schemas, reference checklists in `references/`), which retain
+their own register by design.
+
 ---
 
 ## Core Concepts

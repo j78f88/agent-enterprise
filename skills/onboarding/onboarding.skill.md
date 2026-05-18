@@ -4,7 +4,7 @@ kind: skill
 version: 1.0.0
 applies_to: '**'
 name: onboarding
-description: Guides first-time setup of agent-homebase for a new project. Walks through profile selection, config filling, token resolution, file seeding, and verification. Self-removes after setup is complete.
+description: Guides first-time setup of agent-homebase for a new project. Use when adopting agent-homebase, initialising a project, or running the bootstrap flow. Walks through profile selection, config filling, token resolution, file seeding, and verification. Self-removes after setup is complete.
 when_to_use: set up agents, configure project, first time setup, onboard, initialize, get started
 user-invocable: true
 lifecycle: setup-only

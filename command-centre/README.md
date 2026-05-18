@@ -52,3 +52,4 @@ command-centre/
 - **For "which combinations":** [consumption-matrix.md](00-overview/consumption-matrix.md).
 - **For "how the pieces fit":** [architecture.md](00-overview/architecture.md).
 - **For terminology:** [glossary.md](00-overview/glossary.md).
+- **Visual overview:** [command-centre-visual.html](../docs/command-centre-visual.html) — interactive cheat sheet, process flows, and architecture reference.
