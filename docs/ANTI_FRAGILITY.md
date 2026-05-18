@@ -11,7 +11,7 @@ so future adopters can avoid them.
 > external issue tracker, do that work in a **separate orchestration repo** and
 > keep project-specific governance in a **separate project repo**. Do not
 > write either kind of file into agent-homebase itself. See
-> [docs/EXTENSION_GUIDE.md](docs/EXTENSION_GUIDE.md).
+> [EXTENSION_GUIDE.md](EXTENSION_GUIDE.md).
 
 ---
 
@@ -110,7 +110,7 @@ project â€” was documented but not enforced at the repo boundary.
   into it.
 - If you need to extend or override a generic instruction, do it in your
   project repo and reference it from your profile. See
-  [docs/EXTENSION_GUIDE.md](docs/EXTENSION_GUIDE.md).
+  [EXTENSION_GUIDE.md](EXTENSION_GUIDE.md).
 - If a change feels generic enough to upstream, open a PR â€” but make the
   upstream commit pure (no project name, no project-specific values, no
   hard-coded counts).
@@ -136,5 +136,5 @@ tickets off a queue and assigns them to skills) on top of agent-homebase:
 4. **Prove the loop before adding policy.** Run the dispatcher end-to-end on
    one real ticket and inspect the result before layering governance.
 
-See [docs/EXTENSION_GUIDE.md](docs/EXTENSION_GUIDE.md) for the intended
+See [EXTENSION_GUIDE.md](EXTENSION_GUIDE.md) for the intended
 consumption model.

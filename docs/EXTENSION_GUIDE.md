@@ -114,7 +114,7 @@ The orchestration repo's responsibilities:
 - Translate tracker events into skill invocations.
 - **Verify completion** by checking artifact paths exist with fresh content
   before transitioning a ticket to `Done`. (See
-  [`ANTI_FRAGILITY.md`](../ANTI_FRAGILITY.md) — Pattern 1.)
+  [`ANTI_FRAGILITY.md`](ANTI_FRAGILITY.md) — Pattern 1.)
 - Define classification rules for which kinds of tickets go to which skills.
 - Define retry / escalation policy when an agent fails or returns a
   rejection.

@@ -198,7 +198,7 @@ Engineering essay on production multi-agent system. Key signals adopted:
 
 ## 5. Anti-fragility patterns derived
 
-The existing `ANTI_FRAGILITY.md` documented four patterns from a prior
+The existing `docs/ANTI_FRAGILITY.md` documented four patterns from a prior
 failure (Ghost-Done, Split-state, Governance-before-proven-loop, Repo
 pollution). The new research added three more patterns plus a refinement.
 
@@ -262,7 +262,7 @@ specific program-of-works state (project list, registry, harvest log,
 playbooks for three named projects) into agent-homebase. ADR 0001
 ("containerize in homebase") conflated these two distinct concerns. The
 graduation in Phase 6 only addressed (a). It left (b) inside the
-framework forever — the exact failure mode `ANTI_FRAGILITY.md` Pattern 4
+framework forever — the exact failure mode `docs/ANTI_FRAGILITY.md` Pattern 4
 warns against.
 
 ### Error B — Sync CLI over-build (Pattern 6 violation)
