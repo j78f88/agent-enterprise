@@ -33,7 +33,6 @@ USER_FACING_DOCS: tuple[Path, ...] = (
     REPO_ROOT / "docs" / "CONTEXT.md",
     REPO_ROOT / "CHANGELOG.md",
     REPO_ROOT / "docs" / "ANTI_FRAGILITY.md",
-    REPO_ROOT / "CODE_OF_CONDUCT.md",
     REPO_ROOT / "SECURITY.md",
 )
 

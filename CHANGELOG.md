@@ -71,8 +71,7 @@ pass.
   field labels in lists and prose are unaffected. Scope: top-level
   user-facing docs (`README.md`, `AGENTS.md`, `CLAUDE.md`,
   `CONTEXT.md`, `CHANGELOG.md`, `ANTI_FRAGILITY.md`,
-  `CODE_OF_CONDUCT.md`, `SECURITY.md`, and every top-level
-  `docs/*.md`). Internal sprint records and the long-form
+  `SECURITY.md`, and every top-level `docs/*.md`). Internal sprint records and the long-form
   `sandbox-architecture.instructions.md` are out of scope by design.
 
 ### Changed
