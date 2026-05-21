@@ -1,13 +1,31 @@
 # Quickstart
 
-Get a working agent-homebase build into your project in three commands.
-Designed for the **Pro Dev with AI** persona — see [PERSONAS.md](PERSONAS.md).
+The fastest path is to let the `@onboarding` agent do it. Prefer the terminal?
+The three-command CLI path is right below. Both produce the same build.
 
-## Prerequisites
+## Fastest path — let the agent set it up
+
+Clone the repo, open it in GitHub Copilot Chat or Claude Code, and paste:
+
+```text
+Set up agent-homebase for my project. Ask me what you need, recommend a
+profile, run init.py, deploy the resolved files, and verify it works.
+```
+
+The agent interviews you (~5 questions), picks a profile, fills the config,
+runs the build, deploys the files, and verifies — no YAML editing, no copy
+commands. It self-removes once setup is confirmed.
+
+## CLI path
+
+Designed for the **Pro Dev with AI** persona — see [PERSONAS.md](PERSONAS.md).
+Get a working build into your project in three commands.
+
+### Prerequisites
 
 Python 3.12+ and `pip install pyyaml`.
 
-## Steps
+### Steps
 
 1. **Clone and pick a profile** that matches your stack:
    ```powershell

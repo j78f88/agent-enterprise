@@ -1,10 +1,54 @@
 # Onboarding Guide
 
-Step-by-step setup for a new project consuming agent-homebase.
+Setup for a new project consuming agent-homebase. Pick the lane that fits how
+hands-on you want to be — all three produce the same result.
 
 > **Visual overview:** open [command-centre-visual.html](command-centre-visual.html) in a browser to see all agents, modes, and flows at a glance before diving in.
 
 ---
+
+## Pick your lane
+
+| Lane | First action | Best for |
+|:-----|:-------------|:---------|
+| **A — Chat** ⭐ | Open the repo in your agent and ask it to set you up | First-timers, "just do it for me" |
+| **B — Guided CLI** | `python init.py --quick-setup` | Comfortable in a terminal, want prompts not YAML |
+| **C — Manual** | Edit `project.config.yml`, then run `init.py` | Maximum control, reproducible/CI setups |
+
+---
+
+## Lane A — Chat-driven setup (recommended)
+
+Clone the repo, open the folder in **GitHub Copilot Chat** or **Claude Code**,
+and paste:
+
+```text
+Set up agent-homebase for my project. Ask me what you need, recommend a
+profile, run init.py, deploy the resolved files, and verify it works.
+```
+
+The `@onboarding` agent drives the whole flow for you:
+
+1. **Interviews you** — name, language/framework, repo, branch, team size, platform target (~5 questions).
+2. **Recommends a profile** with rationale, and lets you override.
+3. **Fills the config and runs the build** (`init.py`) — no YAML editing.
+4. **Deploys the resolved files** into your project's directories.
+5. **Seeds only the planning files you're missing** — never overwrites yours.
+6. **Verifies** everything (files in place, no unresolved tokens) and reports a checklist.
+7. **Self-removes** once setup is confirmed.
+
+If anything is unclear it asks rather than guessing. When it finishes, jump
+straight to a real task: `@planner scope my first feature`.
+
+Want to drive it yourself instead? Lanes B and C are the manual paths below.
+
+---
+
+## Lanes B & C — Manual setup
+
+The steps below are what Lane A does for you. Follow them directly if you
+prefer the terminal (Lane B uses `--quick-setup` at Step 3; Lane C edits the
+config by hand).
 
 ## Prerequisites
 
