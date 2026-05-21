@@ -6,6 +6,8 @@
 
 <p><strong>13 agents · 3 delivery modes · 7 enforced schemas · 4 platforms</strong></p>
 
+<p><em>Set up by chatting — open the repo in your agent, say one sentence, and it configures everything for you.</em></p>
+
 [![CI](https://github.com/j78f88/agent-homebase/actions/workflows/ci.yml/badge.svg)](https://github.com/j78f88/agent-homebase/actions/workflows/ci.yml)
 [![GitHub stars](https://img.shields.io/github/stars/j78f88/agent-homebase?style=social)](https://github.com/j78f88/agent-homebase/stargazers)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -141,7 +143,7 @@ You: "@sprint-lead run Sprint 12"
 | 🔐 **@security** | 14 automated security checks — see [details below](#-security-built-in-not-bolted-on) |
 | ♿ **@a11y** | WCAG 2.1 AA accessibility audits |
 | ⚡ **@perf** | Bundle size, build time, dependency analysis |
-| 🚀 **@onboarding** | Ramps up new team members and explains project conventions |
+| 🚀 **@onboarding** | Sets up agent-homebase from one chat prompt — interviews you, builds, deploys, verifies, then self-removes. Also ramps up new team members. |
 
 ### 🔐 Security: Built In, Not Bolted On
 
@@ -208,24 +210,52 @@ Each mode is a standalone install. Adoption order is free. Adding a new mode doe
 
 ## 🚀 Quick Start
 
-```powershell
-# 1. Clone
-git clone https://github.com/j78f88/agent-homebase.git
-cd agent-homebase
+### Get set up in one sentence
 
-# 2. Install
+Clone the repo, open it in **GitHub Copilot Chat** or **Claude Code**, and paste this:
+
+```text
+Set up agent-homebase for my project. Ask me what you need, recommend a
+profile, run init.py, deploy the resolved files, and verify it works.
+```
+
+The `@onboarding` agent takes it from there — it interviews you (about five
+questions), recommends a profile, fills the config, runs the build, deploys
+the files, and checks everything works. **No YAML editing. No copy commands.**
+When setup is verified, it removes itself.
+
+First time in the repo? Clone it, open the folder in your agent, and paste the sentence above.
+
+```powershell
+git clone https://github.com/j78f88/agent-homebase.git
+```
+
+**Rather drive it yourself?** Two terminal paths produce the same build.
+
+*Guided CLI* — interactive prompts, no agent:
+
+```powershell
+cd agent-homebase
+pip install -r requirements.txt
+python init.py --quick-setup          # prompts for name, repo, branch, namespace
+```
+
+*Full manual* — edit the config yourself, most control:
+
+```powershell
+cd agent-homebase
 pip install -r requirements.txt
 
-# 3. Choose your profile and generate resolved files
+# Choose a profile and generate resolved files
 python init.py --config profiles/python-api.config.yml
 # → resolved/skills, resolved/instructions, resolved/agents
 
-# 4. Copy to your project
+# Copy to your project
 cp -r resolved/skills/* ../.github/agents/
 cp -r resolved/instructions/* ../.github/instructions/
 cp -r resolved/agents/* ../.github/agents/
 
-# 5. Initialize planning files (first time only)
+# Initialize planning files (first time only)
 cp starters/SPRINTS.md ../
 cp starters/BACKLOG_LEDGER.md ../docs/planning/
 ```
@@ -350,7 +380,7 @@ resolved/         deploy artifacts (skills/, instructions/, agents/)
 
 | Guide | What You'll Learn |
 |:------|:------------------|
-| **[Onboarding](docs/ONBOARDING.md)** | Step-by-step setup (start here) |
+| **[Onboarding](docs/ONBOARDING.md)** | Setup (start here) — chat-driven, guided CLI, or full manual |
 | **[Quickstart](docs/QUICKSTART.md)** | Fastest path to running |
 | **[Architecture](docs/ARCHITECTURE.md)** | Design decisions & rationale |
 | **[Personas](docs/PERSONAS.md)** | Who this is for (evidence-tagged) |
