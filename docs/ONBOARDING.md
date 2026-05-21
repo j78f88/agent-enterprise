@@ -1,23 +1,23 @@
 # Onboarding Guide
 
-Setup for a new project consuming agent-homebase. Pick the lane that fits how
+Setup for a new project consuming agent-homebase. Pick the path that fits how
 hands-on you want to be — all three produce the same result.
 
 > **Visual overview:** open [command-centre-visual.html](command-centre-visual.html) in a browser to see all agents, modes, and flows at a glance before diving in.
 
 ---
 
-## Pick your lane
+## Three ways to set up
 
-| Lane | First action | Best for |
+| Path | First action | Best for |
 |:-----|:-------------|:---------|
-| **A — Chat** ⭐ | Open the repo in your agent and ask it to set you up | First-timers, "just do it for me" |
-| **B — Guided CLI** | `python init.py --quick-setup` | Comfortable in a terminal, want prompts not YAML |
-| **C — Manual** | Edit `project.config.yml`, then run `init.py` | Maximum control, reproducible/CI setups |
+| **Chat** ⭐ | Open the repo in your agent and ask it to set you up | First-timers, "just do it for me" |
+| **Guided CLI** | `python init.py --quick-setup` | Comfortable in a terminal, want prompts not YAML |
+| **Manual** | Edit `project.config.yml`, then run `init.py` | Maximum control, reproducible/CI setups |
 
 ---
 
-## Lane A — Chat-driven setup (recommended)
+## Chat-driven setup (recommended)
 
 Clone the repo, open the folder in **GitHub Copilot Chat** or **Claude Code**,
 and paste:
@@ -40,15 +40,15 @@ The `@onboarding` agent drives the whole flow for you:
 If anything is unclear it asks rather than guessing. When it finishes, jump
 straight to a real task: `@planner scope my first feature`.
 
-Want to drive it yourself instead? Lanes B and C are the manual paths below.
+Want to drive it yourself instead? The manual steps are below.
 
 ---
 
-## Lanes B & C — Manual setup
+## Manual setup (Guided CLI or by hand)
 
-The steps below are what Lane A does for you. Follow them directly if you
-prefer the terminal (Lane B uses `--quick-setup` at Step 3; Lane C edits the
-config by hand).
+The steps below are what the chat path does for you. Follow them directly if
+you prefer the terminal — the Guided CLI uses `--quick-setup` at Step 3; the
+fully manual path edits the config by hand.
 
 ## Prerequisites
 

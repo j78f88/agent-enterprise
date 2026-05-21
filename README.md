@@ -224,26 +224,25 @@ questions), recommends a profile, fills the config, runs the build, deploys
 the files, and checks everything works. **No YAML editing. No copy commands.**
 When setup is verified, it removes itself.
 
-> First time in the repo? `git clone https://github.com/j78f88/agent-homebase.git`, open the folder in your agent, and paste the sentence above.
-
-<details>
-<summary><strong>Prefer the terminal?</strong> Two CLI lanes are below.</summary>
-
-<br />
-
-**Lane B — Guided CLI** (interactive prompts, no agent):
+First time in the repo? Clone it, open the folder in your agent, and paste the sentence above.
 
 ```powershell
 git clone https://github.com/j78f88/agent-homebase.git
+```
+
+**Rather drive it yourself?** Two terminal paths produce the same build.
+
+*Guided CLI* — interactive prompts, no agent:
+
+```powershell
 cd agent-homebase
 pip install -r requirements.txt
 python init.py --quick-setup          # prompts for name, repo, branch, namespace
 ```
 
-**Lane C — Full manual** (edit the YAML yourself, most control):
+*Full manual* — edit the config yourself, most control:
 
 ```powershell
-git clone https://github.com/j78f88/agent-homebase.git
 cd agent-homebase
 pip install -r requirements.txt
 
@@ -260,8 +259,6 @@ cp -r resolved/agents/* ../.github/agents/
 cp starters/SPRINTS.md ../
 cp starters/BACKLOG_LEDGER.md ../docs/planning/
 ```
-
-</details>
 
 **Then use naturally:**
 ```
