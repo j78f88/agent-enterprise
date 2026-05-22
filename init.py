@@ -115,7 +115,7 @@ class SecurityValidator:
     # Whitelist of allowed command prefixes
     ALLOWED_COMMANDS = {
         # Node/JavaScript
-        'npm', 'pnpm', 'yarn', 'node', 'npx',
+        'npm', 'pnpm', 'yarn', 'node', 'npx', 'bun', 'bunx',
         # Python
         'python', 'python3', 'pytest', 'pip', 'uv',
         # Rust
