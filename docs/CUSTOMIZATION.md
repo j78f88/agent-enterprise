@@ -33,12 +33,15 @@ Sprint overrides (PLAN.md)
 
 > **Documenting tokens in skill or instruction prose.** When source text
 > needs to reference a `{{token}}` literally (in a checklist item,
-> example, or troubleshooting note), wrap it in Markdown backticks:
-> `` `{{paths.bug_backlog}}` ``. The `init.py` detector treats backticked
-> tokens as documentation — they are not substituted, not warned about,
-> and pass through to the resolved output unchanged. GitHub Actions
-> `${{ secrets.* }}` is also recognised as non-template syntax (the
-> leading `$` is the signal) and skipped on the same basis.
+> example, or troubleshooting note), escape it with a single leading
+> backslash: `\{{paths.bug_backlog}}`. Tokens resolve everywhere,
+> including inside Markdown inline code spans, so backticks alone no
+> longer protect a literal. The backslash survives `substitute()`, is
+> ignored by the unresolved-token scans, and is removed by
+> `strip_escapes()` as the build's final step — leaving a clean `{{...}}`
+> in the resolved output. GitHub Actions `${{ secrets.* }}` is recognised
+> as non-template syntax (the leading `$` is the signal) and needs no
+> escaping.
 
 ---
 
@@ -83,7 +86,7 @@ editor:
 - **Subagent delegation** — `sprint-lead` declares `agents: [qa, a11y, perf, reviewer, docs]`
 - **Handoff hints** — `planner` declares `handoffs: [sprint-lead]`
 
-Skills remain the canonical source. Agent bodies reference `skills/<name>/SKILL.md` for detailed procedures.
+Skills remain the canonical source. Agent bodies reference the deployed skill path (`{{paths.skills_deploy_dir}}<name>/SKILL.md`, e.g. `.github/agents/<name>/SKILL.md`) for detailed procedures, so the reference resolves to a path that exists in the adopter project.
 
 ### Customizing Agent Metadata
 

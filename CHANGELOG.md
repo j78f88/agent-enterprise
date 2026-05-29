@@ -45,6 +45,53 @@ The `scope:` → `applies_to` migrator
 
 ---
 
+## 3.0.2 — 2026-05 — adopter token resolution fixes
+
+This release fixes `init.py` shipping raw `{{tokens}}` to adopters
+(BUG-005). Adopters previously received unresolved tokens in deployed
+skill companion files, agent-body cross-references, and inline code
+spans. No authoring contract changes; existing skills and agent bodies
+keep working.
+
+### Fixed
+- **Skill companion files now resolved and deployed.** Companion `*.md`
+  files in each skill directory are discovered, run through
+  `substitute()`, and written to `resolved/skills/<name>/<companion>.md`
+  (respecting the setup-only skip logic). Previously they were copied
+  raw or omitted, shipping unresolved tokens.
+- **Skill/agent cross-references resolve to a real adopter path.** A new
+  `paths.skills_deploy_dir` token (default `.github/agents/`) was
+  introduced. All `skills/<name>/...` cross-references in skill sources
+  and all 13 agent body wrappers (`agents/*.body.md`) were rewritten to
+  `{{paths.skills_deploy_dir}}<name>/...`, so they resolve to a path that
+  exists in the adopter project.
+- **Tokens inside inline code spans now resolve.** `substitute()` no
+  longer skips `{{tokens}}` inside backtick-delimited inline code spans.
+  Path references formatted as code (e.g. agent "Key Documents"
+  sections) now ship resolved.
+
+### Added
+- **`\{{token}}` escape for literal tokens in prose.** A single leading
+  backslash marks a token that should survive verbatim. The marker is
+  preserved through `substitute()` and the unresolved-token scans, then
+  removed by a final `strip_escapes()` pass — yielding a clean `{{...}}`
+  literal. `find_unresolved_tokens()` honours the escape so intentional
+  literals are not flagged. See `docs/EXTENSION_GUIDE.md`.
+
+### Changed
+- **`src/__init__.py` `__version__`** bumped to `3.0.2`.
+- **`config/plugin.json` `version`** bumped to `3.0.2`.
+- **`.github/copilot-instructions.md`** regen command corrected to
+  `config/project.config.example.yml` (matching AGENTS.md).
+
+### Verified
+- 401 pytest tests pass / 7 skipped.
+- `python init.py --config config/project.config.example.yml` builds with
+  0 unresolved-token warnings and byte-identical output across two
+  consecutive runs.
+
+---
+
 ## 3.0.1 — 2026-05 — enforcement gates and heading hierarchy
 
 This release adds **no new policy**. It adds automated regression

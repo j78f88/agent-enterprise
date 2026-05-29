@@ -11,7 +11,7 @@ Single source of truth for all backlog item status. Detail and context live in B
 | ITEM-005 | carry-over | Sprint 1 | 1 | 1 | 2 | assigned | | | API rate limiting |
 | ITEM-006 | bug | BUG-003 | 0 | 0 | — | open | | | Onboarding missing Claude Code /command setup |
 | ITEM-007 | bug | BUG-004 | 0 | 0 | — | open | | | Planner-mode workflow bypassed before approved sprint draft |
-| ITEM-008 | bug | BUG-005 | 0 | 0 | 1 | assigned | | drafts/onboarding-path-resolution-remediation-draft-plan.md | init.py leaves unresolved path tokens in deployed skills/docs |
+| ITEM-008 | bug | BUG-005 | 0 | 0 | 1 | done | | drafts/onboarding-path-resolution-remediation-draft-plan.md | RESOLVED Sprint 1 — companion-file resolution, skills_deploy_dir cross-refs, inline code-span resolution + escape; all 3 BUG-005 mechanisms closed |
 
 <!-- 
 Column guide:

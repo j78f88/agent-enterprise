@@ -35,12 +35,15 @@ together by the agent runtime.
 
 When a skill or instruction needs to *talk about* a token rather than
 expand it — for example, in a checklist item that says "verify
-`{{paths.bug_backlog}}` is writable" — wrap the token in Markdown
-backticks. The build detector treats backticked `{{tokens}}` as
-documentation: they are not substituted, not warned about, and pass
-through to the resolved output unchanged. The same rule covers
-GitHub Actions workflow examples like `${{ secrets.GITHUB_TOKEN }}`
-— the leading `$` is recognised as non-template syntax and skipped.
+`\{{paths.bug_backlog}}` is writable" — escape the token with a single
+leading backslash: `\{{paths.bug_backlog}}`. Tokens resolve everywhere,
+including inside Markdown inline code spans, so backticks alone no longer
+protect a literal. The backslash survives `substitute()` as a marker, is
+skipped by the unresolved-token scans, and is stripped by `strip_escapes()`
+as the build's final step — leaving a clean `{{...}}` literal in the
+resolved output. GitHub Actions workflow examples like
+`${{ secrets.GITHUB_TOKEN }}` need no escaping — the leading `$` is
+recognised as non-template syntax and skipped.
 
 ---
 

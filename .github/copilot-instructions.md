@@ -10,7 +10,7 @@ setup, build, test, architecture, and PR conventions in this repo.
 ## Copilot-specific notes
 
 - Regenerate deployable artifacts with:
-  `python init.py --config config/project.config.yml`
+  `python init.py --config config/project.config.example.yml`
 - **Never edit anything under `resolved/` directly.** It is build output;
   edits will be overwritten the next time `init.py` runs. Change the
   source under `skills/`, `instructions/`, or `agents/` instead.
