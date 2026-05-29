@@ -27,6 +27,7 @@ from init import (
     flatten,
     substitute,
     find_unresolved_tokens,
+    strip_escapes,
     parse_frontmatter,
     extract_agent_body,
     generate_agent_md,
@@ -253,11 +254,15 @@ class TestSubstitute:
 
 
 class TestTokenDetectorFalsePositives:
-    """Token-shaped strings that must NOT be flagged or substituted.
+    """Token-shaped strings and the inline-code-span resolution policy.
 
-    Regression coverage for the init.py detector exemptions:
-      - GitHub Actions '${{ secrets.* }}' has a leading '$'.
-      - Markdown inline code spans (backticked) are documentation.
+    Coverage for the init.py detector exemptions and the Option 2a policy:
+      - GitHub Actions '${{ secrets.* }}' has a leading '$' and is ignored.
+      - Tokens inside backticked inline code spans now RESOLVE (and unknown
+        ones are flagged) like tokens in prose.
+      - Escaped literals '\\{{...}}' are preserved verbatim by substitute()
+        (marker intact) and skipped by find_unresolved_tokens(); the backslash
+        is removed only by the final strip_escapes() pass.
     """
 
     def test_github_actions_secrets_not_substituted(self):
@@ -269,24 +274,48 @@ class TestTokenDetectorFalsePositives:
         src = "Use ${{ secrets.GITHUB_TOKEN }} in your workflow."
         assert find_unresolved_tokens(src) == []
 
-    def test_backticked_token_not_substituted(self):
+    def test_backticked_known_token_resolves(self):
         src = "Check for unresolved `{{tokens}}` in output."
         result = substitute(src, {"tokens": "REPLACED"})
-        assert result == src
+        assert result == "Check for unresolved `REPLACED` in output."
 
-    def test_backticked_token_not_flagged(self):
+    def test_backticked_unknown_token_flagged(self):
         src = "Check for unresolved `{{tokens}}` in output."
+        assert find_unresolved_tokens(src) == ["{{tokens}}"]
+
+    def test_escaped_token_preserved_by_substitute(self):
+        # The marker (with backslash) survives substitution untouched.
+        src = "Check for unresolved `\\{{tokens}}` in output."
+        result = substitute(src, {"tokens": "REPLACED"})
+        assert result == "Check for unresolved `\\{{tokens}}` in output."
+
+    def test_escaped_token_not_flagged(self):
+        src = "Check for unresolved `\\{{tokens}}` in output."
         assert find_unresolved_tokens(src) == []
+
+    def test_strip_escapes_produces_clean_literal(self):
+        # The final pass removes the backslash, leaving a clean literal.
+        src = "Check for unresolved `\\{{tokens}}` in output."
+        assert strip_escapes(src) == "Check for unresolved `{{tokens}}` in output."
 
     def test_bare_unknown_token_still_flagged(self):
         src = "Path is {{paths.missing}}"
         assert find_unresolved_tokens(src) == ["{{paths.missing}}"]
 
-    def test_known_token_still_resolves_outside_backticks(self):
+    def test_known_token_resolves_inside_and_outside_backticks(self):
         src = "Hello {{project.name}}; doc reference: `{{project.name}}`."
         result = substitute(src, {"project.name": "MyApp"})
-        assert result == "Hello MyApp; doc reference: `{{project.name}}`."
+        assert result == "Hello MyApp; doc reference: `MyApp`."
         assert find_unresolved_tokens(result) == []
+
+    def test_escape_end_to_end(self):
+        # Real reference resolves; escaped literal is preserved through the
+        # scan, then cleaned by strip_escapes() for the deployed file.
+        src = "ref `{{paths.x}}` vs literal `\\{{paths.x}}`."
+        resolved = substitute(src, {"paths.x": "docs/x.md"})
+        assert resolved == "ref `docs/x.md` vs literal `\\{{paths.x}}`."
+        assert find_unresolved_tokens(resolved) == []
+        assert strip_escapes(resolved) == "ref `docs/x.md` vs literal `{{paths.x}}`."
 
 
 # =============================================================================

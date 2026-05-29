@@ -145,7 +145,7 @@ Check what planning infrastructure already exists. Only seed what is missing fro
 
 ### Step 8 — Verification
 
-Confirm: skill files exist, instructions exist, agent wrappers exist (VS Code), no unresolved `{{tokens}}` in resolved files, planning files seeded. Report as a checklist.
+Confirm: skill files exist, instructions exist, agent wrappers exist (VS Code), no unresolved `\{{tokens}}` in resolved files, planning files seeded. Report as a checklist.
 
 ### Step 9 — Self-Removal
 

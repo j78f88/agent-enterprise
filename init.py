@@ -680,47 +680,62 @@ def suppress_skill_invocability(output: Path, agent_names: list[str]) -> int:
 # Token detection helpers
 # =============================================================================
 #
-# A token is a {{name}} pair init.py is expected to resolve from config. Two
-# token-shaped strings are NOT init.py tokens and must be left alone:
+# A token is a {{name}} pair init.py is expected to resolve from config.
+# Tokens resolve everywhere — in prose AND inside Markdown inline code spans
+# (backtick-delimited). Two kinds of token-shaped strings are NOT init.py
+# substitution sites and must be left alone:
 #
 #   1. GitHub Actions syntax — a literal '$' before '{{'. Skill and
 #      instruction docs frequently recommend '${{ secrets.X }}' patterns
 #      for workflow files.
-#   2. Markdown inline code spans — `{{name}}` inside backticks is doc
-#      prose talking about the template system, not a substitution site.
+#   2. Escaped literals — a single backslash before '{{' (i.e. '\{{name}}').
+#      Authors use this when discussing the template system itself and want
+#      the token to survive verbatim. The backslash is stripped on output
+#      and the token is neither substituted nor flagged.
 #
-# `_TOKEN_RE` uses a negative lookbehind for '$'. The code-span check is
-# positional because regex alone cannot reliably scope to backtick spans.
+# `_TOKEN_RE` uses a negative lookbehind for '$' (rejects GitHub Actions
+# syntax) and an optional leading-backslash capture group (the escape).
+#
+# Escape handling is two-phase. `substitute()` PRESERVES the '\{{...}}'
+# marker (it is neither resolved nor flagged) so that the unresolved-token
+# scans — which run on already-substituted output — can tell an intentional
+# literal apart from a genuinely-unresolved token. The backslash is removed
+# only at the very end of the build by `strip_escapes()`, after every scan
+# has run, leaving a clean '{{...}}' literal in the deployed files.
 
-_TOKEN_RE = re.compile(r"(?<!\$)\{\{([^}]+)\}\}")
-_CODE_SPAN_RE = re.compile(r"`[^`\n]+`")
+_TOKEN_RE = re.compile(r"(?<!\$)(\\?)\{\{([^}]+)\}\}")
+
+# Matches an escaped literal '\{{...}}' for the final backslash-stripping pass.
+_ESCAPE_RE = re.compile(r"\\(\{\{[^}]+\}\})")
 
 
-def _code_span_ranges(text: str):
-    """Return (start, end) byte ranges of every inline code span in `text`."""
-    return [(m.start(), m.end()) for m in _CODE_SPAN_RE.finditer(text)]
+def strip_escapes(text: str) -> str:
+    """Remove the authoring backslash from escaped literals.
 
-
-def _in_any_range(pos: int, ranges) -> bool:
-    for start, end in ranges:
-        if start <= pos < end:
-            return True
-    return False
+    Turns '\\{{token}}' into '{{token}}'. Run as the final transformation of
+    the build, after all unresolved-token scans, so that intentional literals
+    appear verbatim in the deployed files without tripping the scans.
+    """
+    return _ESCAPE_RE.sub(r"\1", text)
 
 
 def find_unresolved_tokens(text: str) -> list:
     """Return the list of {{token}} matches that should be flagged.
 
-    Excludes GitHub-Actions-style '${{...}}' (negative lookbehind in
-    `_TOKEN_RE`) and any token whose match falls inside a backticked
-    inline code span. Used by the per-file and final post-resolution
-    scans to count and report unresolved tokens without false positives.
+    Tokens are flagged whether they appear in prose or inside a backticked
+    inline code span. Two cases are NOT flagged:
+      - GitHub-Actions-style '${{...}}' (negative lookbehind for '$' in
+        `_TOKEN_RE').
+      - Escaped literals '\\{{...}}' (a single leading backslash). These are
+        documentation literals that survive verbatim.
+
+    Used by the per-file and final post-resolution scans to count and report
+    unresolved tokens without false positives.
     """
-    code_ranges = _code_span_ranges(text)
     return [
-        m.group(0)
+        "{{" + m.group(2) + "}}"
         for m in _TOKEN_RE.finditer(text)
-        if not _in_any_range(m.start(), code_ranges)
+        if m.group(1) != "\\"
     ]
 
 
@@ -728,25 +743,30 @@ def substitute(text: str, tokens: dict) -> str:
     """Replace {{token}} occurrences with config values.
     Unrecognised tokens are left in place and printed as warnings.
 
-    Two kinds of token-shaped strings are deliberately ignored
-    (no substitution attempt, no warning):
+    Tokens resolve everywhere, including inside Markdown inline code spans
+    (backtick-delimited). Two kinds of token-shaped strings are deliberately
+    handled differently (no substitution attempt, no warning):
       - GitHub Actions syntax: a leading '$' before '{{' (e.g.
         '${{ secrets.FOO }}'). init.py tokens never use a dollar prefix.
-      - Documentation literals: a '{{token}}' that appears inside a
-        Markdown inline code span (backtick-delimited). Authors wrap
-        token-shaped strings in backticks when discussing the template
-        system in prose; those references must survive unchanged.
+      - Escaped literals: a single backslash before '{{' (i.e.
+        '\\{{token}}'). The marker is preserved verbatim here so the
+        unresolved-token scans can distinguish it from a real unresolved
+        token; strip_escapes() removes the backslash as the build's final
+        step. Authors use this when discussing the template system in prose
+        and need the token to survive unchanged.
     """
     warnings = []
-    code_ranges = _code_span_ranges(text)
 
     def replace(match):
-        if _in_any_range(match.start(), code_ranges):
+        if match.group(1) == "\\":
+            # Escaped literal: preserve the marker verbatim (including the
+            # backslash) so the unresolved-token scans skip it. The backslash
+            # is stripped later by strip_escapes() as the build's final step.
             return match.group(0)
-        key = match.group(1).strip()
+        key = match.group(2).strip()
         if key not in tokens:
             warnings.append(key)
-            return match.group(0)   # leave unreplaced — visible in output
+            return "{{" + match.group(2) + "}}"   # leave unreplaced — visible in output
         return tokens[key]
 
     result = _TOKEN_RE.sub(replace, text)
@@ -1006,6 +1026,15 @@ def main():
     else:
         print("✓ All tokens resolved — no unresolved {{placeholders}} in output.")
         print()
+
+    # --- Strip authoring escapes (final pass, after all scans) ---
+    # '\{{token}}' -> '{{token}}'. Done last so intentional literals appear
+    # verbatim in deployed files without tripping the unresolved scans above.
+    for md in sorted(output.rglob("*.md")):
+        content = md.read_text(encoding="utf-8")
+        stripped = strip_escapes(content)
+        if stripped != content:
+            md.write_text(stripped, encoding="utf-8")
 
     print(f"Summary: {resolved_count} resolved, {copied_count} copied, {agent_count} agents, {warning_count} token warnings")
     print()
