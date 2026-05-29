@@ -33,8 +33,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .stat b{color:var(--text);font-family:var(--font-display);font-size:20px;margin-right:4px}
 
 /* Tabs */
-.tabs{display:flex;gap:2px;background:var(--surface);border-radius:var(--radius);padding:3px;margin:16px 0;position:sticky;top:0;z-index:50;border:1px solid var(--border)}
-.tab{flex:1;padding:12px 10px;border:none;background:transparent;color:var(--muted);font-family:var(--font-display);font-size:14px;font-weight:600;cursor:pointer;border-radius:var(--radius);transition:all 250ms cubic-bezier(0,0,.2,1);text-align:center;display:flex;align-items:center;justify-content:center;gap:6px}
+.tabs{display:flex;gap:2px;background:var(--surface);border-radius:var(--radius);padding:3px;margin:16px 0;position:sticky;top:0;z-index:50;border:1px solid var(--border);flex-wrap:wrap}
+.tab{flex:1;min-width:130px;padding:12px 10px;border:none;background:transparent;color:var(--muted);font-family:var(--font-display);font-size:14px;font-weight:600;cursor:pointer;border-radius:var(--radius);transition:all 250ms cubic-bezier(0,0,.2,1);text-align:center;display:flex;align-items:center;justify-content:center;gap:6px}
 .tab:hover{color:var(--text);background:var(--surface2)}
 .tab.active{background:var(--planning);color:#1A1816}
 .panel{display:none}.panel.active{display:block}
@@ -56,6 +56,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .card .writes{font-size:12px;color:var(--muted);margin-top:6px;padding:4px 8px;background:var(--surface2);border-radius:var(--radius-sm);display:inline-block}
 .card .writes .wlabel{color:var(--dim);text-transform:uppercase;font-size:10px;letter-spacing:.5px;font-weight:600;margin-right:4px}
 
+/* V2: governed-by line */
+.card .gov{font-size:12px;color:var(--muted);margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);line-height:1.7}
+.card .gov .glabel{display:block;color:var(--dim);text-transform:uppercase;font-size:10px;letter-spacing:.5px;font-weight:600;margin-bottom:4px}
+.card .gov code{background:var(--surface2);padding:1px 6px;border-radius:var(--radius-sm);font-size:11px;color:var(--strategy);margin:1px 2px 1px 0;display:inline-block}
+.badge-count{display:inline-block;padding:2px 7px;border-radius:var(--radius-sm);font-size:10px;font-weight:700;letter-spacing:.3px;background:rgba(255,183,77,.12);color:var(--delivery);border:1px solid rgba(255,183,77,.3);margin-left:auto;vertical-align:middle}
+
 /* S13: subagent badge */
 .badge-sub{display:inline-block;padding:2px 7px;border-radius:var(--radius-sm);font-size:10px;font-weight:700;letter-spacing:.3px;background:rgba(96,165,250,.12);color:var(--strategy);border:1px solid rgba(96,165,250,.3);margin-left:6px;vertical-align:middle}
 
@@ -69,6 +75,57 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .want-tbl tr:hover td{background:var(--surface2)}
 .want-tbl code{background:var(--surface3);padding:2px 6px;border-radius:var(--radius-sm);font-size:13px;color:var(--planning)}
 .want-tbl .not-col{color:var(--dim);font-size:13px}
+
+/* Instructions table */
+.instr-tbl{width:100%;border-collapse:collapse;font-size:14px;margin:14px 0}
+.instr-tbl th{background:var(--surface2);padding:10px 12px;text-align:left;font-weight:600;color:var(--muted);text-transform:uppercase;font-size:12px;letter-spacing:.5px;border:1px solid var(--border)}
+.instr-tbl td{padding:9px 12px;border:1px solid var(--border);vertical-align:top}
+.instr-tbl tr:hover td{background:var(--surface2)}
+.instr-tbl code{background:var(--surface3);padding:2px 6px;border-radius:var(--radius-sm);font-size:13px;color:var(--strategy);white-space:nowrap}
+.instr-tbl .purpose{color:var(--text);font-size:13px}
+
+/* Binding matrix */
+.matrix-wrap{overflow-x:auto;margin:14px 0;border:1px solid var(--border);border-radius:var(--radius-lg)}
+.matrix{border-collapse:collapse;font-size:12px;min-width:100%}
+.matrix th,.matrix td{border:1px solid var(--border);text-align:center;padding:6px 4px}
+.matrix thead th{background:var(--surface2);color:var(--muted);font-weight:600;font-size:11px;position:sticky;top:0;z-index:2}
+.matrix .rowhead{text-align:left;white-space:nowrap;background:var(--surface);color:var(--strategy);font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:11px;padding:6px 10px;position:sticky;left:0;z-index:1}
+.matrix .colhead{writing-mode:vertical-rl;transform:rotate(180deg);white-space:nowrap;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:11px;padding:8px 4px;height:96px;color:var(--text)}
+.matrix .corner{background:var(--surface3);position:sticky;left:0;z-index:3}
+.matrix tr:hover .rowhead{color:var(--planning)}
+.matrix tr:hover td{background:var(--surface2)}
+.matrix .bind{color:var(--success);font-weight:700}
+.matrix .bind .icon{margin:0;font-size:16px}
+.matrix .empty{color:var(--surface3)}
+
+/* Principle cards */
+.princ-grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));margin:14px 0}
+.princ-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px 20px;transition:all 250ms cubic-bezier(0,0,.2,1)}
+.princ-card:hover{border-color:var(--planning);box-shadow:var(--glow)}
+.princ-card h4{font-family:var(--font-display);font-size:15px;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.princ-card p{font-size:13px;color:var(--muted);line-height:1.6}
+
+/* Use case list */
+.uc-list{list-style:none;margin:14px 0}
+.uc-list li{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--strategy);border-radius:0 var(--radius) var(--radius) 0;padding:12px 16px;margin:8px 0;font-size:14px;color:var(--muted);line-height:1.6;display:flex;gap:10px;align-items:flex-start}
+.uc-list li .icon{color:var(--strategy);flex-shrink:0}
+
+/* Hero statement block */
+.hero-stmt{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:22px 24px;margin:14px 0;font-size:15px;line-height:1.75;color:var(--text)}
+.hero-stmt strong{color:var(--planning)}
+.glance{background:linear-gradient(135deg,rgba(249,115,22,.08),rgba(96,165,250,.08));border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px 24px;margin:14px 0;font-size:16px;line-height:1.7;text-align:center;color:var(--text);font-family:var(--font-display)}
+.glance b{color:var(--planning)}
+
+/* ASCII pipeline block */
+.ascii{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:13px;line-height:1.6;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px 20px;margin:14px 0;color:var(--muted);overflow-x:auto;white-space:pre}
+
+/* Profile cards */
+.prof-grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));margin:14px 0}
+.prof-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px 20px;transition:all 250ms cubic-bezier(0,0,.2,1)}
+.prof-card:hover{border-color:var(--planning);box-shadow:var(--glow)}
+.prof-card h4{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:15px;margin-bottom:6px;color:var(--planning)}
+.prof-card p{font-size:13px;color:var(--muted);line-height:1.6}
+.prof-card .pmeta{font-size:12px;color:var(--dim);margin-top:8px}
 
 /* S11: filter input */
 .filter-wrap{margin:14px 0;position:relative}
@@ -99,6 +156,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 /* Callout */
 .callout{border-left:3px solid var(--planning);background:rgba(249,115,22,.04);padding:12px 16px;border-radius:0 var(--radius) var(--radius) 0;margin:14px 0;font-size:14px;color:var(--muted);line-height:1.6}
 .callout strong{color:var(--text)}
+.callout ul{margin:8px 0 0 0;padding-left:20px}
+.callout li{margin:5px 0}
 
 /* Severity table */
 .sev-tbl{width:100%;border-collapse:collapse;font-size:14px;margin:14px 0}
@@ -157,6 +216,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <span class="stat"><span class="icon icon-sm">smart_toy</span> <b>13</b> Agents</span>
     <span class="stat"><span class="icon icon-sm">build</span> <b>13</b> Skills</span>
     <span class="stat"><span class="icon icon-sm">description</span> <b>25</b> Instructions</span>
+    <span class="stat"><span class="icon icon-sm">schema</span> <b>7</b> Schemas</span>
     <span class="stat"><span class="icon icon-sm">account_tree</span> <b>3</b> Modes</span>
     <span class="stat"><span class="icon icon-sm">tune</span> <b>3</b> Profiles</span>
   </div>
@@ -164,19 +224,123 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 
 <!-- ═══════ TABS ═══════ -->
 <div class="tabs" id="tabs">
-  <button class="tab active" data-t="cheat"><span class="icon icon-sm">flash_on</span> Cheat Sheet</button>
+  <button class="tab active" data-t="purpose"><span class="icon icon-sm">lightbulb</span> Purpose &amp; Intent</button>
+  <button class="tab" data-t="cheat"><span class="icon icon-sm">smart_toy</span> Agents &amp; Skills</button>
+  <button class="tab" data-t="instr"><span class="icon icon-sm">description</span> Instructions</button>
   <button class="tab" data-t="flow"><span class="icon icon-sm">timeline</span> Process Flow</button>
   <button class="tab" data-t="want"><span class="icon icon-sm">search</span> I want to&hellip;</button>
   <button class="tab" data-t="arch"><span class="icon icon-sm">architecture</span> Architecture</button>
 </div>
 
 <!-- ═══════════════════════════════════════════════════════
-     TAB 1: CHEAT SHEET
+     TAB 1: PURPOSE & INTENT  (new in v2)
      ═══════════════════════════════════════════════════════ -->
-<div class="panel active" id="p-cheat">
+<div class="panel active" id="p-purpose">
+
+<div class="sh"><span class="icon">lightbulb</span> What is agent-homebase?</div>
+<div class="hero-stmt">
+  agent-homebase is a <strong>portable, multi-agent operating system for software projects</strong>. It governs how AI coding agents (GitHub Copilot, Claude Code, Cursor) work &mdash; turning ad-hoc prompting into a consistent, contract-bound process for strategy, planning, delivery, quality, and documentation. Skills, instructions, and agents live as plain Markdown, get resolved with project-specific tokens by a single build step (<code>python init.py</code>), and emit copy-ready artifacts that any compatible coding agent can consume. The framework ships <strong>zero project-specific content</strong>: you provide the config, it provides the process.
+</div>
+
+<div class="sh"><span class="icon">verified_user</span> Design Principles</div>
+<div class="princ-grid">
+  <div class="princ-card" style="border-left:4px solid var(--strategy)">
+    <h4><span class="icon icon-sm" style="color:var(--strategy)">devices</span> Runtime-agnostic</h4>
+    <p>The same skills and contracts run on GitHub Copilot, Claude Code, and Cursor. Only the invocation syntax differs &mdash; the behaviour is identical.</p>
+  </div>
+  <div class="princ-card" style="border-left:4px solid var(--planning)">
+    <h4><span class="icon icon-sm" style="color:var(--planning)">block</span> Zero project-specific content</h4>
+    <p>The framework contains no app code, no stack assumptions, no hardcoded paths. Everything project-specific lives in your config and is injected at build time.</p>
+  </div>
+  <div class="princ-card" style="border-left:4px solid var(--delivery)">
+    <h4><span class="icon icon-sm" style="color:var(--delivery)">build</span> Single build step</h4>
+    <p><code>python init.py</code> validates security, resolves <code>{{tokens}}</code>, and produces deterministic output under <code>resolved/</code>. One command, reproducible artifacts.</p>
+  </div>
+  <div class="princ-card" style="border-left:4px solid var(--quality)">
+    <h4><span class="icon icon-sm" style="color:var(--quality)">stairs</span> Progressive enhancement</h4>
+    <p>Phases 0&ndash;4 layer capabilities incrementally. Security and contracts are always on; durability, sandboxing, and determinism are opt-in.</p>
+  </div>
+  <div class="princ-card" style="border-left:4px solid var(--success)">
+    <h4><span class="icon icon-sm" style="color:var(--success)">schema</span> Contract-first</h4>
+    <p>JSON schemas enforce structure for frontmatter, callables, registries, and subagent returns. Agents can&rsquo;t drift from the contract without failing validation.</p>
+  </div>
+  <div class="princ-card" style="border-left:4px solid var(--docs)">
+    <h4><span class="icon icon-sm" style="color:var(--docs)">swap_horiz</span> Separation of concerns</h4>
+    <p>Agents stay in their lane: strategy never implements, quality gates never modify code, the orchestrator never writes code itself. Clear boundaries, clean handoffs.</p>
+  </div>
+</div>
+
+<div class="sh"><span class="icon">visibility</span> System at a Glance</div>
+<div class="glance">
+  <b>13 agents</b> across <b>5 lanes</b>, governed by <b>25 instructions</b>, validated by <b>7 schemas</b>, built from source through a single deterministic build step.
+</div>
+
+<div class="sh"><span class="icon">extension</span> How the Pieces Fit</div>
+<div class="ascii">Skills        (what agents can do)
+  + Instructions   (rules agents follow)
+  + Agent bodies   (persona + tool boundary)
+  + Config         (project-specific tokens)
+        │
+        ▼  python init.py  (validate + resolve)
+        │
+        ├──→ resolved/   (deployable artifacts)
+        └──→ .github/    (runtime targets)</div>
+
+<div class="sh"><span class="icon">task_alt</span> When to Reach for This</div>
+<ul class="uc-list">
+  <li><span class="icon icon-sm">check_circle</span> You want AI coding agents to follow consistent processes across sprints without re-explaining every time.</li>
+  <li><span class="icon icon-sm">check_circle</span> You need quality gates that block bad code from shipping without manual review of every line.</li>
+  <li><span class="icon icon-sm">check_circle</span> You want a structured planning &rarr; execution &rarr; documentation flow that doesn&rsquo;t drift between projects.</li>
+  <li><span class="icon icon-sm">check_circle</span> You&rsquo;re running multiple projects and want shared patterns to propagate without copy-paste.</li>
+  <li><span class="icon icon-sm">check_circle</span> You want to onboard a new project into a working agent team in one session.</li>
+</ul>
+
+<div class="sh"><span class="icon">do_not_disturb_on</span> Non-Goals &amp; Boundaries</div>
+<table class="dir-tbl">
+<thead><tr><th style="width:24%">This system is NOT&hellip;</th><th>Because&hellip;</th></tr></thead>
+<tbody>
+<tr><td><strong>A CI/CD pipeline</strong></td><td>Agents run inside coding assistants, not as GitHub Actions. For CI, use your existing pipeline.</td></tr>
+<tr><td><strong>A project management tool</strong></td><td>Agents draft plans and track sprint state, but this isn&rsquo;t Jira/Linear. Use those for cross-team visibility.</td></tr>
+<tr><td><strong>An AI model</strong></td><td>This is a governance layer over existing coding agents. It doesn&rsquo;t replace them &mdash; it structures their work.</td></tr>
+<tr><td><strong>A code generator</strong></td><td>Agents follow contracts and produce plans/reports/audits. Actual code is written by subagents under @sprint-lead, not by the framework.</td></tr>
+<tr><td><strong>Prescriptive about stack</strong></td><td>Zero project-specific content. Works with React, Python, Go, or anything &mdash; you provide the config, it provides the process.</td></tr>
+</tbody>
+</table>
+
+<div class="sh"><span class="icon">exit_to_app</span> If It Doesn&rsquo;t Exist Here</div>
+<table class="dir-tbl">
+<thead><tr><th style="width:30%">You&rsquo;re looking for&hellip;</th><th>It&rsquo;s not here because&hellip;</th><th>Go here instead</th></tr></thead>
+<tbody>
+<tr><td>A specific dispatcher implementation</td><td>Mode 2 is contract-only; impls vary by runtime</td><td><code>command-centre/03-mode-orchestration/reference-impls/</code></td></tr>
+<tr><td>Project-specific config values</td><td>The framework ships zero project content</td><td><code>config/project.config.yml</code> (your copy)</td></tr>
+<tr><td>How to write a new agent</td><td>Extension is documented separately</td><td><code>docs/EXTENSION_GUIDE.md</code></td></tr>
+<tr><td>Runtime-specific setup (Copilot/Claude/Cursor)</td><td>Visual is runtime-agnostic</td><td><code>docs/QUICKSTART.md</code> per-runtime sections</td></tr>
+<tr><td>Customising instruction behaviour</td><td>Token resolution is the mechanism</td><td><code>docs/CUSTOMIZATION.md</code></td></tr>
+<tr><td>Troubleshooting a broken agent</td><td>Operational, not architectural</td><td><code>docs/TROUBLESHOOTING.md</code></td></tr>
+<tr><td>The contract documents themselves</td><td>Visual is a reference overlay</td><td><code>command-centre/</code> folder (per-mode contracts)</td></tr>
+<tr><td>Historical decisions and reasoning</td><td>ADRs live in their own folder</td><td><code>command-centre/decisions/</code> or <code>docs/decisions/</code></td></tr>
+</tbody>
+</table>
+
+<div class="sh"><span class="icon">psychology_alt</span> Common Misconceptions</div>
+<div class="callout">
+  <ul>
+    <li><strong>&ldquo;@sprint-lead writes code&rdquo;</strong> &rarr; No, it delegates to unnamed subagents. Sprint-lead is a thin orchestrator.</li>
+    <li><strong>&ldquo;I need Mode 2 to use agents&rdquo;</strong> &rarr; No, Mode 1 (direct invocation) is the foundation and works standalone.</li>
+    <li><strong>&ldquo;Instructions are optional guidelines&rdquo;</strong> &rarr; No, they&rsquo;re enforced rules. Agents are contractually bound to read them.</li>
+    <li><strong>&ldquo;resolved/ is the source of truth&rdquo;</strong> &rarr; No, it&rsquo;s build output. Source is <code>skills/</code>, <code>instructions/</code>, <code>agents/</code>.</li>
+  </ul>
+</div>
+
+</div><!-- /p-purpose -->
+
+<!-- ═══════════════════════════════════════════════════════
+     TAB 2: AGENTS & SKILLS  (renamed from Cheat Sheet)
+     ═══════════════════════════════════════════════════════ -->
+<div class="panel" id="p-cheat">
 
 <!-- W9: runtime-agnostic callout -->
-<div class="callout"><span class="icon icon-sm">info</span> <strong>Runtime-agnostic.</strong> Invocation patterns below use <code>@agent</code> shorthand. The exact syntax varies by runtime: VS Code Copilot (<code>@agent</code> in chat), Claude Code (<code>@agent</code> via CLAUDE.md), Cursor (<code>@agent</code> via rules). The skills and contracts are identical across all three.</div>
+<div class="callout"><span class="icon icon-sm">info</span> <strong>Runtime-agnostic.</strong> Invocation patterns below use <code>@agent</code> shorthand. The exact syntax varies by runtime: VS Code Copilot (<code>@agent</code> in chat), Claude Code (<code>@agent</code> via CLAUDE.md), Cursor (<code>@agent</code> via rules). The skills and contracts are identical across all three. Each card&rsquo;s <strong>Governed by</strong> line lists the instruction files that agent reads &mdash; see the <em>Instructions</em> tab for the full binding matrix.</div>
 
 <!-- STRATEGY LANE -->
 <div class="lane-hdr"><span class="lane-dot" style="background:var(--strategy)"></span><span class="lane-name" style="color:var(--strategy)"><span class="icon icon-sm">psychology</span> Strategy</span><span class="lane-hint">WHAT &amp; WHY &amp; HOW — opt-in, never implements</span></div>
@@ -188,6 +352,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <div class="cmds">@researcher &lt;research question&gt;</div>
     <div class="meta"><span class="icon icon-sm">arrow_forward</span> Hands off &rarr; @pm</div>
     <div class="writes"><span class="wlabel">Writes:</span> research docs</div>
+    <div class="gov"><span class="glabel">Governed by <span class="badge-count">2 rules</span></span><code>askquestions-contract</code><code>subagent-return-schemas</code></div>
   </div>
   <div class="card" style="border-left-color:var(--strategy)">
     <h3><span style="color:var(--strategy)">@pm</span><span class="badge-sub">subagent</span></h3>
@@ -195,6 +360,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <div class="cmds">@pm validate this feature<br>@pm should we build &lt;idea&gt;</div>
     <div class="meta"><span class="icon icon-sm">arrow_forward</span> Hands off &rarr; @planner</div>
     <div class="writes"><span class="wlabel">Writes:</span> validation records</div>
+    <div class="gov"><span class="glabel">Governed by <span class="badge-count">6 rules</span></span><code>validation-framework</code><code>non-goals-governance</code><code>handoff-rejection-format</code><code>askquestions-contract</code><code>backlog-ledger</code><code>subagent-return-schemas</code></div>
   </div>
   <div class="card" style="border-left-color:var(--strategy)">
     <h3><span style="color:var(--strategy)">@architect</span><span class="badge-sub">subagent</span></h3>
@@ -202,6 +368,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <div class="cmds">@architect write an ADR for &lt;decision&gt;<br>@architect design this &lt;approach&gt;</div>
     <div class="meta"><span class="icon icon-sm">arrow_forward</span> Hands off &rarr; @planner</div>
     <div class="writes"><span class="wlabel">Writes:</span> ADR drafts, architecture docs</div>
+    <div class="gov"><span class="glabel">Governed by <span class="badge-count">2 rules</span></span><code>handoff-rejection-format</code><code>subagent-return-schemas</code></div>
   </div>
 </div>
 
@@ -214,6 +381,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <div class="cmds">@planner plan this feature<br>@planner draft a sprint<br>@planner scope this work<br>@planner check the backlog</div>
     <div class="meta"><span class="icon icon-sm">arrow_forward</span> Hands off &rarr; @sprint-lead &nbsp; <span class="icon icon-sm">replay</span> Rejects &rarr; @pm &middot; @architect</div>
     <div class="writes"><span class="wlabel">Writes:</span> plans, ledger, non-goals, drafts</div>
+    <div class="gov"><span class="glabel">Governed by <span class="badge-count">10 rules</span></span><code>non-goals-governance</code><code>bug-backlog-format</code><code>handoff-rejection-format</code><code>sprint-docs-format</code><code>askquestions-contract</code><code>commit-conventions</code><code>backlog-ledger</code><code>composition-rules</code><code>subagent-return-schemas</code><code>retro-report</code></div>
   </div>
   <div class="card" style="border-left-color:var(--planning)">
     <h3><span style="color:var(--planning)">@bug</span></h3>
@@ -221,6 +389,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <div class="cmds">@bug &lt;describe the bug&gt;</div>
     <div class="meta"><span class="icon icon-sm">arrow_forward</span> Hands off &rarr; @planner (for fix planning)</div>
     <div class="writes"><span class="wlabel">Writes:</span> bug backlog entries, ledger entries</div>
+    <div class="gov"><span class="glabel">Governed by <span class="badge-count">4 rules</span></span><code>bug-backlog-format</code><code>backlog-ledger</code><code>askquestions-contract</code><code>commit-conventions</code></div>
   </div>
 </div>
 
@@ -233,6 +402,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <div class="cmds">@sprint-lead run sprint<br>@sprint-lead autopilot sprint<br>@sprint-lead continue Sprint N</div>
     <div class="meta"><span class="icon icon-sm">group_work</span> Invokes &rarr; @qa &middot; @a11y &middot; @perf &middot; @security &middot; @reviewer &middot; @docs</div>
     <div class="writes"><span class="wlabel">Writes:</span> sprint report, RETRO.md seed</div>
+    <div class="gov"><span class="glabel">Governed by <span class="badge-count">6 rules</span></span><code>severity-levels</code><code>sprint-docs-format</code><code>backlog-ledger</code><code>askquestions-contract</code><code>commit-conventions</code><code>retro-report</code></div>
   </div>
 </div>
 
@@ -245,6 +415,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <div class="cmds">@qa run tests<br>@qa check quality<br>@qa validate sprint</div>
     <div class="meta"><span class="icon icon-sm">block</span> Read-only &mdash; reports only</div>
     <div class="writes"><span class="wlabel">Writes:</span> none (read-only)</div>
+    <div class="gov"><span class="glabel">Governed by <span class="badge-count">3 rules</span></span><code>severity-levels</code><code>non-goals-governance</code><code>sprint-docs-format</code></div>
   </div>
   <div class="card" style="border-left-color:var(--quality)">
     <h3><span style="color:var(--quality)">@a11y</span></h3>
@@ -252,6 +423,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <div class="cmds">@a11y accessibility audit<br>@a11y check a11y &lt;scope&gt;</div>
     <div class="meta"><span class="icon icon-sm">block</span> Read-only &mdash; reports only</div>
     <div class="writes"><span class="wlabel">Writes:</span> none (read-only)</div>
+    <div class="gov"><span class="glabel">Governed by <span class="badge-count">2 rules</span></span><code>severity-levels</code><code>non-goals-governance</code></div>
   </div>
   <div class="card" style="border-left-color:var(--quality)">
     <h3><span style="color:var(--quality)">@perf</span></h3>
@@ -259,6 +431,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <div class="cmds">@perf performance audit<br>@perf check bundle size<br>@perf dependency audit</div>
     <div class="meta"><span class="icon icon-sm">block</span> Read-only &mdash; reports only</div>
     <div class="writes"><span class="wlabel">Writes:</span> none (read-only)</div>
+    <div class="gov"><span class="glabel">Governed by <span class="badge-count">2 rules</span></span><code>severity-levels</code><code>non-goals-governance</code></div>
   </div>
   <div class="card" style="border-left-color:var(--quality)">
     <h3><span style="color:var(--quality)">@reviewer</span></h3>
@@ -266,6 +439,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <div class="cmds">@reviewer review this code<br>@reviewer review branch &lt;name&gt;</div>
     <div class="meta"><span class="icon icon-sm">block</span> Read-only &mdash; reports only</div>
     <div class="writes"><span class="wlabel">Writes:</span> none (read-only)</div>
+    <div class="gov"><span class="glabel">Governed by <span class="badge-count">5 rules</span></span><code>severity-levels</code><code>non-goals-governance</code><code>commit-conventions</code><code>validation-framework</code><code>handoff-rejection-format</code></div>
   </div>
   <!-- S14: accurate write surface for @security -->
   <div class="card" style="border-left-color:var(--quality)">
@@ -274,6 +448,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <div class="cmds">@security security audit<br>@security CVE scan<br>@security integrity check</div>
     <div class="meta"><span class="icon icon-sm">edit_document</span> Reports + writes security docs</div>
     <div class="writes"><span class="wlabel">Writes:</span> security changelog, hash registry, audit reports</div>
+    <div class="gov"><span class="glabel">Governed by <span class="badge-count">4 rules</span></span><code>severity-levels</code><code>non-goals-governance</code><code>security-audit</code><code>commit-conventions</code></div>
   </div>
 </div>
 
@@ -286,6 +461,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <div class="cmds">@docs update docs<br>@docs documentation sync<br>@docs write release notes</div>
     <div class="meta"><span class="icon icon-sm">arrow_forward</span> Invoked by @sprint-lead in Phase 5</div>
     <div class="writes"><span class="wlabel">Writes:</span> documentation files</div>
+    <div class="gov"><span class="glabel">Governed by <span class="badge-count">7 rules</span></span><code>sprint-docs-format</code><code>backlog-ledger</code><code>bug-backlog-format</code><code>non-goals-governance</code><code>commit-conventions</code><code>severity-levels</code><code>subagent-return-schemas</code></div>
   </div>
   <!-- S15: lifecycle-setup dashed border -->
   <div class="card lifecycle-setup" style="border-left-color:var(--docs)">
@@ -294,6 +470,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <div class="cmds">@onboarding set up agents<br>@onboarding configure project<br>@onboarding get started</div>
     <div class="meta"><span class="icon icon-sm">auto_delete</span> Lifecycle: setup-only (self-removes when done)</div>
     <div class="writes"><span class="wlabel">Writes:</span> config files, seeded planning docs</div>
+    <div class="gov"><span class="glabel">Governed by <span class="badge-count">0 rules</span></span><span style="color:var(--dim);font-size:12px">No instruction bindings &mdash; setup-only lifecycle agent.</span></div>
   </div>
 </div>
 
@@ -333,7 +510,115 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 </div><!-- /p-cheat -->
 
 <!-- ═══════════════════════════════════════════════════════
-     TAB 2: PROCESS FLOW
+     TAB 3: INSTRUCTIONS  (new in v2)
+     ═══════════════════════════════════════════════════════ -->
+<div class="panel" id="p-instr">
+
+<div class="callout"><span class="icon icon-sm">info</span> <strong>Instructions are enforced rules, not guidelines.</strong> Every agent is contractually bound to read its governing instructions before acting. <strong>Generic</strong> rules apply to every project with no token dependency. <strong>Configurable</strong> rules consume <code>{{tokens}}</code> from your project config. The binding matrix at the bottom maps all 25 instructions to all 13 agents.</div>
+
+<div class="filter-wrap">
+  <span class="icon icon-sm filter-icon">search</span>
+  <input type="text" id="instrFilter" placeholder="Type to filter instructions&hellip;" autocomplete="off">
+</div>
+<div class="filter-count" id="instrFilterCount"></div>
+
+<div class="sh"><span class="icon">public</span> Generic Instructions <span style="font-size:13px;color:var(--dim);font-weight:400;text-transform:none;letter-spacing:0">&mdash; 11 rules, no token dependency</span></div>
+<div style="overflow-x:auto">
+<table class="instr-tbl" id="instrTableGeneric">
+<thead><tr><th style="width:30%">Instruction</th><th>Purpose</th></tr></thead>
+<tbody>
+<tr><td><code>askquestions-contract</code></td><td class="purpose">Defines when and how agents ask clarifying questions before acting. Prevents wasted work on misread intent.</td></tr>
+<tr><td><code>batch-report</code></td><td class="purpose">Format for batched findings reports across multiple items. Used by strategy and planning subagents.</td></tr>
+<tr><td><code>commit-conventions</code></td><td class="purpose">Conventional Commits format (<code>feat:</code>, <code>fix:</code>, <code>docs:</code>&hellip;) for all agent-authored commits.</td></tr>
+<tr><td><code>contract-change-checklist</code></td><td class="purpose">Checklist agents follow before modifying any contract or schema, ensuring consumers stay valid.</td></tr>
+<tr><td><code>determinism-guarantees</code></td><td class="purpose">Rules for reproducible output: temperature 0.0, logical time, seeded randomness, versioned prompts.</td></tr>
+<tr><td><code>fsm-orchestration</code></td><td class="purpose">Finite-state-machine contract for valid sprint state transitions. Prevents invalid phase jumps.</td></tr>
+<tr><td><code>honesty-contract</code></td><td class="purpose">Bans fabrication: no invented APIs, no unverified claims, no silent skips. Bound to every agent.</td></tr>
+<tr><td><code>observability</code></td><td class="purpose">Logging and trace requirements so sprint execution is auditable after the fact.</td></tr>
+<tr><td><code>security-model</code></td><td class="purpose">Threat model and Phase 0 controls: command whitelist, path traversal, secret scanning.</td></tr>
+<tr><td><code>state-management</code></td><td class="purpose">SQLite persistence and checkpoint rules for durable, resumable execution (Phase 2).</td></tr>
+<tr><td><code>subagent-return-schemas</code></td><td class="purpose">Defines the three return tiers subagents must conform to when reporting back to an orchestrator.</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="sh"><span class="icon">tune</span> Configurable Instructions <span style="font-size:13px;color:var(--dim);font-weight:400;text-transform:none;letter-spacing:0">&mdash; 14 rules, consume project tokens</span></div>
+<div style="overflow-x:auto">
+<table class="instr-tbl" id="instrTableConfig">
+<thead><tr><th style="width:30%">Instruction</th><th>Purpose</th></tr></thead>
+<tbody>
+<tr><td><code>backlog-ledger</code></td><td class="purpose">Canonical schema for the backlog ledger &mdash; single source of truth for item status and scheduling.</td></tr>
+<tr><td><code>bug-backlog-format</code></td><td class="purpose">Entry format and lifecycle for the bug backlog. Holds reproduction context; status lives in the ledger.</td></tr>
+<tr><td><code>composition-rules</code></td><td class="purpose">Priority stack (P0&ndash;P6), scoring formula, and constraints for sprint composition.</td></tr>
+<tr><td><code>engagement-format</code></td><td class="purpose">ENG-NNN numbering, folder structure, and file formats for engagement tracking.</td></tr>
+<tr><td><code>engagement-gates</code></td><td class="purpose">Gate 1&ndash;4 criteria, scope-upgrade thresholds, and deployment workflow config for engagements.</td></tr>
+<tr><td><code>handoff-rejection-format</code></td><td class="purpose">Schema for rejecting a handoff back to an upstream agent with structured context.</td></tr>
+<tr><td><code>non-goals-governance</code></td><td class="purpose">Ownership and approval protocol for the non-goals document. Enforced by @reviewer.</td></tr>
+<tr><td><code>planning-compliance</code></td><td class="purpose">Architecture-compliance checklist agents self-check draft plans against before presenting.</td></tr>
+<tr><td><code>planning-preflight</code></td><td class="purpose">Pre-flight document scan agents run before drafting plans (debt, ADRs, roadmap, non-goals).</td></tr>
+<tr><td><code>retro-report</code></td><td class="purpose">Schema, complexity scale, and forecast format for sprint retrospectives.</td></tr>
+<tr><td><code>security-audit</code></td><td class="purpose">Procedures the @security agent follows for audits, changelog governance, and hash registry.</td></tr>
+<tr><td><code>severity-levels</code></td><td class="purpose">CRITICAL / WARNING / SUGGESTION definitions and the action each triggers. Used by all gates.</td></tr>
+<tr><td><code>sprint-docs-format</code></td><td class="purpose">Schema for sprint-adjacent files: SPRINTS.md, PLAN.md, feature matrix, archives.</td></tr>
+<tr><td><code>validation-framework</code></td><td class="purpose">The 5-test echo-chamber filter @pm applies to feature recommendations before planning.</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="sh"><span class="icon">grid_on</span> Binding Matrix <span style="font-size:13px;color:var(--dim);font-weight:400;text-transform:none;letter-spacing:0">&mdash; instruction &times; agent</span></div>
+<div class="callout"><span class="icon icon-sm">info</span> A <span style="color:var(--success);font-weight:700">&check;</span> means the agent reads that instruction. <code>honesty-contract</code> binds to all 13 agents. <code>@onboarding</code> is setup-only and reads none.</div>
+<div class="matrix-wrap">
+<table class="matrix" id="bindMatrix">
+<thead><tr>
+  <th class="corner">instruction \ agent</th>
+  <th class="colhead">@researcher</th>
+  <th class="colhead">@pm</th>
+  <th class="colhead">@architect</th>
+  <th class="colhead">@planner</th>
+  <th class="colhead">@bug</th>
+  <th class="colhead">@sprint-lead</th>
+  <th class="colhead">@qa</th>
+  <th class="colhead">@a11y</th>
+  <th class="colhead">@perf</th>
+  <th class="colhead">@reviewer</th>
+  <th class="colhead">@security</th>
+  <th class="colhead">@docs</th>
+  <th class="colhead">@onboarding</th>
+</tr></thead>
+<tbody>
+<tr><td class="rowhead">honesty-contract</td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td></tr>
+<tr><td class="rowhead">askquestions-contract</td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td></tr>
+<tr><td class="rowhead">subagent-return-schemas</td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td></tr>
+<tr><td class="rowhead">batch-report</td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td></tr>
+<tr><td class="rowhead">validation-framework</td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td></tr>
+<tr><td class="rowhead">handoff-rejection-format</td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td></tr>
+<tr><td class="rowhead">non-goals-governance</td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td></tr>
+<tr><td class="rowhead">backlog-ledger</td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td></tr>
+<tr><td class="rowhead">commit-conventions</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td></tr>
+<tr><td class="rowhead">bug-backlog-format</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td></tr>
+<tr><td class="rowhead">sprint-docs-format</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td></tr>
+<tr><td class="rowhead">composition-rules</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td></tr>
+<tr><td class="rowhead">retro-report</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td></tr>
+<tr><td class="rowhead">planning-compliance</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td></tr>
+<tr><td class="rowhead">planning-preflight</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td></tr>
+<tr><td class="rowhead">severity-levels</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td></tr>
+<tr><td class="rowhead">security-audit</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td><td class="empty">&middot;</td></tr>
+<tr><td class="rowhead">security-model</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td></tr>
+<tr><td class="rowhead">observability</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td><td class="empty">&middot;</td></tr>
+<tr><td class="rowhead">state-management</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td></tr>
+<tr><td class="rowhead">fsm-orchestration</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td></tr>
+<tr><td class="rowhead">determinism-guarantees</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td></tr>
+<tr><td class="rowhead">contract-change-checklist</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td></tr>
+<tr><td class="rowhead">engagement-format</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td></tr>
+<tr><td class="rowhead">engagement-gates</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td><td class="bind"><span class="icon">check</span></td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td><td class="empty">&middot;</td></tr>
+</tbody>
+</table>
+</div>
+
+</div><!-- /p-instr -->
+
+<!-- ═══════════════════════════════════════════════════════
+     TAB 4: PROCESS FLOW
      ═══════════════════════════════════════════════════════ -->
 <div class="panel" id="p-flow">
 
@@ -618,14 +903,47 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <!-- S12: severity cross-reference -->
 <div class="callout"><span class="icon icon-sm">gavel</span> <strong>Severity contract</strong> (CRITICAL / WARNING / SUGGESTION) governs all quality gate findings. See the <em>Process Flow</em> tab for the full severity table and prioritisation order.</div>
 
+<div class="sh"><span class="icon">verified</span> Schema Registry <span style="font-size:13px;color:var(--dim);font-weight:400;text-transform:none;letter-spacing:0">&mdash; 7 JSON schemas under <code>schemas/</code></span></div>
+<table class="dir-tbl">
+<thead><tr><th>Schema</th><th>Validates</th><th>Used by</th></tr></thead>
+<tbody>
+<tr><td><code>frontmatter-v1</code></td><td>YAML frontmatter on skills, instructions, and agents</td><td><code>init.py</code> build</td></tr>
+<tr><td><code>callable-v1</code></td><td>Callable contract for dispatchable work units</td><td>Mode 2 dispatcher</td></tr>
+<tr><td><code>project-v1</code></td><td>Project config token structure</td><td><code>init.py</code> build</td></tr>
+<tr><td><code>registry-v1</code></td><td>Cross-project registry entries</td><td>Mode 3 choreography</td></tr>
+<tr><td><code>subagent-return-tier1</code></td><td>Tier 1 analysis returns (no artifacts)</td><td>All subagents</td></tr>
+<tr><td><code>subagent-return-tier2</code></td><td>Tier 2 standard returns (with artifacts)</td><td>All subagents</td></tr>
+<tr><td><code>subagent-return-tier3</code></td><td>Tier 3 composition returns (sprint-level)</td><td>@planner</td></tr>
+</tbody>
+</table>
+
+<div class="sh"><span class="icon">tune</span> Pre-Built Profiles <span style="font-size:13px;color:var(--dim);font-weight:400;text-transform:none;letter-spacing:0">&mdash; ready-to-use token configs under <code>profiles/</code></span></div>
+<div class="prof-grid">
+  <div class="prof-card" style="border-left:4px solid var(--strategy)">
+    <h4><span style="color:var(--strategy)">react-web-app</span></h4>
+    <p>React + TypeScript single-page app. Tailwind, Vitest, Playwright E2E, strict TS. Bundles the a11y and perf gates by default.</p>
+    <div class="pmeta"><code>react-web-app.config.yml</code></div>
+  </div>
+  <div class="prof-card" style="border-left:4px solid var(--planning)">
+    <h4><span style="color:var(--planning)">monorepo-fullstack</span></h4>
+    <p>Multi-package monorepo with web + API + shared stores. Store-factory pattern, store versioning, migrations gate enabled.</p>
+    <div class="pmeta"><code>monorepo-fullstack.config.yml</code></div>
+  </div>
+  <div class="prof-card" style="border-left:4px solid var(--delivery)">
+    <h4><span style="color:var(--delivery)">python-api</span></h4>
+    <p>Python service/API. Pytest, ruff, mypy strict. Coverage thresholds tuned for backend service code.</p>
+    <div class="pmeta"><code>python-api.config.yml</code></div>
+  </div>
+</div>
+
 </div><!-- /p-arch -->
 
 <!-- ═══════ FOOTER ═══════ -->
 <!-- C1: corrected date -->
 <div class="footer">
   <strong>agent-homebase</strong> &mdash;
-  13 agents &middot; 13 skills &middot; 25 instructions &middot; 3 modes &middot; 3 profiles
-  &middot; Generated 2026-05-17
+  13 agents &middot; 13 skills &middot; 25 instructions &middot; 7 schemas &middot; 3 modes &middot; 3 profiles
+  &middot; Generated 2026-05-29
 </div>
 
 </div><!-- /app -->
@@ -644,24 +962,31 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     });
   });
 
-  /* S11: "I want to..." table filter */
-  var filterInput=document.getElementById('wantFilter');
-  var table=document.getElementById('wantTable');
-  var countEl=document.getElementById('filterCount');
-  if(filterInput&&table){
-    var rows=table.querySelectorAll('tbody tr');
+  /* Generic table filter — wires an input to one or more tables and a count element */
+  function wireFilter(inputId, tableIds, countId){
+    var filterInput=document.getElementById(inputId);
+    var countEl=document.getElementById(countId);
+    if(!filterInput)return;
+    var rows=[];
+    tableIds.forEach(function(id){
+      var t=document.getElementById(id);
+      if(t){
+        t.querySelectorAll('tbody tr').forEach(function(r){rows.push(r)});
+      }
+    });
     filterInput.addEventListener('input',function(){
       var q=this.value.toLowerCase();
       var shown=0;
       rows.forEach(function(r){
-        var text=r.textContent.toLowerCase();
-        var match=!q||text.indexOf(q)!==-1;
+        var match=!q||r.textContent.toLowerCase().indexOf(q)!==-1;
         r.style.display=match?'':'none';
         if(match)shown++;
       });
-      countEl.textContent=q?shown+' of '+rows.length+' rows':'';
+      if(countEl)countEl.textContent=q?shown+' of '+rows.length+' rows':'';
     });
   }
+  wireFilter('wantFilter',['wantTable'],'filterCount');
+  wireFilter('instrFilter',['instrTableGeneric','instrTableConfig'],'instrFilterCount');
 })();
 </script>
 </body>
