@@ -1,6 +1,6 @@
 # Troubleshooting Guide
 
-Common issues and solutions when using agent-homebase.
+Common issues and solutions when using agent-enterprise.
 
 ---
 

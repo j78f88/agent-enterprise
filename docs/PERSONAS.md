@@ -1,6 +1,6 @@
 # Personas
 
-The four archetypes agent-homebase is designed against. Used as the
+The four archetypes agent-enterprise is designed against. Used as the
 forcing function for what we build, what we defer, and what we
 declare out of scope.
 
@@ -23,7 +23,7 @@ for a persona:
 ## P1 — Framework Owner
 
 - **Tag:** Solo author of the substrate.
-- **Bio:** Senior engineer maintaining agent-homebase across several
+- **Bio:** Senior engineer maintaining agent-enterprise across several
   of their own codebases.
 - **Job to be done:** Encode a pattern once and reuse it next sprint
   without re-deriving it.

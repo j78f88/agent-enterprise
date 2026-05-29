@@ -1,6 +1,6 @@
 <div align="center">
 
-<h1>🏠 agent-homebase</h1>
+<h1>🏠 agent-enterprise</h1>
 
 <h3>The operating system your AI coding assistant is missing</h3>
 
@@ -8,8 +8,8 @@
 
 <p><em>Set up by chatting — open the repo in your agent, say one sentence, and it configures everything for you.</em></p>
 
-[![CI](https://github.com/j78f88/agent-homebase/actions/workflows/ci.yml/badge.svg)](https://github.com/j78f88/agent-homebase/actions/workflows/ci.yml)
-[![GitHub stars](https://img.shields.io/github/stars/j78f88/agent-homebase?style=social)](https://github.com/j78f88/agent-homebase/stargazers)
+[![CI](https://github.com/j78f88/agent-enterprise/actions/workflows/ci.yml/badge.svg)](https://github.com/j78f88/agent-enterprise/actions/workflows/ci.yml)
+[![GitHub stars](https://img.shields.io/github/stars/j78f88/agent-enterprise?style=social)](https://github.com/j78f88/agent-enterprise/stargazers)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Copilot](https://img.shields.io/badge/GitHub%20Copilot-Ready-blue?logo=github)](https://github.com/features/copilot)
 [![Claude](https://img.shields.io/badge/Claude%20Code-Ready-orange)](https://claude.ai)
@@ -24,7 +24,7 @@
 ---
 
 *Copilot, Claude, and Cursor are powerful. But without structure, they're chaos machines.*
-*agent-homebase turns your AI assistant into a professional delivery team.*
+*agent-enterprise turns your AI assistant into a professional delivery team.*
 
 ---
 
@@ -47,7 +47,7 @@ You have a **powerful tool** with **no process**. That's not engineering — tha
 
 ## 💡 The Solution: A Professional Delivery Team in Your Config
 
-**agent-homebase** is a portable, multi-agent operating system for software projects.
+**agent-enterprise** is a portable, multi-agent operating system for software projects.
 
 Skills, instructions, and agents are authored once in plain Markdown, resolved with your project-specific tokens, and emitted as copy-ready artifacts for **any** compatible coding agent — GitHub Copilot, Claude Code, Cursor, or OpenAI Codex.
 
@@ -77,8 +77,8 @@ Your feature request
 
 <table>
 <tr>
-<th width="50%">❌ Without agent-homebase</th>
-<th width="50%">✅ With agent-homebase</th>
+<th width="50%">❌ Without agent-enterprise</th>
+<th width="50%">✅ With agent-enterprise</th>
 </tr>
 <tr>
 <td>
@@ -143,7 +143,7 @@ You: "@sprint-lead run Sprint 12"
 | 🔐 **@security** | 14 automated security checks — see [details below](#-security-built-in-not-bolted-on) |
 | ♿ **@a11y** | WCAG 2.1 AA accessibility audits |
 | ⚡ **@perf** | Bundle size, build time, dependency analysis |
-| 🚀 **@onboarding** | Sets up agent-homebase from one chat prompt — interviews you, builds, deploys, verifies, then self-removes. Also ramps up new team members. |
+| 🚀 **@onboarding** | Sets up agent-enterprise from one chat prompt — interviews you, builds, deploys, verifies, then self-removes. Also ramps up new team members. |
 
 ### 🔐 Security: Built In, Not Bolted On
 
@@ -194,7 +194,7 @@ Every artifact is validated at build time — no more silent drift:
 
 ## 🔀 Three Delivery Modes
 
-agent-homebase ships as three **standalone, independently consumable** modes on top of a shared protocol layer. Use one, two, or all three:
+agent-enterprise ships as three **standalone, independently consumable** modes on top of a shared protocol layer. Use one, two, or all three:
 
 | Mode | What It Is | When You Need It |
 |:-----|:-----------|:-----------------|
@@ -215,7 +215,7 @@ Each mode is a standalone install. Adoption order is free. Adding a new mode doe
 Clone the repo, open it in **GitHub Copilot Chat** or **Claude Code**, and paste this:
 
 ```text
-Set up agent-homebase for my project. Ask me what you need, recommend a
+Set up agent-enterprise for my project. Ask me what you need, recommend a
 profile, run init.py, deploy the resolved files, and verify it works.
 ```
 
@@ -227,7 +227,7 @@ When setup is verified, it removes itself.
 First time in the repo? Clone it, open the folder in your agent, and paste the sentence above.
 
 ```powershell
-git clone https://github.com/j78f88/agent-homebase.git
+git clone https://github.com/j78f88/agent-enterprise.git
 ```
 
 **Rather drive it yourself?** Two terminal paths produce the same build.
@@ -235,7 +235,7 @@ git clone https://github.com/j78f88/agent-homebase.git
 *Guided CLI* — interactive prompts, no agent:
 
 ```powershell
-cd agent-homebase
+cd agent-enterprise
 pip install -r requirements.txt
 python init.py --quick-setup          # prompts for name, repo, branch, namespace
 ```
@@ -243,7 +243,7 @@ python init.py --quick-setup          # prompts for name, repo, branch, namespac
 *Full manual* — edit the config yourself, most control:
 
 ```powershell
-cd agent-homebase
+cd agent-enterprise
 pip install -r requirements.txt
 
 # Choose a profile and generate resolved files
@@ -419,7 +419,7 @@ MIT © 2026
 
 <br />
 
-**[⭐ Star on GitHub](https://github.com/j78f88/agent-homebase)** · **[📖 Get Started](docs/ONBOARDING.md)** · **[🐛 Report Issue](https://github.com/j78f88/agent-homebase/issues)**
+**[⭐ Star on GitHub](https://github.com/j78f88/agent-enterprise)** · **[📖 Get Started](docs/ONBOARDING.md)** · **[🐛 Report Issue](https://github.com/j78f88/agent-enterprise/issues)**
 
 <br />
 

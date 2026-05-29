@@ -11,7 +11,7 @@
   [`01-protocols/`](../01-protocols/), shared across modes.
 - **Substrate** — the skills/instructions/agents/profiles/build that
   satisfies the Mode 1 contract. Reference implementation is the
-  agent-homebase repo root.
+  agent-enterprise repo root.
 - **Delivery mode** — Mode 1 (team), Mode 2 (orchestration), or
   Mode 3 (choreography). Each standalone. See
   [three-modes.md](three-modes.md).

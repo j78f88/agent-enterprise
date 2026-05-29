@@ -9,7 +9,7 @@
 
 ### Repo semver
 
-`agent-homebase@MAJOR.MINOR.PATCH` (plus optional pre-release suffix),
+`agent-enterprise@MAJOR.MINOR.PATCH` (plus optional pre-release suffix),
 applied as a git tag (e.g., `v2.3.0`).
 
 - **MAJOR** — restructure or large policy change.
@@ -61,8 +61,8 @@ include a migration note.
 
 ## Consumer pin strategies
 
-- **Whole framework, fast updates:** `agent-homebase@^2.0.0`.
-- **Whole framework, conservative:** `agent-homebase@~2.3.0`.
+- **Whole framework, fast updates:** `agent-enterprise@^2.0.0`.
+- **Whole framework, conservative:** `agent-enterprise@~2.3.0`.
 - **Single-mode pin:** `protocol-v1 + mode-N-contract-v1`, tracking
-  `agent-homebase@2.*.*` for fixes within those contract versions.
+  `agent-enterprise@2.*.*` for fixes within those contract versions.
   Other modes can bump under you without breaking conformance.

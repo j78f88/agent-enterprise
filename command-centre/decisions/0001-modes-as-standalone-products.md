@@ -1,10 +1,10 @@
 # ADR 0001 — Modes as standalone products
 
-> **Status:** Accepted. Supersedes v1 ADR 0001 (containerize-in-homebase).
+> **Status:** Accepted. Supersedes v1 ADR 0001 (containerize-in-enterprise).
 
 ## Context
 
-agent-homebase v1 treated three deployability modes (team, orchestration,
+agent-enterprise v1 treated three deployability modes (team, orchestration,
 choreography) as additive layers on top of a single substrate. v1 also
 co-located the framework with author-specific program-of-works content
 under a `command centre/` folder, with a plan to graduate generic parts
@@ -12,7 +12,7 @@ later.
 
 Two clarifications made this design untenable:
 
-1. agent-homebase must remain 100% generic — no project-specific files.
+1. agent-enterprise must remain 100% generic — no project-specific files.
 2. The three modes must be consumable individually or in any combination,
    including a consumer who only wants Mode 2 and runs it against their
    own callables.

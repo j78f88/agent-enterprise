@@ -1,0 +1,128 @@
+# project.config.yml — agent-enterprise
+# Run: python init.py --config config/project.config.yml
+
+setup_complete: true
+
+editor:
+  target: "both"                    # vscode + claude-code
+
+project:
+  name: "agent-enterprise"
+  language: "Python"
+  framework: "Custom (init.py + PyYAML)"
+  locale: "en-AU"
+  namespace: ""                     # No monorepo namespace
+
+paths:
+  # Sprint planning
+  sprints: "sprints/"
+  sprints_doc: "SPRINTS.md"
+  web_app_dir: ""                   # No web app — not applicable
+  drafts: "docs/planning/drafts/"
+  archive: "docs/archive/"
+  validation: "docs/planning/validation/"
+  research: "docs/planning/research/"
+  handoffs: "docs/planning/_handoffs/"
+  engagements: "docs/planning/engagements/"
+  vision: "docs/planning/vision/"
+  # Backlog files
+  backlog_ledger: "docs/planning/BACKLOG_LEDGER.md"
+  bug_backlog: "docs/planning/BUG_BACKLOG.md"
+  bugs_screenshots: "docs/planning/bugs/screenshots/"
+  rejections: "docs/planning/HANDOFF_REJECTIONS.md"
+  non_goals: "docs/NON_GOALS.md"
+  # Planning docs
+  roadmap: "docs/planning/ROADMAP.md"
+  feature_matrix: "docs/planning/FEATURE_MATRIX.md"
+  # Architecture docs
+  decisions: "docs/decisions/DECISIONS.md"
+  future_considerations: "docs/decisions/FUTURE_CONSIDERATIONS.md"
+  design_reviews: "docs/decisions/design-reviews/"
+  architecture_doc: "docs/ARCHITECTURE.md"
+  # Development docs
+  technical_debt: "docs/TECHNICAL_DEBT.md"
+  testing_doc: "docs/TESTING.md"
+  # User-facing docs
+  user_guide: "docs/USER_GUIDE.md"
+  releases: "docs/RELEASES.md"
+  changelog: "docs/changelog.json"
+  changelog_deploy_copy: "docs/changelog.json"    # No deploy copy needed
+  package_json: "pyproject.toml"                   # Version lives here if created
+  # Security docs
+  security_changelog: "docs/security/SECURITY_CHANGELOG.md"
+  file_hashes: "docs/security/FILE_HASHES.md"
+  security_reports: "docs/security/reports/"
+  sbom_output: "docs/security/sbom.json"
+  # Agent tooling
+  copilot_instructions: ".github/copilot-instructions.md"
+  instructions_dir: ".github/instructions"
+  skills_deploy_dir: ".github/agents/"
+  memory_architecture: ".claude/memory/architecture.md"
+  memory_conventions: ".claude/memory/conventions.md"
+
+quality:
+  coverage_store_threshold: 80
+  coverage_web_threshold: 0         # No web components
+  e2e_regression_threshold: 5
+  bundle_warning_kb: 0              # Not applicable — Python project
+  bundle_critical_kb: 0             # Not applicable — Python project
+  build_warning_seconds: 30
+
+platform:
+  type: "none"                      # CLI tool, not a deployed app
+  test_workflow: "ci.yml"
+  prod_workflow: "ci.yml"
+  ci_workflow_display_name: "Python CI"
+  test_url: ""
+  prod_url: ""
+  e2e_runner: "pytest"
+
+git:
+  main_branch: "main"
+  develop_branch: "develop"
+  repo: "j78f88/agent-enterprise"
+
+team:
+  cto_name: "josh"
+
+ids:
+  bug_prefix: "BUG"
+  item_prefix: "ITEM"
+  rejection_prefix: "REJ"
+  engagement_prefix: "ENG"
+  adr_prefix: "ADR"
+
+scope_upgrade:
+  task_count: 3
+  files_affected: 8
+
+commands:
+  install: "pip install -r requirements.txt"
+  dev: ""
+  test: "python -m pytest tests/ -v"
+  typecheck: ""
+  lint: ""
+  build: "python init.py --config config/project.config.yml"
+  e2e: "python -m pytest tests/ -v"
+  coverage: "python -m pytest tests/ --cov=. -v"
+  coverage_store: "python -m pytest tests/ --cov=. -v"
+  coverage_web: ""
+  depcheck: ""
+  sbom_generate: "syft . -o cyclonedx-json"
+  sast: ""
+  secret_scan_history: "gitleaks detect --source . --verbose --report-format json"
+  license_check: "pip-licenses --format=json"
+
+escalation:
+  def_p0_threshold: 3
+  def_kill_threshold: 5
+  age_stale_sprints: 10
+  debt_warning_sprints: 3
+  debt_escalate_sprints: 5
+  debt_warning_items: 20
+  debt_escalate_items: 40
+  debt_min_allocation_percent: 30
+  sprint_size_min: 5
+  sprint_size_max: 8
+  feature_cap_percent: 70
+  p0_overflow_percent: 50

@@ -1,6 +1,6 @@
 # Testing Guide
 
-How to run tests, understand results, and maintain test quality for agent-homebase.
+How to run tests, understand results, and maintain test quality for agent-enterprise.
 
 ---
 
@@ -20,7 +20,7 @@ How to run tests, understand results, and maintain test quality for agent-homeba
 ### Run all tests
 
 ```bash
-cd /path/to/agent-homebase
+cd /path/to/agent-enterprise
 pytest tests/ -v
 ```
 
@@ -255,7 +255,7 @@ pytest tests/test_contracts.py -q || exit 1
 
 ```bash
 # Run from project root, not tests/ directory
-cd /path/to/agent-homebase
+cd /path/to/agent-enterprise
 pytest tests/ -v
 ```
 

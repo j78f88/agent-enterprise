@@ -9,7 +9,7 @@
 ## Purpose
 
 Mode 2 (orchestration) needs to dispatch units of work without knowing
-whether those units are agent-homebase skills, a consumer's own prompt
+whether those units are agent-enterprise skills, a consumer's own prompt
 files, MCP tool invocations, or something else. This contract is the
 shape every callable must satisfy.
 
@@ -90,7 +90,7 @@ Return tiers are defined in [return-schemas.md](return-schemas.md).
 Callables that opt into a return tier promise their structured output
 will validate against that tier's JSON Schema.
 
-## Non-homebase callable example
+## Non-enterprise callable example
 
 A consumer with their own prompt-file ecosystem can wrap one as a
 Mode 2 callable by writing a small manifest:
@@ -116,7 +116,7 @@ runtime_hints:
 ```
 
 The consumer's dispatcher (any Mode 2 reference impl) can now invoke
-this callable identically to a homebase skill. No coupling to homebase
+this callable identically to an enterprise skill. No coupling to enterprise
 substrate.
 
 ## Versioning

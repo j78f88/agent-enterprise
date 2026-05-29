@@ -8,7 +8,7 @@
 
 - Deliver three standalone delivery modes that satisfy the user's
   three stated outcomes.
-- Keep agent-homebase 100% generic.
+- Keep agent-enterprise 100% generic.
 - Make all 7 non-empty mode combinations valid consumption profiles.
 - Establish a small, slow-changing protocol layer that all modes
   share.
@@ -55,7 +55,7 @@ Deliverables:
   coordinator example (CI-driven cadence is acceptable).
 
 Exit criteria: each contract has at least one passing reference impl
-and a non-homebase example.
+and a non-enterprise example.
 
 ### Phase 3 — Promotion contract + harvest cadence
 
@@ -85,14 +85,14 @@ this workbench in under one working session.
 Completed:
 - The bannered `command centre/` folder has been removed. Personal
   harvest/onboarding notes were relocated to
-  `D:\VS\agent-homebase-private\command-centre-v1-personal\`
+  `D:\VS\agent-enterprise-private\command-centre-v1-personal\`
   (see `.gitignore`); v1 ADR 0003 (scaffold-workspace) and v1 ADR
   0004 (substrate-at-root) substance is preserved in v2's Mode 3
   install-contract and v2 ADR 0002 respectively.
 
 Remaining (release-time):
 - Note in repo changelog pointing at the final v1 commit hash.
-- Final tag candidates: `agent-homebase@2.0.0`, `protocol-v1`,
+- Final tag candidates: `agent-enterprise@2.0.0`, `protocol-v1`,
   `mode-1-contract-v1`, `mode-2-contract-v1`, `mode-3-contract-v1`.
 
 Exit criteria: v2 is the single workbench; v1 is removed from `main`
@@ -103,7 +103,7 @@ but retrievable via tag.
 1. Each mode has a contract that a consumer can verify their
    substrate or dispatcher or coordinator satisfies.
 2. Each mode has at least one reference implementation.
-3. Each mode has a non-homebase example (or, for Mode 1, an explicit
+3. Each mode has a non-enterprise example (or, for Mode 1, an explicit
    replaceability section).
 4. The seven valid consumption combinations are documented and
    actionable.

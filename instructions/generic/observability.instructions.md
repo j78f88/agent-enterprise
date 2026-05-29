@@ -10,7 +10,7 @@ description: observability instruction
 
 **Phase 0 Foundation — Production-Grade Instrumentation**
 
-This instruction establishes the observability layer for agent-homebase, enabling distributed tracing, session replay, performance profiling, and time-travel debugging.
+This instruction establishes the observability layer for agent-enterprise, enabling distributed tracing, session replay, performance profiling, and time-travel debugging.
 
 ---
 

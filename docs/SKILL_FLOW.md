@@ -1,6 +1,6 @@
 # Skill Execution Flow
 
-How agent-homebase skills orchestrate work. This document shows execution sequences, dependencies, and sprint state transitions.
+How agent-enterprise skills orchestrate work. This document shows execution sequences, dependencies, and sprint state transitions.
 
 **Why thin orchestration?** Single-purpose skills avoid context exhaustion. Each agent focuses on one job (planning, QA, review). `@sprint-lead` coordinates without reading source code, keeping its context window free for orchestration logic.
 

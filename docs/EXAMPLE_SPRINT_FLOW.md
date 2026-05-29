@@ -1,6 +1,6 @@
 # Example Sprint Flow
 
-A complete walkthrough of running a sprint using agent-homebase skills.
+A complete walkthrough of running a sprint using agent-enterprise skills.
 
 ---
 

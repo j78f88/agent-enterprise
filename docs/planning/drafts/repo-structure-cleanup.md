@@ -29,7 +29,7 @@
 
 ## Why This Plan
 
-agent-homebase tells adopters to "Read AGENTS.md first" but the Key
+agent-enterprise tells adopters to "Read AGENTS.md first" but the Key
 directories table omits 8 of 17 directories. Two reference docs clutter
 root alongside entry points. Four directories have zero documentation
 and no GitHub-rendered landing page. The copilot-instructions.md
@@ -379,7 +379,7 @@ is a platform entry point for ADOPTER projects. This repo is the substrate.
 
 **Decision:** Provide `starters/copilot-instructions.md`. Adopters copy it.
 
-**Principle:** agent-homebase ships zero project-specific content (AGENTS.md
+**Principle:** agent-enterprise ships zero project-specific content (AGENTS.md
 contract + command-centre/ anchoring constraint).
 
 ### D4: Preserve root-relative backtick path convention
@@ -415,4 +415,4 @@ primary agent context.
 it exists, otherwise this file is the primary context.
 
 **Principle:** Starters serve all adopter types without assuming they've
-replicated agent-homebase's full structure.
+replicated agent-enterprise's full structure.

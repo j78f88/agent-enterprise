@@ -31,7 +31,7 @@ When the sprint is already in progress, reconstruct state:
 
 ## Phase 2: Implementation (Subagent-per-Task)
 
-For each task, run an unnamed subagent using `#tool:agent`. Use the Implementation Subagent Prompt Template from `skills/sprint-lead/subagent-templates.md`.
+For each task, run an unnamed subagent using `#tool:agent`. Use the Implementation Subagent Prompt Template from `{{paths.skills_deploy_dir}}sprint-lead/subagent-templates.md`.
 
 ### Processing Subagent Returns
 

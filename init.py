@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-init.py — Token substitution for agent-homebase skills library.
+init.py — Token substitution for agent-enterprise skills library.
 
 Usage:
     python init.py --config project.config.yml
@@ -297,7 +297,7 @@ def flatten(d: dict, prefix: str = "") -> dict:
 def quick_setup(config_path: Path) -> None:
     """Interactive setup for key project config values."""
     print("\n" + "=" * 60)
-    print("  agent-homebase Quick Setup")
+    print("  agent-enterprise Quick Setup")
     print("=" * 60 + "\n")
     
     # Check if config exists
@@ -901,6 +901,25 @@ def main():
             else:
                 print(f"  resolved: {dest}")
             resolved_count += 1
+
+            # Resolve companion files — non-skill *.md siblings (e.g.
+            # phase-details.md, subagent-templates.md). The *.skill.md source
+            # is excluded; SKILL.md output lives under resolved/ and is never
+            # a source here since we iterate the source skills/ directory.
+            for companion in sorted(skill_dir.glob("*.md")):
+                if companion.name.endswith(".skill.md") or companion.name == "SKILL.md":
+                    continue
+                comp_dest = output / "skills" / skill_dir.name / companion.name
+                comp_dest.parent.mkdir(parents=True, exist_ok=True)
+                comp_resolved = substitute(companion.read_text(encoding="utf-8"), tokens)
+                comp_dest.write_text(comp_resolved, encoding="utf-8")
+                comp_unresolved = find_unresolved_tokens(comp_resolved)
+                if comp_unresolved:
+                    print(f"  resolved (with warnings): {comp_dest}")
+                    warning_count += len(comp_unresolved)
+                else:
+                    print(f"  resolved: {comp_dest}")
+                resolved_count += 1
 
     # --- Configurable instructions ---
     editor_target_early = config.get('editor', {}).get('target', 'both')

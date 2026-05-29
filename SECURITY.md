@@ -26,7 +26,7 @@ will continue to work through 3.x.
 ## Reporting a vulnerability
 
 Use GitHub's private vulnerability reporting:
-**https://github.com/j78f88/agent-homebase/security/advisories/new**
+**https://github.com/j78f88/agent-enterprise/security/advisories/new**
 
 Please do **not** open a public issue for security reports.
 

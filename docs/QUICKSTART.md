@@ -8,7 +8,7 @@ The three-command CLI path is right below. Both produce the same build.
 Clone the repo, open it in GitHub Copilot Chat or Claude Code, and paste:
 
 ```text
-Set up agent-homebase for my project. Ask me what you need, recommend a
+Set up agent-enterprise for my project. Ask me what you need, recommend a
 profile, run init.py, deploy the resolved files, and verify it works.
 ```
 
@@ -29,8 +29,8 @@ Python 3.12+ and `pip install pyyaml`.
 
 1. **Clone and pick a profile** that matches your stack:
    ```powershell
-   git clone https://github.com/<owner>/agent-homebase.git
-   cd agent-homebase
+   git clone https://github.com/<owner>/agent-enterprise.git
+   cd agent-enterprise
    # Pick one of: python-api, react-web-app, monorepo-fullstack
    Copy-Item profiles\python-api.config.yml config\my-project.config.yml
    ```

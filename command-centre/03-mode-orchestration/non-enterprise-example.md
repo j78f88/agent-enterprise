@@ -1,7 +1,7 @@
-# Mode 2 — Non-homebase example
+# Mode 2 — Non-enterprise example
 
 > A worked example showing Mode 2 dispatching against a callable
-> defined outside agent-homebase substrate. Proves portability:
+> defined outside agent-enterprise substrate. Proves portability:
 > Mode 2 depends on the callable contract, not on substrate.
 
 ## Scenario
@@ -9,7 +9,7 @@
 An organisation has an existing library of prompt files used
 interactively in their coding-agent runtime. They want to drive a
 subset of these prompt files non-interactively from their issue
-tracker, without adopting agent-homebase substrate.
+tracker, without adopting agent-enterprise substrate.
 
 They choose to install Mode 2 standalone. They author callable
 manifests over their existing prompts and run a Mode 2 dispatcher
@@ -43,7 +43,7 @@ runtime_hints:
 ```
 
 This manifest references an existing prompt file at
-`./prompts/draft-rfc.md`. No agent-homebase substrate is involved.
+`./prompts/draft-rfc.md`. No agent-enterprise substrate is involved.
 
 ## Dispatcher configuration
 
@@ -112,11 +112,11 @@ matching `id` declared in the issue body.
 
 ## What this proves
 
-- Mode 2 install required no agent-homebase substrate.
+- Mode 2 install required no agent-enterprise substrate.
 - The callable was authored entirely by the consumer.
 - The dispatcher resolved, invoked, and verified per the Mode 2
   contract.
-- The same dispatcher could now be pointed at a homebase-substrate
+- The same dispatcher could now be pointed at an enterprise-substrate
   skill (also a valid callable) without configuration changes.
 
 Mode 2 is portable because it depends on the callable contract, not

@@ -1,16 +1,16 @@
 ﻿# Anti-Fragility: Lessons from First Orchestrated Deployment
 
-This document captures failure patterns observed the first time agent-homebase
+This document captures failure patterns observed the first time agent-enterprise
 was driven by an automated dispatch orchestrator (rather than interactively by
 a human in VS Code). The patterns are generic and apply to any project that
-puts an autonomous dispatcher on top of agent-homebase. They are recorded here
+puts an autonomous dispatcher on top of agent-enterprise. They are recorded here
 so future adopters can avoid them.
 
-> **TL;DR** Agent-homebase is a generic skills library. It is designed for
+> **TL;DR** Agent-enterprise is a generic skills library. It is designed for
 > interactive use by default. If you bolt on an automated orchestrator and an
 > external issue tracker, do that work in a **separate orchestration repo** and
 > keep project-specific governance in a **separate project repo**. Do not
-> write either kind of file into agent-homebase itself. See
+> write either kind of file into agent-enterprise itself. See
 > [EXTENSION_GUIDE.md](EXTENSION_GUIDE.md).
 
 ---
@@ -105,7 +105,7 @@ project â€” was documented but not enforced at the repo boundary.
 
 ### Mitigation
 
-- Treat agent-homebase as an external dependency. Consume it as a git
+- Treat agent-enterprise as an external dependency. Consume it as a git
   submodule, vendored copy, or package. Do not commit project-specific files
   into it.
 - If you need to extend or override a generic instruction, do it in your
@@ -120,10 +120,10 @@ project â€” was documented but not enforced at the repo boundary.
 ## Recommendation for orchestrated adopters
 
 If you are putting an automated dispatcher (e.g., a workflow agent that picks
-tickets off a queue and assigns them to skills) on top of agent-homebase:
+tickets off a queue and assigns them to skills) on top of agent-enterprise:
 
 1. **Three repos, not one.**
-   - `agent-homebase` â€” generic skills library (this repo).
+  - `agent-enterprise` â€” generic skills library (this repo).
    - `<your>-orchestration` â€” dispatch logic, tracker integration,
      completion-verification rules, retry/escalation policy.
    - `<your>-project` â€” application code plus project-specific governance

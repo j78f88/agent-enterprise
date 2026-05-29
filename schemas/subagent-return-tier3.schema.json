@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://agent-homebase/schemas/subagent-return-tier3.schema.json",
+  "$id": "https://agent-enterprise/schemas/subagent-return-tier3.schema.json",
   "title": "Subagent Return Schema - Tier 3 (Composition)",
   "description": "Schema for sprint composition recommendations",
   "type": "object",

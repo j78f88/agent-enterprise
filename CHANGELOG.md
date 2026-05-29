@@ -27,7 +27,7 @@ The `scope:` → `applies_to` migrator
 
 - Migrate off `jsonschema.RefResolver` to `referencing`.
 - Adopter template repository (one-line `git clone` + `init.py`).
-- PyPI distribution (`pip install agent-homebase`).
+- PyPI distribution (`pip install agent-enterprise`).
 - Authoring linter for skill/instruction/agent frontmatter (catches
   contract violations before `init.py` runs).
 

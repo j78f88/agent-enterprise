@@ -1,12 +1,12 @@
 # Instruction File Index
 
-Master directory of all instruction files in agent-homebase. Instructions are governance rules that agents read to maintain consistent behavior.
+Master directory of all instruction files in agent-enterprise. Instructions are governance rules that agents read to maintain consistent behavior.
 
 ---
 
 ## Start Here
 
-**New to agent-homebase?** Read these 3 instructions first:
+**New to agent-enterprise?** Read these 3 instructions first:
 
 1. **[severity-levels.instructions.md](../instructions/configurable/severity-levels.instructions.md)** — How agents classify issues (CRITICAL/WARNING/SUGGESTION)
 2. **[commit-conventions.instructions.md](../instructions/generic/commit-conventions.instructions.md)** — Git commit format all agents follow

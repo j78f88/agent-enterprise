@@ -1,4 +1,4 @@
-# Canonical install + verification path for agent-homebase (Windows).
+# Canonical install + verification path for agent-enterprise (Windows).
 # Runs from a clean checkout. Exits non-zero on any failure.
 #
 # Usage:
@@ -20,7 +20,7 @@ function Get-ResolvedHash {
     return (Get-FileHash -InputStream $stream -Algorithm SHA256).Hash
 }
 
-Write-Host "=== agent-homebase smoke test ==="
+Write-Host "=== agent-enterprise smoke test ==="
 Write-Host "Python:  $(python --version)"
 Write-Host "Config:  $Config"
 Write-Host ""

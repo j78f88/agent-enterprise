@@ -27,7 +27,7 @@ Each entry under `projects[]`:
 | `name` | string | Human-readable. |
 | `repo` | string | URI. `https://`, `ssh://`, `git@`, or `local:./path`. |
 | `mode_level` | enum | `team` \| `orchestration`. See below. |
-| `substrate_version` | string | Semver, or `"custom"` if not homebase. |
+| `substrate_version` | string | Semver, or `"custom"` if not enterprise. |
 | `contract_pins` | array | Contract tags this project claims to conform to. |
 
 ## Optional fields per project
@@ -54,8 +54,8 @@ coordinated by Mode 3.
 
 ## Substrate version pin
 
-- For homebase substrate: semver matching a published
-  `agent-homebase@N.M.P`.
+- For enterprise substrate: semver matching a published
+  `agent-enterprise@N.M.P`.
 - For custom substrate: literal string `"custom"`, with a
   `custom_substrate` block declaring `provider` and `provider_version`.
 

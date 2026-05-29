@@ -648,6 +648,44 @@ class TestEndToEndResolution:
             line_count = len(body.strip().split('\n'))
             assert line_count <= 120, f"{agent_file.name}: body is {line_count} lines (max ~100)"
 
+
+# =============================================================================
+# Companion file resolution — non-skill *.md siblings deployed to resolved/
+# =============================================================================
+
+class TestCompanionFileResolution:
+    """Companion *.md files (e.g. phase-details.md, subagent-templates.md) in a
+    skill directory should be resolved and deployed alongside SKILL.md."""
+
+    def test_sprint_lead_companions_deployed(self):
+        """sprint-lead companion files should appear in resolved output."""
+        resolved = Path(__file__).parent.parent / "resolved" / "skills" / "sprint-lead"
+        for companion in ("phase-details.md", "subagent-templates.md"):
+            assert (resolved / companion).exists(), f"Missing companion: {companion}"
+
+    def test_companion_tokens_resolved(self):
+        """phase-details.md ships through substitute() with no unresolved tokens.
+
+        The source carries {{commands.*}} tokens inside a fenced code block
+        (Phase 2.5), which substitute() resolves today. Inline code-span tokens
+        (e.g. `{{paths.sprints_doc}}`) are intentionally left raw until the
+        Task Group 3 (Defect B) policy flip, so they are not asserted here.
+        """
+        companion = (
+            Path(__file__).parent.parent
+            / "resolved" / "skills" / "sprint-lead" / "phase-details.md"
+        )
+        text = companion.read_text(encoding="utf-8")
+        assert find_unresolved_tokens(text) == [], "companion has unresolved tokens"
+        # Fenced-block token must be resolved (proves substitute() ran on the companion).
+        assert "{{commands.typecheck}}" not in text
+
+    def test_skill_source_not_emitted_as_companion(self):
+        """The *.skill.md source must not be copied verbatim as a companion."""
+        resolved = Path(__file__).parent.parent / "resolved" / "skills" / "sprint-lead"
+        assert not (resolved / "sprint-lead.skill.md").exists()
+
+
 # =============================================================================
 # 3.1 / 3.2 — Path-scoped frontmatter + Cursor emission
 # =============================================================================
@@ -770,4 +808,45 @@ class TestScopeAddedToTwoInstructions:
                 with_scope.append(p.name)
         assert len(with_scope) >= 2, (
             f"expected >=2 instructions with applies_to/scope, got {with_scope}"
+        )
+
+
+# =============================================================================
+# Cross-reference path correctness — skill companion references resolve to the
+# adopter deploy dir, never the source-tree `skills/<name>/<file>.md` path.
+# =============================================================================
+
+class TestSkillCrossReferencePaths:
+    """Skill companion cross-references must point at the deploy dir, not the
+    source tree. In an adopter project, companion files live at
+    `.github/agents/<name>/<file>.md`, so a literal `skills/<name>/<file>.md`
+    reference in resolved output would dangle.
+    """
+
+    # Source-style references that must be absent from resolved output.
+    SOURCE_STYLE_REFS = [
+        "skills/docs/sync-workflow.md",
+        "skills/sprint-lead/phase-details.md",
+        "skills/sprint-lead/subagent-templates.md",
+        "skills/security/audit-checks.md",
+        "skills/security/report-format.md",
+        "skills/planner/session-lifecycle.md",
+        "skills/planner/session-end-menu.md",
+    ]
+
+    def test_no_source_style_companion_refs_in_resolved(self):
+        root = Path(__file__).parent.parent / "resolved"
+        offenders = []
+        for sub in ("skills", "instructions", "agents"):
+            base = root / sub
+            if not base.exists():
+                continue
+            for md in sorted(base.rglob("*.md")):
+                text = md.read_text(encoding="utf-8")
+                for ref in self.SOURCE_STYLE_REFS:
+                    if ref in text:
+                        offenders.append(f"{md.relative_to(root)}: {ref}")
+        assert not offenders, (
+            "source-style companion cross-references found in resolved output: "
+            + "; ".join(offenders)
         )

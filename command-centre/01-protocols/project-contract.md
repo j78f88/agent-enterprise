@@ -22,7 +22,7 @@ Every registry entry declares:
 | `name` | string | Human-readable name. |
 | `repo` | string | URI of the project repository. May be `local:./path` for monorepo sub-projects. |
 | `mode_level` | enum | One of `team`, `orchestration` (see below). |
-| `substrate_version` | string | Pinned agent-homebase semver. |
+| `substrate_version` | string | Pinned agent-enterprise semver. |
 | `contract_pins` | array | List of contract tags this project relies on. |
 
 Optional fields are listed in [registry-schema.md](../04-mode-choreography/registry-schema.md).
@@ -46,7 +46,7 @@ behaviour based on this field.
 
 ## Substrate version pin
 
-`substrate_version` is the agent-homebase semver that this project was
+`substrate_version` is the agent-enterprise semver that this project was
 last verified against. Mode 3 coordinators use this to:
 
 - Detect drift between project pin and current substrate.
@@ -85,9 +85,9 @@ projects:
     contract_pins: [protocol-v1, mode-1-contract-v1]
 ```
 
-## Non-homebase project example
+## Non-enterprise project example
 
-A project does not have to use agent-homebase substrate to appear in a
+A project does not have to use agent-enterprise substrate to appear in a
 registry. It must, however, declare the contracts it conforms to:
 
 ```yaml
@@ -104,7 +104,7 @@ projects:
 ```
 
 The project asserts conformance to `mode-1-contract-v1` even though
-its substrate is not homebase. The coordinator trusts that assertion
+its substrate is not enterprise. The coordinator trusts that assertion
 and verifies it at harvest time.
 
 ## Versioning

@@ -170,7 +170,7 @@ Use `#tool:askQuestions` at decision points:
 
 ## Documentation Sync Workflow
 
-Follow the complete workflow in `skills/docs/sync-workflow.md`. Run every step — do not skip any file. Check each one, and if it needs no changes, confirm it is current and move on.
+Follow the complete workflow in `{{paths.skills_deploy_dir}}docs/sync-workflow.md`. Run every step — do not skip any file. Check each one, and if it needs no changes, confirm it is current and move on.
 
 ## Common Rationalizations
 

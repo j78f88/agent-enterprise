@@ -19,7 +19,7 @@ N-1 (and ideally N-2) contract coexistence.
 
 Three independent version streams:
 
-1. **Repo semver** — `agent-homebase@MAJOR.MINOR.PATCH`. Bumps on any
+1. **Repo semver** — `agent-enterprise@MAJOR.MINOR.PATCH`. Bumps on any
    change to any file in the repo. Used by consumers who want the whole
    framework at a known version.
 2. **Protocol version** — single tag `protocol-vN`. Bumps only on a
@@ -38,7 +38,7 @@ breaking bump. Consumers get a deprecation window, not a flag day.
 
 **Positive**
 - Mode-2-only consumer pins `protocol-v1 + mode-2-contract-v1` and
-  tracks `agent-homebase@2.*.*` for fixes.
+  tracks `agent-enterprise@2.*.*` for fixes.
 - A breaking change to Mode 3 does not invalidate Mode 1 or Mode 2
   consumers.
 - Release notes can speak in two registers: repo-level (what changed at

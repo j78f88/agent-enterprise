@@ -42,7 +42,7 @@ resolved/
 node_modules/
 
 # Personal context kept outside the public repo
-agent-homebase-private/
+agent-enterprise-private/
 
 
 # Local agent state (debug logs, violations)

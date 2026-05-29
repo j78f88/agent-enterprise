@@ -1,6 +1,6 @@
 # Mode 1 — Reference substrate
 
-> Pointer page. The agent-homebase root *is* the reference substrate
+> Pointer page. The agent-enterprise root *is* the reference substrate
 > satisfying `mode-1-contract-v1`. See
 > [contract.md](contract.md) for the normative contract.
 

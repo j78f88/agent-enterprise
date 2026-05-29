@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://agent-homebase/schemas/frontmatter-v1.schema.json",
+  "$id": "https://agent-enterprise/schemas/frontmatter-v1.schema.json",
   "title": "Substrate Frontmatter — v1",
-  "description": "Required and optional YAML frontmatter for any agent-homebase substrate file (skill, instruction, agent, profile, callable, policy, schema). Implements command-centre/01-protocols/frontmatter-spec.md (contract tag: frontmatter-v1).",
+  "description": "Required and optional YAML frontmatter for any agent-enterprise substrate file (skill, instruction, agent, profile, callable, policy, schema). Implements command-centre/01-protocols/frontmatter-spec.md (contract tag: frontmatter-v1).",
   "type": "object",
   "required": ["id", "kind", "version", "applies_to"],
   "properties": {

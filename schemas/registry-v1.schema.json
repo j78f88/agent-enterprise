@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://agent-homebase/schemas/registry-v1.schema.json",
+  "$id": "https://agent-enterprise/schemas/registry-v1.schema.json",
   "title": "Choreography Registry — v1",
   "description": "Top-level registry file consumed by Mode-3 coordinators. Implements command-centre/04-mode-choreography/registry-schema.md (part of mode-3-contract-v1).",
   "type": "object",

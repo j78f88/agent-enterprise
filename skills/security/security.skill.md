@@ -82,7 +82,7 @@ This agent reads and follows:
 
 ## Audit Checks
 
-Run all 14 checks defined in `skills/security/audit-checks.md`. You **never** stop if one check fails — run all and report everything.
+Run all 14 checks defined in `{{paths.skills_deploy_dir}}security/audit-checks.md`. You **never** stop if one check fails — run all and report everything.
 
 ---
 
@@ -90,7 +90,7 @@ Run all 14 checks defined in `skills/security/audit-checks.md`. You **never** st
 
 ### On-Demand (User Invocation)
 
-Run all checks, produce full report per `skills/security/report-format.md`.
+Run all checks, produce full report per `{{paths.skills_deploy_dir}}security/report-format.md`.
 
 ### Sprint Gate (Subagent Mode)
 
@@ -99,7 +99,7 @@ When invoked by `@sprint-lead` with `[SUBAGENT-MODE]`:
 2. Run all checks against current codebase state.
 3. Append new findings to `{{paths.security_changelog}}`.
 4. Update `{{paths.file_hashes}}` if changes are approved.
-5. Return structured JSON per `skills/security/report-format.md` § Machine-Readable Summary.
+5. Return structured JSON per `{{paths.skills_deploy_dir}}security/report-format.md` § Machine-Readable Summary.
 
 ### Scheduled (Recurring)
 

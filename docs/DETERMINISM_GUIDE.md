@@ -1,6 +1,6 @@
 # Determinism Guide
 
-How agent-homebase ensures reproducible execution through logical time, prompt versioning, and replay verification.
+How agent-enterprise ensures reproducible execution through logical time, prompt versioning, and replay verification.
 
 ---
 
@@ -55,7 +55,7 @@ t4 = clock.tick()  # Returns 12
 3. **Thread-safe**: Lock-protected increment operations
 4. **Checkpoint-safe**: Clock state persisted in checkpoints
 
-### Usage in agent-homebase
+### Usage in agent-enterprise
 
 ```python
 # Event recording

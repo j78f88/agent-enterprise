@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Canonical install + verification path for agent-homebase.
+# Canonical install + verification path for agent-enterprise.
 # Runs from a clean checkout. Exits non-zero on any failure.
 #
 # Usage:
@@ -12,7 +12,7 @@ set -euo pipefail
 CONFIG="${1:-profiles/python-api.config.yml}"
 PYTHON="${PYTHON:-python3}"
 
-echo "=== agent-homebase smoke test ==="
+echo "=== agent-enterprise smoke test ==="
 echo "Python:  $($PYTHON --version)"
 echo "Config:  $CONFIG"
 echo

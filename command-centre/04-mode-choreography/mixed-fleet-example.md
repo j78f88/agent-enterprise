@@ -2,7 +2,7 @@
 
 > A worked example proving Mode 3 coordinates a program containing
 > both `mode_level: team` and `mode_level: orchestration` projects,
-> with one project on custom (non-homebase) substrate.
+> with one project on custom (non-enterprise) substrate.
 
 ## Scenario
 
@@ -10,9 +10,9 @@ A platform organisation runs three internal product teams. Each team
 owns one project. The program-of-works coordinator wants visibility,
 drift control, and shared learnings across all three.
 
-- **Project Alpha:** uses agent-homebase substrate; runs Mode 1 only
+- **Project Alpha:** uses agent-enterprise substrate; runs Mode 1 only
   (interactive use by a small team, no dispatcher).
-- **Project Bravo:** uses agent-homebase substrate; runs Mode 1 + Mode 2
+- **Project Bravo:** uses agent-enterprise substrate; runs Mode 1 + Mode 2
   (issue-driven dispatcher operating on a queue).
 - **Project Gamma:** uses a custom internal substrate that conforms to
   Mode 1 contract; runs Mode 1 only.
@@ -64,12 +64,12 @@ projects:
 
 | Project | mode_level | Substrate | Dispatcher? |
 | --- | --- | --- | --- |
-| Alpha | team | homebase 2.3.0 | No |
-| Bravo | orchestration | homebase 2.3.0 | Yes |
+| Alpha | team | enterprise 2.3.0 | No |
+| Bravo | orchestration | enterprise 2.3.0 | Yes |
 | Gamma | team | custom 4.1.0 | No |
 
 The coordinator handles all three uniformly through the project
-contract. It does not need separate logic for homebase vs custom
+contract. It does not need separate logic for enterprise vs custom
 substrate, nor for `team` vs `orchestration` projects — the meta-agents
 branch on `mode_level` internally.
 
@@ -77,14 +77,14 @@ branch on `mode_level` internally.
 
 **`@audit`:**
 - All three: check `substrate_version` against current. Alpha and Bravo
-  share homebase — same current-version reference. Gamma uses custom —
+  share enterprise — same current-version reference. Gamma uses custom —
   the coordinator resolves `my-org-internal-skills` current version
   separately (or skips, with a note in the audit record).
 - Bravo only: also check `dispatcher.impl_version` for drift if the
   coordinator tracks dispatcher releases.
 
 **`@framework-dev`:**
-- When proposing a homebase substrate change: impact list includes
+- When proposing a enterprise substrate change: impact list includes
   Alpha and Bravo, excludes Gamma.
 - When proposing a Mode 2 contract change: impact list includes Bravo
   only.
@@ -93,7 +93,7 @@ branch on `mode_level` internally.
 **`@harvest`:**
 - Scans all three project repos for promotable artifacts.
 - For Gamma (custom substrate), promotions go to `my-org-internal-skills`
-  not agent-homebase — the coordinator may decline to propose them, or
+  not agent-enterprise — the coordinator may decline to propose them, or
   may route them to a sibling harvest workflow if one exists.
 - Audit record covers all three uniformly.
 

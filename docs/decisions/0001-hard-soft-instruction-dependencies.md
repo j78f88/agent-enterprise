@@ -8,7 +8,7 @@
 
 ## Context
 
-agent-homebase ships instructions in two directories:
+agent-enterprise ships instructions in two directories:
 
 - `instructions/generic/` — 11 files
 - `instructions/configurable/` — 14 files
@@ -44,7 +44,7 @@ in its opening paragraph or frontmatter description:
 
 The instruction works without any project config. It references no
 tokens. Output is fully correct for any project consuming
-agent-homebase.
+agent-enterprise.
 
 **Rule:** Soft-dependency instructions reference "the project's
 conventions" in general prose only. They never assume specific paths,

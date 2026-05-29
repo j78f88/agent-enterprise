@@ -1,5 +1,5 @@
 {
-  "$schema": "https://json.schemastore.org/agent-homebase-hooks.json",
+  "$schema": "https://json.schemastore.org/agent-enterprise-hooks.json",
   "version": 1,
   "hooks": {
     "session-start": {

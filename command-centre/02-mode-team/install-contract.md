@@ -16,13 +16,13 @@
 
 For the reference substrate:
 
-1. Vendor or fork agent-homebase into the consumer project (or as a
+1. Vendor or fork agent-enterprise into the consumer project (or as a
    sibling repo / submodule).
 2. Create a profile at `<consumer>/config/<name>.config.yml` based on
    [`profiles/`](../../profiles/).
 3. Run `python init.py --config config/<name>.config.yml`.
 4. Commit `resolved/` artifacts (or symlink into the runtime path).
-5. Record pins in `<consumer>/.agent-homebase-pins`.
+5. Record pins in `<consumer>/.agent-enterprise-pins`.
 
 For a custom substrate: the equivalent of the above using the
 consumer's own build, producing artifacts in the runtime's shape.
@@ -37,7 +37,7 @@ consumer's own build, producing artifacts in the runtime's shape.
 
 ## Upgrade path
 
-Bump `agent-homebase@N.M.P` in the pin file, re-run the build, review
+Bump `agent-enterprise@N.M.P` in the pin file, re-run the build, review
 the `resolved/` diff, and commit. If the upgrade crosses a contract-tag
 bump, read the release note first.
 

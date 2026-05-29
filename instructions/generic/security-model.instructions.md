@@ -10,7 +10,7 @@ description: security-model instruction
 
 **Phase 0 — Production Security Hardening**
 
-This instruction establishes the formal security model for agent-homebase operations, implementing defense-in-depth to prevent command injection, path traversal, secrets leakage, and supply chain attacks.
+This instruction establishes the formal security model for agent-enterprise operations, implementing defense-in-depth to prevent command injection, path traversal, secrets leakage, and supply chain attacks.
 
 ---
 
@@ -187,7 +187,7 @@ All security-relevant events must be logged to an immutable append-only log.
 
 ## Security Checklist
 
-Before deploying agent-homebase in production, verify:
+Before deploying agent-enterprise in production, verify:
 
 - [ ] Config validated by `init.py` security checks
 - [ ] No secrets in config files (use environment variables)
@@ -214,7 +214,7 @@ If a security violation is detected:
 
 ## Security Contact
 
-For security vulnerabilities in agent-homebase framework itself:
+For security vulnerabilities in agent-enterprise framework itself:
 - Open a private GitHub security advisory
 - **Do not** open public issues for security bugs
 

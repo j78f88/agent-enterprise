@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://agent-homebase/schemas/callable-v1.schema.json",
+  "$id": "https://agent-enterprise/schemas/callable-v1.schema.json",
   "title": "Callable Manifest — v1",
   "description": "Mode-2 callable manifest contract. Defines inputs, outputs, and verifier hook for any unit of work a dispatcher can invoke. Implements command-centre/01-protocols/callable-contract.md (contract tag: callable-contract-v1).",
   "type": "object",

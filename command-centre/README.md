@@ -8,7 +8,7 @@
 > install-contract and v2 ADR 0002. See `00-overview/design-history.md`
 > for the full reasoning trail.
 
-Workbench for designing agent-homebase as three **standalone,
+Workbench for designing agent-enterprise as three **standalone,
 independently consumable delivery modes** (team / orchestration /
 choreography) on top of a small shared protocol layer.
 
@@ -23,7 +23,7 @@ choreography) on top of a small shared protocol layer.
 3. **Multi-deployable as a choreography layer across multiple
    projects in a program-of-works approach.** → Mode 3.
 
-Under two anchoring constraints: agent-homebase ships **zero
+Under two anchoring constraints: agent-enterprise ships **zero
 project-specific content**, and any mode can be consumed alone
 alongside the consumer's own substrate.
 

@@ -153,7 +153,7 @@ When drafting a plan, follow `docs/templates/SPRINT_PLAN_TEMPLATE.md`. Key secti
 
 ## Session Lifecycle
 
-Follow the full session lifecycle in `skills/planner/session-lifecycle.md`. This covers:
+Follow the full session lifecycle in `{{paths.skills_deploy_dir}}planner/session-lifecycle.md`. This covers:
 - Context Continuity (session start handoff checks, ledger summary, draft triage)
 - Health Check (contamination scan)
 - Carry-Over Escalation Gate (P0 mandatory items)
@@ -165,7 +165,7 @@ Follow the full session lifecycle in `skills/planner/session-lifecycle.md`. This
 
 ## Session-End Menu
 
-At natural stopping points, present the next action using `#tool:askQuestions`. Follow the menu table in `skills/planner/session-end-menu.md`. Only show options that are relevant to the current state.
+At natural stopping points, present the next action using `#tool:askQuestions`. Follow the menu table in `{{paths.skills_deploy_dir}}planner/session-end-menu.md`. Only show options that are relevant to the current state.
 
 ## Common Rationalizations
 

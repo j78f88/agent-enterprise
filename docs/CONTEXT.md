@@ -1,6 +1,6 @@
 # CONTEXT.md — Domain Glossary
 
-Canonical definitions for every domain term used in agent-homebase.
+Canonical definitions for every domain term used in agent-enterprise.
 When writing skills, instructions, agents, or docs, use these terms
 exactly as defined here. When a term has an "Avoid" entry, do not use
 that word in agent-facing files.
@@ -23,7 +23,7 @@ their own register by design.
 | **Resolved** | Build output produced by `init.py`. Token-substituted, ready to deploy into a consumer project. Read-only — never edit by hand. | `resolved/` | "deployed" (implies runtime), "compiled" (implies binary), "generated" (too generic) |
 | **Token** | A `{{placeholder}}` in a source file, replaced at build time with a value from project config. Tokens in backticks are documentation and pass through unchanged. | Source files in `skills/`, `instructions/configurable/`, `agents/` | "variable" (too generic), "parameter" (implies runtime) |
 | **Profile** | A pre-built project config for a common stack. Maps token names to values appropriate for that stack. | `profiles/` | "template" (overloaded — used for sprint plan templates, file templates) |
-| **Substrate** | The agent-homebase repo itself — the authoring and build layer that produces resolved artifacts for consumer projects. | Repository root | "framework" (implies runtime), "platform" (implies hosting) |
+| **Substrate** | The agent-enterprise repo itself — the authoring and build layer that produces resolved artifacts for consumer projects. | Repository root | "framework" (implies runtime), "platform" (implies hosting) |
 
 ---
 
@@ -36,7 +36,7 @@ their own register by design.
 | **Subagent** | An agent invoked by another agent (the caller) with isolated context. Returns structured data per its write permit. | "child agent", "nested agent" |
 | **Callable** | Any unit of work that can be dispatched by Mode 2 orchestration — a skill, prompt file, MCP tool, or external process. Declares inputs, outputs, and a verifier. | "task" (too generic), "job" |
 | **Handoff** | The structured transfer of work from one agent to another with explicit context, constraints, and acceptance criteria. | "delegation" (implies hierarchy) |
-| **Dispatch** | The act of routing a unit of work to a callable based on classification rules. Belongs in the orchestration layer, not in agent-homebase. | "assignment" (implies human manager) |
+| **Dispatch** | The act of routing a unit of work to a callable based on classification rules. Belongs in the orchestration layer, not in agent-enterprise. | "assignment" (implies human manager) |
 
 ---
 

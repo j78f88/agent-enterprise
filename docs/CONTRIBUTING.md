@@ -1,6 +1,6 @@
 # Contributing Guide
 
-How to contribute to agent-homebase: adding skills, instructions, and extending the library.
+How to contribute to agent-enterprise: adding skills, instructions, and extending the library.
 
 ---
 
@@ -22,8 +22,8 @@ No contribution is too small. Typo fixes welcome.
 
 ```bash
 # Clone the repository
-git clone https://github.com/j78f88/agent-homebase.git
-cd agent-homebase
+git clone https://github.com/j78f88/agent-enterprise.git
+cd agent-enterprise
 
 # One-time: install the commit-message hook (rejects BOM + enforces
 # Conventional Commits). Works on Linux, macOS, and Git Bash on Windows.
@@ -45,7 +45,7 @@ means a green CI run.
 ## Project Structure
 
 ```
-agent-homebase/
+agent-enterprise/
 ├── skills/              # Agent skill definitions ({name}.skill.md)
 ├── instructions/        # Governance rules
 │   ├── generic/         # Cross-project standards

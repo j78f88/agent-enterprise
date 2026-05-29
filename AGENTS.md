@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Repository: **agent-homebase** — a portable, multi-agent operating system for
+Repository: **agent-enterprise** — a portable, multi-agent operating system for
 software projects. Skills, instructions, and agents live as plain Markdown,
 get resolved with project-specific tokens by `init.py`, and emit copy-ready
 artifacts under `resolved/` for any compatible coding agent (Claude Code,

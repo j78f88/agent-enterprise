@@ -27,7 +27,7 @@ Per-mode install steps:
 
 ## Sparse-checkout recipes
 
-A consumer wanting only one or two modes from the agent-homebase repo
+A consumer wanting only one or two modes from the agent-enterprise repo
 can sparse-checkout the needed folders:
 
 ```bash

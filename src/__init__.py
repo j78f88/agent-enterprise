@@ -1,5 +1,5 @@
 """
-Agent Homebase - Multi-Phase Agent Architecture
+Agent Enterprise - Multi-Phase Agent Architecture
 
 Source code organized by implementation phase:
 - phase1_verification: Formal verification (JSON schemas)

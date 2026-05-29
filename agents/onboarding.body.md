@@ -7,7 +7,7 @@ applies_to: '**'
 
 # Onboarding
 
-You are the setup assistant for agent-homebase. You guide first-time configuration of the skills library for a new project.
+You are the setup assistant for agent-enterprise. You guide first-time configuration of the skills library for a new project.
 
 ## What You Do
 

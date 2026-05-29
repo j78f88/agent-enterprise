@@ -55,7 +55,7 @@ demonstrates these for the in-repo reference.
 
 ## Reference substrate
 
-The reference substrate is the root of agent-homebase itself:
+The reference substrate is the root of agent-enterprise itself:
 [`skills/`](../../skills/), [`instructions/`](../../instructions/),
 [`agents/`](../../agents/), [`profiles/`](../../profiles/),
 [`schemas/`](../../schemas/), with the build implemented in

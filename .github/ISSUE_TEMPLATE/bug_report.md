@@ -21,7 +21,7 @@ python -m pytest
 
 - OS:                    <!-- Windows 11 / Ubuntu 22.04 / macOS 14 -->
 - Python:                <!-- python --version -->
-- agent-homebase commit: <!-- git rev-parse HEAD -->
+- agent-enterprise commit: <!-- git rev-parse HEAD -->
 - Config:                <!-- which profile, or paste sanitised config -->
 
 ## Logs / output

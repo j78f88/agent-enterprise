@@ -1,6 +1,6 @@
 # Onboarding Guide
 
-Setup for a new project consuming agent-homebase. Pick the path that fits how
+Setup for a new project consuming agent-enterprise. Pick the path that fits how
 hands-on you want to be — all three produce the same result.
 
 > **Visual overview:** open [command-centre-visual.html](command-centre-visual.html) in a browser to see all agents, modes, and flows at a glance before diving in.
@@ -23,7 +23,7 @@ Clone the repo, open the folder in **GitHub Copilot Chat** or **Claude Code**,
 and paste:
 
 ```text
-Set up agent-homebase for my project. Ask me what you need, recommend a
+Set up agent-enterprise for my project. Ask me what you need, recommend a
 profile, run init.py, deploy the resolved files, and verify it works.
 ```
 
@@ -94,7 +94,7 @@ You can install all thirteen and let the skill descriptions handle routing — s
 Links the library as a separate repo. You get updates via `git submodule update --remote`. Keeps your repo clean and upgradeable.
 
 ```bash
-git submodule add https://github.com/j78f88/agent-homebase.git skills-library
+git submodule add https://github.com/j78f88/agent-enterprise.git skills-library
 ```
 
 ### Option B — One-time copy
@@ -102,7 +102,7 @@ git submodule add https://github.com/j78f88/agent-homebase.git skills-library
 Copies files once. No auto-updates, but simpler setup if you don't plan to upgrade.
 
 ```bash
-git clone https://github.com/j78f88/agent-homebase.git skills-library
+git clone https://github.com/j78f88/agent-enterprise.git skills-library
 rm -rf skills-library/.git   # detach from library history
 ```
 

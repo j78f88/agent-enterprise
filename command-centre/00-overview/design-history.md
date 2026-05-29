@@ -12,19 +12,19 @@
 
 The intent that anchored this entire design effort:
 
-> 1. agent-homebase singularly deployable as an effective project team
-> 2. agent-homebase singularly deployable as an orchestration layer
-> 3. agent-homebase multi-deployable as a choreography layer across multiple
+> 1. agent-enterprise singularly deployable as an effective project team
+> 2. agent-enterprise singularly deployable as an orchestration layer
+> 3. agent-enterprise multi-deployable as a choreography layer across multiple
 >    projects in a program-of-works approach — a combination of 1 and 2
 
 These three statements named what later became Mode 1 (team), Mode 2
 (orchestration), and Mode 3 (choreography). They were stated as
-*deployability modes of agent-homebase*. That framing turned out to need
+*deployability modes of agent-enterprise*. That framing turned out to need
 correction, but the underlying capabilities did not.
 
 Two additional anchoring constraints:
 
-- **agent-homebase must remain 100% generic** — zero references to
+- **agent-enterprise must remain 100% generic** — zero references to
   personal projects, zero project-specific files, no examples that name a
   real codebase the author is working on.
 - **The three modes must be consumable in any combination, including
@@ -39,7 +39,7 @@ what forced v1 to be redesigned.
 ## 2. The v1 design (committed as `f17eeeb`)
 
 The first response to the three outcomes was to build a workbench called
-`command centre/` inside agent-homebase. 28 files across these folders:
+`command centre/` inside agent-enterprise. 28 files across these folders:
 
 ```
 command centre/
@@ -56,7 +56,7 @@ command centre/
 
 Key v1 design decisions:
 
-- **Containerize the work inside agent-homebase.** The reasoning was that
+- **Containerize the work inside agent-enterprise.** The reasoning was that
   a separate command-centre repo would create sprawl; better to keep all
   thinking co-located, then graduate generic parts into
   `delivery-modes/choreography/` at Phase 6.
@@ -144,7 +144,7 @@ Key signals adopted:
   trichotomy is not arbitrary.
 - **Plugins as the unit of distribution.** Anthropic's "plugins"
   (packages of skills, context, connectors) are functionally identical to
-  agent-homebase's existing skills + instructions + profiles structure.
+  agent-enterprise's existing skills + instructions + profiles structure.
   Confirms the substrate concept predates the term.
 - **"Compounding returns assume sustained expert feedback investment.
   Organisations that encode knowledge once and do not maintain it will
@@ -259,8 +259,8 @@ surfaced:
 ### Error A — Repo pollution (Pattern 4 violation)
 v1 put both (a) generic choreography templates and (b) the author's
 specific program-of-works state (project list, registry, harvest log,
-playbooks for three named projects) into agent-homebase. ADR 0001
-("containerize in homebase") conflated these two distinct concerns. The
+playbooks for three named projects) into agent-enterprise. ADR 0001
+("containerize in enterprise") conflated these two distinct concerns. The
 graduation in Phase 6 only addressed (a). It left (b) inside the
 framework forever — the exact failure mode `docs/ANTI_FRAGILITY.md` Pattern 4
 warns against.
@@ -290,7 +290,7 @@ After errors were surfaced, the author added two clarifications that
 forced the architecture into its final form:
 
 ### Clarification 1 — Total genericity
-*"agent-homebase is totally generic and has no information around any of
+*"agent-enterprise is totally generic and has no information around any of
 my personal projects."*
 
 This eliminated the option of a sister command-centre repo I would
@@ -305,7 +305,7 @@ their requirements."*
 This forced **Reading B** (modes as standalone products) over **Reading
 A** (modes as additive layers on Mode 1). Reading B is more demanding —
 each mode must publish a contract in the abstract, not as a tight
-coupling to homebase substrate — but it delivers genuine independence.
+coupling to enterprise substrate — but it delivers genuine independence.
 
 ---
 
@@ -319,13 +319,13 @@ After the second clarification, two coherent designs were on the table.
 | Valid combinations | {1}, {1,2}, {1,3}, {1,2,3} — 4 | All 7 non-empty subsets |
 | Effort | ~half day | ~1.5 days |
 | Contract discipline | Implicit | Explicit per mode |
-| Reference impls | Optional | Required (proves portability against non-homebase users) |
+| Reference impls | Optional | Required (proves portability against non-enterprise users) |
 | Future-proofing | Locks substrate to specific shape | Substrate can evolve independently within contract |
 
 **Why Reading B was chosen:** the author's stated outcome #3 was
 *"someone could consume mode 2 with their own in-project agents and
 skills."* Reading A makes that aspirational. Reading B makes it true.
-The 1-day delta is the cost of contract extraction and one non-homebase
+The 1-day delta is the cost of contract extraction and one non-enterprise
 worked example per mode.
 
 ---
@@ -365,13 +365,13 @@ Hatice becomes `03-mode-orchestration/reference-impl/hatice/`, not Mode
 siblings.
 
 ### C. Three versioning streams
-- Repo semver (`agent-homebase@2.3.0`) — bumps on any change.
+- Repo semver (`agent-enterprise@2.3.0`) — bumps on any change.
 - Protocol version (`protocol-v1`) — bumps very rarely.
 - Per-mode contract tags (`mode-2-contract-v1` etc.) — bump only on
   breaking contract changes.
 
 A Mode-2-only consumer pins `protocol-v1 + mode-2-contract-v1` and
-tracks `agent-homebase@2.*.*`. They get fixes without tracking other
+tracks `agent-enterprise@2.*.*`. They get fixes without tracking other
 modes. Supports the rainbow-deployment requirement from Anthropic's
 multi-agent research post.
 

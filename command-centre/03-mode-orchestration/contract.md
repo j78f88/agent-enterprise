@@ -5,7 +5,7 @@
 > Defines what a dispatch / verifier layer must do to satisfy Mode 2.
 > Runtime- and substrate-agnostic. A conforming implementation can
 > dispatch any [callable](../01-protocols/callable-contract.md),
-> whether from agent-homebase substrate or elsewhere.
+> whether from agent-enterprise substrate or elsewhere.
 
 ## Purpose
 
@@ -99,7 +99,7 @@ A dispatcher claims `mode-2-contract-v1` conformance if and only if:
       transitions.
 - [ ] Returns tier 2 or 3 results.
 - [ ] Includes a worked test against at least one non-substrate
-      callable (see [non-homebase-example.md](non-homebase-example.md)).
+      callable (see [non-enterprise-example.md](non-enterprise-example.md)).
 - [ ] Documents its queue source(s) and how to configure them.
 
 ## Independence guarantees

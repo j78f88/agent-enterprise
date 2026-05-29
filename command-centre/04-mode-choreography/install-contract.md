@@ -22,7 +22,7 @@ Why scaffold rather than drop-in:
 - **Disposability.** Operators can delete and re-scaffold without
   surgery on any coordinated project.
 
-The reference implementation pins agent-homebase via submodule
+The reference implementation pins agent-enterprise via submodule
 (default) or vendored copy (`--vendor` flag) for version stability.
 
 ## Preconditions

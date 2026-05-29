@@ -91,7 +91,7 @@ A coordinator claims `mode-3-contract-v1` conformance if and only if:
 - [ ] Runs harvest on a declared cadence with required-metric movement.
 - [ ] Applies the promotion contract on every promotion.
 - [ ] Handles mixed-fleet registries by construction.
-- [ ] Includes a worked example of coordinating a non-homebase project
+- [ ] Includes a worked example of coordinating a non-enterprise project
       (see [mixed-fleet-example.md](mixed-fleet-example.md)).
 
 ## Independence guarantees
@@ -99,7 +99,7 @@ A coordinator claims `mode-3-contract-v1` conformance if and only if:
 - Mode 3 depends only on [`01-protocols/`](../01-protocols/).
 - Mode 3 does NOT require any project to run Mode 2. A program of works
   entirely composed of `mode_level: team` projects is valid.
-- Mode 3 does NOT require projects to use agent-homebase substrate.
+- Mode 3 does NOT require projects to use agent-enterprise substrate.
   Projects may declare custom substrate per the project contract.
 - Mode 3 coordinator reference impls do not import from Mode 1 or
   Mode 2 source trees.

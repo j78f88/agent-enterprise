@@ -1,12 +1,12 @@
 # Extension Guide
 
-How to extend agent-homebase for a specific project **without modifying this
-repo**. The intent is that agent-homebase stays a clean, generic library and
+How to extend agent-enterprise for a specific project **without modifying this
+repo**. The intent is that agent-enterprise stays a clean, generic library and
 all project-specific concerns — governance rules, domain instructions,
 external trackers, automated dispatch — live in your own repos that consume
-agent-homebase as a dependency.
+agent-enterprise as a dependency.
 
-If you find yourself wanting to edit a file inside `agent-homebase/`, stop and
+If you find yourself wanting to edit a file inside `agent-enterprise/`, stop and
 read this guide first. Almost every customization can be expressed without
 forking.
 
@@ -21,8 +21,8 @@ your-project/                       <-- your application code lives here
 ├── instructions/                   <-- YOUR project-specific instructions
 │   └── domain-rules.instructions.md
 ├── profiles/
-│   └── my-project.config.yml       <-- YOUR profile (not in agent-homebase)
-└── skills-library/                 <-- agent-homebase as submodule / vendored copy
+│   └── my-project.config.yml       <-- YOUR profile (not in agent-enterprise)
+└── skills-library/                 <-- agent-enterprise as submodule / vendored copy
     └── (read-only — never edit)
 ```
 
@@ -47,7 +47,7 @@ GitHub Actions workflow examples like `${{ secrets.GITHUB_TOKEN }}`
 ## Pattern 1 — Project profile
 
 Create your profile **in your project's repo**, not in
-`agent-homebase/profiles/`:
+`agent-enterprise/profiles/`:
 
 ```yaml
 # your-project/profiles/my-project.config.yml
@@ -66,7 +66,7 @@ paths:
     - ../skills-library/agents
 ```
 
-Run `init.py` from agent-homebase pointing at your profile. The resolved
+Run `init.py` from agent-enterprise pointing at your profile. The resolved
 output goes into your project. Your profile is never committed to the library.
 
 ---
@@ -75,12 +75,12 @@ output goes into your project. Your profile is never committed to the library.
 
 Put them in `your-project/instructions/`. Reference them from your profile's
 `paths.instructions` list. They load alongside the generic instructions
-shipped with agent-homebase.
+shipped with agent-enterprise.
 
 Example: a payment-processing project might define
 `payment-state-machine.instructions.md` describing valid state transitions.
 That file lives in the project repo. The generic `bug` skill from
-agent-homebase will compose with it automatically because both are loaded into
+agent-enterprise will compose with it automatically because both are loaded into
 the agent's context.
 
 ---
@@ -97,7 +97,7 @@ database write must reference a row-level-security policy"). Two options:
    first, then runs your additional check. The shim lives in your project's
    `.github/agents/`, not in the library.
 
-Do not edit `skills/security/security.skill.md` in agent-homebase to add a
+Do not edit `skills/security/security.skill.md` in agent-enterprise to add a
 project rule. That rule will not be relevant to the next adopter.
 
 ---
@@ -107,7 +107,7 @@ project rule. That rule will not be relevant to the next adopter.
 If your project uses an external issue tracker (Linear, Jira, GitHub Issues
 with workflow automation) or an automated dispatcher (a process that picks
 tickets off a queue and assigns them to skills), that integration belongs in
-its own **orchestration repo**, not in agent-homebase.
+its own **orchestration repo**, not in agent-enterprise.
 
 The orchestration repo's responsibilities:
 
@@ -119,12 +119,12 @@ The orchestration repo's responsibilities:
 - Define retry / escalation policy when an agent fails or returns a
   rejection.
 
-Agent-homebase intentionally has none of this. It provides skills. The
+Agent-enterprise intentionally has none of this. It provides skills. The
 orchestration layer provides the dispatch.
 
 ---
 
-## What does NOT belong in agent-homebase
+## What does NOT belong in agent-enterprise
 
 A change belongs in your project repo (or your orchestration repo) if any of
 these are true:
@@ -137,7 +137,7 @@ these are true:
 - It changes the README's agent count, project name, or feature list to
   match a specific deployment.
 
-A change belongs in agent-homebase only if a team using it for an unrelated
+A change belongs in agent-enterprise only if a team using it for an unrelated
 project — different domain, different tracker, different dispatch model —
 would also benefit.
 
@@ -149,7 +149,7 @@ Sometimes a project surfaces a real generic improvement: a missing skill, a
 fixed bug in an instruction, a clarification that helps every adopter. In
 that case:
 
-1. Make the change in a fork or branch of agent-homebase.
+1. Make the change in a fork or branch of agent-enterprise.
 2. Strip every project-specific reference out of it.
 3. Open a PR. Reviewers will check that nothing project-specific leaked in.
 

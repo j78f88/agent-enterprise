@@ -10,7 +10,7 @@ description: determinism-guarantees instruction
 
 **Phase 4 — Reproducible Agent Execution**
 
-This instruction establishes formal determinism guarantees for agent-homebase, enabling bit-identical replay, reproducible composition, and verifiable outcomes.
+This instruction establishes formal determinism guarantees for agent-enterprise, enabling bit-identical replay, reproducible composition, and verifiable outcomes.
 
 ---
 

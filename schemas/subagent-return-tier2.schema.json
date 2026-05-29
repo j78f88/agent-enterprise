@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://agent-homebase/schemas/subagent-return-tier2.schema.json",
+  "$id": "https://agent-enterprise/schemas/subagent-return-tier2.schema.json",
   "title": "Subagent Return Schema - Tier 2 (Artifact Creation)",
   "description": "Schema for subagent returns that create file artifacts",
   "type": "object",

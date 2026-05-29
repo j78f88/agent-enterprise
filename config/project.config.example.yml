@@ -57,6 +57,7 @@ paths:
   # Agent tooling
   copilot_instructions: ".github/copilot-instructions.md"
   instructions_dir: ".github/instructions"                  # Used by @reviewer to reference instruction files
+  skills_deploy_dir: ".github/agents/"                      # Where resolved skills are copied in the adopter project
   memory_architecture: ".claude/memory/architecture.md"
   memory_conventions: ".claude/memory/conventions.md"
 

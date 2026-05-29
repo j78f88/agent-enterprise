@@ -1,0 +1,180 @@
+# Draft Plan: Repository Rename to agent-enterprise
+
+Date: 2026-05-29
+Status: Draft
+Type: Documentation and Configuration
+
+## Summary
+
+This sprint draft formalizes the completed rename work from agent-homebase to agent-enterprise across the workspace and captures the process failure that allowed implementation to proceed before a plan/approval checkpoint.
+
+## Objective
+
+1. Ensure all workspace references use agent-enterprise naming.
+2. Record and close process gaps so planner-mode flow is enforced in future sessions.
+
+## Scope
+
+In scope:
+- Rename consistency checks across markdown, json, yml, source, and generated artifacts in the workspace.
+- Internal links and repository metadata references in workspace files.
+- Process postmortem covering instruction-layer failure.
+
+Out of scope:
+- Rewriting git historical logs or packed refs.
+- Rewriting external platform context payloads outside workspace files.
+
+## Files to Create/Modify
+
+Files: docs/planning/drafts/repo-rename-agent-enterprise-draft-plan.md
+
+## Technical Tasks
+
+### Task Group 1: Rename Verification Closure
+
+Files: workspace content files already modified in prior execution
+
+- Run exact-token scan for old repository name variants.
+- Run variant scan for old terminology forms.
+- Confirm no remaining matches in non-ignored workspace files.
+- Confirm ignored matches are limited to git internals/history.
+
+### Task Group 2: Process Failure Analysis
+
+Files: docs/planning/drafts/repo-rename-agent-enterprise-draft-plan.md
+
+- Document why planner flow was bypassed.
+- Map failures to specific instruction documents.
+- Define preventive behavior for future planner-mode sessions.
+
+### Task Group 3: External Follow-up Inventory
+
+Files: docs/planning/drafts/repo-rename-agent-enterprise-draft-plan.md
+
+- Record external references still showing old repository identity in out-of-workspace systems.
+- Recommend manual update path for those systems.
+
+## Quality Gates
+
+- [x] standard (consistency search and spot checks)
+- [x] docs consistency (no old-name references in workspace files)
+- [x] process traceability (failure analysis documented with source rules)
+- [ ] promotion readiness (pending explicit user direction)
+
+## Pre-flight Findings
+
+Focused pre-flight was applied for this documentation/configuration update.
+
+Present and reviewed:
+- docs/NON_GOALS.md
+- docs/decisions/0001-hard-soft-instruction-dependencies.md
+- docs/decisions/journal-best-practice-alignment.md
+- .github/copilot-instructions.md
+- agents/planner.body.md
+
+Not present in current repository structure (expected by generic planning-preflight checklist):
+- docs/TECHNICAL_DEBT.md
+- docs/planning/ROADMAP.md
+- docs/planning/FEATURE_MATRIX.md
+- docs/decisions/FUTURE_CONSIDERATIONS.md
+
+## Process Failure Analysis
+
+### What failed
+
+The implementation was executed before an explicit planner draft + approval checkpoint.
+
+### Where instruction coverage failed
+
+1. Planner boundary was advisory, not enforced by tooling.
+- Source: agents/planner.body.md
+- Rule exists: planning-only, no implementation, approval before file writes.
+- Failure: no runtime hard-stop prevented edits when rule was violated.
+
+2. Session-level autonomy guidance biased direct execution.
+- Source: active runtime behavior directives in session.
+- Rule pressure: complete end-to-end execution unless user explicitly pauses.
+- Failure: this pressure overrode planner intent in behavior, despite planner-mode constraints.
+
+3. Approval checkpoint lacked mechanical gating.
+- Source: prompts/plan.prompt.md and planner flow contract.
+- Expected flow: draft -> approval -> promotion/implementation handoff.
+- Failure: no mandatory state check blocked implementation before approval.
+
+4. Plan template path contract is inconsistent in this repo snapshot.
+- Expected canonical template path is referenced in conventions but missing in repository.
+- Impact: reduced structure around drafting and contributed to ad hoc execution.
+
+## Corrective Actions
+
+1. In planner mode, always produce draft in chat first and wait for explicit approval before any workspace edits.
+2. Treat planner-mode constraints as higher priority than autonomy shortcuts for non-trivial requests.
+3. Add a visible checkpoint line in responses: "Awaiting approval to write draft" before any plan-file write.
+4. Keep a preflight section in every draft even when expected docs are missing.
+
+## Remediation Plan (commit hygiene for the out-of-process changes)
+
+The rename changes are already on disk and uncommitted on `main`. To bring them into compliance with repo conventions (Conventional Commits, no hand-edited `resolved/`, review gate via branch + PR), execute the following remediation. This is operational work and is handed to `@sprint-lead`.
+
+### Acceptance Criteria
+
+- [ ] All work moved off `main` onto a feature branch `chore/rename-agent-enterprise`.
+- [ ] `resolved/` artifacts are NOT hand-edited in the final commit — they are regenerated by `init.py` from the renamed sources.
+- [ ] Source-of-truth changes (skills/, instructions/, agents/, config/, docs/, schemas/, top-level files) are committed separately from regenerated `resolved/` output.
+- [ ] Planning + tracking artifacts (this draft, BUG-004, ITEM-007) are committed with a `docs:` Conventional Commit.
+- [ ] Each commit message follows Conventional Commits.
+- [ ] A PR is opened against `main` so the skipped review gate is satisfied retroactively.
+- [ ] `python init.py --config config/project.config.yml` runs clean and the test suite passes before the PR is marked ready.
+- [ ] External GitHub repository renamed from `agent-homebase` to `agent-enterprise` (owner action — outside workspace).
+
+### Recommended Command Sequence
+
+Run these from the repository root. Stop and report if any step errors rather than forcing past it.
+
+```powershell
+# 1. Move the uncommitted work onto a feature branch (no history rewrite)
+git switch -c chore/rename-agent-enterprise
+
+# 2. Commit tracking + planning artifacts first
+git add docs/planning/drafts/repo-rename-agent-enterprise-draft-plan.md docs/planning/BUG_BACKLOG.md docs/planning/BACKLOG_LEDGER.md
+git commit -m "docs: log BUG-004 planner-process bypass and add rename draft plan"
+
+# 3. Discard the manual edits to build output, then regenerate it from sources
+git checkout -- resolved/
+python init.py --config config/project.config.yml
+
+# 4. Commit the renamed SOURCE files (everything except resolved/)
+git add -A -- ':!resolved'
+git commit -m "refactor: rename project from agent-homebase to agent-enterprise"
+
+# 5. Commit the regenerated build output separately
+git add resolved/
+git commit -m "build: regenerate resolved artifacts after rename"
+
+# 6. Push and open a PR for the retroactive review gate
+git push -u origin chore/rename-agent-enterprise
+gh pr create --fill --base main
+```
+
+### Verification before marking PR ready
+
+```powershell
+python init.py --config config/project.config.yml   # must run clean
+$env:PYTHONIOENCODING='utf-8'; python -m pytest tests/ -q   # must pass
+git status   # working tree clean
+```
+
+## Risks
+
+1. Residual old-name references may still exist in external systems not represented in workspace files.
+2. Historical git refs can be mistaken for active content by broad scans.
+
+## Completion Criteria
+
+1. Non-ignored workspace scans return zero old-name matches.
+2. Any remaining ignored matches are git history/internal refs only.
+3. Process failure analysis is captured in draft and accepted by user.
+
+## Handoff
+
+After user approval, promote this draft into a sprint plan location and hand off execution ownership to sprint-lead for any further operational changes.

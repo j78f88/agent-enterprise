@@ -1,0 +1,29 @@
+---
+id: instruction.planning-compliance
+kind: instruction
+version: 1.0.0
+applies_to: '**'
+description: Use when reviewing draft plans for architecture compliance, checking
+  sprint plans against project conventions, or validating technical design decisions.
+applyTo: '**'
+---
+
+# Planning Compliance Checklist
+
+Before presenting any draft plan, self-check against these project rules.
+
+> **Adopter note:** The rules below are examples from a React/TypeScript
+> project. Replace them with your project's actual conventions.
+
+- **Factory pattern** — All stores use `createXStore(storage)`, never instantiate directly
+- **Store versioning** — All persisted stores have `version` + `migrate` for schema evolution
+- **ISO date strings** — All dates are ISO strings for JSON safety, never Date objects
+- **Tailwind-only** — No inline styles, no CSS modules
+- **TypeScript strict** — No `any` types in new code
+- **Testing** — 80% coverage for stores, 0% for components; specify test types needed
+- **Security** — Input validation, safe data storage, sanitized exports
+- **Accessibility** — aria labels, keyboard navigation, focus traps for modals
+- **Import order** — React → External → `{{project.namespace}}/*` → Relative
+- **Design tokens** — Never hardcode color values (no `bg-purple-500`), use token classes
+
+Output findings as a **Compliance Notes** section in the draft plan.

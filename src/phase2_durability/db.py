@@ -1,7 +1,7 @@
 """
 SQLite Database Layer
 
-Provides ACID-compliant state management for agent-homebase.
+Provides ACID-compliant state management for agent-enterprise.
 Phase 2 - Durable Execution
 
 Features:

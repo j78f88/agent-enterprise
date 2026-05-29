@@ -1,6 +1,6 @@
 # Skill Authoring Guide
 
-Rules for writing, reviewing, and maintaining skills in agent-homebase.
+Rules for writing, reviewing, and maintaining skills in agent-enterprise.
 Every skill under `skills/<name>/` follows these rules. No exceptions.
 
 ---
@@ -331,7 +331,7 @@ Use this checklist when reviewing any skill — new or rewritten.
 ## Relationship to EXTENSION_GUIDE.md
 
 `docs/EXTENSION_GUIDE.md` covers how external projects consume and
-extend agent-homebase without forking. This guide covers how to author
-skill content within agent-homebase itself. The skill template section
+extend agent-enterprise without forking. This guide covers how to author
+skill content within agent-enterprise itself. The skill template section
 in EXTENSION_GUIDE is superseded by this document — use this guide as
 the authoritative reference for section structure and voice.

@@ -98,7 +98,7 @@ Rendered into RETRO.md at Phase 6. Not written to any file during the sprint.
 
 ## Sprint Execution Phases
 
-Full phase details with step-by-step instructions are in `skills/sprint-lead/phase-details.md`. Subagent prompt templates are in `skills/sprint-lead/subagent-templates.md`.
+Full phase details with step-by-step instructions are in `{{paths.skills_deploy_dir}}sprint-lead/phase-details.md`. Subagent prompt templates are in `{{paths.skills_deploy_dir}}sprint-lead/subagent-templates.md`.
 
 | Phase | Purpose |
 | --- | --- |

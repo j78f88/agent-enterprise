@@ -10,7 +10,7 @@
 
 ## 1. Context — what the repo looked like before the sprint
 
-agent-homebase is a portable multi-agent OS: skills, instructions, and agents authored as Markdown with `{{tokens}}`, compiled by `init.py` into platform-ready artifacts under `resolved/`. It was architecturally well-differentiated (compilation step, tiered subagent contracts, write permits, OPA Rego policy layer), but two rounds of external research surfaced **5 concrete gaps vs. industry convention** that were hurting adoption surface and agent adherence.
+agent-enterprise is a portable multi-agent OS: skills, instructions, and agents authored as Markdown with `{{tokens}}`, compiled by `init.py` into platform-ready artifacts under `resolved/`. It was architecturally well-differentiated (compilation step, tiered subagent contracts, write permits, OPA Rego policy layer), but two rounds of external research surfaced **5 concrete gaps vs. industry convention** that were hurting adoption surface and agent adherence.
 
 ### Locked baseline
 

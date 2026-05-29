@@ -1,6 +1,6 @@
 # Customization Guide
 
-How to customize agent-homebase for your project: tuning skills, overriding defaults, and extending capabilities.
+How to customize agent-enterprise for your project: tuning skills, overriding defaults, and extending capabilities.
 
 ---
 

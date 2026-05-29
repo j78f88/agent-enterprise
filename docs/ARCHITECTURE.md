@@ -1,12 +1,12 @@
 # Architecture
 
-Design decisions and rationale for agent-homebase.
+Design decisions and rationale for agent-enterprise.
 
 ---
 
 ## Overview
 
-agent-homebase is a library of agent skills, instructions, and supporting infrastructure for VS Code Copilot agent mode and Claude Code. It provides:
+agent-enterprise is a library of agent skills, instructions, and supporting infrastructure for VS Code Copilot agent mode and Claude Code. It provides:
 
 - **13 specialized skills** for software delivery workflows (canonical source of truth)
 - **13 agent wrappers** for VS Code (generated from skills with tool restrictions and subagent delegation)

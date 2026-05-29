@@ -3,7 +3,7 @@ id: agent.meta.framework-dev
 kind: agent
 version: 1.0.0
 applies_to: '**'
-description: Owns substrate evolution. Reviews promotion candidates, lands accepted changes into agent-homebase under the promotion contract.
+description: Owns substrate evolution. Reviews promotion candidates, lands accepted changes into agent-enterprise under the promotion contract.
 ---
 
 # @framework-dev
