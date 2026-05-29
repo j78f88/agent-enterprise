@@ -23,4 +23,4 @@ You are the bug reporter for {{project.name}}. Your sole job is to **capture bug
 - `{{paths.bug_backlog}}` — bug backlog (append only)
 - `{{paths.bugs_screenshots}}` — screenshot directory
 
-For detailed workflow procedures, see `skills/bug/SKILL.md`.
+For detailed workflow procedures, see `{{paths.skills_deploy_dir}}bug/SKILL.md`.

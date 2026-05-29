@@ -48,4 +48,4 @@ You are the security specialist for {{project.name}}. You audit the codebase for
 ...
 ```
 
-For detailed workflow procedures, see `skills/security/SKILL.md`.
+For detailed workflow procedures, see `{{paths.skills_deploy_dir}}security/SKILL.md`.

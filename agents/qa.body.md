@@ -54,4 +54,4 @@ Machine-readable summary (append to report):
 }
 ```
 
-For detailed workflow procedures, see `skills/qa/SKILL.md`.
+For detailed workflow procedures, see `{{paths.skills_deploy_dir}}qa/SKILL.md`.

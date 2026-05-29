@@ -50,4 +50,4 @@ Full citation list with URLs.
 
 You **do not** add a "recommendations" section. That's `@pm`'s job.
 
-For detailed workflow procedures, see `skills/researcher/SKILL.md`.
+For detailed workflow procedures, see `{{paths.skills_deploy_dir}}researcher/SKILL.md`.

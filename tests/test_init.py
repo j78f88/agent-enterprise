@@ -617,12 +617,18 @@ class TestEndToEndResolution:
             assert len(fm.get("description", "")) <= 1024, f"{agent_file.name}: description exceeds 1024 chars"
 
     def test_agents_reference_skill(self):
-        """Every agent body should reference its skill."""
+        """Every agent body should reference its skill at the adopter deploy
+        path, not the non-deployed source-tree `skills/<name>/SKILL.md` path
+        (BUG-005 mechanism #3)."""
         agents_dir = Path(__file__).parent.parent / "resolved" / "agents"
         for agent_file in sorted(agents_dir.glob("*.agent.md")):
             name = agent_file.stem.replace(".agent", "")
             text = agent_file.read_text(encoding="utf-8")
-            assert f"skills/{name}/SKILL.md" in text, f"{agent_file.name}: missing skill reference"
+            assert f"{name}/SKILL.md" in text, f"{agent_file.name}: missing skill reference"
+            assert f"skills/{name}/SKILL.md" not in text, (
+                f"{agent_file.name}: references non-deployed source path "
+                f"skills/{name}/SKILL.md — use the deploy-dir token instead"
+            )
 
     def test_sprint_lead_has_security_in_agents(self):
         """Sprint-lead agent should delegate to security."""

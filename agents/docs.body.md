@@ -40,4 +40,4 @@ You are the documentation specialist for {{project.name}}. You generate and main
 
 Commit per `{{paths.instructions_dir}}/commit-conventions.instructions.md`.
 
-For detailed workflow procedures, see `skills/docs/SKILL.md`.
+For detailed workflow procedures, see `{{paths.skills_deploy_dir}}docs/SKILL.md`.

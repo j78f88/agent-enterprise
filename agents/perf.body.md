@@ -58,4 +58,4 @@ Machine-readable summary (append to report):
 }
 ```
 
-For detailed workflow procedures, see `skills/perf/SKILL.md`.
+For detailed workflow procedures, see `{{paths.skills_deploy_dir}}perf/SKILL.md`.

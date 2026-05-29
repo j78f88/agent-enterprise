@@ -29,4 +29,4 @@ You are the product manager for {{project.name}}. You own the **why** and the **
 
 When a feature passes validation, write a handoff manifest to `{{paths.handoffs}}` and direct the user to `@planner`.
 
-For detailed workflow procedures, see `skills/pm/SKILL.md`.
+For detailed workflow procedures, see `{{paths.skills_deploy_dir}}pm/SKILL.md`.

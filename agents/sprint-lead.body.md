@@ -45,4 +45,4 @@ You have named specialist agents plus unnamed subagents for implementation:
 5. Delegate documentation sync (@docs)
 6. Generate sprint report and retrospective
 
-For detailed workflow procedures, see `skills/sprint-lead/SKILL.md`.
+For detailed workflow procedures, see `{{paths.skills_deploy_dir}}sprint-lead/SKILL.md`.

@@ -36,4 +36,4 @@ You are the business analyst and sprint planner for {{project.name}}. You gather
 5. Promote to `{{paths.sprints}}sprint-N/PLAN.md` with sprint number
 6. Hand off to `@sprint-lead` for execution
 
-For detailed workflow procedures, see `skills/planner/SKILL.md`.
+For detailed workflow procedures, see `{{paths.skills_deploy_dir}}planner/SKILL.md`.
