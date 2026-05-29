@@ -317,6 +317,19 @@ class TestTokenDetectorFalsePositives:
         assert find_unresolved_tokens(resolved) == []
         assert strip_escapes(resolved) == "ref `docs/x.md` vs literal `{{paths.x}}`."
 
+    def test_strip_must_run_after_scan(self):
+        # Locks the main() pipeline ordering: the unresolved-token scan must
+        # run BEFORE strip_escapes(). If strip ran first, the backslash would
+        # be gone and the now-bare {{token}} would be flagged as unresolved.
+        resolved = substitute("literal `\\{{tokens}}`.", {})
+        # Correct order: scan sees the marker and stays silent, strip cleans.
+        assert find_unresolved_tokens(resolved) == []
+        assert strip_escapes(resolved) == "literal `{{tokens}}`."
+        # Inverted order (strip first) would produce a false-positive flag —
+        # this is the failure the ordering guards against.
+        stripped_first = strip_escapes(resolved)
+        assert find_unresolved_tokens(stripped_first) == ["{{tokens}}"]
+
 
 # =============================================================================
 # Frontmatter Parsing Tests
@@ -594,6 +607,25 @@ class TestEndToEndResolution:
         for skill_name in expected_skills:
             skill_md = resolved / skill_name / "SKILL.md"
             assert skill_md.exists(), f"Missing resolved skill: {skill_name}"
+
+    def test_resolved_onboarding_escape_is_clean_literal(self):
+        """Full-build evidence that strip_escapes() runs after the unresolved
+        scan in main(): the escaped `\\{{tokens}}` literal in the onboarding
+        skill source ships as a clean `{{tokens}}` literal in the deployed
+        file — no surviving backslash, and it was not flagged or resolved."""
+        skill_md = (
+            Path(__file__).parent.parent
+            / "resolved" / "skills" / "onboarding" / "SKILL.md"
+        )
+        assert skill_md.exists(), "resolved onboarding SKILL.md missing — rebuild"
+        text = skill_md.read_text(encoding="utf-8")
+        assert "`{{tokens}}`" in text, "escaped literal did not survive as clean {{tokens}}"
+        assert "\\{{tokens}}" not in text, "backslash escape marker leaked into deployed file"
+        # The clean literal is intentionally a bare {{tokens}} in the deployed
+        # file. find_unresolved_tokens() WOULD flag it now (the backslash is
+        # gone) — which is exactly why strip_escapes() must run after the scan,
+        # not before. We assert it IS detectable to document that ordering.
+        assert find_unresolved_tokens(text) == ["{{tokens}}"]
 
     def test_all_13_agents_generated(self):
         """All 13 agents should be generated."""

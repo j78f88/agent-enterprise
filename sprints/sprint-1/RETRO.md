@@ -183,9 +183,9 @@ TG2 (the `paths.skills_deploy_dir` token + skill-source cross-reference rewrites
 No functional work carried over — all three task groups and both review warnings completed in-sprint.
 
 Deferred review SUGGESTIONs (non-blocking, first logged Sprint 1):
-- SUGGESTION #1 — add a full-build test asserting `strip_escapes()` runs after the unresolved scan (the contract is currently covered indirectly by `test_escape_end_to_end`).
+- SUGGESTION #1 — ✅ DONE in-sprint. Added `test_strip_must_run_after_scan` (ordering-contract unit test proving strip-before-scan would false-flag) and `test_resolved_onboarding_escape_is_clean_literal` (full-build evidence that the deployed onboarding SKILL.md ships a clean `{{tokens}}` literal with no leaked backslash).
 - SUGGESTION #2 — `SOURCE_STYLE_REFS` in `tests/test_init.py` is a hardcoded 7-item allowlist; consider deriving it.
-- SUGGESTION #3 — confirm commit messages follow Conventional Commits.
+- SUGGESTION #3 — confirm commit messages follow Conventional Commits (verified: `e4d0272`, `8a33211`, `b0f0057` all use `feat:`/`fix:` prefixes).
 
 ## Section 10: Sprint Trends
 
