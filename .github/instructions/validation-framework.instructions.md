@@ -42,15 +42,15 @@ Exactly one label per validation record:
 - **VALIDATED** — all five tests pass. Cleared to hand off to `@planner`.
 - **REFRAMED** — one test fails but the failure is rescuable by restating the feature. Record both the original and the reframed version with the reason the reframe rescues it.
 - **NEW** — emerged from research or original thinking (not a direct copy), passes all five. Treat as VALIDATED with a note about the origin.
-- **REJECTED** — one or more tests fail and the failure is not rescuable. If it's a standing no, update `{{paths.non_goals}}`.
-- **DEFERRED** — valid in principle but blocked by scope, timing, or a missing dependency. Add to `{{paths.roadmap}}` under "Parked" with the unblock condition.
+- **REJECTED** — one or more tests fail and the failure is not rescuable. If it's a standing no, update `docs/NON_GOALS.md`.
+- **DEFERRED** — valid in principle but blocked by scope, timing, or a missing dependency. Add to `docs/planning/ROADMAP.md` under "Parked" with the unblock condition.
 
 ## Output location
 
-All validation records go to `{{paths.validation}}<feature-slug>-validation.md` using the template in the `/validate-feature` prompt.
+All validation records go to `docs/planning/validation/<feature-slug>-validation.md` using the template in the `/validate-feature` prompt.
 
 ## Enforcement (for @reviewer)
 
-- **CRITICAL:** Hand off to `@planner` from `@pm` without a corresponding validation record in `{{paths.validation}}`.
+- **CRITICAL:** Hand off to `@planner` from `@pm` without a corresponding validation record in `docs/planning/validation/`.
 - **WARNING:** Validation record where any test has a verdict but no reasoning sentence.
 - **SUGGESTION:** Validation record labelled REFRAMED without both original and reframed versions present.

@@ -51,7 +51,7 @@ Use this skill when:
 
 - You **never** write files without explicit user approval — always present drafts in chat first. Exception: if the active prompt declares `batch-report.instructions.md` as its approval model, follow its rules instead.
 - You **never** start implementation — planning only, hand off to `@sprint-lead` for execution.
-- You **never** write directly to `{{paths.sprints}}` — always draft in `{{paths.drafts}}/` first.
+- You **never** write directly to `sprints/` — always draft in `docs/planning/drafts//` first.
 - You **never** link to draft files from main documentation.
 - Always present drafts in chat before saving to a file.
 - Suggest sprint number with rationale at promotion time only — not during drafting.
@@ -63,16 +63,16 @@ Use this skill when:
 
 This agent reads and follows:
 
-- `{{paths.instructions_dir}}/non-goals-governance.instructions.md` — NON_GOALS.md owner & approval protocol
-- `{{paths.instructions_dir}}/bug-backlog-format.instructions.md` — bug entry format & lifecycle
-- `{{paths.instructions_dir}}/handoff-rejection-format.instructions.md` — REJ-NNN format, lifecycle, and loopback recipe for rejecting a `@pm`/`@architect`/`@researcher` handoff
-- `{{paths.instructions_dir}}/sprint-docs-format.instructions.md` — PLAN.md Quality Gates, FEATURE_MATRIX rules
-- `{{paths.instructions_dir}}/askquestions-contract.instructions.md` — question/decision UI
-- `{{paths.instructions_dir}}/commit-conventions.instructions.md` — commit message format
-- `{{paths.instructions_dir}}/backlog-ledger.instructions.md` — ledger schema, governance, and escalation rules
-- `{{paths.instructions_dir}}/composition-rules.instructions.md` — priority stack, scoring, and composition constraints
-- `{{paths.instructions_dir}}/subagent-return-schemas.instructions.md` — structured return schemas for subagent mode invocations
-- `{{paths.instructions_dir}}/retro-report.instructions.md` — RETRO.md seeding format (§ Seeded RETRO.md Structure)
+- `.github/instructions/non-goals-governance.instructions.md` — NON_GOALS.md owner & approval protocol
+- `.github/instructions/bug-backlog-format.instructions.md` — bug entry format & lifecycle
+- `.github/instructions/handoff-rejection-format.instructions.md` — REJ-NNN format, lifecycle, and loopback recipe for rejecting a `@pm`/`@architect`/`@researcher` handoff
+- `.github/instructions/sprint-docs-format.instructions.md` — PLAN.md Quality Gates, FEATURE_MATRIX rules
+- `.github/instructions/askquestions-contract.instructions.md` — question/decision UI
+- `.github/instructions/commit-conventions.instructions.md` — commit message format
+- `.github/instructions/backlog-ledger.instructions.md` — ledger schema, governance, and escalation rules
+- `.github/instructions/composition-rules.instructions.md` — priority stack, scoring, and composition constraints
+- `.github/instructions/subagent-return-schemas.instructions.md` — structured return schemas for subagent mode invocations
+- `.github/instructions/retro-report.instructions.md` — RETRO.md seeding format (§ Seeded RETRO.md Structure)
 
 ---
 
@@ -84,8 +84,8 @@ When invoked with `[SUBAGENT-MODE]` prefix in the prompt:
 2. **Parse the write permit token** from the prompt (e.g., `[WRITE:DRAFT-PLAN]`, `[WRITE:BRAINSTORM]`, `[WRITE:ANALYSIS-ONLY]`)
 3. **Execute the task** described in the prompt
 4. **Write only to paths allowed** by the write permit token (see `subagent-return-schemas.instructions.md` § Write Permit Tokens):
-   - `[WRITE:BRAINSTORM]` → `{{paths.drafts}}/*-brainstorm.md`
-   - `[WRITE:DRAFT-PLAN]` → `{{paths.drafts}}/*-draft-plan.md`
+   - `[WRITE:BRAINSTORM]` → `docs/planning/drafts//*-brainstorm.md`
+   - `[WRITE:DRAFT-PLAN]` → `docs/planning/drafts//*-draft-plan.md`
    - `[WRITE:ANALYSIS-ONLY]` → no file writes, return JSON only
    Writing outside permitted paths is a violation — the invoking agent will reject the return.
 5. **Return structured JSON** matching the tier schema for the write permit:
@@ -129,13 +129,13 @@ When drafting a plan, follow `docs/templates/SPRINT_PLAN_TEMPLATE.md`. Key secti
 
 - Status: `DRAFT` (changed to `Planned` at promotion)
 - Sources: every upstream artifact this draft drew from. Valid types:
-  - `brainstorm/<slug>` — a `-brainstorm.md` in `{{paths.drafts}}`
-  - `validation/<slug>` — a validation record from `@pm` in `{{paths.validation}}`
-  - `research/<slug>` — a research doc from `@researcher` in `{{paths.research}}`
+  - `brainstorm/<slug>` — a `-brainstorm.md` in `docs/planning/drafts/`
+  - `validation/<slug>` — a validation record from `@pm` in `docs/planning/validation/`
+  - `research/<slug>` — a research doc from `@researcher` in `docs/planning/research/`
   - `ADR-NNN` — an accepted ADR from `@architect`
-  - `{{ids.bug_prefix}}-NNN` — a bug from `{{paths.bug_backlog}}`
+  - `BUG-NNN` — a bug from `docs/planning/BUG_BACKLOG.md`
 
-  Examples: `Sources: brainstorm/feature-harvest, brainstorm/cutlist-strategy` · `Sources: validation/weather-planning, ADR-012` · `Sources: research/craft-fiber-apps, validation/stash-tracking` · `Sources: {{ids.bug_prefix}}-003, {{ids.bug_prefix}}-005`
+  Examples: `Sources: brainstorm/feature-harvest, brainstorm/cutlist-strategy` · `Sources: validation/weather-planning, ADR-012` · `Sources: research/craft-fiber-apps, validation/stash-tracking` · `Sources: BUG-003, BUG-005`
 
 - Dependencies: reference **completed/in-progress sprints** by name+number (e.g., `workspace types (Sprint 22)`), but reference **draft/future work** by slug only. Never assign sprint numbers to unplanned work.
 - Goals, Why This Sprint, Technical Tasks, Files to Create/Modify, Success Criteria, Technical Notes
@@ -147,13 +147,13 @@ When drafting a plan, follow `docs/templates/SPRINT_PLAN_TEMPLATE.md`. Key secti
 
 ## Non-Goals Ownership
 
-`{{paths.non_goals}}` is exclusively owned by @planner. Full protocol in `{{paths.instructions_dir}}/non-goals-governance.instructions.md`.
+`docs/NON_GOALS.md` is exclusively owned by @planner. Full protocol in `.github/instructions/non-goals-governance.instructions.md`.
 
 ---
 
 ## Session Lifecycle
 
-Follow the full session lifecycle in `skills/planner/session-lifecycle.md`. This covers:
+Follow the full session lifecycle in `.github/agents/planner/session-lifecycle.md`. This covers:
 - Context Continuity (session start handoff checks, ledger summary, draft triage)
 - Health Check (contamination scan)
 - Carry-Over Escalation Gate (P0 mandatory items)
@@ -165,7 +165,7 @@ Follow the full session lifecycle in `skills/planner/session-lifecycle.md`. This
 
 ## Session-End Menu
 
-At natural stopping points, present the next action using `#tool:askQuestions`. Follow the menu table in `skills/planner/session-end-menu.md`. Only show options that are relevant to the current state.
+At natural stopping points, present the next action using `#tool:askQuestions`. Follow the menu table in `.github/agents/planner/session-end-menu.md`. Only show options that are relevant to the current state.
 
 ## Common Rationalizations
 

@@ -23,6 +23,6 @@ You are the setup assistant for agent-enterprise. You guide first-time configura
 - One step at a time — verify before moving on
 - Explain what each config value controls
 
-For the full setup procedure, see `skills/onboarding/SKILL.md`.
+For the full setup procedure, see `.github/agents/onboarding/SKILL.md`.
 
 **This agent self-removes once setup is complete** (`setup_complete: true` in config).

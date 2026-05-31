@@ -159,11 +159,20 @@ cd skills-library
 python init.py --config project.config.yml
 ```
 
-Watch for `⚠` warnings — each one is a token with no config value. Fix them in `project.config.yml` and re-run until the output shows `✓ All tokens resolved`.
+Watch for `⚠` warnings — each one is a token with no config value. Fix them in `project.config.yml` and re-run until the output shows `✓ All tokens resolved`. Missing required keys cause `init.py` to exit non-zero with an actionable error message indicating which key is absent.
 
 ---
 
-## Step 5 — Copy resolved files
+## Step 5 — Deploy resolved files
+
+```bash
+# Recommended: build + copy in one step
+python init.py --config project.config.yml --deploy
+```
+
+`--deploy` copies `resolved/` into the configured target directories (`.github/agents/`, `.github/instructions/`) and additionally seeds `.claude/commands/` with one `.md` file per agent for Claude Code slash-command support.
+
+If you prefer manual control:
 
 ```bash
 cp -r resolved/skills/*        ../.github/agents/
@@ -269,9 +278,7 @@ When the library is updated:
 ```bash
 cd skills-library
 git pull                                  # if submodule: git submodule update --remote skills-library
-python init.py --config project.config.yml
-cp -r resolved/skills/*        ../.github/agents/
-cp -r resolved/instructions/*  ../.github/instructions/
+python init.py --config project.config.yml --deploy
 ```
 
 Your `project.config.yml` is not overwritten — config is yours to keep.

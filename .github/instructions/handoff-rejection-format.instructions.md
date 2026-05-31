@@ -9,7 +9,7 @@ applyTo: '**'
 
 # Handoff Rejection Format
 
-Single schema and lifecycle specification for `{{paths.rejections}}`. Mirrors the `bug-backlog-format` pattern.
+Single schema and lifecycle specification for `docs/planning/HANDOFF_REJECTIONS.md`. Mirrors the `bug-backlog-format` pattern.
 
 > **Why this exists:** handoffs between agents (e.g., `@pm → @planner`, `@architect → @planner`) are currently one-directional. When a receiving agent discovers the handoff cannot be cleanly scoped — scope too large, conflicts with an ADR, missing dependency — there needs to be a structured place to record the rejection and loop back to the upstream agent with context. Without this, rejections happen informally and the upstream agent loses signal.
 
@@ -35,7 +35,7 @@ Single schema and lifecycle specification for `{{paths.rejections}}`. Mirrors th
 
 ## ID Assignment
 
-`{{ids.rejection_prefix}}-NNN`, zero-padded to 3 digits, sequential. Read `{{paths.rejections}}` to find the highest existing N; assign N+1.
+`REJ-NNN`, zero-padded to 3 digits, sequential. Read `docs/planning/HANDOFF_REJECTIONS.md` to find the highest existing N; assign N+1.
 
 ## Severity
 
@@ -75,7 +75,7 @@ When `@planner` encounters a blocking condition while executing `/plan-feature`,
 
 ## Handoff Manifest Cleanup
 
-Handoff manifests in `{{paths.handoffs}}` track agent-to-agent hand-offs (separate from rejections above).
+Handoff manifests in `docs/planning/_handoffs/` track agent-to-agent hand-offs (separate from rejections above).
 
-- When the promoted sprint completes, move the handoff manifest to `{{paths.handoffs}}archive/`.
+- When the promoted sprint completes, move the handoff manifest to `docs/planning/_handoffs/archive/`.
 - Handoffs that did not result in a sprint (abandoned or superseded) should also be archived with a note.

@@ -22,7 +22,7 @@ Items are assigned a priority tier at composition time based on their ledger att
 | P0   | Mandatory          | Def 3 (escalation rule), or item explicitly marked as blocker by user                    |
 | P1   | Blocking Bug       | Type: `bug`, source severity 🔴 Blocks                                                    |
 | P2   | Degrading Bug      | Type: `bug`, source severity 🟡 Degraded                                                  |
-| P3   | Validated Feature   | Type: `feature` with a passing validation record in `{{paths.validation}}`            |
+| P3   | Validated Feature   | Type: `feature` with a passing validation record in `docs/planning/validation/`            |
 | P4   | Planned Feature    | Type: `feature` with a Draft ≠ `—` but no validation record                               |
 | P5   | Backlog            | All other open items (carry-overs, audit findings, research, rejections, unplanned features) |
 | P6   | Cosmetic / Edge    | Type: `bug`, source severity 🟢 Cosmetic or ⚪ Edge case                                  |
@@ -33,7 +33,7 @@ When computing P1/P2/P6 tiers for bug-type items, read the docs/planning/BUG_BAC
 
 ### P4 Validation Record Lookup
 
-When computing P3 tier for feature-type items, check `{{paths.validation}}` for a validation record matching the item's source reference. If a passing validation exists, promote from P4 to P3.
+When computing P3 tier for feature-type items, check `docs/planning/validation/` for a validation record matching the item's source reference. If a passing validation exists, promote from P4 to P3.
 
 ## Intra-Tier Scoring Formula
 

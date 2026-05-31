@@ -1,63 +1,69 @@
 # Sprint Tracking
 
-**Current: Sprint 2** — In Progress
+**Last Completed: Sprint 2**
 
 ---
 
-## Sprint 2 — Authentication Improvements
+## Sprint 2 — Build-System Hardening & Process Hygiene
 
-**Status:** In Progress  
-**Type:** Mixed (Feature + Bug)  
-**Started:** 2026-04-27  
-**Completed:** —
+**Status:** Complete  
+**Type:** Mixed (bug-fix / debt)  
+**Started:** 2026-05-31  
+**Completed:** 2026-05-31
 
 ### Goals
 
-- [x] Fix Safari login redirect (BUG-001)
-- [ ] Implement API rate limiting
-- [ ] Add session timeout handling
+- [x] Automated deploy-copy + fail-on-unresolved (BUG-006 / ITEM-012)
+- [x] Token-free guardrail for the deployed `.github/` tree (ITEM-012)
+- [x] CI canonical-build-command check (ITEM-011)
+- [x] Derive `SOURCE_STYLE_REFS` from config/resolved tree (ITEM-009)
+- [x] Claude Code `/command` seeding + onboarding docs (BUG-003 / ITEM-006)
+- [x] Planner-mode draft-approval checkpoint (BUG-004 / ITEM-007)
+- [x] Purge demo/template content from ledger and SPRINTS (ITEM-010)
 
 ### Tasks
 
-- [x] Diagnose Safari cookie issue
-- [x] Update OAuth callback handler
-- [ ] Add rate limit middleware
-- [ ] Implement graceful session expiry
-- [ ] Write integration tests
+- [x] TG1: deploy-copy step + fail-on-missing-key (ITEM-012)
+- [x] TG2: token-free guardrail script + CI step (ITEM-012)
+- [x] TG3: CI canonical-build-command check (ITEM-011)
+- [x] TG4: derive `SOURCE_STYLE_REFS` from config/resolved tree (ITEM-009)
+- [x] TG5: Claude Code `/command` seeding + onboarding docs (ITEM-006)
+- [x] TG6: planner-mode checkpoint enforcement (ITEM-007)
+- [x] TG7: purge demo/template content — ledger, bug backlog, SPRINTS (ITEM-010)
 
 ### Notes
 
-- Safari fix merged in PR #142
-- Rate limiting blocked on Redis setup
+- Sprint started 2026-05-31
+- Sprint completed 2026-05-31
 
 ---
 
-## Sprint 1 — Initial Setup
+## Sprint 1 — Onboarding Path Resolution Remediation
 
 **Status:** Complete  
-**Type:** Feature  
-**Started:** 2026-04-15  
-**Completed:** 2026-04-22
+**Type:** fix (build-system debt / bug-fix)  
+**Started:** 2026-04-27  
+**Completed:** 2026-05-30
 
 ### Goals
 
-- [x] Set up project scaffolding
-- [x] Configure CI/CD pipeline
-- [x] Implement basic authentication
+- [x] Resolve and deploy skill companion files
+- [x] Resolve inline code-span tokens with two-phase escape
+- [x] Cross-references use deploy path (`paths.skills_deploy_dir` token)
 
 ### Tasks
 
-- [x] Initialize monorepo structure
-- [x] Configure ESLint + Prettier
-- [x] Set up GitHub Actions
-- [x] Implement OAuth login flow
-- [x] Add user session management
+- [x] TG1 (A): companion-file resolution loop + setup-skip interaction
+- [x] TG2 (C): `paths.skills_deploy_dir` token + cross-reference rewrites
+- [x] TG3 (B): inline code-span policy + two-phase escape (preserve → strip after scans)
+- [x] Review fix: agent-wrapper refs corrected to deploy path
 
 ### Retro Summary
 
-- **Velocity:** 5 story points
-- **Carry-over:** 1 item (API rate limiting)
-- **Process notes:** Need to allocate time for infrastructure setup
+- **Velocity:** 3 task groups + 1 review-fix; 100% completion rate
+- **Carry-over:** none
+- **Forecast calibration:** 100% (3/3 assumptions, 3/3 complexity)
+- **Process notes:** Escape must preserve marker through scans; strip-after-scan ordering is now test-locked.
 
 ---
 

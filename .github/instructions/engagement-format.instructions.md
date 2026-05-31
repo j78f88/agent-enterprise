@@ -11,11 +11,11 @@ applyTo: '**'
 
 # Engagement Tracking Format
 
-Single schema and lifecycle specification for engagement tracking under `{{paths.engagements}}`.
+Single schema and lifecycle specification for engagement tracking under `docs/planning/engagements/`.
 
 ## Engagement Folder Structure
 
-Each engagement lives at: `{{paths.engagements}}{{ids.engagement_prefix}}-NNN-{slug}/`
+Each engagement lives at: `docs/planning/engagements/ENG-NNN-{slug}/`
 
 ```
 ENG-001-export-pdf/
@@ -27,7 +27,7 @@ ENG-001-export-pdf/
 
 ## ID Assignment
 
-`{{ids.engagement_prefix}}-NNN`, zero-padded to 3 digits, sequential. Scan `{{paths.engagements}}` for the highest existing N; assign N+1. If no engagements exist, start at ENG-001.
+`ENG-NNN`, zero-padded to 3 digits, sequential. Scan `docs/planning/engagements/` for the highest existing N; assign N+1. If no engagements exist, start at ENG-001.
 
 ## Status Lifecycle
 

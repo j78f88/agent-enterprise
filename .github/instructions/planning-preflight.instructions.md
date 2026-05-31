@@ -19,18 +19,18 @@ Read each document and note findings. **Do not** skip any row.
 
 | Document                                     | Look for                                          |
 | -------------------------------------------- | ------------------------------------------------- |
-| `{{paths.technical_debt}}`         | Resolvable debt, constraining debt                |
-| `{{paths.decisions}}`             | Applicable ADRs, need for new ADR                 |
-| `{{paths.future_considerations}}` | Strategic notes                                   |
-| `{{paths.sprints_doc}}` + `{{paths.roadmap}}`    | Phase alignment, dependencies                     |
-| `{{paths.feature_matrix}}`            | Web/mobile parity                                 |
-| `{{paths.copilot_instructions}}`            | Architecture rules                                |
-| `{{paths.non_goals}}`                          | Conflicts — **flag, do not silently work around** |
+| `docs/TECHNICAL_DEBT.md`         | Resolvable debt, constraining debt                |
+| `docs/decisions/DECISIONS.md`             | Applicable ADRs, need for new ADR                 |
+| `docs/decisions/FUTURE_CONSIDERATIONS.md` | Strategic notes                                   |
+| `SPRINTS.md` + `docs/planning/ROADMAP.md`    | Phase alignment, dependencies                     |
+| `docs/planning/FEATURE_MATRIX.md`            | Web/mobile parity                                 |
+| `.github/copilot-instructions.md`            | Architecture rules                                |
+| `docs/NON_GOALS.md`                          | Conflicts — **flag, do not silently work around** |
 
 ## Focused Pre-flight (Bug Fixes)
 
 | Item                                   | Look for                           |
 | -------------------------------------- | ---------------------------------- |
-| `{{paths.technical_debt}}`   | Is this a symptom of tracked debt? |
-| `{{paths.copilot_instructions}}`      | Architecture constraints           |
+| `docs/TECHNICAL_DEBT.md`   | Is this a symptom of tracked debt? |
+| `.github/copilot-instructions.md`      | Architecture constraints           |
 | Test coverage search for affected area | Existing tests, gaps               |

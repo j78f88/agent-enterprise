@@ -51,21 +51,21 @@ Use this skill when:
 
 This agent reads and follows:
 
-- `{{paths.instructions_dir}}/severity-levels.instructions.md` — severity definitions & required actions
-- `{{paths.instructions_dir}}/non-goals-governance.instructions.md` — NON_GOALS read-only rule
-- `{{paths.instructions_dir}}/sprint-docs-format.instructions.md` — Quality Gates format (for sprint validation)
+- `.github/instructions/severity-levels.instructions.md` — severity definitions & required actions
+- `.github/instructions/non-goals-governance.instructions.md` — NON_GOALS read-only rule
+- `.github/instructions/sprint-docs-format.instructions.md` — Quality Gates format (for sprint validation)
 - `references/testing-patterns.md` — cross-skill testing patterns, coverage expectations, anti-patterns
 
 ## Quality Pipeline
 
 Run these in order. **Do not** stop if one fails — run all of them and report everything.
 
-1. **TypeScript check:** `{{commands.typecheck}}`
-2. **Linting:** `{{commands.lint}}`
-3. **Unit/Integration tests:** `{{commands.test}}`
-4. **Store coverage:** `{{commands.coverage_store}}`
-5. **Web coverage:** `{{commands.coverage_web}}`
-6. **E2E tests:** `{{commands.e2e}}`
+1. **TypeScript check:** ``
+2. **Linting:** ``
+3. **Unit/Integration tests:** `python -m pytest tests/ -v`
+4. **Store coverage:** `python -m pytest tests/ --cov=. -v`
+5. **Web coverage:** ``
+6. **E2E tests:** `python -m pytest tests/ -v`
 
 ### Optional Pipeline Steps (check PLAN.md Quality Gates)
 
@@ -74,15 +74,15 @@ Run these in order. **Do not** stop if one fails — run all of them and report 
 ## Coverage Thresholds
 
 - Store package (`packages/store`): 80% minimum
-- Web components (`{{paths.web_app_dir}}`): 0% minimum
+- Web components (``): 0% minimum
 - Flag anything below threshold as CRITICAL (see severity-levels)
 
 ## Sprint Validation
 
 When asked to validate a sprint:
 
-1. Read `{{paths.sprints_doc}}` to find the current sprint
-2. Read the sprint's `PLAN.md` from `{{paths.sprints}}` directory
+1. Read `SPRINTS.md` to find the current sprint
+2. Read the sprint's `PLAN.md` from `sprints/` directory
 3. For each task marked complete in the plan:
    - Verify the component/feature exists in the codebase
    - Check if it has test coverage

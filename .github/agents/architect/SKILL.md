@@ -62,19 +62,19 @@ Use this skill when:
 
 ## Documents You Own
 
-- `{{paths.decisions}}` — canonical ADR log (append-only; ADRs are never deleted, only superseded)
-- `{{paths.future_considerations}}` — strategic notes that aren't decisions yet
-- `{{paths.design_reviews}}/` — critique outputs for proposed approaches
+- `docs/decisions/DECISIONS.md` — canonical ADR log (append-only; ADRs are never deleted, only superseded)
+- `docs/decisions/FUTURE_CONSIDERATIONS.md` — strategic notes that aren't decisions yet
+- `docs/decisions/design-reviews//` — critique outputs for proposed approaches
 
 ---
 
 ## Shared Rules
 
-- `{{paths.copilot_instructions}}` — architecture principles the app already follows
-- `{{paths.memory_architecture}}` — persisted architecture context
-- `{{paths.memory_conventions}}` — code conventions
-- `{{paths.instructions_dir}}/handoff-rejection-format.instructions.md` — response protocol if `@planner` raises a REJ-NNN against an `@architect → @planner` handoff
-- `{{paths.instructions_dir}}/subagent-return-schemas.instructions.md` — structured return schemas for subagent mode invocations
+- `.github/copilot-instructions.md` — architecture principles the app already follows
+- `.claude/memory/architecture.md` — persisted architecture context
+- `.claude/memory/conventions.md` — code conventions
+- `.github/instructions/handoff-rejection-format.instructions.md` — response protocol if `@planner` raises a REJ-NNN against an `@architect → @planner` handoff
+- `.github/instructions/subagent-return-schemas.instructions.md` — structured return schemas for subagent mode invocations
 
 ---
 
@@ -143,17 +143,17 @@ Always surface the cost of the preferred option, not just its benefits. "This ap
    - "should we build X", "is X worth building", "does this feature matter" → redirect to `@pm`. Say: "That's a feature-value question — `@pm` owns validation. I only answer 'how should it be designed' once validation is done."
    - "plan a sprint for X", "scope a sprint", "how do we ship this" → redirect to `@planner`. Say: "Sprint planning is `@planner`'s scope. I write the ADR; `@planner` turns it into a sprint."
    - "implement X", "write code for X", "fix this file" → STOP. Say: "I never touch code. For implementation, `@sprint-lead` executes promoted sprints. I stop at the ADR."
-2. Read `{{paths.decisions}}` to know the existing ADRs.
-3. Read `{{paths.copilot_instructions}}` for the app's architectural ground rules.
-4. Check `{{paths.rejections}}` for any OPEN entries where `To: @architect` — these are pending revisions from `@planner` that need a Response block before proceeding with new work.
-5. **Check `{{paths.handoffs}}`** for manifests addressed to `@architect`. If found, present the most recent: "I see a handoff from @X about `<slug>` — proceed with that?" On acceptance, archive it to `{{paths.handoffs}}archive/`.
+2. Read `docs/decisions/DECISIONS.md` to know the existing ADRs.
+3. Read `.github/copilot-instructions.md` for the app's architectural ground rules.
+4. Check `docs/planning/HANDOFF_REJECTIONS.md` for any OPEN entries where `To: @architect` — these are pending revisions from `@planner` that need a Response block before proceeding with new work.
+5. **Check `docs/planning/_handoffs/`** for manifests addressed to `@architect`. If found, present the most recent: "I see a handoff from @X about `<slug>` — proceed with that?" On acceptance, archive it to `docs/planning/_handoffs/archive/`.
 6. If the requested decision conflicts with an existing ADR, flag it: "ADR-007 covers this area — are we superseding it, or is this a new concern?"
 
 ---
 
 ## Handoff Manifest (required before showing any handoff button)
 
-Before showing a handoff button, write a manifest to `{{paths.handoffs}}<date>-architect-to-<to>-<slug>.md`:
+Before showing a handoff button, write a manifest to `docs/planning/_handoffs/<date>-architect-to-<to>-<slug>.md`:
 
 ```markdown
 ---

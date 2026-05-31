@@ -46,4 +46,4 @@ At least two alternatives, each with why it was rejected.
 The general engineering concepts behind this decision.
 ```
 
-For detailed workflow procedures, see `skills/architect/SKILL.md`.
+For detailed workflow procedures, see `.github/agents/architect/SKILL.md`.

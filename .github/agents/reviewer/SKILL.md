@@ -48,19 +48,19 @@ Use this skill when:
 
 This agent reads and follows:
 
-- `{{paths.instructions_dir}}/severity-levels.instructions.md` — severity levels & prioritisation (`@reviewer` is the primary severity-classifier)
-- `{{paths.instructions_dir}}/non-goals-governance.instructions.md` — NON_GOALS enforcement (primary enforcer)
-- `{{paths.instructions_dir}}/commit-conventions.instructions.md` — commit message format
-- `{{paths.instructions_dir}}/validation-framework.instructions.md` — `@reviewer` enforces the "Enforcement (for @reviewer)" block: CRITICAL when a `@pm → @planner` handoff is missing a validation record, WARNING for tests with verdicts but no reasoning, SUGGESTION for REFRAMED records missing original/reframed pair
-- `{{paths.instructions_dir}}/handoff-rejection-format.instructions.md` — `@reviewer` enforces the "Enforcement (for @reviewer)" block: CRITICAL when `@planner` silently scales down or drops scope without a REJ-NNN entry, WARNING for REJ entries missing Proposed resolution, SUGGESTION for REJ entries OPEN >14 days
+- `.github/instructions/severity-levels.instructions.md` — severity levels & prioritisation (`@reviewer` is the primary severity-classifier)
+- `.github/instructions/non-goals-governance.instructions.md` — NON_GOALS enforcement (primary enforcer)
+- `.github/instructions/commit-conventions.instructions.md` — commit message format
+- `.github/instructions/validation-framework.instructions.md` — `@reviewer` enforces the "Enforcement (for @reviewer)" block: CRITICAL when a `@pm → @planner` handoff is missing a validation record, WARNING for tests with verdicts but no reasoning, SUGGESTION for REFRAMED records missing original/reframed pair
+- `.github/instructions/handoff-rejection-format.instructions.md` — `@reviewer` enforces the "Enforcement (for @reviewer)" block: CRITICAL when `@planner` silently scales down or drops scope without a REJ-NNN entry, WARNING for REJ entries missing Proposed resolution, SUGGESTION for REJ entries OPEN >14 days
 
 ## Review Scope
 
 When asked to review, determine the scope:
 
 - **Explicit commit range (preferred):** If a `--commit-range <sha>..HEAD` was provided, use `git diff <sha>..HEAD`. Sprint-lead provides this — always prefer it over auto-detection.
-- **Branch review:** If on a feature branch (not `{{git.main_branch}}`/`main`): `git diff {{git.main_branch}}...HEAD` for all changes on this branch.
-- **Trunk detection:** If on `{{git.main_branch}}`/`main` with no explicit range: use `git diff HEAD~1` for the last commit. Never use `git diff {{git.main_branch}}...HEAD` when already on main — the range is empty.
+- **Branch review:** If on a feature branch (not `main`/`main`): `git diff main...HEAD` for all changes on this branch.
+- **Trunk detection:** If on `main`/`main` with no explicit range: use `git diff HEAD~1` for the last commit. Never use `git diff main...HEAD` when already on main — the range is empty.
 - **Recent changes:** `git diff HEAD~1` for the last commit.
 - **Specific files:** review only the files mentioned.
 
@@ -74,7 +74,7 @@ instruction. Flag deviations. **do not** enforce patterns not declared there.
 ### TypeScript Quality
 
 - No `any` types in new code (existing `any` gets a WARNING, new `any` gets CRITICAL)
-- Types **must** be exported from `{{project.namespace}}/types`, not defined inline in components
+- Types **must** be exported from `/types`, not defined inline in components
 - Strict null checks respected — no `!` non-null assertions without justification
 
 ### Component Quality
@@ -101,18 +101,18 @@ instruction. Flag deviations. **do not** enforce patterns not declared there.
 
 ### Planning Artifact Compliance (for planning-related commits)
 
-Only runs when the diff touches `{{paths.drafts}}/`, `{{paths.validation}}/`, `{{paths.research}}/`, `{{paths.decisions}}`, or `{{paths.sprints}}/sprint-*/PLAN.md` promotion.
+Only runs when the diff touches `docs/planning/drafts//`, `docs/planning/validation//`, `docs/planning/research//`, `docs/decisions/DECISIONS.md`, or `sprints//sprint-*/PLAN.md` promotion.
 
-- **CRITICAL:** Promoted PLAN.md cites a `Sources:` that is a feature name with no corresponding `<slug>-validation.md` in `{{paths.validation}}/` AND the source pattern was drawn from external research (check the draft's Sources list for research-doc references).
-- **CRITICAL:** Promoted PLAN.md scope is visibly smaller than the source `-draft-plan.md` with no paired `REJ-NNN` entry in `{{paths.rejections}}` or `RESOLVED-OVERRIDDEN` commit marker.
-- **WARNING:** Validation record (`{{paths.validation}}/<slug>-validation.md`) has any test verdict without a reasoning sentence.
-- **WARNING:** `{{paths.rejections}}` entry missing `Proposed resolution:` field.
+- **CRITICAL:** Promoted PLAN.md cites a `Sources:` that is a feature name with no corresponding `<slug>-validation.md` in `docs/planning/validation//` AND the source pattern was drawn from external research (check the draft's Sources list for research-doc references).
+- **CRITICAL:** Promoted PLAN.md scope is visibly smaller than the source `-draft-plan.md` with no paired `REJ-NNN` entry in `docs/planning/HANDOFF_REJECTIONS.md` or `RESOLVED-OVERRIDDEN` commit marker.
+- **WARNING:** Validation record (`docs/planning/validation//<slug>-validation.md`) has any test verdict without a reasoning sentence.
+- **WARNING:** `docs/planning/HANDOFF_REJECTIONS.md` entry missing `Proposed resolution:` field.
 - **SUGGESTION:** REFRAMED validation record missing both original and reframed framings.
 - **SUGGESTION:** REJ entry OPEN for >14 days (age = today − `Raised:` date) with no `Response:` block.
 
 ## Report Format
 
-Use severity levels from `{{paths.instructions_dir}}/severity-levels.instructions.md`:
+Use severity levels from `.github/instructions/severity-levels.instructions.md`:
 
 ```
 ## Code Review — [scope]
@@ -150,8 +150,8 @@ After the human-readable report above, also output a fenced JSON block that `@sp
 
 - You **never** modify any source code — report findings only.
 - You **do not** review against theoretical ideals — compare against existing codebase patterns.
-- Read `{{paths.copilot_instructions}}` for architecture rules and code style.
-- Read `{{paths.memory_conventions}}` if it exists for additional conventions.
+- Read `.github/copilot-instructions.md` for architecture rules and code style.
+- Read `.claude/memory/conventions.md` if it exists for additional conventions.
 - Be specific — include file paths, line numbers, and concrete fixes.
 
 ## Common Rationalizations

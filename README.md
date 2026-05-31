@@ -246,14 +246,10 @@ python init.py --quick-setup          # prompts for name, repo, branch, namespac
 cd agent-enterprise
 pip install -r requirements.txt
 
-# Choose a profile and generate resolved files
-python init.py --config profiles/python-api.config.yml
+# Choose a profile and generate + deploy resolved files
+python init.py --config profiles/python-api.config.yml --deploy
 # → resolved/skills, resolved/instructions, resolved/agents
-
-# Copy to your project
-cp -r resolved/skills/* ../.github/agents/
-cp -r resolved/instructions/* ../.github/instructions/
-cp -r resolved/agents/* ../.github/agents/
+# → copies automatically into .github/ and seeds .claude/commands/
 
 # Initialize planning files (first time only)
 cp starters/SPRINTS.md ../

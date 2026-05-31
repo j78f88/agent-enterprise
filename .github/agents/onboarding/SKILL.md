@@ -124,7 +124,7 @@ For each section, show the current value and ask if it's correct. Fill in values
 ### Step 5 — Run Token Resolution
 
 ```bash
-python init.py --config project.config.yml
+python init.py --config config/project.config.example.yml
 ```
 
 Check for `✓ All tokens resolved`. If unresolved tokens remain, identify missing config values and go back.

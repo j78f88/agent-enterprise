@@ -6,86 +6,6 @@ Only @bug appends entries below the marker. Never edit existing entries.
 ---
 <!-- BUG ENTRIES BELOW THIS LINE — do not edit above -->
 
-## BUG-001 — Login redirect fails on Safari
-
-**Severity:** WARNING  
-**Reported:** 2026-04-20  
-**Reporter:** QA team  
-
-### Description
-
-After successful OAuth login, Safari users are redirected to a blank page instead of the dashboard.
-
-### Steps to Reproduce
-
-1. Open app in Safari 17.x
-2. Click "Sign in with Google"
-3. Complete OAuth flow
-4. Observe blank page instead of dashboard
-
-### Expected Behavior
-
-User should land on `/dashboard` after successful authentication.
-
-### Actual Behavior
-
-User sees blank white page. URL shows `/callback?code=...` — redirect never completes.
-
-### Environment
-
-- Browser: Safari 17.4
-- OS: macOS Sonoma 14.4
-- Device: MacBook Pro M3
-
-### Screenshots
-
-See `bugs/screenshots/BUG-001-safari-blank.png`
-
-### Notes
-
-- Works correctly in Chrome, Firefox, Edge
-- Likely related to Safari's stricter cookie handling
-- Possibly a SameSite cookie issue
-
----
-
-## BUG-002 — Dashboard charts don't render on slow connections
-
-**Severity:** SUGGESTION  
-**Reported:** 2026-04-25  
-**Reporter:** User feedback  
-
-### Description
-
-On slow 3G connections, dashboard charts show loading spinner indefinitely.
-
-### Steps to Reproduce
-
-1. Enable network throttling (Slow 3G preset)
-2. Navigate to dashboard
-3. Wait 30+ seconds
-
-### Expected Behavior
-
-Charts should render within 10 seconds or show error state.
-
-### Actual Behavior
-
-Loading spinner persists indefinitely. No error shown.
-
-### Environment
-
-- Any browser with network throttling
-- Simulated Slow 3G (400ms RTT, 400kbps down)
-
-### Notes
-
-- Timeout appears to be missing
-- Consider adding skeleton loading state
-- Lower priority — affects edge case users only
-
----
-
 ## BUG-003 — Onboarding agent does not cover Claude Code slash-command setup
 
 **Severity:** WARNING
@@ -216,3 +136,49 @@ Raw `{{tokens}}` appear across deployed skills and agent docs; companion files a
 - Build-system gap in `init.py`, affects every adopter (not a config error from onboarding)
 - Remediation draft: `docs/planning/drafts/onboarding-path-resolution-remediation-draft-plan.md`
 - Linked ledger item: ITEM-008
+
+---
+
+## BUG-006 — init.py has no automated deploy-copy or token-free guardrail for the .github tree
+
+**Severity:** 🟡 Degraded
+**Area:** init.py / build system / deployment
+**Reported:** 2026-05-30
+**Ledger:** ITEM-012
+**Screenshots:** None
+
+### Description
+
+BUG-005 fixed token *resolution* (companion files, code spans, cross-refs) so `init.py` now emits a clean `resolved/`. But the deployed tree that agents actually load — `.github/instructions/` and `.github/agents/` — drifted back to containing raw `{{namespace.key}}` tokens. Three distinct root causes, none covered by BUG-005:
+
+- **(A) No automated deploy-copy.** `init.py` only writes to `resolved/`. Copying `resolved/` → `.github/` is a manual step documented only in the "Next steps" output. A prior cleanup sprint regenerated `resolved/` but skipped the copy, so the deployed tree silently went stale. This recurs for every adopter and every rebuild.
+- **(B) No guardrail asserting the deployed tree is token-free.** Nothing fails the build (or CI) when `.github/instructions/**` or `.github/agents/**` contains an unresolved `{{namespace.key}}` token. Drift is invisible until a human notices broken references at runtime.
+- **(C) Missing config keys produce unresolved tokens with only a non-blocking warning.** `config/project.config.yml` was missing `commands.container_scan`, `commands.iac_scan`, and the entire `security:` block (`sbom_format`, `tracked_files`, `license_gate`, `license_denylist`, `license_allowlist`). `init.py` printed "token warnings" but exited 0, so the broken output shipped.
+
+### Steps to Reproduce
+
+1. Run `python init.py --config config/project.config.yml`
+2. Manually edit/regenerate `resolved/` without copying into `.github/` (or omit a config key)
+3. Grep `.github/instructions` and `.github/agents` for `\{\{[a-zA-Z_]+\.[a-zA-Z_]+`
+4. Observe stale `{{paths.*}}` / `{{commands.*}}` / `{{security.*}}` tokens in the files agents load
+5. Note the build still exited 0 — nothing flagged the drift
+
+### Expected Behavior
+
+A single build command produces a token-free deployed tree, OR the build/CI fails loudly when `.github/**` contains unresolved real-reference tokens. Missing config keys that leave unresolved tokens should fail the build, not warn-and-continue.
+
+### Actual Behavior
+
+Deployed `.github/` files contain raw `{{tokens}}`; the build exits 0 regardless; the deploy-copy is a manual step that is easy to skip.
+
+### Environment
+
+- Repository: agent-enterprise
+- Branch: main
+- Date observed: 2026-05-30
+
+### Notes
+
+- Distinct from BUG-005: that was token *resolution* inside `init.py`; this is the *deploy + verification* gap around it
+- Affects every adopter — agent-enterprise is consumed this way downstream
+- Immediate symptom was hand-fixed this session (config keys added, resolved/ rebuilt clean, copied into .github/, verified zero tokens); this entry tracks the durable guardrail so it cannot recur

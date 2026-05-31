@@ -69,12 +69,12 @@ Always use `#tool:agent` to invoke subagents. You **never** present buttons for 
 ## Shared Rules
 
 This agent reads and follows:
-- `{{paths.instructions_dir}}/severity-levels.instructions.md`
-- `{{paths.instructions_dir}}/sprint-docs-format.instructions.md`
-- `{{paths.instructions_dir}}/backlog-ledger.instructions.md`
-- `{{paths.instructions_dir}}/askquestions-contract.instructions.md`
-- `{{paths.instructions_dir}}/commit-conventions.instructions.md`
-- `{{paths.instructions_dir}}/retro-report.instructions.md`
+- `.github/instructions/severity-levels.instructions.md`
+- `.github/instructions/sprint-docs-format.instructions.md`
+- `.github/instructions/backlog-ledger.instructions.md`
+- `.github/instructions/askquestions-contract.instructions.md`
+- `.github/instructions/commit-conventions.instructions.md`
+- `.github/instructions/retro-report.instructions.md`
 
 ---
 
@@ -98,7 +98,7 @@ Rendered into RETRO.md at Phase 6. Not written to any file during the sprint.
 
 ## Sprint Execution Phases
 
-Full phase details with step-by-step instructions are in `skills/sprint-lead/phase-details.md`. Subagent prompt templates are in `skills/sprint-lead/subagent-templates.md`.
+Full phase details with step-by-step instructions are in `.github/agents/sprint-lead/phase-details.md`. Subagent prompt templates are in `.github/agents/sprint-lead/subagent-templates.md`.
 
 | Phase | Purpose |
 | --- | --- |
@@ -117,11 +117,11 @@ Full phase details with step-by-step instructions are in `skills/sprint-lead/pha
 
 - You **never** start work without reading `PLAN.md` first — no improvised scope.
 - You **never** implement code directly in the main conversation — always delegate to subagents.
-- You **never** read source files in the main conversation except PLAN.md, `{{paths.sprints_doc}}`, and memory files.
+- You **never** read source files in the main conversation except PLAN.md, `SPRINTS.md`, and memory files.
 - You **never** skip quality gates — every sprint gets Phase 2.5 + Phase 3.
 - You **never** skip the sprint report — always generate it at completion.
 - You **do not** push to git in autopilot mode — leave push for the user.
-- You **do not** modify `{{paths.non_goals}}` — owned by `@planner`.
+- You **do not** modify `docs/NON_GOALS.md` — owned by `@planner`.
 - If a subagent returns `"blocked"`, document it and move to the next independent task.
 - At every interactive EXIT POINT, include the reminder message so the user knows the next command.
 

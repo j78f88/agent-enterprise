@@ -58,6 +58,7 @@ paths:
   copilot_instructions: ".github/copilot-instructions.md"
   instructions_dir: ".github/instructions"                  # Used by @reviewer to reference instruction files
   skills_deploy_dir: ".github/agents/"                      # Where resolved skills are copied in the adopter project
+  claude_commands: ".claude/commands"                       # Claude Code slash-command directory (one .md per agent)
   memory_architecture: ".claude/memory/architecture.md"
   memory_conventions: ".claude/memory/conventions.md"
 
@@ -165,7 +166,7 @@ security:
   license_gate: false                 # If true, denied license = gate FAIL (default: WARNING only)
   license_denylist: ["GPL-3.0-only", "AGPL-3.0-only", "SSPL-1.0"]
   license_allowlist: ["MIT", "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause", "ISC", "0BSD"]
-  check_security_headers: true        # Check HTTP security headers (web projects only)
+  check_security_headers: true        # Set true only for web projects with an HTTP frontend
   sast_tool: "semgrep"                # semgrep | bandit | eslint-security | codeql
   iac_scanner: "checkov"              # checkov | kics | trivy-config
 

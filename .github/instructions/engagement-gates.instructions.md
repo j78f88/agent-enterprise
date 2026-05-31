@@ -107,8 +107,8 @@ When triggered, @sprint-lead presents: "This looks bigger than S-size. Upgrade t
 ### Validation Subagent (Phase 2)
 
 ```
-Read `{{paths.engagements}}{engagement}/brief.md` and
-`{{paths.instructions_dir}}/validation-framework.instructions.md`.
+Read `docs/planning/engagements/{engagement}/brief.md` and
+`.github/instructions/validation-framework.instructions.md`.
 
 Apply the 5-test validation framework against the brief.
 
@@ -117,7 +117,7 @@ Also read:
 - docs/planning/ROADMAP.md — check for roadmap alignment
 - docs/decisions/DECISIONS.md — check for ADR conflicts
 
-Write a validation record to `{{paths.engagements}}{engagement}/validation.md`.
+Write a validation record to `docs/planning/engagements/{engagement}/validation.md`.
 
 Return a JSON summary:
 {
@@ -131,8 +131,8 @@ Return a JSON summary:
 ### Planning Subagent (Phase 3)
 
 ```
-Read `{{paths.engagements}}{engagement}/brief.md` and the validation
-record at `{{paths.engagements}}{engagement}/validation.md` (if it exists).
+Read `docs/planning/engagements/{engagement}/brief.md` and the validation
+record at `docs/planning/engagements/{engagement}/validation.md` (if it exists).
 
 Read:
 - .github/instructions/planning-compliance.instructions.md
@@ -162,7 +162,7 @@ Gate definitions above reference "the platform's deployment workflow" and "autom
 
 ### Web
 
-- **Test deploy workflow:** `{{platform.test_workflow}}`
+- **Test deploy workflow:** `ci.yml`
 - **Production deploy workflow:** `deploy-azure-swa.yml` (Python CI)
 - **Automated test suite:** Playwright E2E (chromium + iPhone 14 viewport)
 - **Test environment URL:** Azure SWA test instance URL from workflow output

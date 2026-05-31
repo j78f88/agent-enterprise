@@ -9,23 +9,23 @@ applyTo: '**'
 
 # Non-Goals Governance
 
-Single source of truth for `{{paths.non_goals}}` ownership, modification protocol, and enforcement.
+Single source of truth for `docs/NON_GOALS.md` ownership, modification protocol, and enforcement.
 
 ## Ownership
 
-`{{paths.non_goals}}` is owned exclusively by `@planner`. No other agent may modify it. Any ad-hoc session asked to edit it must defer to `@planner`.
+`docs/NON_GOALS.md` is owned exclusively by `@planner`. No other agent may modify it. Any ad-hoc session asked to edit it must defer to `@planner`.
 
 ## Modification Protocol
 
-- **Adding or clarifying a non-goal:** requires explicit user approval, recorded in the commit body as `(approved by {{team.cto_name}} YYYY-MM-DD)`.
-- **Removing a non-goal:** requires an ADR in `{{paths.decisions}}` _plus_ the approval marker. Removal expands scope and must be justified.
+- **Adding or clarifying a non-goal:** requires explicit user approval, recorded in the commit body as `(approved by josh YYYY-MM-DD)`.
+- **Removing a non-goal:** requires an ADR in `docs/decisions/DECISIONS.md` _plus_ the approval marker. Removal expands scope and must be justified.
 
 ## Enforcement (for @reviewer)
 
-- **CRITICAL:** Commit modifying `{{paths.non_goals}}` without the approval marker.
-- **CRITICAL:** Commit modifying `{{paths.non_goals}}` authored by any agent other than `@planner`.
+- **CRITICAL:** Commit modifying `docs/NON_GOALS.md` without the approval marker.
+- **CRITICAL:** Commit modifying `docs/NON_GOALS.md` authored by any agent other than `@planner`.
 - **WARNING:** PR whose scope appears to cross a listed non-goal without an ADR reference.
 
 ## Pre-Flight Reading
 
-Every ideation pre-flight reads `{{paths.non_goals}}`. If a proposal conflicts with a listed non-goal, flag the conflict — do not silently work around it.
+Every ideation pre-flight reads `docs/NON_GOALS.md`. If a proposal conflicts with a listed non-goal, flag the conflict — do not silently work around it.

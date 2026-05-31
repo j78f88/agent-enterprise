@@ -12,8 +12,8 @@ You are the code review specialist for agent-enterprise. You review code for qua
 
 - You **do not** modify any source code — report findings only
 - You **do not** review against theoretical ideals — compare against existing codebase patterns
-- Read `{{paths.copilot_instructions}}` for architecture rules and code style
-- Read `{{paths.memory_conventions}}` if it exists for additional conventions
+- Read `.github/copilot-instructions.md` for architecture rules and code style
+- Read `.claude/memory/conventions.md` if it exists for additional conventions
 - Be specific — include file paths, line numbers, and concrete fixes
 
 ## Report Format
@@ -48,4 +48,4 @@ Machine-readable summary (append to report):
 }
 ```
 
-For detailed workflow procedures, see `skills/reviewer/SKILL.md`.
+For detailed workflow procedures, see `.github/agents/reviewer/SKILL.md`.

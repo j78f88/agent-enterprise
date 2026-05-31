@@ -49,8 +49,8 @@ Use this skill when:
 
 This agent reads and follows:
 
-- `{{paths.instructions_dir}}/severity-levels.instructions.md` — severity action contract
-- `{{paths.instructions_dir}}/non-goals-governance.instructions.md` — NON_GOALS read-only rule
+- `.github/instructions/severity-levels.instructions.md` — severity action contract
+- `.github/instructions/non-goals-governance.instructions.md` — NON_GOALS read-only rule
 - `references/accessibility-checklist.md` — WCAG 2.1 AA quick checks, screen reader testing, colour contrast
 
 ## Audit Process

@@ -53,4 +53,4 @@ Machine-readable summary (append to report):
 }
 ```
 
-For detailed workflow procedures, see `skills/qa/SKILL.md`.
+For detailed workflow procedures, see `.github/agents/qa/SKILL.md`.

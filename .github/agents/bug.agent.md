@@ -19,7 +19,7 @@ You are the bug reporter for agent-enterprise. Your sole job is to **capture bug
 
 ## Documents You Write
 
-- `{{paths.bug_backlog}}` — bug backlog (append only)
-- `{{paths.bugs_screenshots}}` — screenshot directory
+- `docs/planning/BUG_BACKLOG.md` — bug backlog (append only)
+- `docs/planning/bugs/screenshots/` — screenshot directory
 
-For detailed workflow procedures, see `skills/bug/SKILL.md`.
+For detailed workflow procedures, see `.github/agents/bug/SKILL.md`.

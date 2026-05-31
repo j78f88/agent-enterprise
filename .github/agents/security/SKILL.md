@@ -64,25 +64,25 @@ Use this skill when:
 ## Shared Rules
 
 This agent reads and follows:
-- `{{paths.instructions_dir}}/severity-levels.instructions.md`
-- `{{paths.instructions_dir}}/non-goals-governance.instructions.md`
-- `{{paths.instructions_dir}}/security-audit.instructions.md`
-- `{{paths.instructions_dir}}/commit-conventions.instructions.md`
+- `.github/instructions/severity-levels.instructions.md`
+- `.github/instructions/non-goals-governance.instructions.md`
+- `.github/instructions/security-audit.instructions.md`
+- `.github/instructions/commit-conventions.instructions.md`
 - `references/security-checklist.md`
 
 ---
 
 ## Documents You Own
 
-- `{{paths.security_changelog}}` — append-only security changelog (SEC-NNN entries)
-- `{{paths.file_hashes}}` — SHA-256 hash registry for tracked files
-- `{{paths.security_reports}}/` — per-audit detailed reports
+- `docs/security/SECURITY_CHANGELOG.md` — append-only security changelog (SEC-NNN entries)
+- `docs/security/FILE_HASHES.md` — SHA-256 hash registry for tracked files
+- `docs/security/reports//` — per-audit detailed reports
 
 ---
 
 ## Audit Checks
 
-Run all 14 checks defined in `skills/security/audit-checks.md`. You **never** stop if one check fails — run all and report everything.
+Run all 14 checks defined in `.github/agents/security/audit-checks.md`. You **never** stop if one check fails — run all and report everything.
 
 ---
 
@@ -90,21 +90,21 @@ Run all 14 checks defined in `skills/security/audit-checks.md`. You **never** st
 
 ### On-Demand (User Invocation)
 
-Run all checks, produce full report per `skills/security/report-format.md`.
+Run all checks, produce full report per `.github/agents/security/report-format.md`.
 
 ### Sprint Gate (Subagent Mode)
 
 When invoked by `@sprint-lead` with `[SUBAGENT-MODE]`:
 1. Skip session lifecycle — no interactive prompts.
 2. Run all checks against current codebase state.
-3. Append new findings to `{{paths.security_changelog}}`.
-4. Update `{{paths.file_hashes}}` if changes are approved.
-5. Return structured JSON per `skills/security/report-format.md` § Machine-Readable Summary.
+3. Append new findings to `docs/security/SECURITY_CHANGELOG.md`.
+4. Update `docs/security/FILE_HASHES.md` if changes are approved.
+5. Return structured JSON per `.github/agents/security/report-format.md` § Machine-Readable Summary.
 
 ### Scheduled (Recurring)
 
 1. Run full audit pipeline.
-2. Diff findings against previous report in `{{paths.security_reports}}/`.
+2. Diff findings against previous report in `docs/security/reports//`.
 3. Highlight new and resolved findings.
 4. Append summary to changelog.
 5. Commit: `security(audit): scheduled audit YYYY-MM-DD — N new, M resolved`
@@ -114,7 +114,7 @@ When invoked by `@sprint-lead` with `[SUBAGENT-MODE]`:
 ## Backlog Integration
 
 For CRITICAL findings requiring code changes:
-1. Check if an `ITEM-NNN` already exists in `{{paths.backlog_ledger}}` (dedup by CVE ID).
+1. Check if an `ITEM-NNN` already exists in `docs/planning/BACKLOG_LEDGER.md` (dedup by CVE ID).
 2. If none, recommend `@bug` append a new entry (Type: `audit-finding`, Source: `SEC-NNN`).
 3. Actively exploited CVEs → recommend immediate P0 escalation.
 

@@ -23,7 +23,7 @@ Before presenting any draft plan, self-check against these project rules.
 - **Testing** — 80% coverage for stores, 0% for components; specify test types needed
 - **Security** — Input validation, safe data storage, sanitized exports
 - **Accessibility** — aria labels, keyboard navigation, focus traps for modals
-- **Import order** — React → External → `{{project.namespace}}/*` → Relative
+- **Import order** — React → External → `/*` → Relative
 - **Design tokens** — Never hardcode color values (no `bg-purple-500`), use token classes
 
 Output findings as a **Compliance Notes** section in the draft plan.

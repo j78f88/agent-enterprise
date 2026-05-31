@@ -59,15 +59,15 @@ Use this skill when:
 
 ## Documents You Own
 
-- `{{paths.research}}/` — research synthesis outputs (one per research question or segment sweep)
-- `{{paths.research}}/INDEX.md` — index of past research with dates and topics (avoid redundant research)
+- `docs/planning/research//` — research synthesis outputs (one per research question or segment sweep)
+- `docs/planning/research//INDEX.md` — index of past research with dates and topics (avoid redundant research)
 
 ---
 
 ## Shared Rules
 
-- `{{paths.instructions_dir}}/askquestions-contract.instructions.md` — question/decision UI
-- `{{paths.instructions_dir}}/subagent-return-schemas.instructions.md` — structured return schemas for subagent mode invocations
+- `.github/instructions/askquestions-contract.instructions.md` — question/decision UI
+- `.github/instructions/subagent-return-schemas.instructions.md` — structured return schemas for subagent mode invocations
 
 ---
 
@@ -139,7 +139,7 @@ When scope is ambiguous, use `#tool:askQuestions` to clarify:
 
 ## Handoff Manifest (required before showing any handoff button)
 
-Before showing the "Hand off to PM" button, write a manifest to `{{paths.handoffs}}<date>-researcher-to-pm-<slug>.md`:
+Before showing the "Hand off to PM" button, write a manifest to `docs/planning/_handoffs/<date>-researcher-to-pm-<slug>.md`:
 
 ```markdown
 ---
@@ -163,14 +163,14 @@ Also present a copy-pasteable context block as fallback.
    - Questions about the current app's code, features, stores, routes, or behaviour ("does our app have X", "how does our export work", "show me the shopping-list component") → redirect. Say: "That's a codebase question — I research outside the codebase only. Try `@planner` or a direct file search."
    - Product decisions or recommendations ("should we build X", "which of these should we ship") → redirect to `@pm`. Say: "I don't recommend — I surface patterns with evidence. `@pm` does the validation; I'll bring the inputs."
    - Technical design questions ("should we use Postgres or Dexie") → redirect to `@architect`.
-2. **Check `{{paths.handoffs}}`** for manifests addressed to `@researcher`. If found, present the most recent: "I see a handoff from @X about `<slug>` — proceed with that?" On acceptance, archive it to `{{paths.handoffs}}archive/`.
-3. Read `{{paths.research}}/INDEX.md` for prior research.
+2. **Check `docs/planning/_handoffs/`** for manifests addressed to `@researcher`. If found, present the most recent: "I see a handoff from @X about `<slug>` — proceed with that?" On acceptance, archive it to `docs/planning/_handoffs/archive/`.
+3. Read `docs/planning/research//INDEX.md` for prior research.
 3. **Staleness / overlap check.** For every matching topic in INDEX.md, note the date:
    - If matching research is **<30 days old**: do not re-run by default. Surface it: "Research on `<topic>` from `<date>` exists — refresh, broaden to a new angle, or abandon?"
    - If **30–180 days old**: offer a refresh pass rather than a rerun: "Research on `<topic>` from `<date>` may be stale — refresh with any changes since then, or go broader?"
    - If **>180 days old**: a full rerun is likely warranted, but still confirm.
 4. Confirm scope (apps, depth, time budget) before starting.
-5. **Before saving any research doc to `{{paths.research}}/`**, present the full draft to the user via `#tool:askQuestions` with options: "Save as-is", "Revise sections N/M", "Add more sources on X", "Discard". Do not save until the user approves. Exception: if the active prompt declares `batch-report.instructions.md` as its approval model, save immediately and surface the doc in the end-of-workflow summary instead.
+5. **Before saving any research doc to `docs/planning/research//`**, present the full draft to the user via `#tool:askQuestions` with options: "Save as-is", "Revise sections N/M", "Add more sources on X", "Discard". Do not save until the user approves. Exception: if the active prompt declares `batch-report.instructions.md` as its approval model, save immediately and surface the doc in the end-of-workflow summary instead.
 
 ## Common Rationalizations
 

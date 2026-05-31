@@ -136,8 +136,10 @@ class SecurityValidator:
         'tsc', 'mypy', 'pyright',
         # Version control
         'git', 'gh',
+        # Security scanning tools
+        'syft', 'gitleaks', 'trivy', 'checkov', 'bandit', 'pip-licenses', 'semgrep',
         # Time command (safe)
-        'date', 'powershell -c "Get-Date"',
+        'date', 'powershell',
     }
     
     # Dangerous command patterns
@@ -210,7 +212,7 @@ class SecurityValidator:
             )
         
         # Check for absolute paths (should be relative to project root)
-        if path.startswith('/') or (len(path) > 2 and path[1] == ':'):
+        if Path(path).is_absolute():
             errors.append(
                 f"WARNING: Absolute path in '{key}': {path}\n"
                 f"  Consider using relative paths from project root"
@@ -777,6 +779,104 @@ def substitute(text: str, tokens: dict) -> str:
     return result
 
 
+def deploy_resolved(output: Path, config: dict, agent_count: int) -> int:
+    """Copy resolved/ into the configured deploy dirs under .github/.
+
+    Mirrors the manual "Next steps" copy so the deployed tree (the files
+    agents actually load) cannot silently drift from resolved/. Returns the
+    number of unresolved-token hits found in the deployed tree (0 = clean).
+    Callers should treat a non-zero return as a deploy failure.
+
+    Also seeds paths.claude_commands (default: .claude/commands/) with one
+    <name>.md file per agent — the filename (without .md) becomes the Claude
+    Code slash-command name.
+    """
+    paths = config.get("paths", {})
+    instructions_dir = paths.get("instructions_dir")
+    skills_deploy_dir = paths.get("skills_deploy_dir")
+    claude_commands = paths.get("claude_commands")
+
+    if not instructions_dir or not skills_deploy_dir:
+        print("⚠  Cannot deploy: paths.instructions_dir and/or "
+              "paths.skills_deploy_dir not set in config.")
+        return -1
+
+    # Guard against absolute deploy paths that could write outside the project.
+    for _label, _dest_val in [
+        ("paths.instructions_dir", instructions_dir),
+        ("paths.skills_deploy_dir", skills_deploy_dir),
+        ("paths.claude_commands", claude_commands),
+    ]:
+        if _dest_val and Path(_dest_val).is_absolute():
+            print(
+                f"ERROR: Deploy target '{_label}' is an absolute path — "
+                "refusing to deploy outside project directory.",
+                file=sys.stderr,
+            )
+            sys.exit(1)
+
+    instr_dest = Path(instructions_dir)
+    skills_dest = Path(skills_deploy_dir)
+    instr_dest.mkdir(parents=True, exist_ok=True)
+    skills_dest.mkdir(parents=True, exist_ok=True)
+
+    deployed = 0
+
+    # Instructions: resolved/instructions/*.md -> instructions_dir/
+    src_instr = output / "instructions"
+    if src_instr.exists():
+        for md in sorted(src_instr.glob("*.md")):
+            shutil.copy(md, instr_dest / md.name)
+            deployed += 1
+
+    # Agent wrappers: resolved/agents/*.agent.md -> skills_deploy_dir/
+    src_agents = output / "agents"
+    if agent_count and src_agents.exists():
+        for md in sorted(src_agents.glob("*.agent.md")):
+            shutil.copy(md, skills_dest / md.name)
+            deployed += 1
+
+    # Skill bundles: resolved/skills/<name>/* -> skills_deploy_dir/<name>/
+    src_skills = output / "skills"
+    if src_skills.exists():
+        for skill_dir in sorted(p for p in src_skills.iterdir() if p.is_dir()):
+            dest_dir = skills_dest / skill_dir.name
+            dest_dir.mkdir(parents=True, exist_ok=True)
+            for f in sorted(skill_dir.glob("*")):
+                if f.is_file():
+                    shutil.copy(f, dest_dir / f.name)
+                    deployed += 1
+
+    # Claude Code slash commands: resolved/agents/*.agent.md -> claude_commands/<name>.md
+    # The filename without .md becomes the slash-command name (e.g. planner.md → /planner).
+    if agent_count and src_agents.exists() and claude_commands:
+        claude_dest = Path(claude_commands)
+        claude_dest.mkdir(parents=True, exist_ok=True)
+        for md in sorted(src_agents.glob("*.agent.md")):
+            # planner.agent.md → planner.md
+            name = md.name[: -len(".agent.md")]
+            shutil.copy(md, claude_dest / f"{name}.md")
+            deployed += 1
+        print(f"  seeded {len(list(src_agents.glob('*.agent.md')))} Claude Code slash command(s) → {claude_dest}")
+
+    print(f"  deployed {deployed} file(s) to {instr_dest} and {skills_dest}")
+
+    # Post-deploy guardrail: the deployed tree must be token-free.
+    leftover = []
+    for md in sorted(skills_dest.rglob("*.md")):
+        if find_unresolved_tokens(md.read_text(encoding="utf-8")):
+            leftover.append(md)
+    for md in sorted(instr_dest.rglob("*.md")):
+        if find_unresolved_tokens(md.read_text(encoding="utf-8")):
+            leftover.append(md)
+    if claude_commands:
+        for md in sorted(Path(claude_commands).rglob("*.md")):
+            if find_unresolved_tokens(md.read_text(encoding="utf-8")):
+                leftover.append(md)
+
+    return len(leftover)
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Resolve {{tokens}} in skills and instructions using a project config."
@@ -795,6 +895,19 @@ def main():
         "--allow-frontmatter-warnings",
         action="store_true",
         help="Lax mode: collect frontmatter-v1 / callable-v1 violations as warnings instead of aborting the build."
+    )
+    parser.add_argument(
+        "--deploy",
+        action="store_true",
+        help="After a clean build, copy resolved/ into the configured deploy dirs "
+             "(paths.instructions_dir, paths.skills_deploy_dir). Refuses to deploy "
+             "if any unresolved token remains in the output."
+    )
+    parser.add_argument(
+        "--strict",
+        action="store_true",
+        help="Legacy flag — hard failure on unresolved tokens is now the default behaviour. "
+             "Kept for backward compatibility; passing it has no additional effect."
     )
     args = parser.parse_args()
 
@@ -1019,9 +1132,11 @@ def main():
             all_unresolved.append((md, matches))
 
     if all_unresolved:
-        print(f"⚠  {len(all_unresolved)} file(s) have unresolved tokens — check project.config.yml:")
+        print(f"⚠  {len(all_unresolved)} file(s) have unresolved tokens:")
         for path, found in all_unresolved:
-            print(f"   {path}: {found}")
+            for token in found:
+                key = token.strip("{}").strip()
+                print(f"   {path}: Missing config key '{key}' — add it to your project.config.yml")
         print()
     else:
         print("✓ All tokens resolved — no unresolved {{placeholders}} in output.")
@@ -1038,7 +1153,36 @@ def main():
 
     print(f"Summary: {resolved_count} resolved, {copied_count} copied, {agent_count} agents, {warning_count} token warnings")
     print()
+
+    # --- Hard guardrail: fail the build on any unresolved token ---
+    # This is unconditional. --strict is kept as a legacy no-op.
+    if all_unresolved:
+        print("✗ Build failed — unresolved tokens detected. "
+              "Add the missing config keys listed above to your project.config.yml and re-run.")
+        sys.exit(1)
+
+    # --- Optional deploy-copy into the .github tree ---
+    if args.deploy:
+        if all_unresolved:
+            print("✗ Refusing to deploy: output still contains unresolved tokens. "
+                  "Fix the config and re-run with --deploy.")
+            sys.exit(1)
+        print("Deploying resolved/ into configured deploy dirs...")
+        leftover = deploy_resolved(output, config, agent_count)
+        if leftover < 0:
+            sys.exit(1)
+        if leftover > 0:
+            print(f"✗ Deploy guardrail: {leftover} deployed file(s) still contain "
+                  "unresolved {{tokens}}. This should not happen after a clean build — "
+                  "investigate companion-file resolution.")
+            sys.exit(1)
+        print("✓ Deploy complete — deployed tree is token-free.")
+        print()
+        return
+
     print("Next steps:")
+    print("  python init.py --config <config> --deploy   # build + copy into .github/ (recommended)")
+    print("  — or copy manually —")
     print("  cp -r resolved/skills/*        .github/agents/")
     print("  cp -r resolved/instructions/*  .github/instructions/")
     if agent_count:

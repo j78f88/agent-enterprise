@@ -16,7 +16,7 @@ Shared rule for all agents that report findings. Defines the three severity leve
 | Level      | Definition                    | Action (code-touching agents: @qa, @reviewer, @a11y, @perf, @security) | Action (@docs)                                        |
 | ---------- | ----------------------------- | ------------------------------------------------------------ | ----------------------------------------------------- |
 | CRITICAL   | Blocks gate, must be resolved | Blocks sprint advancement and git push                       | Must resolve in same session; does **not** block push |
-| WARNING    | Does not block                | Logged to `{{paths.technical_debt}}` with sprint number + agent source | Fix or defer in session                            |
+| WARNING    | Does not block                | Logged to `docs/TECHNICAL_DEBT.md` with sprint number + agent source | Fix or defer in session                            |
 | SUGGESTION | Optional improvement          | Recorded in sprint report's "Notes" section                  | Recorded in sprint report's "Notes" section           |
 
 ## Prioritisation Order
@@ -32,12 +32,12 @@ The `@bug` agent uses a separate **user-impact triage** taxonomy (🔴 Blocks / 
 - Store with a new persisted field but no `version` bump or `migrate()` function (Sprint 32 data-safety rule).
 - E2E test suite regressing by >5% after a merge (Sprint 31 lesson).
 - Coverage dropping below threshold (80% store / 0% web).
-- Commit modifying `{{paths.non_goals}}` without the required approval marker.
+- Commit modifying `docs/NON_GOALS.md` without the required approval marker.
 - Missing dependencies flagged by `depcheck`.
 
 ## Recommended-Default Gates
 
-For any sprint touching `{{paths.web_app_dir}}/src/components/**`, the `a11y` gate should be checked by default in PLAN.md Quality Gates unless explicitly waived with rationale.
+For any sprint touching `/src/components/**`, the `a11y` gate should be checked by default in PLAN.md Quality Gates unless explicitly waived with rationale.
 
 ## Report Format for Findings
 

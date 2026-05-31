@@ -50,8 +50,8 @@ Use this skill when:
 
 This agent reads and follows:
 
-- `{{paths.instructions_dir}}/severity-levels.instructions.md` — severity action contract
-- `{{paths.instructions_dir}}/non-goals-governance.instructions.md` — NON_GOALS read-only rule
+- `.github/instructions/severity-levels.instructions.md` — severity action contract
+- `.github/instructions/non-goals-governance.instructions.md` — NON_GOALS read-only rule
 - `references/performance-checklist.md` — bundle, render, DB/network, build budgets
 
 ## Checks
@@ -60,7 +60,7 @@ This agent reads and follows:
 
 ```bash
 cd 
-python init.py --config config/project.config.yml
+python init.py --config config/project.config.example.yml
 ```
 
 After build completes, report:
@@ -98,11 +98,10 @@ Flag multiple versions of the same package as WARNING.
 Time the build:
 
 ```bash
-# Cross-platform: use Node.js timer
-node -e "const s=Date.now(); require('child_process').execSync('python init.py --config config/project.config.yml', {stdio:'inherit'}); console.log(\`Build time: \${((Date.now()-s)/1000).toFixed(1)}s\`)"
+time python init.py --config config/project.config.example.yml
 ```
 
-(On Windows/PowerShell, `Measure-Command { {{commands.build}} 2>&1 } | Select-Object TotalSeconds` also works.)
+(On Windows/PowerShell, `Measure-Command { python init.py --config config/project.config.example.yml 2>&1 } | Select-Object TotalSeconds` also works.)
 
 Report build duration. Flag if over 30 as WARNING.
 

@@ -27,5 +27,11 @@ jobs:
       - name: Build resolved/ artifacts
         run: python init.py --config config/project.config.example.yml
 
+      - name: Check for unresolved tokens in .github/ tree
+        run: python scripts/check_tokens.py
+
+      - name: Check for canonical build command in docs
+        run: python scripts/check_build_command.py
+
       - name: Run full test suite
         run: pytest tests/ -v

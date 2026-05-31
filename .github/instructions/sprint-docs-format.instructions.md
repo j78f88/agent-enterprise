@@ -9,7 +9,7 @@ applyTo: '**'
 
 # Sprint Documentation Format
 
-Schema and rules for sprint-adjacent files: `{{paths.sprints_doc}}`, `PLAN.md`, `{{paths.feature_matrix}}`, and phase archives.
+Schema and rules for sprint-adjacent files: `SPRINTS.md`, `PLAN.md`, `docs/planning/FEATURE_MATRIX.md`, and phase archives.
 
 ## SPRINTS.md Archiving
 
@@ -25,19 +25,19 @@ When Sprint N completes, move the Sprint N-2 plan directory to the archive:
 Move-Item -Path "sprints/sprint-(N-2)" -Destination "docs/archive/sprint-plans/sprint-(N-2)" -Force
 ```
 
-- **Source:** `{{paths.sprints}}sprint-(N-2)/` (contains PLAN.md and any companion files)
+- **Source:** `sprints/sprint-(N-2)/` (contains PLAN.md and any companion files)
 - **Destination:** `docs/archive/sprint-plans/sprint-(N-2)/`
-- **Update links:** If any archive docs (`SPRINTS_PHASE_*.md`, `SPRINTS_STANDALONE.md`) link to the moved sprint, rewrite `../../{{paths.sprints}}sprint-(N-2)/PLAN.md` → `sprint-plans/sprint-(N-2)/PLAN.md`.
-- Active sprint plans (current and next) always remain in `{{paths.sprints}}`.
+- **Update links:** If any archive docs (`SPRINTS_PHASE_*.md`, `SPRINTS_STANDALONE.md`) link to the moved sprint, rewrite `../../sprints/sprint-(N-2)/PLAN.md` → `sprint-plans/sprint-(N-2)/PLAN.md`.
+- Active sprint plans (current and next) always remain in `sprints/`.
 
 ## RETRO.md Lifecycle
 
-- **Seeded at promotion:** `@planner` writes `{{paths.sprints}}sprint-N/RETRO.md` with the forecast and placeholder sections (via `/promote-draft`).
+- **Seeded at promotion:** `@planner` writes `sprints/sprint-N/RETRO.md` with the forecast and placeholder sections (via `/promote-draft`).
 - **Loaded at kickoff:** `@sprint-lead` Phase 1 reads the seeded RETRO.md to capture the forecast.
 - **Finalized at completion:** `@sprint-lead` Phase 6 assembles the full RETRO.md from forecast + actuals + prior trends.
 - **Committed:** Included in the `docs: Sprint N — complete` commit.
 - **Archived at N-2:** Moves with the sprint directory to `docs/archive/sprint-plans/sprint-N/`.
-- **Full format reference:** `{{paths.instructions_dir}}/retro-report.instructions.md`
+- **Full format reference:** `.github/instructions/retro-report.instructions.md`
 
 ## PLAN.md Per-Task File Annotations
 
@@ -68,7 +68,7 @@ Files: `path/to/file.ts`, `path/to/other.tsx`
 ```
 
 - `standard` is always checked.
-- `a11y` is recommended-default when the sprint touches `{{paths.web_app_dir}}/src/components/**`.
+- `a11y` is recommended-default when the sprint touches `/src/components/**`.
 - `migrations` is recommended-default when the sprint adds or modifies persisted store fields in `packages/store/src/`.
 - Unknown gate names are flagged CRITICAL by `@sprint-lead` Phase 3.
 
@@ -78,49 +78,49 @@ When `migrations` is checked:
 
 1. Verify `version` was bumped in every modified store factory.
 2. Verify `migrate()` function handles upgrade from `version - 1` to `version`.
-3. Run store test suite: `{{commands.test}}` — all migration tests must pass.
+3. Run store test suite: `python -m pytest tests/ -v` — all migration tests must pass.
 4. Spot-check: seed a store at the previous version and verify `migrate()` produces the correct current-version shape without data loss.
 
 ## FEATURE_MATRIX.md Update Rule
 
 - "Last Updated" date at top must be set to today's date on every update.
 - Parity percentages must be recomputed, not estimated.
-- **Test counts:** Copy unit test count and E2E test count from the latest completed sprint's Quality Results in `{{paths.sprints_doc}}` (the `@qa` report numbers). Update the "Quality & Testing" table rows to match. Also update the footer "Last Updated" + "Tracked By" line to reflect the current sprint.
+- **Test counts:** Copy unit test count and E2E test count from the latest completed sprint's Quality Results in `SPRINTS.md` (the `@qa` report numbers). Update the "Quality & Testing" table rows to match. Also update the footer "Last Updated" + "Tracked By" line to reflect the current sprint.
 - **Feature completeness:** If a sprint ships a new user-facing feature, verify it has a row in docs/planning/FEATURE_MATRIX.md. Missing rows are added during the same docs sync.
 
 ## changelog.json & Version Bump Rule
 
 When a sprint ships user-facing features, bug fixes, or improvements:
 
-1. **Prepend** a new `ChangelogEntry` to `{{paths.changelog}}` with the next incremented version, today's date, and a user-friendly title + highlights.
-2. **Copy** the updated file to `{{paths.changelog_deploy_copy}}` (the web app fetches from `public/`).
-3. **Bump** the `version` field in `{{paths.package_json}}` to match the new entry. This version drives the `UpdateNotification` banner — a mismatch causes the notification to either never show or show on every reload.
-4. **Verify** JSON validity: `Get-Content {{paths.changelog}} -Raw | ConvertFrom-Json` must succeed.
+1. **Prepend** a new `ChangelogEntry` to `docs/changelog.json` with the next incremented version, today's date, and a user-friendly title + highlights.
+2. **Copy** the updated file to `docs/changelog.json` (the web app fetches from `public/`).
+3. **Bump** the `version` field in `pyproject.toml` to match the new entry. This version drives the `UpdateNotification` banner — a mismatch causes the notification to either never show or show on every reload.
+4. **Verify** JSON validity: `Get-Content docs/changelog.json -Raw | ConvertFrom-Json` must succeed.
 
 Sprints with no user-facing changes (documentation-only, audit-only) do not require a changelog entry or version bump.
 
 ## NON_GOALS.md Approval Marker
 
-See `{{paths.instructions_dir}}/non-goals-governance.instructions.md` for the full protocol.
+See `.github/instructions/non-goals-governance.instructions.md` for the full protocol.
 
 ## Review File Archival
 
-Point-in-time review files (`docs/planning/REVIEW_*.md` and `.html`) should be moved to `{{paths.archive}}` after all action items from the review have been executed. Keep only the current/active review in `docs/planning/`.
+Point-in-time review files (`docs/planning/REVIEW_*.md` and `.html`) should be moved to `docs/archive/` after all action items from the review have been executed. Keep only the current/active review in `docs/planning/`.
 
 ## Sprint Output Artifacts
 
 When a sprint plan specifies non-code output files (reports, roadmaps, audits):
 
-- **During planning:** `@planner` may use `{{paths.drafts}}` as the initial output location in the plan — this is correct for the planning phase.
-- **At sprint completion:** `@sprint-lead` (via `@docs`) must move these artifacts from `{{paths.drafts}}` to their permanent location:
+- **During planning:** `@planner` may use `docs/planning/drafts/` as the initial output location in the plan — this is correct for the planning phase.
+- **At sprint completion:** `@sprint-lead` (via `@docs`) must move these artifacts from `docs/planning/drafts/` to their permanent location:
   - Architecture reports/audits → `docs/architecture/`
   - Development guides/strategies → `docs/development/`
   - Research outputs → `docs/research/`
-- **Cleanup verification:** `/plan-cleanup` flags any non-plan files remaining in `{{paths.drafts}}` after their source sprint completes.
+- **Cleanup verification:** `/plan-cleanup` flags any non-plan files remaining in `docs/planning/drafts/` after their source sprint completes.
 
 ## Ledger Updates
 
-At sprint completion, `@sprint-lead` updates the Backlog Ledger (`{{paths.backlog_ledger}}`) at **Phase 6 step 2** — before the `docs: Sprint N — complete` commit.
+At sprint completion, `@sprint-lead` updates the Backlog Ledger (`docs/planning/BACKLOG_LEDGER.md`) at **Phase 6 step 2** — before the `docs: Sprint N — complete` commit.
 
 ### Required Operations
 

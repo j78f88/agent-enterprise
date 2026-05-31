@@ -49,7 +49,7 @@ Use this skill when:
 
 ## Core Constraints
 
-- You **never** write files without explicit user approval — always present drafts in chat first. Exception: if the active prompt declares `batch-report.instructions.md` as its approval model, follow its rules instead.
+- You **never** write files without explicit user approval — always present drafts in chat first. For non-trivial tasks (>3 files, feature additions, or new sprint plans) you **must** invoke `#tool:askQuestions` at the **Draft Approval Checkpoint** (see agent body § Draft Approval Checkpoint) before writing to `{{paths.drafts}}/`. Exception: if the active prompt declares `batch-report.instructions.md` as its approval model, follow its rules instead.
 - You **never** start implementation — planning only, hand off to `@sprint-lead` for execution.
 - You **never** write directly to `{{paths.sprints}}` — always draft in `{{paths.drafts}}/` first.
 - You **never** link to draft files from main documentation.

@@ -48,13 +48,13 @@ Use this skill when:
 
 This agent reads and follows:
 
-- `{{paths.instructions_dir}}/sprint-docs-format.instructions.md` — SPRINTS archiving, FEATURE_MATRIX, PLAN.md Quality Gates
-- `{{paths.instructions_dir}}/backlog-ledger.instructions.md` — detail-store-only discipline (BUG_BACKLOG + HANDOFF_REJECTIONS hold context, not status)
-- `{{paths.instructions_dir}}/bug-backlog-format.instructions.md` — BUG entry format (detail store — no status fields)
-- `{{paths.instructions_dir}}/non-goals-governance.instructions.md` — NON_GOALS read-only rule
-- `{{paths.instructions_dir}}/commit-conventions.instructions.md` — commit message format
-- `{{paths.instructions_dir}}/severity-levels.instructions.md` — severity contract (note: @docs CRITICAL does not block push per severity-levels)
-- `{{paths.instructions_dir}}/subagent-return-schemas.instructions.md` — structured return schemas for subagent mode invocations
+- `.github/instructions/sprint-docs-format.instructions.md` — SPRINTS archiving, FEATURE_MATRIX, PLAN.md Quality Gates
+- `.github/instructions/backlog-ledger.instructions.md` — detail-store-only discipline (BUG_BACKLOG + HANDOFF_REJECTIONS hold context, not status)
+- `.github/instructions/bug-backlog-format.instructions.md` — BUG entry format (detail store — no status fields)
+- `.github/instructions/non-goals-governance.instructions.md` — NON_GOALS read-only rule
+- `.github/instructions/commit-conventions.instructions.md` — commit message format
+- `.github/instructions/severity-levels.instructions.md` — severity contract (note: @docs CRITICAL does not block push per severity-levels)
+- `.github/instructions/subagent-return-schemas.instructions.md` — structured return schemas for subagent mode invocations
 
 ---
 
@@ -62,7 +62,7 @@ This agent reads and follows:
 
 1. Search the codebase to confirm the feature/component exists
 2. Read the existing docs in that area to match tone and format
-3. Check `{{paths.memory_architecture}}` and `{{paths.memory_conventions}}` for established patterns
+3. Check `.claude/memory/architecture.md` and `.claude/memory/conventions.md` for established patterns
 
 ---
 
@@ -70,38 +70,38 @@ This agent reads and follows:
 
 ### Sprint Documentation (every sprint)
 
-- Update `{{paths.sprints_doc}}` when sprints complete: dates, commit hashes, component lists
-- Archive Sprint N-2 per `{{paths.instructions_dir}}/sprint-docs-format.instructions.md`
-- Update `{{paths.copilot_instructions}}` current sprint pointer
+- Update `SPRINTS.md` when sprints complete: dates, commit hashes, component lists
+- Archive Sprint N-2 per `.github/instructions/sprint-docs-format.instructions.md`
+- Update `.github/copilot-instructions.md` current sprint pointer
 - Update sprint `PLAN.md` checkboxes
 
 ### User-Facing Docs (every sprint that ships features)
 
-- **`{{paths.user_guide}}`** — Add/update sections for new features. Write for end users, not developers. Step-by-step instructions, limitations, tips. Update the Table of Contents, "What's Coming Next", and "Last Updated" footer.
-- **`{{paths.releases}}`** — Add release notes for the completed sprint(s). Include features, bug fixes, metrics, technical changes. Match the existing format (✨ Features, 🐛 Bug Fixes, 🧪 Testing, etc.).
-- **`{{paths.changelog}}`** — Prepend a new entry for the completed sprint's version. Follow the `ChangelogEntry` schema (version, date, title, highlights, features, improvements, fixes, technical). Write highlights and features for end users, not developers. Then **copy** the updated file to `{{paths.changelog_deploy_copy}}` so the web app serves it.
-- **`{{paths.package_json}}`** — Bump the `version` field to match the new changelog entry's version.
+- **`docs/USER_GUIDE.md`** — Add/update sections for new features. Write for end users, not developers. Step-by-step instructions, limitations, tips. Update the Table of Contents, "What's Coming Next", and "Last Updated" footer.
+- **`docs/RELEASES.md`** — Add release notes for the completed sprint(s). Include features, bug fixes, metrics, technical changes. Match the existing format (✨ Features, 🐛 Bug Fixes, 🧪 Testing, etc.).
+- **`docs/changelog.json`** — Prepend a new entry for the completed sprint's version. Follow the `ChangelogEntry` schema (version, date, title, highlights, features, improvements, fixes, technical). Write highlights and features for end users, not developers. Then **copy** the updated file to `docs/changelog.json` so the web app serves it.
+- **`pyproject.toml`** — Bump the `version` field to match the new changelog entry's version.
 
 ### Developer Docs (every sprint)
 
-- **`{{paths.technical_debt}}`** — Add newly resolved items from the sprint. Add any new tech debt or known issues discovered during code review. Update test counts and coverage numbers. Mark previously-open items as resolved if addressed.
-- **`{{paths.architecture_doc}}`** — Update when new patterns, stores, or architectural changes are introduced.
-- **`{{paths.decisions}}`** — Add ADRs for significant architectural decisions made during the sprint.
-- **`{{paths.testing_doc}}`** — Verify relative links still resolve correctly. Update test counts if significantly changed.
+- **`docs/TECHNICAL_DEBT.md`** — Add newly resolved items from the sprint. Add any new tech debt or known issues discovered during code review. Update test counts and coverage numbers. Mark previously-open items as resolved if addressed.
+- **`docs/ARCHITECTURE.md`** — Update when new patterns, stores, or architectural changes are introduced.
+- **`docs/decisions/DECISIONS.md`** — Add ADRs for significant architectural decisions made during the sprint.
+- **`docs/TESTING.md`** — Verify relative links still resolve correctly. Update test counts if significantly changed.
 
 ### Planning & Status Docs (every sprint)
 
 - **`README.md`** — Keep feature list current, verify structure diagram matches actual project directories, ensure all internal links resolve, update sprint roadmap table.
-- **`{{paths.copilot_instructions}}`** — Update current sprint pointer, verify all file paths are valid.
-- **`{{paths.roadmap}}`** — Update phase statuses (IN PROGRESS / COMPLETE) to match `{{paths.sprints_doc}}`. Mark completed sprints with ✅.
-- **`{{paths.feature_matrix}}`** — Update "Last Updated" date, add any new features shipped, update test counts, update feature parity percentages.
+- **`.github/copilot-instructions.md`** — Update current sprint pointer, verify all file paths are valid.
+- **`docs/planning/ROADMAP.md`** — Update phase statuses (IN PROGRESS / COMPLETE) to match `SPRINTS.md`. Mark completed sprints with ✅.
+- **`docs/planning/FEATURE_MATRIX.md`** — Update "Last Updated" date, add any new features shipped, update test counts, update feature parity percentages.
 
 ### Link Validation (run on every docs sync)
 
 Before committing documentation changes, validate all internal markdown links:
 
 1. For each `[text](path)` link in the files you touched, verify the target file exists
-2. For relative links, resolve from the file's own directory (e.g., `../user/{{paths.user_guide}}` from `docs/development/`)
+2. For relative links, resolve from the file's own directory (e.g., `../user/docs/USER_GUIDE.md` from `docs/development/`)
 3. For root-relative links, resolve from the repo root
 4. Fix or remove any links to files/directories that no longer exist
 
@@ -109,10 +109,10 @@ Before committing documentation changes, validate all internal markdown links:
 
 Every 5th sprint that ships user-facing features (not test-only, docs-only, or audit-only sprints), run a full coverage audit instead of just the delta check:
 
-1. List every user-facing feature category with a ✅ in `{{paths.feature_matrix}}`
+1. List every user-facing feature category with a ✅ in `docs/planning/FEATURE_MATRIX.md`
 2. For each, verify a dedicated docs/USER_GUIDE.md section exists with: description, step-by-step instructions, and tips
 3. Search docs/USER_GUIDE.md for `Sprint \d+`, hardcoded version strings, and forward-looking promises — fix all stale references
-4. Verify the Settings section structure matches the actual routes in `{{paths.web_app_dir}}/src/routes/` (adjust path for your project structure)
+4. Verify the Settings section structure matches the actual routes in `/src/routes/` (adjust path for your project structure)
 5. Verify the Table of Contents matches actual `##` headings in the file
 6. Log findings as a checklist in the sprint's docs commit message
 
@@ -170,7 +170,7 @@ Use `#tool:askQuestions` at decision points:
 
 ## Documentation Sync Workflow
 
-Follow the complete workflow in `skills/docs/sync-workflow.md`. Run every step — do not skip any file. Check each one, and if it needs no changes, confirm it is current and move on.
+Follow the complete workflow in `.github/agents/docs/sync-workflow.md`. Run every step — do not skip any file. Check each one, and if it needs no changes, confirm it is current and move on.
 
 ## Common Rationalizations
 

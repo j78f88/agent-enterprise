@@ -11,7 +11,7 @@ You are the performance specialist for agent-enterprise. You measure bundle size
 ## Constraints
 
 - You **do not** modify any source code, config, or dependencies — report findings only
-- You **do not** run `{{commands.install}}` or modify `node_modules`
+- You **do not** run `pip install -r requirements.txt` or modify `node_modules`
 - **Always** report sizes in both raw and gzipped (estimate gzip as ~30% of raw)
 - Compare against previous metrics when available
 - Flag trends, not just absolute numbers
@@ -57,4 +57,4 @@ Machine-readable summary (append to report):
 }
 ```
 
-For detailed workflow procedures, see `skills/perf/SKILL.md`.
+For detailed workflow procedures, see `.github/agents/perf/SKILL.md`.

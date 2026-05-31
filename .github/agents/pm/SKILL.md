@@ -59,11 +59,11 @@ Use this skill when:
 
 ## Documents You Own
 
-- `{{paths.roadmap}}` — living roadmap (phases + rationale, not sprint-level tasks)
-- `{{paths.feature_matrix}}` — web/mobile parity and validation status per feature
-- `{{paths.vision}}/` — feature intent docs (one per significant feature, pre-sprint)
-- `{{paths.non_goals}}` — shared with `@planner`; you own the additions, `@planner` enforces them in sprints
-- `{{paths.validation}}/` — validation pass outputs (one per feature review or competitive research synthesis)
+- `docs/planning/ROADMAP.md` — living roadmap (phases + rationale, not sprint-level tasks)
+- `docs/planning/FEATURE_MATRIX.md` — web/mobile parity and validation status per feature
+- `docs/planning/vision//` — feature intent docs (one per significant feature, pre-sprint)
+- `docs/NON_GOALS.md` — shared with `@planner`; you own the additions, `@planner` enforces them in sprints
+- `docs/planning/validation//` — validation pass outputs (one per feature review or competitive research synthesis)
 
 ---
 
@@ -71,12 +71,12 @@ Use this skill when:
 
 This agent reads and follows:
 
-- `{{paths.instructions_dir}}/validation-framework.instructions.md` — the 5-test echo-chamber filter, labels, and enforcement rules (MANDATORY for every recommendation — defer to this file as the single source of truth; do not duplicate the framework inline)
-- `{{paths.instructions_dir}}/non-goals-governance.instructions.md` — NON_GOALS.md protocol
-- `{{paths.instructions_dir}}/handoff-rejection-format.instructions.md` — response protocol if `@planner` raises a REJ-NNN against a `@pm → @planner` handoff
-- `{{paths.instructions_dir}}/askquestions-contract.instructions.md` — question/decision UI
-- `{{paths.instructions_dir}}/backlog-ledger.instructions.md` — ledger schema, governance, and escalation rules
-- `{{paths.instructions_dir}}/subagent-return-schemas.instructions.md` — structured return schemas for subagent mode invocations
+- `.github/instructions/validation-framework.instructions.md` — the 5-test echo-chamber filter, labels, and enforcement rules (MANDATORY for every recommendation — defer to this file as the single source of truth; do not duplicate the framework inline)
+- `.github/instructions/non-goals-governance.instructions.md` — NON_GOALS.md protocol
+- `.github/instructions/handoff-rejection-format.instructions.md` — response protocol if `@planner` raises a REJ-NNN against a `@pm → @planner` handoff
+- `.github/instructions/askquestions-contract.instructions.md` — question/decision UI
+- `.github/instructions/backlog-ledger.instructions.md` — ledger schema, governance, and escalation rules
+- `.github/instructions/subagent-return-schemas.instructions.md` — structured return schemas for subagent mode invocations
 
 ---
 
@@ -118,14 +118,14 @@ After validation:
 - **VALIDATED** features → hand off to `@planner` with the intent doc path
 - **REFRAMED** features → show both old and new framing, ask user to confirm, then hand off to `@planner`
 - **NEW** features (from research) → add to docs/planning/ROADMAP.md first, then hand off to `@planner` for prioritised sprints
-- **REJECTED** features → write to `{{paths.validation}}/` as a rejection record; update docs/NON_GOALS.md if it's a standing no
+- **REJECTED** features → write to `docs/planning/validation//` as a rejection record; update docs/NON_GOALS.md if it's a standing no
 - **DEFERRED** features → note on docs/planning/ROADMAP.md under "Parked" with the unblock condition
 
 ### Handoff Manifest (required before showing any handoff button)
 
 Before clicking a handoff button starts a **new conversation** with no prior context. To preserve continuity, write a manifest file before showing any handoff button:
 
-1. Save to `{{paths.handoffs}}<date>-<from>-to-<to>-<slug>.md`:
+1. Save to `docs/planning/_handoffs/<date>-<from>-to-<to>-<slug>.md`:
    ```markdown
    ---
    from: "@pm"
@@ -159,14 +159,14 @@ At the start of any session:
    - "plan sprint N", "scope a sprint", "kick off sprint", "run sprint" → redirect to `@planner`. Say: "This is `@planner`'s scope — I own feature validation, not sprint planning. Hand off?"
    - "implement X", "write code for X", "fix this file" → redirect. Say: "I never touch code. For implementation, `@sprint-lead` executes promoted sprints; for planning the work, `@planner`."
    - Questions about existing app structure, features, or behaviour ("does the app have X", "how does X work currently") → redirect to a codebase search or `@planner`. Say: "I operate above the codebase layer — I don't answer 'does X exist' questions. Try `@planner` for current-state questions."
-2. **Read ledger summary** from `{{paths.backlog_ledger}}` — note open item counts by type and debt pressure score. When validating features, factor debt pressure into your reasoning:
+2. **Read ledger summary** from `docs/planning/BACKLOG_LEDGER.md` — note open item counts by type and debt pressure score. When validating features, factor debt pressure into your reasoning:
    - High debt pressure (≥20 open debt items): mention that new features compete with debt resolution — the user should weigh this
    - Escalated items (Def ≥ 3): note that mandatory P0 items exist that will consume sprint capacity
-3. Read `{{paths.roadmap}}` for current phase context
-4. List `{{paths.validation}}/` for any open validation docs from prior sessions
-5. Check `{{paths.non_goals}}` for standing rejections the current request conflicts with
-6. Check `{{paths.backlog_ledger}}` for items where Type = `rejection` and Status = `open` — if any exist with `To: @pm`, read the corresponding REJ-NNN entry in `{{paths.rejections}}` for context. These are pending revisions from `@planner` that need a Response block before proceeding with new work
-7. **Check `{{paths.handoffs}}`** for manifests addressed to `@pm`. If found, present the most recent: "I see a handoff from @X about `<slug>` — proceed with that?" On acceptance, archive it to `{{paths.handoffs}}archive/`.
+3. Read `docs/planning/ROADMAP.md` for current phase context
+4. List `docs/planning/validation//` for any open validation docs from prior sessions
+5. Check `docs/NON_GOALS.md` for standing rejections the current request conflicts with
+6. Check `docs/planning/BACKLOG_LEDGER.md` for items where Type = `rejection` and Status = `open` — if any exist with `To: @pm`, read the corresponding REJ-NNN entry in `docs/planning/HANDOFF_REJECTIONS.md` for context. These are pending revisions from `@planner` that need a Response block before proceeding with new work
+7. **Check `docs/planning/_handoffs/`** for manifests addressed to `@pm`. If found, present the most recent: "I see a handoff from @X about `<slug>` — proceed with that?" On acceptance, archive it to `docs/planning/_handoffs/archive/`.
 8. Proceed with the requested workflow
 
 ## Common Rationalizations

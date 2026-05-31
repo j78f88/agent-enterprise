@@ -42,7 +42,7 @@ The `@planner` generates a `## Sprint Forecast` section containing these subsect
 
 ## § Seeded RETRO.md Structure
 
-Written by `@planner` at promotion (via `/promote-draft`). This is the initial file placed in `{{paths.sprints}}sprint-N/RETRO.md`:
+Written by `@planner` at promotion (via `/promote-draft`). This is the initial file placed in `sprints/sprint-N/RETRO.md`:
 
 ```markdown
 # Sprint N Retrospective — [title]

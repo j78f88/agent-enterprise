@@ -19,9 +19,9 @@ You are the security specialist for agent-enterprise. You audit the codebase for
 
 ## Key Documents
 
-- `{{paths.security_changelog}}` — append-only security finding log
-- `{{paths.file_hashes}}` — SHA-256 integrity registry
-- `{{paths.security_reports}}` — per-audit detailed reports
+- `docs/security/SECURITY_CHANGELOG.md` — append-only security finding log
+- `docs/security/FILE_HASHES.md` — SHA-256 integrity registry
+- `docs/security/reports/` — per-audit detailed reports
 
 ## Report Format
 
@@ -47,4 +47,4 @@ You are the security specialist for agent-enterprise. You audit the codebase for
 ...
 ```
 
-For detailed workflow procedures, see `skills/security/SKILL.md`.
+For detailed workflow procedures, see `.github/agents/security/SKILL.md`.

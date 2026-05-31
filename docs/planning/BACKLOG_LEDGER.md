@@ -4,14 +4,14 @@ Single source of truth for all backlog item status. Detail and context live in B
 
 | ID | Type | Source | Age | Def | Sprint | Status | Blocked | Draft | Notes |
 |----|------|--------|-----|-----|--------|--------|---------|-------|-------|
-| ITEM-001 | feature | User feedback | 0 | 0 | 1 | open | | drafts/auth-flow.md | OAuth integration |
-| ITEM-002 | bug | BUG-001 | 1 | 0 | 1 | assigned | | | Login redirect broken |
-| ITEM-003 | debt | Code review | 2 | 1 | 2 | open | Waiting on ITEM-001 | | Refactor auth module |
-| ITEM-004 | feature | Roadmap | 0 | 0 | — | open | | | Dashboard widgets |
-| ITEM-005 | carry-over | Sprint 1 | 1 | 1 | 2 | assigned | | | API rate limiting |
-| ITEM-006 | bug | BUG-003 | 0 | 0 | — | open | | | Onboarding missing Claude Code /command setup |
-| ITEM-007 | bug | BUG-004 | 0 | 0 | — | open | | | Planner-mode workflow bypassed before approved sprint draft |
+| ITEM-006 | bug | BUG-003 | 0 | 0 | 2 | done | | | Onboarding missing Claude Code /command setup |
+| ITEM-007 | bug | BUG-004 | 0 | 0 | 2 | done | | | Planner-mode workflow bypassed before approved sprint draft |
 | ITEM-008 | bug | BUG-005 | 0 | 0 | 1 | done | | drafts/onboarding-path-resolution-remediation-draft-plan.md | RESOLVED Sprint 1 — companion-file resolution, skills_deploy_dir cross-refs, inline code-span resolution + escape; all 3 BUG-005 mechanisms closed |
+| ITEM-009 | audit-finding | Sprint 1 review SUGGESTION #2 | 1 | 0 | 2 | done | | | `SOURCE_STYLE_REFS` in tests/test_init.py is a hardcoded 7-item allowlist; consider deriving it from config/resolved tree instead of maintaining by hand |
+| ITEM-010 | debt | Sprint 1 retro | 1 | 0 | 2 | done | | | Decide whether SPRINTS.md and BACKLOG_LEDGER.md hold real repo history or stay as template demo content |
+| ITEM-011 | debt | Sprint 1 retro | 1 | 0 | 2 | done | | | Consider a CI check asserting all docs use config/project.config.example.yml for the canonical build command |
+| ITEM-012 | bug | BUG-006 | 0 | 0 | 2 | done | | | init.py has no automated deploy-copy or token-free guardrail for the .github tree (distinct from BUG-005) |
+| ITEM-013 | debt | Sprint 2 retro (@security/@reviewer SUGGESTION) | 2 | 0 | — | open | | | jsonschema.RefResolver deprecated in jsonschema ≥4.18; pre-existing warning, no immediate failure, migrate to jsonschema.validators API before upgrading jsonschema |
 
 <!-- 
 Column guide:

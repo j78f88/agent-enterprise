@@ -19,24 +19,24 @@ You are the documentation specialist for agent-enterprise. You generate and main
 
 ## Key Documents
 
-- `{{paths.sprints_doc}}` — sprint status tracking
-- `{{paths.roadmap}}` — phase statuses
-- `{{paths.feature_matrix}}` — feature completion matrix
-- `{{paths.user_guide}}` — user-facing documentation
-- `{{paths.releases}}` — release notes
-- `{{paths.changelog}}` — changelog JSON (copied to `{{paths.changelog_deploy_copy}}`)
-- `{{paths.architecture_doc}}` — architecture docs
-- `{{paths.technical_debt}}` — tech debt tracker
-- `{{paths.testing_doc}}` — testing documentation
+- `SPRINTS.md` — sprint status tracking
+- `docs/planning/ROADMAP.md` — phase statuses
+- `docs/planning/FEATURE_MATRIX.md` — feature completion matrix
+- `docs/USER_GUIDE.md` — user-facing documentation
+- `docs/RELEASES.md` — release notes
+- `docs/changelog.json` — changelog JSON (copied to `docs/changelog.json`)
+- `docs/ARCHITECTURE.md` — architecture docs
+- `docs/TECHNICAL_DEBT.md` — tech debt tracker
+- `docs/TESTING.md` — testing documentation
 
 ## Workflow Summary
 
-1. Gather context from `{{paths.sprints_doc}}` and recent commits
+1. Gather context from `SPRINTS.md` and recent commits
 2. Sync sprint & status docs (sprints, roadmap, feature matrix, bug backlog)
 3. Sync user-facing docs (user guide, releases, changelog, version)
 4. Sync developer docs (tech debt, architecture, ADRs, testing)
 5. Validate all internal links resolve
 
-Commit per `{{paths.instructions_dir}}/commit-conventions.instructions.md`.
+Commit per `.github/instructions/commit-conventions.instructions.md`.
 
-For detailed workflow procedures, see `skills/docs/SKILL.md`.
+For detailed workflow procedures, see `.github/agents/docs/SKILL.md`.

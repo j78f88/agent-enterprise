@@ -165,8 +165,10 @@ Complexity distribution: 2 moderate, 1 complex, 1 straightforward.
 
 | Action Item | Target |
 | ----------- | ------ |
-| Decide whether `SPRINTS.md` and `BACKLOG_LEDGER.md` should hold real repo history or stay as template demo content | Sprint 2 |
-| Consider a CI check asserting all docs use `config/project.config.example.yml` for the canonical build command | Sprint 2 |
+| Decide whether `SPRINTS.md` and `BACKLOG_LEDGER.md` should hold real repo history or stay as template demo content | ITEM-010 (open, unscheduled) |
+| Consider a CI check asserting all docs use `config/project.config.example.yml` for the canonical build command | ITEM-011 (open, unscheduled) |
+
+Scheduling is `@planner`'s call at composition — these are logged to the backlog ledger as `open` with no sprint assignment, not pre-allocated to a sprint.
 
 ## Section 8: Commits
 
@@ -175,6 +177,7 @@ Complexity distribution: 2 moderate, 1 complex, 1 straightforward.
 | `e4d0272` | feat: Sprint 1 — resolve and deploy skill companion files (TG1) |
 | `8a33211` | feat: Sprint 1 — resolve inline code-span tokens with escape for literals (TG3) |
 | `b0f0057` | fix: Sprint 1 — agent wrappers reference skills at deploy path (BUG-005 #3) |
+| `2194596` | test: Sprint 1 — lock strip-after-scan ordering (review SUGGESTION #1) |
 
 TG2 (the `paths.skills_deploy_dir` token + skill-source cross-reference rewrites) was not committed as a standalone commit — it landed folded into the TG1/TG3 commits; the agent-wrapper portion of the cross-reference work was completed and committed separately as `b0f0057` after code review. The `docs: Sprint 1 — complete` close-out commit (this RETRO, ledger, @docs sync, version bumps) follows.
 
@@ -184,8 +187,8 @@ No functional work carried over — all three task groups and both review warnin
 
 Deferred review SUGGESTIONs (non-blocking, first logged Sprint 1):
 - SUGGESTION #1 — ✅ DONE in-sprint. Added `test_strip_must_run_after_scan` (ordering-contract unit test proving strip-before-scan would false-flag) and `test_resolved_onboarding_escape_is_clean_literal` (full-build evidence that the deployed onboarding SKILL.md ships a clean `{{tokens}}` literal with no leaked backslash).
-- SUGGESTION #2 — `SOURCE_STYLE_REFS` in `tests/test_init.py` is a hardcoded 7-item allowlist; consider deriving it.
-- SUGGESTION #3 — confirm commit messages follow Conventional Commits (verified: `e4d0272`, `8a33211`, `b0f0057` all use `feat:`/`fix:` prefixes).
+- SUGGESTION #2 — `SOURCE_STYLE_REFS` in `tests/test_init.py` is a hardcoded 7-item allowlist; consider deriving it. Logged to backlog ledger as **ITEM-009** (open, unscheduled).
+- SUGGESTION #3 — confirm commit messages follow Conventional Commits (verified: `e4d0272`, `8a33211`, `b0f0057` all use `feat:`/`fix:` prefixes). No follow-up needed.
 
 ## Section 10: Sprint Trends
 

@@ -57,6 +57,7 @@ paths:
   copilot_instructions: ".github/copilot-instructions.md"
   instructions_dir: ".github/instructions"
   skills_deploy_dir: ".github/agents/"
+  claude_commands: ".claude/commands"          # Claude Code slash-command directory
   memory_architecture: ".claude/memory/architecture.md"
   memory_conventions: ".claude/memory/conventions.md"
 
@@ -112,6 +113,10 @@ commands:
   sast: ""
   secret_scan_history: "gitleaks detect --source . --verbose --report-format json"
   license_check: "pip-licenses --format=json"
+  container_scan: ""                # Not applicable — no container images
+  iac_scan: ""                      # Not applicable — no IaC in this project
+  # Cross-platform ISO timestamp — used by @sprint-lead for phase timing.
+  timestamp: "date -u +\"%Y-%m-%dT%H:%M:%SZ\""
 
 escalation:
   def_p0_threshold: 3
@@ -126,3 +131,19 @@ escalation:
   sprint_size_max: 8
   feature_cap_percent: 70
   p0_overflow_percent: 50
+
+security:
+  sbom_format: "cyclonedx"            # cyclonedx | spdx
+  tracked_files: []                   # Additional files to track in hash registry (beyond defaults)
+  license_gate: false                 # If true, denied license = gate FAIL (default: WARNING only)
+  license_denylist: ["GPL-3.0-only", "AGPL-3.0-only", "SSPL-1.0"]
+  license_allowlist: ["MIT", "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause", "ISC", "0BSD"]
+  audit_on_sprint: true               # Include @security as a sprint quality gate
+  cvss_critical_threshold: 9.0        # CVSS score >= this → CRITICAL
+  cvss_warning_threshold: 7.0         # CVSS score >= this → WARNING
+  cisa_kev_check: true                # Cross-reference CISA Known Exploited Vulnerabilities catalog
+  sec_id_prefix: "SEC"                # Prefix for security changelog entry IDs
+  scan_git_history: true              # Scan full git history for previously committed secrets
+  sast_tool: "semgrep"                # semgrep | bandit | eslint-security | codeql
+  iac_scanner: "checkov"              # checkov | kics | trivy-config
+  check_security_headers: false       # Not applicable — no web frontend

@@ -139,7 +139,7 @@ Return a Tier [1/2/3] response:
 
 ```bash
 # Run token substitution
-python init.py --config profiles/react-web-app.config.yml
+python init.py --config config/project.config.example.yml
 
 # Verify resolved skill (output is always SKILL.md per VS Code convention)
 cat resolved/skills/my-skill/SKILL.md

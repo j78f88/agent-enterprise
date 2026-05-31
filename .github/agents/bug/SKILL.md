@@ -48,10 +48,10 @@ Use this skill when:
 
 This agent reads and follows:
 
-- `{{paths.instructions_dir}}/bug-backlog-format.instructions.md` — entry schema, ID assignment, append marker, writer discipline
-- `{{paths.instructions_dir}}/backlog-ledger.instructions.md` — ledger schema, governance (append new ITEM type: bug)
-- `{{paths.instructions_dir}}/askquestions-contract.instructions.md` — question UI rules
-- `{{paths.instructions_dir}}/commit-conventions.instructions.md` — commit format for bug captures
+- `.github/instructions/bug-backlog-format.instructions.md` — entry schema, ID assignment, append marker, writer discipline
+- `.github/instructions/backlog-ledger.instructions.md` — ledger schema, governance (append new ITEM type: bug)
+- `.github/instructions/askquestions-contract.instructions.md` — question UI rules
+- `.github/instructions/commit-conventions.instructions.md` — commit format for bug captures
 
 ## Severity Note
 
@@ -80,11 +80,11 @@ After processing the initial message, use #tool:askQuestions to classify:
 
 ### Step 3 — Save Evidence
 
-If screenshots were provided (in Step 1 or Step 2), save to `{{paths.bugs_screenshots}}/` using convention: `{{ids.bug_prefix}}-NNN-slug.png`. Create the directory if it doesn't exist.
+If screenshots were provided (in Step 1 or Step 2), save to `docs/planning/bugs/screenshots//` using convention: `BUG-NNN-slug.png`. Create the directory if it doesn't exist.
 
 ### Step 4 — Assign ID
 
-Assign the next `{{ids.bug_prefix}}-NNN` ID per `bug-backlog-format.instructions.md`.
+Assign the next `BUG-NNN` ID per `bug-backlog-format.instructions.md`.
 
 ### Step 5 — Present Entry
 
@@ -98,18 +98,18 @@ Show the formatted entry in chat using the format from `bug-backlog-format.instr
 
 ### Step 6 — Append to Backlog
 
-On confirmation, append the entry to `{{paths.bug_backlog}}` per `bug-backlog-format.instructions.md` (below the append marker).
+On confirmation, append the entry to `docs/planning/BUG_BACKLOG.md` per `bug-backlog-format.instructions.md` (below the append marker).
 
 ### Step 6b — Append to Backlog Ledger
 
 In the **same commit** as the BUG_BACKLOG entry:
 
-1. Read `{{paths.backlog_ledger}}` to find the highest existing `ITEM-NNN`.
+1. Read `docs/planning/BACKLOG_LEDGER.md` to find the highest existing `ITEM-NNN`.
 2. Assign the next sequential ID (`ITEM-{NNN+1}`).
 3. Append a new row to the ledger table:
    - **ID:** `ITEM-{NNN+1}`
    - **Type:** `bug`
-   - **Source:** `{{ids.bug_prefix}}-{NNN}` (the ID assigned in Step 4)
+   - **Source:** `BUG-{NNN}` (the ID assigned in Step 4)
    - **Age:** current sprint number
    - **Def:** `0`
    - **Sprint:** `—`
@@ -132,7 +132,7 @@ Use #tool:askQuestions:
 
 ## Handoff Manifest (required before showing "Hand off to Planner for fix")
 
-Before showing the handoff button, write a manifest to `{{paths.handoffs}}<date>-bug-to-planner-<bug-id>.md`:
+Before showing the handoff button, write a manifest to `docs/planning/_handoffs/<date>-bug-to-planner-<bug-id>.md`:
 
 ```markdown
 ---

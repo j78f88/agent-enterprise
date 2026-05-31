@@ -41,10 +41,10 @@ Users may configure periodic audits. The recommended cadence:
 | On merge to main | Full pipeline | CI hook |
 
 When running a scheduled audit, `@security` must:
-1. Load the previous audit report from `{{paths.security_reports}}/`
+1. Load the previous audit report from `docs/security/reports//`
 2. Run the full pipeline
 3. Diff findings: identify **new**, **resolved**, and **unchanged**
-4. Only append **new** findings to `{{paths.security_changelog}}`
+4. Only append **new** findings to `docs/security/SECURITY_CHANGELOG.md`
 5. Update resolved findings' status in the changelog (append a resolution note — do not edit the original entry)
 
 ---
@@ -53,9 +53,9 @@ When running a scheduled audit, `@security` must:
 
 ### Format
 
-- **Preferred:** CycloneDX JSON (configurable via `{{security.sbom_format}}`)
+- **Preferred:** CycloneDX JSON (configurable via `cyclonedx`)
 - **Acceptable:** SPDX JSON
-- Output stored at `{{paths.sbom_output}}`
+- Output stored at `docs/security/sbom.json`
 
 ### When to Generate
 
@@ -65,8 +65,8 @@ When running a scheduled audit, `@security` must:
 
 ### Storage & Retention
 
-- Current SBOM committed at `{{paths.sbom_output}}` alongside lock files
-- Previous SBOMs archived in `{{paths.security_reports}}/` — retain last 5 for diff comparison
+- Current SBOM committed at `docs/security/sbom.json` alongside lock files
+- Previous SBOMs archived in `docs/security/reports//` — retain last 5 for diff comparison
 - Naming: `sbom-YYYY-MM-DD.json`
 - Commit message: `security(sbom): update software bill of materials`
 
@@ -80,7 +80,7 @@ If cosign or Sigstore is available, sign the SBOM artifact. This enables downstr
 
 ### Ownership
 
-- `@security` is the **primary owner** of `{{paths.security_changelog}}`
+- `@security` is the **primary owner** of `docs/security/SECURITY_CHANGELOG.md`
 - `@reviewer` may append entries when it discovers security findings during code review (use `Found by: @reviewer`)
 - No other agent may write to this file
 
@@ -126,13 +126,13 @@ If a duplicate is found, **do not** create a new entry. Instead, add a note to t
 The minimum tracked file set:
 
 1. **Lock files** — `package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`, `Pipfile.lock`, `poetry.lock`
-2. **Agent configuration** — `{{paths.copilot_instructions}}`, all files in `{{paths.instructions_dir}}/`
+2. **Agent configuration** — `.github/copilot-instructions.md`, all files in `.github/instructions/`
 3. **Skill definitions** — all `{name}.skill.md` files (resolved as `SKILL.md`)
 4. **CI/CD** — `.github/workflows/*.yml`, `Dockerfile`, `docker-compose.yml`
-5. **Security policy** — `{{paths.security_changelog}}`
-6. **Entry points** — `init.py`, `{{paths.web_app_dir}}/index.html` (if exists)
+5. **Security policy** — `docs/security/SECURITY_CHANGELOG.md`
+6. **Entry points** — `init.py`, `/index.html` (if exists)
 
-Users may add additional files via `{{security.tracked_files}}` config list.
+Users may add additional files via `[]` config list.
 
 ### Hash Algorithm
 
@@ -140,7 +140,7 @@ SHA-256 only. No MD5 or SHA-1.
 
 ### Verification Process
 
-1. Read `{{paths.file_hashes}}`
+1. Read `docs/security/FILE_HASHES.md`
 2. For each tracked file, compute current SHA-256
 3. Compare against stored hash
 4. Report:
@@ -168,7 +168,7 @@ Always commit hash updates separately: `security(hashes): update file integrity 
 ### First Scan
 
 The first run of git history secret scanning generates a baseline file at:
-`{{paths.security_reports}}/gitleaks-baseline.json`
+`docs/security/reports//gitleaks-baseline.json`
 
 All findings from the first scan are placed into the baseline for initial triage. The operator must review each finding and classify it as:
 - **Real secret** → CRITICAL, rotate credential immediately, open SEC-NNN entry
@@ -184,7 +184,7 @@ All findings from the first scan are placed into the baseline for initial triage
 
 - After triage, commit updated baseline: `security(baseline): update gitleaks baseline`
 - Include a summary of findings triaged in the commit body
-- Baseline is tracked in `{{paths.file_hashes}}` (hash changes when new entries are triaged)
+- Baseline is tracked in `docs/security/FILE_HASHES.md` (hash changes when new entries are triaged)
 
 ---
 
@@ -192,20 +192,20 @@ All findings from the first scan are placed into the baseline for initial triage
 
 ### Default Lists
 
-**Deny list** (configurable via `{{security.license_denylist}}`):
+**Deny list** (configurable via `['GPL-3.0-only', 'AGPL-3.0-only', 'SSPL-1.0']`):
 - `GPL-3.0-only`
 - `AGPL-3.0-only`
 - `SSPL-1.0`
 - `EUPL-1.1`
 
-**Allow list** (configurable via `{{security.license_allowlist}}`):
+**Allow list** (configurable via `['MIT', 'Apache-2.0', 'BSD-2-Clause', 'BSD-3-Clause', 'ISC', '0BSD']`):
 - `MIT`, `Apache-2.0`, `BSD-2-Clause`, `BSD-3-Clause`, `ISC`, `0BSD`, `CC0-1.0`, `Unlicense`
 
 ### Classification Rules
 
 | Dependency Type | License Status | Severity |
 |----------------|---------------|----------|
-| Production | Denied license | CRITICAL if `{{security.license_gate}}` is `true`, else WARNING |
+| Production | Denied license | CRITICAL if `False` is `true`, else WARNING |
 | Production | Unknown / not listed | SUGGESTION (manual review required) |
 | Dev-only | Denied license | WARNING |
 | Dev-only | Unknown / not listed | SUGGESTION |
@@ -213,8 +213,8 @@ All findings from the first scan are placed into the baseline for initial triage
 
 ### Gate Behaviour
 
-- Default: `{{security.license_gate}}` = `false` → denied licenses produce WARNING only (non-blocking)
-- When `{{security.license_gate}}` = `true` → denied licenses on production dependencies cause gate FAIL
+- Default: `False` = `false` → denied licenses produce WARNING only (non-blocking)
+- When `False` = `true` → denied licenses on production dependencies cause gate FAIL
 - Dev-only dependencies never cause gate FAIL for license issues
 
 ---
@@ -268,7 +268,7 @@ When reporting CRITICAL or WARNING findings, classify each into one of 4 remedia
 
 When `@security` finds CRITICAL issues that require code changes:
 
-1. Check `{{paths.backlog_ledger}}` for existing items matching the finding (dedup)
+1. Check `docs/planning/BACKLOG_LEDGER.md` for existing items matching the finding (dedup)
 2. If no match exists, recommend that `@bug` append a new item:
    - **Type:** `audit-finding`
    - **Source:** `SEC-NNN`
@@ -291,7 +291,7 @@ When `@security` finds CRITICAL issues that require code changes:
 
 When `@reviewer` runs on commits that touch security-relevant files:
 
-- **CRITICAL:** `{{paths.file_hashes}}` was not updated after changing a tracked file
-- **CRITICAL:** `{{paths.security_changelog}}` entry was edited (not appended)
+- **CRITICAL:** `docs/security/FILE_HASHES.md` was not updated after changing a tracked file
+- **CRITICAL:** `docs/security/SECURITY_CHANGELOG.md` entry was edited (not appended)
 - **WARNING:** Dependency version changed without a corresponding `@security` audit
 - **SUGGESTION:** New CI/CD file added but not registered in hash registry

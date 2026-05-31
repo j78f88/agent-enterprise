@@ -35,6 +35,8 @@ from init import (
     suppress_skill_invocability,
     transform_frontmatter_for_target,
     emit_cursor_mdc,
+    deploy_resolved,
+    main,
 )
 
 
@@ -730,6 +732,13 @@ class TestCompanionFileResolution:
         for companion in ("phase-details.md", "subagent-templates.md"):
             assert (resolved / companion).exists(), f"Missing companion: {companion}"
 
+    def test_onboarding_companions_deployed(self):
+        """onboarding companion files should appear in resolved output."""
+        resolved = Path(__file__).parent.parent / "resolved" / "skills" / "onboarding"
+        assert (resolved / "CLAUDE_CODE_SETUP.md").exists(), (
+            "Missing companion: CLAUDE_CODE_SETUP.md"
+        )
+
     def test_companion_tokens_resolved(self):
         """phase-details.md ships through substitute() with no unresolved tokens.
 
@@ -890,15 +899,16 @@ class TestSkillCrossReferencePaths:
     reference in resolved output would dangle.
     """
 
-    # Source-style references that must be absent from resolved output.
+    # Source-style references derived from skill companion files at collection
+    # time: all .md files inside skills/<name>/ that are NOT the primary
+    # *.skill.md entry-point.  Any future companion added to a skill dir is
+    # automatically included without touching this list.
     SOURCE_STYLE_REFS = [
-        "skills/docs/sync-workflow.md",
-        "skills/sprint-lead/phase-details.md",
-        "skills/sprint-lead/subagent-templates.md",
-        "skills/security/audit-checks.md",
-        "skills/security/report-format.md",
-        "skills/planner/session-lifecycle.md",
-        "skills/planner/session-end-menu.md",
+        f"skills/{d.name}/{f.name}"
+        for d in sorted((Path(__file__).parent.parent / "skills").iterdir())
+        if d.is_dir()
+        for f in sorted(d.glob("*.md"))
+        if not f.name.endswith(".skill.md")
     ]
 
     def test_no_source_style_companion_refs_in_resolved(self):
@@ -917,3 +927,377 @@ class TestSkillCrossReferencePaths:
             "source-style companion cross-references found in resolved output: "
             + "; ".join(offenders)
         )
+
+
+# =============================================================================
+# Fail-on-unresolved: hard failure when config key is missing
+# =============================================================================
+
+class TestFailOnUnresolved:
+    """Build must exit non-zero when output contains an unresolved {{token}}."""
+
+    def _make_minimal_config(self, tmp_path: Path, **overrides) -> Path:
+        """Write a minimal valid config YAML to tmp_path/config.yml."""
+        cfg = {
+            "setup_complete": True,
+            "editor": {"target": "vscode"},
+            "project": {"name": "TestProj", "language": "Python",
+                        "framework": "Custom", "locale": "en-US",
+                        "namespace": ""},
+            "paths": {
+                "sprints": "sprints/", "sprints_doc": "SPRINTS.md",
+                "web_app_dir": "", "drafts": "docs/planning/drafts/",
+                "archive": "docs/archive/",
+                "validation": "docs/planning/validation/",
+                "research": "docs/planning/research/",
+                "handoffs": "docs/planning/_handoffs/",
+                "engagements": "docs/planning/engagements/",
+                "vision": "docs/planning/vision/",
+                "backlog_ledger": "docs/planning/BACKLOG_LEDGER.md",
+                "bug_backlog": "docs/planning/BUG_BACKLOG.md",
+                "bugs_screenshots": "docs/planning/bugs/screenshots/",
+                "rejections": "docs/planning/HANDOFF_REJECTIONS.md",
+                "non_goals": "docs/NON_GOALS.md",
+                "roadmap": "docs/planning/ROADMAP.md",
+                "feature_matrix": "docs/planning/FEATURE_MATRIX.md",
+                "decisions": "docs/decisions/DECISIONS.md",
+                "future_considerations": "docs/decisions/FUTURE_CONSIDERATIONS.md",
+                "design_reviews": "docs/decisions/design-reviews/",
+                "architecture_doc": "docs/ARCHITECTURE.md",
+                "technical_debt": "docs/TECHNICAL_DEBT.md",
+                "testing_doc": "docs/TESTING.md",
+                "user_guide": "docs/USER_GUIDE.md",
+                "releases": "docs/RELEASES.md",
+                "changelog": "docs/changelog.json",
+                "changelog_deploy_copy": "docs/changelog.json",
+                "package_json": "pyproject.toml",
+                "security_changelog": "docs/security/SECURITY_CHANGELOG.md",
+                "file_hashes": "docs/security/FILE_HASHES.md",
+                "security_reports": "docs/security/reports/",
+                "sbom_output": "docs/security/sbom.json",
+                "copilot_instructions": ".github/copilot-instructions.md",
+                "instructions_dir": ".github/instructions",
+                "skills_deploy_dir": ".github/agents/",
+                "memory_architecture": ".claude/memory/architecture.md",
+                "memory_conventions": ".claude/memory/conventions.md",
+            },
+            "quality": {"coverage_store_threshold": 80, "coverage_web_threshold": 0,
+                        "e2e_regression_threshold": 5, "bundle_warning_kb": 0,
+                        "bundle_critical_kb": 0, "build_warning_seconds": 30},
+            "platform": {"type": "none", "test_workflow": "ci.yml",
+                         "prod_workflow": "ci.yml",
+                         "ci_workflow_display_name": "CI",
+                         "test_url": "", "prod_url": "", "e2e_runner": "pytest"},
+            "git": {"main_branch": "main", "develop_branch": "develop",
+                    "repo": "owner/repo"},
+            "team": {"cto_name": "tester"},
+            "ids": {"bug_prefix": "BUG", "item_prefix": "ITEM",
+                    "rejection_prefix": "REJ", "engagement_prefix": "ENG",
+                    "adr_prefix": "ADR"},
+            "scope_upgrade": {"task_count": 3, "files_affected": 8},
+            "escalation": {"def_p0_threshold": 3, "def_kill_threshold": 5,
+                           "age_stale_sprints": 10, "debt_warning_sprints": 3,
+                           "debt_escalate_sprints": 5, "debt_warning_items": 20,
+                           "debt_escalate_items": 40,
+                           "debt_min_allocation_percent": 30,
+                           "sprint_size_min": 5, "sprint_size_max": 8,
+                           "feature_cap_percent": 70, "p0_overflow_percent": 50},
+            "commands": {"install": "pip install -r requirements.txt",
+                         "test": "pytest", "build": "python init.py",
+                         "dev": "", "typecheck": "", "lint": "", "e2e": "pytest",
+                         "coverage": "pytest", "coverage_store": "pytest",
+                         "coverage_web": "", "depcheck": "",
+                         "sbom_generate": "syft . -o cyclonedx-json",
+                         "sast": "",
+                         "secret_scan_history": "gitleaks detect --source .",
+                         "license_check": "pip-licenses --format=json",
+                         "container_scan": "", "iac_scan": "",
+                         "timestamp": "date -u +\"%Y-%m-%dT%H:%M:%SZ\""},
+            "security": {"sbom_format": "cyclonedx", "tracked_files": [],
+                         "license_gate": False,
+                         "license_denylist": ["GPL-3.0-only"],
+                         "license_allowlist": ["MIT"]},
+        }
+        cfg.update(overrides)
+        import yaml as _yaml
+        config_path = tmp_path / "config.yml"
+        config_path.write_text(_yaml.dump(cfg), encoding="utf-8")
+        return config_path
+
+    def test_missing_config_key_exits_nonzero(self, tmp_path):
+        """A skill referencing an unmapped token must cause a non-zero exit."""
+        import os
+        import yaml as _yaml
+
+        config_path = self._make_minimal_config(tmp_path)
+
+        # Create a skill with a token NOT in the config
+        skill_dir = tmp_path / "skills" / "canary"
+        skill_dir.mkdir(parents=True)
+        (skill_dir / "SKILL.md").write_text(
+            "---\n"
+            "name: canary\n"
+            "kind: skill\n"
+            "description: Canary skill for testing.\n"
+            "when_to_use: canary test\n"
+            "user-invocable: false\n"
+            "---\n\n"
+            "{{commands.missing_key_xyz}}\n",
+            encoding="utf-8",
+        )
+
+        old_cwd = os.getcwd()
+        old_argv = sys.argv
+        try:
+            os.chdir(tmp_path)
+            sys.argv = ["init.py", "--config", str(config_path),
+                        "--allow-frontmatter-warnings"]
+            with pytest.raises(SystemExit) as exc_info:
+                main()
+            assert exc_info.value.code != 0, (
+                "Expected non-zero exit when config key is missing"
+            )
+        finally:
+            os.chdir(old_cwd)
+            sys.argv = old_argv
+
+    def test_clean_config_exits_zero(self, tmp_path):
+        """A build with all tokens resolved should exit normally (no SystemExit)."""
+        import os
+
+        config_path = self._make_minimal_config(tmp_path)
+
+        # Create a skill with only known tokens
+        skill_dir = tmp_path / "skills" / "clean"
+        skill_dir.mkdir(parents=True)
+        (skill_dir / "SKILL.md").write_text(
+            "---\n"
+            "name: clean\n"
+            "kind: skill\n"
+            "description: Clean skill.\n"
+            "when_to_use: clean test\n"
+            "user-invocable: false\n"
+            "---\n\n"
+            "Project: {{project.name}}\n",
+            encoding="utf-8",
+        )
+
+        old_cwd = os.getcwd()
+        old_argv = sys.argv
+        try:
+            os.chdir(tmp_path)
+            sys.argv = ["init.py", "--config", str(config_path),
+                        "--allow-frontmatter-warnings"]
+            # Should not raise SystemExit
+            main()
+        except SystemExit as e:
+            pytest.fail(f"Expected clean exit but got SystemExit({e.code})")
+        finally:
+            os.chdir(old_cwd)
+            sys.argv = old_argv
+
+
+# =============================================================================
+# Deploy-copy: --deploy writes resolved/ into configured target directories
+# =============================================================================
+
+class TestDeployCopy:
+    """--deploy (deploy_resolved) copies resolved artifacts to the configured dirs."""
+
+    def test_deploy_copies_instructions_to_target(self, tmp_path, monkeypatch):
+        """deploy_resolved copies resolved/instructions/*.md to instructions_dir."""
+        monkeypatch.chdir(tmp_path)
+        # Build a minimal resolved/ tree
+        output = tmp_path / "resolved"
+        instr_dir = output / "instructions"
+        instr_dir.mkdir(parents=True)
+        (instr_dir / "test.instructions.md").write_text(
+            "---\napplyTo: '**'\n---\n\n# Test\n", encoding="utf-8"
+        )
+
+        config = {
+            "paths": {
+                "instructions_dir": ".github/instructions",
+                "skills_deploy_dir": ".github/agents",
+            }
+        }
+
+        leftover = deploy_resolved(output, config, agent_count=0)
+
+        assert leftover == 0, f"deploy_resolved reported {leftover} unresolved tokens"
+        assert (tmp_path / ".github" / "instructions" / "test.instructions.md").exists(), (
+            "Expected instruction file to be copied to deploy target"
+        )
+
+    def test_deploy_copies_agents_to_target(self, tmp_path, monkeypatch):
+        """deploy_resolved copies resolved/agents/*.agent.md to skills_deploy_dir."""
+        monkeypatch.chdir(tmp_path)
+        output = tmp_path / "resolved"
+        agents_dir = output / "agents"
+        agents_dir.mkdir(parents=True)
+        (agents_dir / "qa.agent.md").write_text(
+            "---\nname: qa\ndescription: QA agent\n---\n\n# QA\n", encoding="utf-8"
+        )
+
+        config = {
+            "paths": {
+                "instructions_dir": ".github/instructions",
+                "skills_deploy_dir": ".github/agents",
+            }
+        }
+
+        leftover = deploy_resolved(output, config, agent_count=1)
+
+        assert leftover == 0
+        assert (tmp_path / ".github" / "agents" / "qa.agent.md").exists(), (
+            "Expected agent file to be copied to skills_deploy_dir"
+        )
+
+    def test_deploy_copies_skill_bundles_to_target(self, tmp_path, monkeypatch):
+        """deploy_resolved copies resolved/skills/<name>/ subdirs to skills_deploy_dir."""
+        monkeypatch.chdir(tmp_path)
+        output = tmp_path / "resolved"
+        skill_dir = output / "skills" / "architect"
+        skill_dir.mkdir(parents=True)
+        (skill_dir / "SKILL.md").write_text(
+            "---\nname: architect\nkind: skill\ndescription: Architect.\n"
+            "when_to_use: design\nuser-invocable: false\n---\n\n# Architect\n",
+            encoding="utf-8",
+        )
+
+        config = {
+            "paths": {
+                "instructions_dir": ".github/instructions",
+                "skills_deploy_dir": ".github/agents",
+            }
+        }
+
+        leftover = deploy_resolved(output, config, agent_count=0)
+
+        assert leftover == 0
+        assert (tmp_path / ".github" / "agents" / "architect" / "SKILL.md").exists(), (
+            "Expected skill SKILL.md to be copied under skills_deploy_dir/architect/"
+        )
+
+    def test_deploy_fails_if_deployed_file_has_unresolved_token(self, tmp_path, monkeypatch):
+        """deploy_resolved returns non-zero when a copied file still has {{tokens}}."""
+        monkeypatch.chdir(tmp_path)
+        output = tmp_path / "resolved"
+        skill_dir = output / "skills" / "broken"
+        skill_dir.mkdir(parents=True)
+        # Deliberately unresolved token in the deployed skill
+        (skill_dir / "SKILL.md").write_text(
+            "# Broken\n\n{{commands.missing_key}}\n", encoding="utf-8"
+        )
+
+        config = {
+            "paths": {
+                "instructions_dir": ".github/instructions",
+                "skills_deploy_dir": ".github/agents",
+            }
+        }
+
+        leftover = deploy_resolved(output, config, agent_count=0)
+
+        assert leftover > 0, (
+            "Expected deploy_resolved to return > 0 when deployed file has unresolved token"
+        )
+
+
+# =============================================================================
+# check_tokens.py guardrail tests
+# =============================================================================
+
+import importlib.util as _ilu
+
+_ct_spec = _ilu.spec_from_file_location(
+    "check_tokens",
+    Path(__file__).resolve().parents[1] / "scripts" / "check_tokens.py",
+)
+assert _ct_spec and _ct_spec.loader
+_check_tokens = _ilu.module_from_spec(_ct_spec)
+_ct_spec.loader.exec_module(_check_tokens)  # type: ignore[attr-defined]
+
+
+class TestCheckTokensGuardrail:
+    """Guardrail script exits 0 on a clean tree, 1 when unresolved tokens exist."""
+
+    def test_exits_0_when_github_tree_is_clean(self, tmp_path):
+        """No unresolved tokens → returns 0 and prints success message."""
+        instr_dir = tmp_path / ".github" / "instructions"
+        instr_dir.mkdir(parents=True)
+        (instr_dir / "clean.instructions.md").write_text(
+            "---\napplyTo: '**'\n---\n\n# Clean\n\nNo tokens here.\n",
+            encoding="utf-8",
+        )
+
+        rc = _check_tokens.main([str(tmp_path)])
+        assert rc == 0
+
+    def test_exits_1_when_unresolved_token_present(self, tmp_path):
+        """A file containing {{unresolved.token}} → returns 1."""
+        agents_dir = tmp_path / ".github" / "agents"
+        agents_dir.mkdir(parents=True)
+        (agents_dir / "broken.agent.md").write_text(
+            "---\nname: broken\n---\n\n# Broken\n\n{{commands.missing_key}}\n",
+            encoding="utf-8",
+        )
+
+        rc = _check_tokens.main([str(tmp_path)])
+        assert rc == 1
+
+    def test_reports_file_line_and_token(self, tmp_path, capsys):
+        """Output includes the file path, line number, and token name."""
+        instr_dir = tmp_path / ".github" / "instructions"
+        instr_dir.mkdir(parents=True)
+        (instr_dir / "bad.instructions.md").write_text(
+            "# Bad\n\nSee {{paths.missing_path}} for details.\n",
+            encoding="utf-8",
+        )
+
+        _check_tokens.main([str(tmp_path)])
+        captured = capsys.readouterr()
+        assert "{{paths.missing_path}}" in captured.out
+        assert "bad.instructions.md" in captured.out
+
+    def test_escaped_literal_not_flagged(self, tmp_path):
+        r"""\\{{token}} escape markers are intentional literals — not flagged."""
+        instr_dir = tmp_path / ".github" / "instructions"
+        instr_dir.mkdir(parents=True)
+        (instr_dir / "escaped.instructions.md").write_text(
+            "# Escaped\n\nUse `\\{{project.name}}` syntax to reference tokens.\n",
+            encoding="utf-8",
+        )
+
+        rc = _check_tokens.main([str(tmp_path)])
+        assert rc == 0
+
+    def test_github_actions_syntax_not_flagged(self, tmp_path):
+        """${{secrets.TOKEN}} GitHub Actions syntax is excluded by the regex."""
+        agents_dir = tmp_path / ".github" / "agents"
+        agents_dir.mkdir(parents=True)
+        (agents_dir / "workflow.agent.md").write_text(
+            "---\nname: ci\n---\n\nToken: ${{ secrets.GITHUB_TOKEN }}\n",
+            encoding="utf-8",
+        )
+
+        rc = _check_tokens.main([str(tmp_path)])
+        assert rc == 0
+
+    def test_missing_scan_dirs_exit_0(self, tmp_path):
+        """No .github/ subdirs present → nothing to scan → returns 0."""
+        rc = _check_tokens.main([str(tmp_path)])
+        assert rc == 0
+
+    def test_check_file_returns_line_numbers(self, tmp_path):
+        """check_file returns correct 1-based line numbers for each finding."""
+        md = tmp_path / "test.md"
+        md.write_text(
+            "# Header\n\nLine two is clean.\n{{first.token}}\nclean\n{{second.token}}\n",
+            encoding="utf-8",
+        )
+
+        findings = _check_tokens.check_file(md)
+        assert len(findings) == 2
+        assert findings[0] == (4, "{{first.token}}")
+        assert findings[1] == (6, "{{second.token}}")

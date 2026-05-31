@@ -9,9 +9,9 @@ applyTo: '**'
 
 # Backlog Ledger — Schema & Governance
 
-Single schema, governance, and escalation specification for `{{paths.backlog_ledger}}`.
+Single schema, governance, and escalation specification for `docs/planning/BACKLOG_LEDGER.md`.
 
-> **Canonical status tracker.** The ledger is the single source of truth for item status. Detail stores (`{{paths.bug_backlog}}`, `{{paths.rejections}}`) hold reproduction/rejection context only — no status fields.
+> **Canonical status tracker.** The ledger is the single source of truth for item status. Detail stores (`docs/planning/BUG_BACKLOG.md`, `docs/planning/HANDOFF_REJECTIONS.md`) hold reproduction/rejection context only — no status fields.
 
 ## Schema
 
@@ -19,14 +19,14 @@ The ledger table uses 10 columns:
 
 | Column  | Type     | Description                                                                          |
 | ------- | -------- | ------------------------------------------------------------------------------------ |
-| ID      | string   | `{{ids.item_prefix}}-NNN`, zero-padded to 3 digits, sequential                                     |
+| ID      | string   | `ITEM-NNN`, zero-padded to 3 digits, sequential                                     |
 | Type    | enum     | `bug`, `debt`, `feature`, `carry-over`, `audit-finding`, `research`, `rejection`     |
-| Source  | string   | Origin reference (e.g., `{{ids.bug_prefix}}-003`, `{{ids.rejection_prefix}}-001`, `audit-H-1`, `RETRO-55`, `ROAD-nnn`) |
+| Source  | string   | Origin reference (e.g., `BUG-003`, `REJ-001`, `audit-H-1`, `RETRO-55`, `ROAD-nnn`) |
 | Age     | integer  | Sprint number when item first appeared (not migration sprint)                        |
 | Def     | integer  | Deferral count — incremented each sprint the item is not resolved                    |
 | Sprint  | string   | Assigned sprint number, or `—` if unscheduled                                        |
 | Status  | enum     | `open`, `assigned`, `done`, `killed`                                                 |
-| Blocked | string   | Blocking reference (e.g., `{{ids.item_prefix}}-005`) or `—`                                         |
+| Blocked | string   | Blocking reference (e.g., `ITEM-005`) or `—`                                         |
 | Draft   | string   | Link to draft plan if exists, or `—`                                                 |
 | Notes   | string   | Free-text context                                                                    |
 
@@ -83,13 +83,13 @@ The ledger is the **canonical status tracker**. Detail stores hold context only:
 
 | File                         | Role                                      | Status Fields |
 | ---------------------------- | ----------------------------------------- | ------------- |
-| `{{paths.backlog_ledger}}` | Canonical tracker — status, scheduling, deferrals | ✅ Yes   |
-| `{{paths.bug_backlog}}`    | Reproduction context — severity, description, screenshots | ❌ None — removed |
-| `{{paths.rejections}}` | Rejection context — reason, proposed resolution, response | ❌ None — removed |
+| `docs/planning/BACKLOG_LEDGER.md` | Canonical tracker — status, scheduling, deferrals | ✅ Yes   |
+| `docs/planning/BUG_BACKLOG.md`    | Reproduction context — severity, description, screenshots | ❌ None — removed |
+| `docs/planning/HANDOFF_REJECTIONS.md` | Rejection context — reason, proposed resolution, response | ❌ None — removed |
 
 Cross-references:
-- Ledger entries use the **Source** column to reference detail-store entries (e.g., `{{ids.bug_prefix}}-003`, `{{ids.rejection_prefix}}-001`).
-- Detail-store entries use a **Ledger:** field to reference back (e.g., `{{ids.item_prefix}}-007`).
+- Ledger entries use the **Source** column to reference detail-store entries (e.g., `BUG-003`, `REJ-001`).
+- Detail-store entries use a **Ledger:** field to reference back (e.g., `ITEM-007`).
 
 ## Invariants
 
