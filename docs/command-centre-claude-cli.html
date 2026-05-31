@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⌁ Claude CLI — agent-enterprise</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='2' y='2' width='60' height='60' rx='14' fill='%23CC785C'/%3E%3Cpolyline points='19,20 33,32 19,44' fill='none' stroke='%23F0EEE6' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cline x1='37' y1='44' x2='48' y2='44' stroke='%23F0EEE6' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<style>
+:root{
+  /* Anthropic brand palette — ivory ground, Claude clay accent */
+  --bg:#F0EEE6;--surface:#FAF9F5;--surface2:#EFEBE1;--surface3:#E6E1D4;
+  --border:#DBD6C7;--text:#1F1E1D;--muted:#6B665C;--dim:#938E82;
+  --strategy:#5E81A5;--planning:#CC785C;--delivery:#BE8A40;--quality:#B0534E;--docs:#8A867C;
+  --claude:#CC785C;--red:#B0534E;--success:#3F7E54;--warning:#BE8A40;--info:#5E81A5;
+  --glow:0 0 18px rgba(204,120,92,.18);
+  /* dark terminal panel (for code / ascii blocks) */
+  --term-bg:#262420;--term-border:#3A362F;--term-text:#E7E2D6;--term-dim:#8F897B;--term-accent:#E0876A;
+  --radius-sm:4px;--radius:8px;--radius-lg:12px;--radius-xl:16px;
+  --font-display:'Plus Jakarta Sans',system-ui,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Consolas,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.55;font-size:15px;-webkit-font-smoothing:antialiased}
+.app{max-width:1280px;margin:0 auto;padding:20px 20px 60px}
+.icon{font-family:'Material Symbols Outlined';font-size:22px;vertical-align:middle;margin-right:4px;font-variation-settings:'FILL' 0,'wght' 500,'GRAD' 0,'opsz' 24}
+.icon-sm{font-size:18px}
+code{font-family:var(--mono)}
+kbd{font-family:var(--mono);background:var(--surface3);border:1px solid var(--border);border-bottom-width:2px;border-radius:var(--radius-sm);padding:1px 7px;font-size:12px;color:var(--text)}
+
+/* Hero */
+.hero{text-align:center;padding:24px 0 12px}
+.hero h1{font-family:var(--font-display);font-size:30px;font-weight:700;background:linear-gradient(135deg,var(--claude),var(--strategy));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero .sub{color:var(--muted);font-size:15px;margin-top:6px}
+.stats{display:flex;gap:8px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:7px 14px;font-size:14px;color:var(--muted)}
+.stat b{color:var(--text);font-family:var(--font-display);font-size:18px;margin-right:4px}
+
+/* Sticky nav */
+.nav{display:flex;gap:4px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:4px;margin:16px 0;position:sticky;top:8px;z-index:50;flex-wrap:wrap}
+.nav a{flex:1;min-width:120px;text-align:center;padding:9px 8px;color:var(--muted);font-family:var(--font-display);font-size:13px;font-weight:600;text-decoration:none;border-radius:var(--radius);transition:all .2s}
+.nav a:hover{color:var(--text);background:var(--surface2)}
+
+/* Section header */
+.sh{font-family:var(--font-display);font-size:18px;font-weight:700;letter-spacing:.5px;margin:34px 0 12px;display:flex;align-items:center;gap:8px;color:var(--text);padding-bottom:8px;border-bottom:1px solid var(--border)}
+.sh .icon{color:var(--claude)}
+
+/* Lanes + cards */
+.lane-hdr{display:flex;align-items:center;gap:10px;margin:22px 0 10px}
+.lane-dot{width:10px;height:10px;border-radius:50%}
+.lane-name{font-family:var(--font-display);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1.4px}
+.lane-hint{font-size:12px;color:var(--muted);margin-left:auto}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(340px,1fr))}
+.card{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--border);border-radius:var(--radius-lg);padding:16px 18px;transition:all .2s}
+.card:hover{border-color:var(--claude);box-shadow:var(--glow)}
+.card h3{font-family:var(--mono);font-size:16px;margin-bottom:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.card .role{font-size:13.5px;color:var(--muted);margin-bottom:8px;line-height:1.55}
+.card .cmds{font-family:var(--mono);font-size:12.5px;color:var(--claude);background:rgba(204,120,92,.09);border-left:2px solid var(--claude);padding:6px 11px;margin:6px 0;border-radius:0 var(--radius-sm) var(--radius-sm) 0;line-height:1.85}
+.card .meta{font-size:12.5px;color:var(--dim);margin-top:6px}
+.badge{display:inline-block;padding:1px 7px;border-radius:var(--radius-sm);font-size:10px;font-weight:700;letter-spacing:.3px;vertical-align:middle}
+.badge-sub{background:rgba(96,165,250,.12);color:var(--strategy);border:1px solid rgba(96,165,250,.3)}
+.badge-orch{background:rgba(255,183,77,.14);color:var(--delivery);border:1px solid rgba(255,183,77,.3)}
+.badge-setup{background:rgba(144,164,174,.12);color:var(--docs);border:1px solid rgba(144,164,174,.3)}
+.card.dashed{border-style:dashed;border-left-style:solid}
+
+/* Tables */
+.tbl{width:100%;border-collapse:collapse;font-size:13.5px;margin:12px 0}
+.tbl th{background:var(--surface2);padding:9px 12px;text-align:left;font-weight:600;color:var(--muted);text-transform:uppercase;font-size:11px;letter-spacing:.5px;border:1px solid var(--border)}
+.tbl td{padding:9px 12px;border:1px solid var(--border);vertical-align:top}
+.tbl tr:hover td{background:var(--surface2)}
+.tbl code{background:var(--surface3);padding:2px 6px;border-radius:var(--radius-sm);font-size:12.5px;color:var(--claude);white-space:nowrap}
+.tbl .b{color:var(--strategy)}
+
+/* Callout */
+.callout{border-left:3px solid var(--claude);background:rgba(204,120,92,.07);padding:12px 16px;border-radius:0 var(--radius) var(--radius) 0;margin:14px 0;font-size:13.5px;color:var(--muted);line-height:1.6}
+.callout strong{color:var(--text)}
+.callout.warn{border-left-color:var(--red);background:rgba(176,83,78,.07)}
+.callout ul{margin:6px 0 0 18px}
+.callout li{margin:4px 0}
+
+/* ASCII / flow block */
+.ascii{font-family:var(--mono);font-size:12.5px;line-height:1.55;background:var(--term-bg);border:1px solid var(--term-border);border-radius:var(--radius-lg);padding:16px 18px;margin:14px 0;color:var(--term-text);overflow-x:auto;white-space:pre}
+.ascii .h{color:var(--term-accent);font-weight:700}
+
+/* Phase chips */
+.phases{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));margin:14px 0}
+.phase{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px}
+.phase .n{font-family:var(--mono);font-size:11px;color:var(--delivery);font-weight:700;letter-spacing:.5px}
+.phase h4{font-family:var(--font-display);font-size:14px;margin:2px 0 4px}
+.phase p{font-size:12.5px;color:var(--muted);line-height:1.5}
+
+/* code block */
+.code{font-family:var(--mono);font-size:13px;background:var(--term-bg);border:1px solid var(--term-border);border-radius:var(--radius);padding:14px 16px;margin:12px 0;color:var(--term-text);overflow-x:auto;white-space:pre;line-height:1.7}
+.code .c{color:var(--term-dim)}
+.code .p{color:var(--term-accent)}
+
+.footer{text-align:center;margin-top:30px;font-size:12.5px;color:var(--dim);padding:16px 0;border-top:1px solid var(--border)}
+</style>
+</head>
+<body>
+<div class="app">
+
+<div class="hero">
+  <h1><span class="icon" style="font-size:28px">terminal</span> agent-enterprise — Claude Code CLI</h1>
+  <div class="sub">How to drive the Command Centre agents from the Claude Code terminal</div>
+  <div class="stats">
+    <span class="stat"><b>13</b> agents → <code style="color:var(--claude)">/slash</code> commands</span>
+    <span class="stat"><b>6</b> sprint phases</span>
+    <span class="stat"><b>2</b> modes</span>
+    <span class="stat"><b>1</b> orchestrator</span>
+  </div>
+</div>
+
+<div class="nav">
+  <a href="#shift">From VS&nbsp;Code</a>
+  <a href="#roster">Roster</a>
+  <a href="#flow">Sprint Flow</a>
+  <a href="#cli">CLI Essentials</a>
+  <a href="#builtins">Built-in Tools</a>
+  <a href="#guard">Guardrails</a>
+</div>
+
+<div class="callout">
+  <span class="icon icon-sm" style="color:var(--claude)">info</span>
+  <strong>Invocation.</strong> The original Command Centre uses <code>@agent</code> (Copilot) shorthand. In Claude Code the same 13 agents are <strong>slash commands</strong> you type at the prompt: <code>/planner</code>, <code>/sprint-lead</code>, and so on. Inside a sprint they run as <strong>subagents</strong>, each in its own context handing back structured JSON. The agents behave the same way whichever runtime you're on; what changes is how you call them.
+</div>
+
+<!-- ════════ FROM VS CODE ════════ -->
+<div class="sh" id="shift"><span class="icon">swap_horiz</span> Coming from VS Code agents</div>
+<table class="tbl">
+<thead><tr><th style="width:42%">In VS Code you…</th><th>In Claude Code CLI you…</th></tr></thead>
+<tbody>
+<tr><td>Type <code>@agent</code> in the chat panel</td><td>Type <code class="b">/agent</code> at the prompt (e.g. <code>/planner</code>) — it autocompletes when you hit <code>/</code></td></tr>
+<tr><td>Keep working context in the chat thread</td><td>Keep durable state on disk: <code>PLAN.md</code>, <code>SPRINTS.md</code>, <code>RETRO.md</code></td></tr>
+<tr><td>Re-prompt the agent for each subtask</td><td>Run <code>/sprint-lead</code> once — it spawns <strong>one subagent per task</strong> from the plan</td></tr>
+<tr><td>Watch edits stream into the editor</td><td>Subagents edit in isolated context and return a JSON summary the orchestrator collects</td></tr>
+<tr><td>Run tests manually when you remember</td><td>Quality gates (<code>/qa</code>, <code>/reviewer</code>, <code>/security</code>) are <strong>non-skippable phases</strong></td></tr>
+<tr><td>Open an agent picker / mode dropdown</td><td>Toggle <strong>plan mode</strong> with <kbd>shift</kbd>+<kbd>tab</kbd>; switch model with <code>/model</code></td></tr>
+<tr><td>Multiple editor windows for parallel work</td><td>Git <strong>worktrees</strong> — isolated branches, run <code>claude remote-control --spawn worktree</code></td></tr>
+<tr><td>Stay tethered to the laptop</td><td><strong>Remote Control</strong> — drive the session from phone/browser (<code>/remote-control</code>)</td></tr>
+</tbody>
+</table>
+
+<!-- ════════ ROSTER ════════ -->
+<div class="sh" id="roster"><span class="icon">smart_toy</span> The roster — as slash commands</div>
+<div class="callout">Type these at the prompt. The <span class="b">strategy → planning → delivery</span> chain is a run of slash commands you trigger yourself. After that, <code>/sprint-lead</code> calls the quality and docs lane as subagents, so you don't have to invoke them one by one.</div>
+
+<div class="lane-hdr"><span class="lane-dot" style="background:var(--strategy)"></span><span class="lane-name" style="color:var(--strategy)">Strategy</span><span class="lane-hint">what &amp; why &amp; how — opt-in, never implements</span></div>
+<div class="grid">
+  <div class="card" style="border-left-color:var(--strategy)">
+    <h3>/researcher <span class="badge badge-sub">subagent</span></h3>
+    <div class="role">External research. Digs up patterns, data models, user complaints, and failure modes from outside the codebase. Reports what it finds and leaves the call to you.</div>
+    <div class="cmds">/researcher &lt;research question&gt;</div>
+    <div class="meta">→ hands off to /pm · writes research docs</div>
+  </div>
+  <div class="card" style="border-left-color:var(--strategy)">
+    <h3>/pm <span class="badge badge-sub">subagent</span></h3>
+    <div class="role">Product manager. Validates whether a feature is worth building (5-test echo-chamber filter). Owns the <em>why</em> and <em>when</em>. Never writes sprint plans.</div>
+    <div class="cmds">/pm should we build &lt;idea&gt;<br>/pm validate this feature</div>
+    <div class="meta">→ hands off to /planner · writes validation records</div>
+  </div>
+  <div class="card" style="border-left-color:var(--strategy)">
+    <h3>/architect <span class="badge badge-sub">subagent</span></h3>
+    <div class="role">Technical advisor. Designs approaches, writes ADRs, pressure-tests before planning. Prefers the boring option. Never implements code.</div>
+    <div class="cmds">/architect design &lt;approach&gt;<br>/architect write an ADR for &lt;decision&gt;</div>
+    <div class="meta">→ hands off to /planner · writes ADR + architecture docs</div>
+  </div>
+</div>
+
+<div class="lane-hdr"><span class="lane-dot" style="background:var(--planning)"></span><span class="lane-name" style="color:var(--planning)">Planning &amp; Capture</span><span class="lane-hint">intent → plan · drafts/ → sprints/</span></div>
+<div class="grid">
+  <div class="card" style="border-left-color:var(--planning)">
+    <h3>/planner <span class="badge badge-sub">subagent</span></h3>
+    <div class="role">Business analyst &amp; sprint planner. Scopes requirements, drafts sprint plans, manages backlog ledger and non-goals. Drafts in <code>drafts/</code>, promotes to <code>sprints/</code>. Has a draft-approval checkpoint — <strong>you approve before it commits</strong>.</div>
+    <div class="cmds">/planner scope this work<br>/planner draft a sprint<br>/planner check the backlog</div>
+    <div class="meta">→ hands off to /sprint-lead · rejects back to /pm · /architect</div>
+  </div>
+  <div class="card" style="border-left-color:var(--planning)">
+    <h3>/bug</h3>
+    <div class="role">Fast bug capture (~30s). Appends to the bug backlog with ID, severity, area, repro steps. Never diagnoses or plans fixes.</div>
+    <div class="cmds">/bug &lt;describe the bug&gt;</div>
+    <div class="meta">→ hands off to /planner for fix planning · writes backlog entries</div>
+  </div>
+</div>
+
+<div class="lane-hdr"><span class="lane-dot" style="background:var(--delivery)"></span><span class="lane-name" style="color:var(--delivery)">Delivery</span><span class="lane-hint">6-phase sprint orchestration</span></div>
+<div class="grid">
+  <div class="card" style="border-left-color:var(--delivery)">
+    <h3>/sprint-lead <span class="badge badge-orch">orchestrator</span></h3>
+    <div class="role">Thin orchestrator. Reads <code>PLAN.md</code>, hands every task to its own subagent, runs the quality gates, gathers the results, and writes the sprint report and retro. <strong>It never writes code itself.</strong></div>
+    <div class="cmds">/sprint-lead run the sprint<br>/sprint-lead run Sprint N autopilot<br>/sprint-lead continue Sprint N</div>
+    <div class="meta">↳ invokes /qa · /a11y · /perf · /security · /reviewer · /docs as subagents</div>
+  </div>
+</div>
+
+<div class="lane-hdr"><span class="lane-dot" style="background:var(--quality)"></span><span class="lane-name" style="color:var(--quality)">Quality Gates</span><span class="lane-hint">read-only — report findings, never modify code</span></div>
+<div class="grid">
+  <div class="card" style="border-left-color:var(--quality)">
+    <h3>/qa</h3>
+    <div class="role">Full quality pipeline: typecheck, lint, unit tests, coverage, E2E. Reports pass/fail with exact numbers vs configured thresholds.</div>
+    <div class="cmds">/qa run tests · /qa validate sprint</div>
+    <div class="meta">read-only — reports only</div>
+  </div>
+  <div class="card" style="border-left-color:var(--quality)">
+    <h3>/reviewer</h3>
+    <div class="role">Code review for pattern compliance, type quality, security basics, planning-artifact integrity. Primary severity classifier.</div>
+    <div class="cmds">/reviewer review this code<br>/reviewer review branch &lt;name&gt;</div>
+    <div class="meta">read-only — reports only</div>
+  </div>
+  <div class="card" style="border-left-color:var(--quality)">
+    <h3>/security</h3>
+    <div class="role">Vulnerabilities, active exploits, security changelog, file-integrity hashes. Cites CVE IDs and advisory URLs.</div>
+    <div class="cmds">/security security audit<br>/security CVE scan · /security integrity check</div>
+    <div class="meta">reports + writes security docs</div>
+  </div>
+  <div class="card" style="border-left-color:var(--quality)">
+    <h3>/perf</h3>
+    <div class="role">Bundle size, build time, dependency health. Flags unused / missing / duplicated deps vs configured budgets.</div>
+    <div class="cmds">/perf performance audit · /perf dependency audit</div>
+    <div class="meta">read-only — reports only</div>
+  </div>
+  <div class="card" style="border-left-color:var(--quality)">
+    <h3>/a11y</h3>
+    <div class="role">WCAG 2.1 AA audit: keyboard nav, ARIA semantics, contrast, screen-reader behaviour (automated + manual).</div>
+    <div class="cmds">/a11y accessibility audit &lt;scope&gt;</div>
+    <div class="meta">read-only — reports only</div>
+  </div>
+</div>
+
+<div class="lane-hdr"><span class="lane-dot" style="background:var(--docs)"></span><span class="lane-name" style="color:var(--docs)">Documentation &amp; Setup</span><span class="lane-hint">post-sprint sync · only documents what exists</span></div>
+<div class="grid">
+  <div class="card" style="border-left-color:var(--docs)">
+    <h3>/docs</h3>
+    <div class="role">Maintains all project docs after a sprint: <code>SPRINTS.md</code>, changelog, user guide, architecture, dev docs. Never invents features.</div>
+    <div class="cmds">/docs documentation sync · /docs write release notes</div>
+    <div class="meta">invoked by /sprint-lead in Phase 5 · writes doc files</div>
+  </div>
+  <div class="card dashed" style="border-left-color:var(--docs)">
+    <h3>/onboarding <span class="badge badge-setup">setup-only</span></h3>
+    <div class="role">First-time setup for a new project: profile selection, config fill, token resolution, verification. Self-removes when done. <strong>Your first stop on a fresh checkout.</strong></div>
+    <div class="cmds">/onboarding get started · /onboarding set up agents</div>
+    <div class="meta">lifecycle: self-removes after completion</div>
+  </div>
+</div>
+
+<!-- ════════ SPRINT FLOW ════════ -->
+<div class="sh" id="flow"><span class="icon">timeline</span> The sprint flow</div>
+<div class="ascii"><span class="h">PRIMARY CHAIN</span>
+  /researcher → /pm → /planner → /sprint-lead → [gates] → /docs
+                       │              │
+                  writes PLAN.md   spawns 1 subagent per task</div>
+
+<div class="callout">What <code>/sprint-lead</code> runs for you, in order. Kick it off, then either answer the EXIT POINT prompts as they come (interactive) or let it run start to finish (autopilot).</div>
+
+<div class="phases">
+  <div class="phase"><div class="n">PHASE 1</div><h4>Kickoff</h4><p>Reads PLAN.md, validates every task has a <code>Files:</code> annotation, builds the todo list, commits <code>docs: Sprint N — kick off</code>.</p></div>
+  <div class="phase"><div class="n">PHASE 2</div><h4>Implementation</h4><p><strong>One subagent per task.</strong> Each returns structured JSON (status / commits / files / tests). Blocked → moves to next independent task.</p></div>
+  <div class="phase"><div class="n">PHASE 2.5</div><h4>Safety net</h4><p>Typecheck + lint in the main context. Failure → spawns a narrow fix subagent, repeats until clean.</p></div>
+  <div class="phase"><div class="n">PHASE 3</div><h4>Quality gates</h4><p><code>/qa</code> always; <code>/a11y</code> · <code>/perf</code> · <code>/security</code> per the plan. CRITICAL → fix subagent, re-run.</p></div>
+  <div class="phase"><div class="n">PHASE 4</div><h4>Code review</h4><p><code>/reviewer</code> over the sprint commit range. CRITICAL → fix &amp; re-review. WARNING → tech debt for /docs.</p></div>
+  <div class="phase"><div class="n">PHASE 5</div><h4>Documentation</h4><p><code>/docs</code> sync; determine push target. (Push left to you — see modes.)</p></div>
+  <div class="phase"><div class="n">PHASE 6</div><h4>Retrospective</h4><p>Updates backlog ledger, assembles <code>RETRO.md</code>, commits <code>docs: Sprint N — complete</code>.</p></div>
+</div>
+
+<table class="tbl">
+<thead><tr><th style="width:22%">Mode</th><th>Behaviour</th></tr></thead>
+<tbody>
+<tr><td><code>interactive</code> <span style="color:var(--dim)">(default)</span></td><td>Pauses at EXIT POINTs and asks (which task to start, whether to push). Best while learning the repo.</td></tr>
+<tr><td><code>autopilot</code></td><td>Add the word <code>autopilot</code>. Picks the recommended option at each step, runs every phase, and <strong>stops short of pushing to git</strong>. Good for starting something and watching it from your phone over Remote Control.</td></tr>
+</tbody>
+</table>
+
+<!-- ════════ CLI ESSENTIALS ════════ -->
+<div class="sh" id="cli"><span class="icon">keyboard</span> Claude Code CLI essentials</div>
+<table class="tbl">
+<thead><tr><th style="width:34%">Action</th><th>How</th></tr></thead>
+<tbody>
+<tr><td>Invoke an agent / skill</td><td><code>/name</code> at the prompt — <code>/</code> opens autocomplete</td></tr>
+<tr><td>Plan mode (read-only thinking)</td><td><kbd>shift</kbd>+<kbd>tab</kbd> to toggle; use it before a big change</td></tr>
+<tr><td>Reference a file in your prompt</td><td><code>@</code> autocompletes local file paths</td></tr>
+<tr><td>Add a memory</td><td>start a line with <code>#</code>, or run <code>/memory</code></td></tr>
+<tr><td>Switch model / fast mode</td><td><code>/model</code> · <code>/fast</code> (Opus, faster output)</td></tr>
+<tr><td>Drive from phone / browser</td><td><code>/remote-control agent-enterprise</code> (no <code>--name</code> flag in-session)</td></tr>
+<tr><td>Parallel isolated work</td><td>git <strong>worktrees</strong> · <code>claude remote-control --spawn worktree</code></td></tr>
+<tr><td>Resume a past session</td><td><code>claude --resume</code> (local-only picker)</td></tr>
+<tr><td>Local-only commands</td><td><code>/mcp</code> · <code>/plugin</code> · <code>/resume</code> open terminal pickers — won't work from mobile</td></tr>
+</tbody>
+</table>
+
+<!-- ════════ BUILT-IN TOOLS ════════ -->
+<div class="sh" id="builtins"><span class="icon">construction</span> Claude Code built-ins worth knowing</div>
+<div class="callout">These come with Claude Code itself, not the framework, but they sit well alongside the roster. Run <code>/code-review</code> on its own when a full sprint is overkill, or <code>/verify</code> a fix by actually running the app.</div>
+<table class="tbl">
+<thead><tr><th style="width:24%">Command</th><th>Use</th></tr></thead>
+<tbody>
+<tr><td><code>/code-review</code></td><td>Review the current diff for bugs + cleanups. <code>--comment</code> posts to a PR; <code>--fix</code> applies findings. <code>ultra</code> = deep multi-agent cloud review.</td></tr>
+<tr><td><code>/simplify</code></td><td>Reuse / simplification / efficiency cleanups on the diff, then applies them (quality only — no bug hunt).</td></tr>
+<tr><td><code>/verify</code></td><td>Run the app and observe behaviour to confirm a change actually works.</td></tr>
+<tr><td><code>/run</code></td><td>Launch &amp; drive this project's app to see a change live.</td></tr>
+<tr><td><code>/security-review</code></td><td>Security review of pending changes on the branch.</td></tr>
+<tr><td><code>/loop</code></td><td>Run a prompt/command on a recurring interval (e.g. poll a deploy).</td></tr>
+<tr><td><code>/schedule</code></td><td>Cron-scheduled remote agents (routines) — recurring or one-time.</td></tr>
+<tr><td><code>deep-research</code></td><td>Fan-out web research → fetch → adversarially verify → cited report.</td></tr>
+<tr><td><code>/fewer-permission-prompts</code></td><td>Scan transcripts, build an allowlist to cut repetitive permission prompts.</td></tr>
+</tbody>
+</table>
+
+<!-- ════════ GUARDRAILS ════════ -->
+<div class="sh" id="guard"><span class="icon">shield</span> Guardrails &amp; build</div>
+<div class="callout warn">
+  <span class="icon icon-sm" style="color:var(--red)">warning</span>
+  <strong>Never edit anything under <code>resolved/</code>.</strong> It's build output: every build regenerates it and overwrites whatever you changed. Edit the source under <code>skills/</code>, <code>instructions/</code>, or <code>agents/</code> and rebuild instead.
+</div>
+<div class="code"><span class="c"># Regenerate deployable artifacts after editing sources</span>
+<span class="p">python</span> init.py --config config/project.config.example.yml
+
+<span class="c"># Run the test suite (set UTF-8 first on Windows)</span>
+<span class="p">$env:</span>PYTHONIOENCODING='utf-8'
+<span class="p">python</span> -m pytest tests/ -v</div>
+<table class="tbl">
+<thead><tr><th style="width:40%">Rule</th><th>Why</th></tr></thead>
+<tbody>
+<tr><td>Keep <code>python init.py</code> green</td><td>It validates security, resolves tokens, writes deterministic output. Every PR must pass it.</td></tr>
+<tr><td>Keep the test suite green</td><td>Every PR keeps <code>pytest tests/</code> passing.</td></tr>
+<tr><td>Don't commit anything under <code>resolved/</code></td><td>It's build output, not source.</td></tr>
+<tr><td>A plan with no <code>Files:</code> annotations</td><td><code>/sprint-lead</code> won't run it. It refuses to guess the scope rather than improvise.</td></tr>
+<tr><td>Prefer source <code>*.skill.md</code> over <code>resolved/SKILL.md</code></td><td>When in doubt about a skill's contract, read the source.</td></tr>
+<tr><td>New skills follow <code>docs/EXTENSION_GUIDE.md</code></td><td>Keeps the contract + schema validation intact.</td></tr>
+</tbody>
+</table>
+
+<div class="callout">
+  <strong>First-run sequence on a fresh checkout:</strong>
+  <div class="code" style="margin:8px 0 0"><span class="p">/onboarding</span>
+<span class="p">/planner</span>  scope a sprint for &lt;your feature/fix&gt;   <span class="c"># review &amp; approve PLAN.md</span>
+<span class="p">/sprint-lead</span>  run the sprint                       <span class="c"># add "autopilot" to go hands-free</span></div>
+</div>
+
+<div class="footer">
+  Claude Code edition · companion to <code>command-centre-visual.html</code><br>
+  Agents are slash commands here; the contracts match the other runtimes.
+</div>
+
+</div>
+</body>
+</html>
