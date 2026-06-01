@@ -1,0 +1,17 @@
+{
+  "id": "SRC-agentsmd-repo",
+  "title": "agentsmd/agents.md GitHub repository",
+  "source_tier": "primary",
+  "publisher": "GitHub / agentsmd org",
+  "url": "https://github.com/agentsmd/agents.md",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://github.com/agentsmd/agents.md"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "A simple, open format for guiding coding agents... a README for agents. 21.9k stars, 1.6k forks. No multi-target emit, templating, or security validation in the convention itself; it is a single-file Markdown convention agents read natively.",
+  "content_hash": "sha256:b81f5af087a00ebf8538d00f1c612f26b82c6e0f82fa7adcba0dd7d7bf0db79e"
+}

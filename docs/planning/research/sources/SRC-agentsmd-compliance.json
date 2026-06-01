@@ -1,0 +1,17 @@
+{
+  "id": "SRC-agentsmd-compliance",
+  "title": "AGENTS.md - open format for guiding coding agents",
+  "source_tier": "community",
+  "publisher": "Agentic AI Foundation (Linux Foundation)",
+  "url": "https://agents.md/",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://github.com/agentsmd/agents.md"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "AGENTS.md is an open, vendor-neutral format (60,000+ projects) for the human-authored context coding agents need; stewarded by the Agentic AI Foundation. It is a file convention, not a government security standard.",
+  "content_hash": "sha256:cc614d3717f48890ea8829bbadbd9b1c09d281b804fdde8b30e38433afbc37c4"
+}

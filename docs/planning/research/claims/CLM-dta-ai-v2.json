@@ -1,0 +1,30 @@
+{
+  "id": "CLM-dta-ai-v2",
+  "statement": "The DTA Policy for the responsible use of AI in government is at Version 2.0, effective 15 December 2025 (succeeding v1.1 of 1 September 2024), adding mandatory impact assessments and procurement guidance.",
+  "verdict": "plausible",
+  "evidence": [
+    {
+      "source_id": "SRC-dta-ai-policy",
+      "quote": "Policy for the responsible use of AI in government - Version 2.0 ... Version 2.0: Comes into effect Monday 15 December 2025",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": false,
+  "falsifier": "A digital.gov.au page showing a version other than 2.0 as current, or a different effective date, would falsify this.",
+  "control_anchor": {
+    "framework": "DTA AI Policy",
+    "control_id": "Policy for the responsible use of AI in government v2.0",
+    "relationship": "requires"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency",
+    "other-gov-orgs"
+  ],
+  "tags": [
+    "compliance-anchor"
+  ],
+  "date": "2026-06-01"
+}

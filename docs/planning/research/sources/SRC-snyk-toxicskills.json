@@ -1,0 +1,17 @@
+{
+  "id": "SRC-snyk-toxicskills",
+  "title": "ToxicSkills: Snyk Finds Prompt Injection in 36% of Agent Skills",
+  "source_tier": "primary",
+  "publisher": "Snyk",
+  "url": "https://snyk.io/blog/toxicskills-malicious-ai-agent-skills-clawhub/",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://snyk.io/blog/toxicskills-malicious-ai-agent-skills-clawhub/"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "Scanned 3,984 agent skills from ClawHub using the mcp-scan engine... 36.82% (1,467 skills) have at least one security flaw... 76 malicious payloads designed for credential theft and data exfiltration... hidden instructions, obfuscated commands, and credential exposure within SKILL.md documentation.",
+  "content_hash": "sha256:112f15f9d114a23de46fe2ce93565ab4886e43dc5c029c2429c6bc1168ae4563"
+}

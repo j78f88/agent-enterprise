@@ -1,0 +1,31 @@
+{
+  "id": "CLM-no-build-time-security-validation",
+  "statement": "None of the surveyed commodity multi-target tools perform build-time SECURITY validation of rule inputs (prompt-injection / supply-chain scanning); their 'security' is limited to backups, gitignore, secret-scan configs, or 'trust the author' assumptions.",
+  "verdict": "verified",
+  "evidence": [
+    {
+      "source_id": "SRC-ruler-readme",
+      "quote": "The documentation does not address prompt injection defenses or input sanitization... distributes Markdown verbatim without filtering, validation, or security preprocessing.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    },
+    {
+      "source_id": "SRC-anthropic-skills",
+      "quote": "Security addressed only via 'install from trusted sources' and advising manual auditing before use.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": false,
+  "falsifier": "Documentation showing ruler/rulesync/ai-rulez actively scan rule content for injection/supply-chain attacks at build time and fail the build on violation.",
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency",
+    "other-gov-orgs"
+  ],
+  "tags": [
+    "substrate"
+  ],
+  "date": "2026-06-01"
+}

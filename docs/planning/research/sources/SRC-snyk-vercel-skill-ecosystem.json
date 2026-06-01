@@ -1,0 +1,17 @@
+{
+  "id": "SRC-snyk-vercel-skill-ecosystem",
+  "title": "Securing the Agent Skill Ecosystem: How Snyk and Vercel Are Locking Down the New Software Supply Chain",
+  "source_tier": "primary",
+  "publisher": "Snyk",
+  "url": "https://snyk.io/blog/snyk-vercel-securing-agent-skill-ecosystem/",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://snyk.io/blog/snyk-vercel-securing-agent-skill-ecosystem/"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "When a new agent skill is installed using the npx skills installer, Vercel's infrastructure triggers a call to Snyk's high-throughput scanning API... possible to deploy this as an automated gate at submission time — you can block truly malicious skills. Language understanding to catch prompt injection and natural language malware that hides in the SKILL.md instructions.",
+  "content_hash": "sha256:1aace42d63b9748d6b07448e758f3e81bd8c3375b4a712f5a65e8c388a82c931"
+}

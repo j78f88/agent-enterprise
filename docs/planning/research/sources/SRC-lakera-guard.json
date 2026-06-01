@@ -1,0 +1,17 @@
+{
+  "id": "SRC-lakera-guard",
+  "title": "Lakera Guard: Runtime visibility and protection for AI applications",
+  "source_tier": "primary",
+  "publisher": "Lakera (Cisco AI Defense)",
+  "url": "https://www.lakera.ai/lakera-guard",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://www.lakera.ai/lakera-guard"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "A real-time AI application firewall... screens any user or reference contents passed into an LLM and the output response in real time. Detects prompt injection, jailbreaks, data leakage with sub-50ms latency (vendor self-report).",
+  "content_hash": "sha256:c560081baa50ed6858142df20f2d96448cc2bba25c616e07aa208caff28b2b03"
+}

@@ -1,0 +1,32 @@
+{
+  "id": "CLM-rulesync-covers-multitarget",
+  "statement": "rulesync independently commoditises the same author-once -> multi-target generation across 30+ agents including Copilot, Cursor, Claude Code and Codex, with import/export and high release cadence.",
+  "verdict": "verified",
+  "evidence": [
+    {
+      "source_id": "SRC-rulesync-repo",
+      "quote": "Node.js CLI tool that generates configuration files for AI development tools from unified rule files... supports 30+ agents... 242 releases, v8.23.0 (May 2026), MIT.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    },
+    {
+      "source_id": "SRC-airulez-repo",
+      "quote": "Write your rules... once in .ai-rulez/ then generate native configs for Claude, Cursor, Copilot, Windsurf, Gemini, Codex and more.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": false,
+  "falsifier": "Evidence rulesync's generate command does not actually produce per-agent native configs, or that it dropped Codex/Copilot support.",
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency",
+    "other-gov-orgs",
+    "vendor-baseline"
+  ],
+  "tags": [
+    "substrate"
+  ],
+  "date": "2026-06-01"
+}

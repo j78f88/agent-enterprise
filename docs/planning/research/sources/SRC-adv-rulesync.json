@@ -1,0 +1,17 @@
+{
+  "id": "SRC-adv-rulesync",
+  "title": "rulesync — utility CLI for AI coding agents",
+  "source_tier": "primary",
+  "publisher": "dyoshikawa (GitHub)",
+  "url": "https://github.com/dyoshikawa/rulesync",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://github.com/dyoshikawa/rulesync"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "Generates configuration files for AI dev tools from unified rule files. Supports rules, ignore files, MCP, commands, subagents, skills, hooks, and permissions across 30+ platforms (Claude Code, Cursor, Copilot, Gemini CLI, Codex CLI...). Import/export + convert between tools; supports fetching official skills.",
+  "content_hash": "sha256:e10622c25a41f021792df9eb977c5e8db8280cdf4bfa8fe9664e4245faa218f2"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "CLM-no-reusable-gov-template-exists",
+  "statement": "No AUSTRALIAN-government (ACSC/DTA) reusable AI-coding-agent build template or 'AGENTS.md for government' standard exists; AU gov publishes policy (DTA AI Policy v2.0) and risk guidance, not a deployable coding-agent governance baseline — leaving a genuine gap agent-enterprise fills, though it overlaps materially with the UK GDS guidance.",
+  "verdict": "plausible",
+  "evidence": [
+    {
+      "source_id": "SRC-agentsmd-compliance",
+      "quote": "AGENTS.md is a simple, open format for guiding coding agents ... stewarded by the Agentic AI Foundation under the Linux Foundation",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    },
+    {
+      "source_id": "SRC-gds-aica",
+      "quote": "ten specific principles tailored to AI coding assistants",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": true,
+  "falsifier": "Discovery of an ACSC/DTA-published, deployable AI-coding-agent template or a 'gov AGENTS.md' baseline repo would falsify the 'no AU gov template' claim outright.",
+  "control_anchor": {
+    "framework": "DTA AI Policy",
+    "control_id": "v2.0 (no build-time template provided)",
+    "relationship": "informs"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency",
+    "other-gov-orgs",
+    "vendor-baseline"
+  ],
+  "tags": [
+    "redundancy-risk"
+  ],
+  "date": "2026-06-01"
+}

@@ -1,0 +1,31 @@
+{
+  "id": "CLM-adv-not-runtime-operate-gap",
+  "statement": "The DTA AI technical standard mandates controls across Discover/Operate/Retire — including the Operate (runtime) phase — but agent-enterprise explicitly is 'not a runtime sandbox' and disclaims downstream model/agent behaviour, so as scoped it cannot satisfy operate-phase assurance and is at best a partial, pre-deployment control.",
+  "verdict": "verified",
+  "evidence": [
+    {
+      "source_id": "SRC-adv-dta-techstd",
+      "quote": "The AI technical standard provides requirements/recommendations across three lifecycle phases — Discover, Operate and Retire... including operate-phase (runtime) controls.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    },
+    {
+      "source_id": "SRC-adv-dta-policy",
+      "quote": "Focus: accountability, mandatory use-case impact assessment, procurement safeguards, transparency, technical assurance.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": true,
+  "falsifier": "Reframe scope honestly: position agent-enterprise as covering only the Discover/build-and-procure controls and the artefact-supply-chain slice, with an explicit documented hand-off to runtime tooling for the Operate phase — a complementary control, not end-to-end assurance.",
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency"
+  ],
+  "tags": [
+    "adversarial",
+    "non-compliance"
+  ],
+  "date": "2026-06-01"
+}

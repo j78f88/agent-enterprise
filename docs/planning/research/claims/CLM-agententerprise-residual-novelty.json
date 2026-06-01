@@ -1,0 +1,31 @@
+{
+  "id": "CLM-agententerprise-residual-novelty",
+  "statement": "agent-enterprise's only genuinely differentiated substrate elements versus 2026 commodity tooling are (a) {{token}} build-time templating combined with (b) build-time security validation of inputs (injection/supply-chain) — the raw multi-target emit is redundant.",
+  "verdict": "plausible",
+  "evidence": [
+    {
+      "source_id": "SRC-ruler-readme",
+      "quote": "No token templating... no prompt-injection defenses or input sanitization documented.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    },
+    {
+      "source_id": "SRC-prompt-injection-context",
+      "quote": "LLMs process trusted instructions and untrusted data through the same token stream with no architectural separation — build-time concatenation tools do not address this.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": true,
+  "falsifier": "ai-rulez 'security auditor' / 'input validation rules' or rulesync secretlint integration turn out to deliver equivalent build-time injection/supply-chain validation, collapsing the residual novelty to near-zero.",
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency",
+    "other-gov-orgs"
+  ],
+  "tags": [
+    "substrate"
+  ],
+  "date": "2026-06-01"
+}

@@ -1,0 +1,32 @@
+{
+  "id": "CLM-ruler-covers-multitarget",
+  "statement": "Ruler already provides author-once -> multi-target emit across Copilot, Cursor, Claude Code and Codex, deterministically at apply-time, as a mature MIT-licensed CLI.",
+  "verdict": "verified",
+  "evidence": [
+    {
+      "source_id": "SRC-ruler-repo",
+      "quote": "Automatic Distribution... applying rules to configuration files of supported AI agents (GitHub Copilot, Claude Code, Cursor, OpenAI Codex CLI...). v0.3.42 (May 2026), MIT, ~2.7k stars.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    },
+    {
+      "source_id": "SRC-ruler-readme",
+      "quote": "Rule Files (*.md): Discovered recursively from .ruler/ and concatenated in order... ruler apply distributes to each agent's native format.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": false,
+  "falsifier": "Evidence that ruler cannot emit to one of Copilot/Cursor/Claude Code/Codex, or that the project is unmaintained (no release since 2025).",
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency",
+    "other-gov-orgs",
+    "vendor-baseline"
+  ],
+  "tags": [
+    "substrate"
+  ],
+  "date": "2026-06-01"
+}

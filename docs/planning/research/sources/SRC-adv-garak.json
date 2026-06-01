@@ -1,0 +1,17 @@
+{
+  "id": "SRC-adv-garak",
+  "title": "Promptfoo vs Garak — LLM red-teaming / prompt-injection scanners",
+  "source_tier": "primary",
+  "publisher": "Promptfoo / NVIDIA garak",
+  "url": "https://www.promptfoo.dev/blog/promptfoo-vs-garak/",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://www.promptfoo.dev/blog/promptfoo-vs-garak/"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "Garak (NVIDIA) is an OSS LLM vulnerability scanner with 37+ probes including direct/indirect/encoding-based prompt injection. Promptfoo covers 50+ vulnerability types, YAML test configs, and runs as a CI check on every deployment.",
+  "content_hash": "sha256:7db94bd5dfea40a13fae8abc365cb1c3a2be69105c2f6e35f7974c76b80e96be"
+}

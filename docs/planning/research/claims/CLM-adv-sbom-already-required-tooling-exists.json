@@ -1,0 +1,31 @@
+{
+  "id": "CLM-adv-sbom-already-required-tooling-exists",
+  "statement": "ISM-1730 already mandates SBOMs and ACSC provides the requirement; SBOM generation is commodity (syft/CycloneDX), so 'we emit a CycloneDX SBOM' is meeting a baseline obligation with off-the-shelf tooling, not a differentiator.",
+  "verdict": "plausible",
+  "evidence": [
+    {
+      "source_id": "SRC-adv-ism1730",
+      "quote": "ISM-1730 requires a software bill of materials be produced and made available to consumers.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    },
+    {
+      "source_id": "SRC-adv-msgov",
+      "quote": "pinned dependencies with cryptographic hashes... Dependabot scanning.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": true,
+  "falsifier": "Show that no existing SBOM tool models the agent-artefact dependency graph (skill->@ref->imported skill->declared MCP/npm/pip dep) and that agent-enterprise's SBOM captures injection-relevant provenance (trust labels, capability surface) a stock syft SBOM omits.",
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency"
+  ],
+  "tags": [
+    "adversarial",
+    "redundancy"
+  ],
+  "date": "2026-06-01"
+}

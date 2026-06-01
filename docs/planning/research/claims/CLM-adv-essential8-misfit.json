@@ -1,0 +1,25 @@
+{
+  "id": "CLM-adv-essential8-misfit",
+  "statement": "The Essential Eight (mandatory ML2 for federal agencies) targets patching, MFA, app control, backups and admin restriction — none of which agent-enterprise addresses; it therefore contributes nothing to the agency's mandatory Essential Eight compliance posture and shouldn't be justified on that basis.",
+  "verdict": "overhyped",
+  "evidence": [
+    {
+      "source_id": "SRC-adv-irap",
+      "quote": "Essential Eight is mandatory for federal agencies to Maturity Level Two under the PSPF, with annual compliance reporting.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": false,
+  "falsifier": "This kill-claim over-reaches: agent-enterprise never claimed to be an Essential Eight control. The team rebuts by stating it targets ISM software-supply-chain controls (e.g. ISM-1730 SBOM) and DTA AI-assurance, not Essential Eight — a category error in the criticism, not a project defect.",
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency"
+  ],
+  "tags": [
+    "adversarial",
+    "non-compliance"
+  ],
+  "date": "2026-06-01"
+}

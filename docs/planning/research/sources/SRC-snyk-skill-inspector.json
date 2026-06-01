@@ -1,0 +1,17 @@
+{
+  "id": "SRC-snyk-skill-inspector",
+  "title": "Introducing Agent Scan - Skill Inspector: Detect Malicious Skills Instantly",
+  "source_tier": "primary",
+  "publisher": "Snyk Labs",
+  "url": "https://labs.snyk.io/resources/agent-scan-skill-inspector/",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://labs.snyk.io/resources/agent-scan-skill-inspector/"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "Agent Scan analyzes AI skills as a combination of Skill code and Natural language instructions to identify security risks before installation: prompt injection, malicious code, suspicious downloads, hardcoded secrets, improper credential handling.",
+  "content_hash": "sha256:a3c38e7412ec55e7b3c7c3555ec401946c1896bfe3497f0382fd157d3978a1e4"
+}

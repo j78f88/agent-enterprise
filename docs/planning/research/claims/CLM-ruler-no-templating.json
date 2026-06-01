@@ -1,0 +1,31 @@
+{
+  "id": "CLM-ruler-no-templating",
+  "statement": "Ruler performs only concatenation with source-marker prepending; it does NOT support {{token}} templating or variable substitution.",
+  "verdict": "verified",
+  "evidence": [
+    {
+      "source_id": "SRC-ruler-readme",
+      "quote": "Ruler does not support token templating, variable substitution, or placeholders... operates through straightforward concatenation. Each file's content is prepended with <!-- Source: ... -->.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    },
+    {
+      "source_id": "SRC-ruler-repo",
+      "quote": "Rule Files (*.md) discovered recursively from .ruler/ and concatenated.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": false,
+  "falsifier": "A ruler.toml or docs section showing variable/placeholder interpolation in rule bodies.",
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency",
+    "vendor-baseline"
+  ],
+  "tags": [
+    "substrate"
+  ],
+  "date": "2026-06-01"
+}

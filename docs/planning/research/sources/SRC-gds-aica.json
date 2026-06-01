@@ -1,0 +1,18 @@
+{
+  "id": "SRC-gds-aica",
+  "title": "AI Insights: AI Coding Assistants for developers in HMG | GOV.UK",
+  "source_tier": "official-guidance",
+  "publisher": "UK Government Digital Service (GDS) / DSIT",
+  "url": "https://www.gov.uk/government/publications/ai-insights/ai-insights-ai-coding-assistants-for-developers-in-hmg-html",
+  "published_date": "2025-09-12",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://technology.blog.gov.uk/2025/09/12/why-you-should-use-ai-coding-assistants-in-the-public-sector/"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "Ten principles for AI coding assistants in HMG: main-branch protection with human peer review, secrets separated from AICAs, multi-layered vulnerability scanning, commit only code you understand, code in the open, verify dependency versions.",
+  "content_hash": "sha256:73eac45ff99fab4f0ac4eee5aaa1e2f216200d3ac0daf2e24511eaf606655ef3"
+}

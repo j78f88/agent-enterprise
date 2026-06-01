@@ -1,0 +1,18 @@
+{
+  "id": "SRC-nist-genai",
+  "title": "AI RMF: Generative AI Profile (NIST AI 600-1) | NIST",
+  "source_tier": "authoritative-standard",
+  "publisher": "NIST",
+  "url": "https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-generative-artificial-intelligence",
+  "published_date": "2024-07-26",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.600-1.pdf"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "NIST AI 600-1, the Generative AI Profile, published 26 July 2024; companion to AI RMF 1.0 defining 12 GenAI risk categories with govern/map/measure/manage actions.",
+  "content_hash": "sha256:c517a1a40ec15e5ccc33d584a2a06ea892ec7b0e9577e83443f832fe18c24f0f"
+}

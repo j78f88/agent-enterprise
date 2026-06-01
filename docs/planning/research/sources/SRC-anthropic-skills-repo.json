@@ -1,0 +1,17 @@
+{
+  "id": "SRC-anthropic-skills-repo",
+  "title": "anthropics/skills — Public repository for Agent Skills",
+  "source_tier": "primary",
+  "publisher": "GitHub / Anthropic",
+  "url": "https://github.com/anthropics/skills",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://github.com/anthropics/skills"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "Skills are a folder with a SKILL.md file containing YAML frontmatter (required: name, description) and instructions. Format released as open standard Dec 2025; OpenAI adopted the same format for Codex CLI and ChatGPT. No build-time token resolution or input security validation in the spec.",
+  "content_hash": "sha256:cebe777b57f5fc68ed068a5318cf16dbf6b2e16d3f8f557afe117009424c281c"
+}

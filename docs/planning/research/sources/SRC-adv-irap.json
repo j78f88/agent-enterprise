@@ -1,0 +1,17 @@
+{
+  "id": "SRC-adv-irap",
+  "title": "Securing the Software Supply Chain: ISM, IRAP, and the Essential Eight",
+  "source_tier": "community",
+  "publisher": "Chainguard",
+  "url": "https://www.chainguard.dev/unchained/securing-the-software-supply-chain-a-guide-to-ism-irap-and-the-essential-eight",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://www.chainguard.dev/unchained/securing-the-software-supply-chain-a-guide-to-ism-irap-and-the-essential-eight"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "IRAP is the framework ASD uses to evaluate ICT systems against the ISM; assessment is required prior to processing/storing government data. Essential Eight is mandatory for federal agencies to Maturity Level Two under the PSPF, with annual compliance reporting.",
+  "content_hash": "sha256:cf66abd41b02fe338f5922294fdb33adf575bc5b3bf5c514e971dc4586b1c38d"
+}

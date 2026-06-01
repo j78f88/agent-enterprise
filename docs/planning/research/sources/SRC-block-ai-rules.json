@@ -1,0 +1,17 @@
+{
+  "id": "SRC-block-ai-rules",
+  "title": "block/ai-rules — Manage AI rules, commands, and skills across multiple coding agents",
+  "source_tier": "primary",
+  "publisher": "GitHub / Block (Square)",
+  "url": "https://github.com/block/ai-rules",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://github.com/block/ai-rules"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "Manage AI rules, commands, and skills across multiple coding agents from one place — a corporate-backed (Block) entrant confirming the author-once/multi-target-emit category is being commoditised by vendors beyond solo maintainers.",
+  "content_hash": "sha256:7ace486ec94154c7407af078071085cb78b9aab864f3db3aec0c10c4176bc817"
+}

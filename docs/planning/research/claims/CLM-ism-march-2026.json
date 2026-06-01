@@ -1,0 +1,36 @@
+{
+  "id": "CLM-ism-march-2026",
+  "statement": "The ACSC/ASD Information Security Manual (ISM) current release is the March 2026 edition; ASD revises the ISM roughly quarterly.",
+  "verdict": "verified",
+  "evidence": [
+    {
+      "source_id": "SRC-acsc-ism",
+      "quote": "Information security manual Last updated: March 2026",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    },
+    {
+      "source_id": "SRC-e8-update",
+      "quote": "This update adopted language from mapped controls within the Information security manual (ISM) to ensure consistency",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": false,
+  "falsifier": "A cyber.gov.au ISM page or OSCAL release dated later than March 2026 at retrieval would falsify 'current'.",
+  "control_anchor": {
+    "framework": "ACSC ISM",
+    "control_id": "Guidelines for Software Development",
+    "relationship": "supports"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency",
+    "other-gov-orgs"
+  ],
+  "tags": [
+    "compliance-anchor"
+  ],
+  "date": "2026-06-01"
+}

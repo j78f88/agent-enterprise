@@ -1,0 +1,17 @@
+{
+  "id": "SRC-adv-skills-openstd",
+  "title": "Equipping agents for the real world with Agent Skills",
+  "source_tier": "primary",
+  "publisher": "Anthropic",
+  "url": "https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "We've published Agent Skills as an open standard for cross-platform portability. (December 18, 2025). Skills supported across Claude.ai, Claude Code, the Claude Agent SDK, and the Claude Developer Platform. 'malicious skills may introduce vulnerabilities... install skills only from trusted sources.'",
+  "content_hash": "sha256:2396aab49374b92372be72309984fa3cbd0eb8b208580896969d730c4e8b9166"
+}

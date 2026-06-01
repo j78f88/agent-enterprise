@@ -1,0 +1,18 @@
+{
+  "id": "SRC-ruler-repo",
+  "title": "intellectronica/ruler — Apply the same rules to all coding agents",
+  "source_tier": "primary",
+  "publisher": "GitHub / Eleanor Berger (intellectronica)",
+  "url": "https://github.com/intellectronica/ruler",
+  "published_date": "2025-04-01",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://github.com/intellectronica/ruler"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "Centralised Rule Management... Automatic Distribution to configuration files of supported AI agents (GitHub Copilot, Claude Code, Cursor, OpenAI Codex CLI, Aider, Windsurf...). Rule Files (*.md) discovered recursively from .ruler/ and concatenated. License MIT, ~2.7k stars, v0.3.42 (May 2026).",
+  "content_hash": "sha256:b38d3490e05bfcbbf4302d9fcc92a87473c565c10cbe62a8ae104afd1a8e78c9"
+}

@@ -1,0 +1,29 @@
+{
+  "id": "CLM-sfia9",
+  "statement": "SFIA 9 (published 30 October 2024) is the current version of the Skills Framework for the Information Age, expanding to 147 skills and refreshing cyber/AI/data competencies.",
+  "verdict": "plausible",
+  "evidence": [
+    {
+      "source_id": "SRC-sfia9",
+      "quote": "SFIA 9 ... published in October 2024 ... expanding the total number of skills from 121 to 147",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": false,
+  "falsifier": "sfia-online.org announcing SFIA 10 as current would falsify this.",
+  "control_anchor": {
+    "framework": "SFIA",
+    "control_id": "SFIA 9 skills (PROG, SCTY, DLMG)",
+    "relationship": "informs"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "vendor-baseline"
+  ],
+  "tags": [
+    "compliance-anchor"
+  ],
+  "date": "2026-06-01"
+}

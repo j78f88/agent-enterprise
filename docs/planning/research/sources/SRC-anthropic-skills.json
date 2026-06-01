@@ -1,0 +1,18 @@
+{
+  "id": "SRC-anthropic-skills",
+  "title": "Equipping agents for the real world with Agent Skills",
+  "source_tier": "official-guidance",
+  "publisher": "Anthropic",
+  "url": "https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills",
+  "published_date": "2025-10-16",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "We've published Agent Skills as an open standard for cross-platform portability (Dec 18, 2025 update)... organized folders of instructions, scripts, and resources agents discover and load dynamically. A single portable format, not author-once-emit-to-many. Security addressed only via 'install from trusted sources' + manual audit.",
+  "content_hash": "sha256:21937fb3f82d0f641839df2d8a02f5c2c516174b6ad386f9e54abf0c4e54a3c1"
+}

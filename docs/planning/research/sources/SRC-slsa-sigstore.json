@@ -1,0 +1,17 @@
+{
+  "id": "SRC-slsa-sigstore",
+  "title": "GitHub Artifact Attestations (SLSA build provenance + Sigstore)",
+  "source_tier": "official-guidance",
+  "publisher": "GitHub / OpenSSF",
+  "url": "https://docs.github.com/en/actions/concepts/security/artifact-attestations",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://docs.github.com/en/actions/concepts/security/artifact-attestations"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "SLSA build provenance is a signed document making claims about how an artifact was built; Sigstore provides keyless signing and Rekor transparency log. Proves provenance/integrity — does not inspect artefact content for injection.",
+  "content_hash": "sha256:f0f9939b8a15418a5828439cbcccefd69377dcd167525f71b82558ecc1299390"
+}

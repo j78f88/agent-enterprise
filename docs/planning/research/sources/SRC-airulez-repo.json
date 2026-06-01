@@ -1,0 +1,17 @@
+{
+  "id": "SRC-airulez-repo",
+  "title": "Goldziher/ai-rulez — Complete AI development workflow for 19+ tools",
+  "source_tier": "primary",
+  "publisher": "GitHub / Goldziher (Na'aman Hirschfeld)",
+  "url": "https://github.com/Goldziher/ai-rulez",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://github.com/Goldziher/ai-rulez"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "Write your rules, context, skills, agents, and commands once in .ai-rulez/ then generate native configs for Claude, Cursor, Copilot, Windsurf, Gemini, Codex and more. 19+ platforms. Written in Go. JSON schema directory present. v4.3.2 (May 2026), MIT.",
+  "content_hash": "sha256:bca2da1952f1c1458585d48ab70c89db42d23713d3898c95b8344cc52f0f6d57"
+}

@@ -1,0 +1,37 @@
+{
+  "id": "CLM-dep-and-provenance-layer-commoditised",
+  "statement": "The dependency-scanning, SBOM, and provenance/attestation sub-components of agent-enterprise's safety layer are commodity capabilities already provided fail-closed in CI by OSV-Scanner, Socket, Semgrep, and SLSA/Sigstore.",
+  "verdict": "verified",
+  "evidence": [
+    {
+      "source_id": "SRC-osv-scanner",
+      "quote": "reusable GitHub workflows... fail builds above a severity threshold.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    },
+    {
+      "source_id": "SRC-socket-dev",
+      "quote": "Static analysis flags new install scripts, obfuscated code, privileged API usage; Firewall proxy blocks malicious package downloads at install time.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    },
+    {
+      "source_id": "SRC-slsa-sigstore",
+      "quote": "SLSA build provenance is a signed document making claims about how an artifact was built; Sigstore provides keyless signing and Rekor transparency log.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": false,
+  "falsifier": "If these tools could not be wired to fail builds, the dep/provenance overlap would be weaker.",
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "vendor-baseline",
+    "own-agency"
+  ],
+  "tags": [
+    "safety-layer"
+  ],
+  "date": "2026-06-01"
+}

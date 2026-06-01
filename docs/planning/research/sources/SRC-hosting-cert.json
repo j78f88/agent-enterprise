@@ -1,0 +1,17 @@
+{
+  "id": "SRC-hosting-cert",
+  "title": "Hosting Certification Framework | Digital Transformation Agency",
+  "source_tier": "official-guidance",
+  "publisher": "Digital Transformation Agency (DTA)",
+  "url": "https://www.dta.gov.au/our-projects/hosting-certification-framework",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://www.dta.gov.au/our-projects/hosting-certification-framework"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "The DTA-administered Hosting Certification Framework (replacing the former Cloud Services Certification Program, which ceased 2 March 2020) certifies data-centre/hosting providers (Certified Strategic / Certified Assured) for government workloads.",
+  "content_hash": "sha256:15c4006eef9c42857c4b9d2614b93cd11559cee5d5993f786f051d7313c62d50"
+}

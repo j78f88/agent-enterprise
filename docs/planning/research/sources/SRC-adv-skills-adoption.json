@@ -1,0 +1,17 @@
+{
+  "id": "SRC-adv-skills-adoption",
+  "title": "Introducing Agent Skills (open standard adopted by OpenAI)",
+  "source_tier": "primary",
+  "publisher": "Anthropic / Claude news",
+  "url": "https://www.anthropic.com/news/skills",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://www.anthropic.com/news/skills"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "In December 2025, Anthropic released the Agent Skills specification as an open standard, and OpenAI adopted the same format for Codex CLI and ChatGPT.",
+  "content_hash": "sha256:25053a9706bbf23c1308336ed542f647655f11ff87d116927079df21ce4e533b"
+}

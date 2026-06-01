@@ -1,0 +1,17 @@
+{
+  "id": "SRC-adv-dta-policy",
+  "title": "AI Policy overhauled with new Impact Assessment Tool and Procurement Guidance",
+  "source_tier": "official-guidance",
+  "publisher": "Australian Govt Digital Transformation Agency (DTA)",
+  "url": "https://www.dta.gov.au/media-releases/ai-policy-overhauled-new-impact-assessment-tool-and-procurement-guidance",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://www.dta.gov.au/media-releases/ai-policy-overhauled-new-impact-assessment-tool-and-procurement-guidance"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "Updated Policy for responsible use of AI in government effective 15 Dec 2025; first mandatory requirement begins 15 June 2026, remaining requirements Dec 2026. New AI Impact Assessment Tool and Guidance on AI procurement.",
+  "content_hash": "sha256:dbae9fa63e0898b60fbf88d0a867d3a593162e3eb2ebc204bc4d93c99a18de77"
+}

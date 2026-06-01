@@ -1,0 +1,18 @@
+{
+  "id": "SRC-secure-ai-guidelines",
+  "title": "Guidelines for secure AI system development | NCSC / CISA",
+  "source_tier": "authoritative-standard",
+  "publisher": "UK NCSC & US CISA (+21 international agencies incl. ASD ACSC)",
+  "url": "https://www.ncsc.gov.uk/collection/guidelines-secure-ai-system-development",
+  "published_date": "2023-11-26",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://www.cisa.gov/news-events/alerts/2023/11/26/cisa-and-uk-ncsc-unveil-joint-guidelines-secure-ai-system-development"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "On 26 November 2023 CISA with UK NCSC published joint Guidelines for Secure AI System Development, developed with 21 other agencies; first of their kind agreed globally; secure-by-design across the AI lifecycle.",
+  "content_hash": "sha256:55aff263fde6f1909f8907f5f81fa6fe8981228b14a14d09372ce726a6ba9fac"
+}

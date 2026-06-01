@@ -1,0 +1,17 @@
+{
+  "id": "SRC-adv-ism1730",
+  "title": "ISM-1730 SBOM control + Guidelines for procurement and outsourcing",
+  "source_tier": "official-guidance",
+  "publisher": "Australian Cyber Security Centre (ACSC / cyber.gov.au)",
+  "url": "https://www.cyber.gov.au/about-us/view-all-content/news/new-guidance-on-integrating-a-software-bill-of-materials",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://www.cyber.gov.au/resources-business-and-government/essential-cybersecurity/ism/cybersecurity-guidelines/guidelines-procurement-and-outsourcing"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "ISM-1730 requires a software bill of materials be produced and made available to consumers. ISM procurement guidance: a supply chain risk assessment is performed for suppliers; products procured from suppliers that have demonstrated a commitment to the security of their products and services.",
+  "content_hash": "sha256:dd993d822d5b9bd83a6fa8152d2e256a06adcc6463dd7f4e0361e4d10254d0ad"
+}

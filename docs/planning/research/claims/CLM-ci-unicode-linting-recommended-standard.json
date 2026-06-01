@@ -1,0 +1,32 @@
+{
+  "id": "CLM-ci-unicode-linting-recommended-standard",
+  "statement": "Authoritative guidance already prescribes build-time CI/CD linting of agent skill files for hidden-Unicode prompt-injection smuggling — i.e., the exact 'hidden-unicode smuggling lint' agent-enterprise claims.",
+  "verdict": "verified",
+  "evidence": [
+    {
+      "source_id": "SRC-csa-unicode-skills",
+      "quote": "CI/CD pipelines should incorporate Unicode linting that rejects any skill file, MCP server manifest, or AI configuration file containing Tags-block codepoints or anomalous zero-width character densities.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    },
+    {
+      "source_id": "SRC-embracethered-skills",
+      "quote": "AID Scanner (wunderwuzzi23/aid) scans files and flags suspicious Unicode sequences... I have seen Skill scanners lacking this capability.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": false,
+  "falsifier": "If no published standard/tool recommended pre-deploy Unicode linting of skill files, agent-enterprise's lint would be novel.",
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency",
+    "other-gov-orgs",
+    "vendor-baseline"
+  ],
+  "tags": [
+    "safety-layer"
+  ],
+  "date": "2026-06-01"
+}

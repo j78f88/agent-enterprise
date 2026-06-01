@@ -1,0 +1,30 @@
+{
+  "id": "CLM-deterministic-not-unique",
+  "statement": "Deterministic / policy-engine generation is itself becoming a marketed feature of commodity tools, so 'deterministic build' alone is not a defensible differentiator for agent-enterprise.",
+  "verdict": "plausible",
+  "evidence": [
+    {
+      "source_id": "SRC-airulez-medium",
+      "quote": "Agent RuleZ: A Deterministic Policy Engine for AI Coding Agents — framing this tool class as a deterministic policy engine.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    },
+    {
+      "source_id": "SRC-airulez-repo",
+      "quote": "Built-in security auditor agent; supports input validation rules and secrets handling standards within governance framework.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": true,
+  "falsifier": "Evidence that ai-rulez's 'deterministic' and 'security auditor' claims are runtime-agent features, not build-time guarantees — which would re-open determinism as a differentiator.",
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "vendor-baseline"
+  ],
+  "tags": [
+    "substrate"
+  ],
+  "date": "2026-06-01"
+}

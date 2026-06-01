@@ -1,0 +1,18 @@
+{
+  "id": "SRC-pspf-2025",
+  "title": "PSPF Annual Release 2025 | Protective Security Policy Framework",
+  "source_tier": "authoritative-standard",
+  "publisher": "Department of Home Affairs (AU)",
+  "url": "https://www.protectivesecurity.gov.au/publications-library/pspf-annual-release-2025",
+  "published_date": "2025-07-24",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://www.protectivesecurity.gov.au/pspf-annual-release"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "PSPF 2025 Annual Release embeds Zero Trust, adds new policy on AI, quantum computing and connected peripherals, uplifts Gateway security, requires stocktake of internet-facing systems.",
+  "content_hash": "sha256:5dfaf7fcd33645a99a1755561f40846a13816374765bb2c12f88f6e953e04332"
+}

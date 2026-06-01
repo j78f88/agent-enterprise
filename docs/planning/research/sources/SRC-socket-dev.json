@@ -1,0 +1,17 @@
+{
+  "id": "SRC-socket-dev",
+  "title": "Socket: Block zero-day supply chain attacks",
+  "source_tier": "primary",
+  "publisher": "Socket.dev",
+  "url": "https://socket.dev/",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://docs.socket.dev/docs/socket-for-github"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "Static analysis flags new install scripts, obfuscated code, privileged API usage in dependencies; Firewall proxy blocks malicious package downloads at install time. Targets package supply chain, not markdown agent artefacts.",
+  "content_hash": "sha256:141f5d261c4fb037ba40368f1ed20baf164f573329d83499bc994e1ba4359896"
+}

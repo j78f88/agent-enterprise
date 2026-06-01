@@ -1,0 +1,32 @@
+{
+  "id": "CLM-invariant-mcp-scan-static-preuse",
+  "statement": "Invariant mcp-scan (the engine inside Snyk Agent Scan) statically scans MCP/agent artefacts for prompt injection and tool poisoning before use and pins tool hashes to detect post-approval tampering (rug pulls).",
+  "verdict": "verified",
+  "evidence": [
+    {
+      "source_id": "SRC-invariant-mcp-scan",
+      "quote": "MCP-Scan checks installed MCP servers for prompt injections, tool poisoning... Built-in Tool Pinning detects MCP Rug Pull attacks, verifying integrity of installed tools by tracking changes via tool hashing.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    },
+    {
+      "source_id": "SRC-snyk-agent-scan-repo",
+      "quote": "Discover and scan agent components on your machine for prompt injections and vulnerabilities (including agents, MCP servers, skills).",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": false,
+  "falsifier": "If tool-pinning/hashing were removed or shown to be runtime-only, the integrity-checking overlap would be weaker.",
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency",
+    "other-gov-orgs",
+    "vendor-baseline"
+  ],
+  "tags": [
+    "safety-layer"
+  ],
+  "date": "2026-06-01"
+}

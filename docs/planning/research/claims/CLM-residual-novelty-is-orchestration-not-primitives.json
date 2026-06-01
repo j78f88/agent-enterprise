@@ -1,0 +1,31 @@
+{
+  "id": "CLM-residual-novelty-is-orchestration-not-primitives",
+  "statement": "agent-enterprise's residual novelty is not any individual primitive (all of which exist) but the unified build-time resolution pipeline that combines artefact injection-linting + trust-labelling/quarantine + checksums + SBOM + dep-scan with a fail-closed gate over multi-platform agent deploy artefacts.",
+  "verdict": "plausible",
+  "evidence": [
+    {
+      "source_id": "SRC-snyk-vercel-skill-ecosystem",
+      "quote": "The article mentions a Security Verified badge as a transparency signal but does not describe checksums, quarantine systems, or granular trust labeling mechanisms beyond this visual indicator.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    },
+    {
+      "source_id": "SRC-invariant-mcp-scan",
+      "quote": "Built-in Tool Pinning... verifying integrity of installed tools by tracking changes via tool hashing.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": true,
+  "falsifier": "If a single shipped tool already bundles artefact injection-lint + quarantine + checksum + SBOM + dep-scan as one fail-closed build pipeline for agent artefacts, this residual novelty disappears.",
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency",
+    "other-gov-orgs"
+  ],
+  "tags": [
+    "safety-layer"
+  ],
+  "date": "2026-06-01"
+}

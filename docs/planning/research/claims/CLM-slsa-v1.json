@@ -1,0 +1,31 @@
+{
+  "id": "CLM-slsa-v1",
+  "statement": "SLSA reached v1.0 in April 2023; the slsa.dev specification has since advanced to later 1.x releases defining progressive build-integrity levels.",
+  "verdict": "plausible",
+  "evidence": [
+    {
+      "source_id": "SRC-slsa",
+      "quote": "SLSA version 1.0 was released in April 2023 by OpenSSF ... v1.2 documentation",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": false,
+  "falsifier": "slsa.dev/spec showing v1.0 (not 1.1/1.2) as latest stable would falsify the 'advanced' part; the precise current minor was not confirmed from the issuing site.",
+  "control_anchor": {
+    "framework": "SLSA",
+    "control_id": "Build L1-L3 (provenance/build integrity)",
+    "relationship": "supports"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency",
+    "vendor-baseline"
+  ],
+  "tags": [
+    "compliance-anchor",
+    "version-uncertain"
+  ],
+  "date": "2026-06-01"
+}

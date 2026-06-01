@@ -1,0 +1,30 @@
+{
+  "id": "CLM-nonce-data-fence-not-found-in-competitors",
+  "statement": "The specific structural defence of build-time data/instruction separation via a nonce data-fence in resolved agent artefacts was not found in any surveyed competitor and is a candidate genuine differentiator.",
+  "verdict": "plausible",
+  "evidence": [
+    {
+      "source_id": "SRC-snyk-vercel-skill-ecosystem",
+      "quote": "language understanding to catch prompt injection and natural language malware that hides in the SKILL.md instructions.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    },
+    {
+      "source_id": "SRC-csa-unicode-skills",
+      "quote": "recommends Unicode normalization (NFKC form) as a preprocessing defense layer before tokenization.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": true,
+  "falsifier": "Surveyed tools detect/normalise injection but none documents emitting a nonce-delimited data fence into the resolved artefact; finding one would falsify this.",
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency"
+  ],
+  "tags": [
+    "safety-layer"
+  ],
+  "date": "2026-06-01"
+}

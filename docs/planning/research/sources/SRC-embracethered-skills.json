@@ -1,0 +1,17 @@
+{
+  "id": "SRC-embracethered-skills",
+  "title": "Scary Agent Skills: Hidden Unicode Instructions in Skills ...And How To Catch Them",
+  "source_tier": "practitioner-signal",
+  "publisher": "Embrace The Red (Johann Rehberger)",
+  "url": "https://embracethered.com/blog/posts/2026/scary-agent-skills/",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://embracethered.com/blog/posts/2026/scary-agent-skills/"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "Invisible Unicode Tag codepoints embedded in skill files are interpreted as instructions by Gemini, Claude, Grok... survive human review. AID Scanner (wunderwuzzi23/aid) scans files and flags suspicious Unicode sequences. I have seen Skill scanners lacking this capability.",
+  "content_hash": "sha256:037f1ef59c5a336af1bcc1775433ccf10fd0bafc01e29b5dbf76d1615151c13f"
+}

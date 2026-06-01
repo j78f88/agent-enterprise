@@ -1,0 +1,31 @@
+{
+  "id": "CLM-adv-no-irap",
+  "statement": "For AU federal use that processes government data, IRAP assessment against the ISM is the gating expectation; agent-enterprise has no IRAP assessment, no security classification posture, and a single-maintainer bus-factor, so it cannot be procured as an assessed control regardless of its design merits.",
+  "verdict": "plausible",
+  "evidence": [
+    {
+      "source_id": "SRC-adv-irap",
+      "quote": "IRAP is the framework ASD uses to evaluate ICT systems against the ISM; assessment is required prior to processing/storing government data. Essential Eight is mandatory for federal agencies to Maturity Level Two under the PSPF.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    },
+    {
+      "source_id": "SRC-adv-ism1730",
+      "quote": "ISM procurement guidance: a supply chain risk assessment is performed for suppliers; products procured from suppliers that have demonstrated a commitment to the security of their products and services.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": true,
+  "falsifier": "Show agent-enterprise is a developer build-time tool that never processes or stores government data at runtime (so IRAP of the artefact pipeline is not the gating control), and that its outputs FEED an agency's existing IRAP-assessed system — i.e., it lowers the assessment burden rather than itself requiring IRAP.",
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency"
+  ],
+  "tags": [
+    "adversarial",
+    "non-compliance"
+  ],
+  "date": "2026-06-01"
+}

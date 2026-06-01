@@ -1,0 +1,17 @@
+{
+  "id": "SRC-garak",
+  "title": "NVIDIA/garak: the LLM vulnerability scanner",
+  "source_tier": "primary",
+  "publisher": "NVIDIA",
+  "url": "https://github.com/NVIDIA/garak",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://github.com/NVIDIA/garak"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "Probes a deployed LLM endpoint for prompt injection, jailbreaks, hallucination, data leakage via 50+ probe modules and 23 generator backends; evaluates model responses (dynamic/runtime probing of a live model).",
+  "content_hash": "sha256:2e2fc5ebcd8fab30ddb4ef35b5e9cf29a01cf311cef25b1247d8f5647887067a"
+}

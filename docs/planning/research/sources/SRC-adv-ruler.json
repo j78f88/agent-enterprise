@@ -1,0 +1,17 @@
+{
+  "id": "SRC-adv-ruler",
+  "title": "Ruler — apply the same rules to all coding agents",
+  "source_tier": "primary",
+  "publisher": "intellectronica (GitHub)",
+  "url": "https://github.com/intellectronica/ruler",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://github.com/intellectronica/ruler"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "Ruler centralizes AI coding assistant instructions in a single .ruler/ directory and automatically distributes them across 30+ agents (Copilot, Claude Code, Cursor, Codex CLI, Aider, Gemini CLI...). MCP servers defined once in ruler.toml are propagated to native config. Backups, ruler.toml validation, safe revert.",
+  "content_hash": "sha256:a85800763c557ad3c7bda3136d66012c1d63b700c87b206dcb79fd5925c8ca7c"
+}

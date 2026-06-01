@@ -1,0 +1,18 @@
+{
+  "id": "SRC-nist-ssdf",
+  "title": "NIST SP 800-218 SSDF v1.1 (Final) | NIST CSRC",
+  "source_tier": "authoritative-standard",
+  "publisher": "NIST",
+  "url": "https://csrc.nist.gov/pubs/sp/800/218/final",
+  "published_date": "2022-02-03",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://csrc.nist.gov/pubs/sp/800/218/final"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "02/03/22: SP 800-218 (Final). Secure Software Development Framework (SSDF) Version 1.1. A draft Rev.1 (SSDF v1.2) exists in initial public draft form.",
+  "content_hash": "sha256:ecc9207574f754c4ba092bb11013dabc10bff963714fdbfc2214143b091ed36b"
+}

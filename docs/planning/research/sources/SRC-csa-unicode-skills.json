@@ -1,0 +1,17 @@
+{
+  "id": "SRC-csa-unicode-skills",
+  "title": "Hidden Unicode Instruction Injection in AI Agent Skills",
+  "source_tier": "official-guidance",
+  "publisher": "Cloud Security Alliance (Lab Space)",
+  "url": "https://labs.cloudsecurityalliance.org/research/csa-research-note-unicode-instruction-injection-ai-skills-20/",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://labs.cloudsecurityalliance.org/research/csa-research-note-unicode-instruction-injection-ai-skills-20/"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "CI/CD pipelines should incorporate Unicode linting that rejects any skill file, MCP server manifest, or AI configuration file containing Tags-block codepoints or anomalous zero-width character densities. Recommends NFKC normalization as a preprocessing defense before tokenization.",
+  "content_hash": "sha256:a36c21dbc5036f752b3d7bc6f3f4242b04e223786f29d7fa4b66da7581e5d906"
+}

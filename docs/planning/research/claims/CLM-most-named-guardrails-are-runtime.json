@@ -1,0 +1,37 @@
+{
+  "id": "CLM-most-named-guardrails-are-runtime",
+  "statement": "The majority of the named guardrail tools (NeMo Guardrails, Llama Guard, Lakera Guard, Microsoft Agent Governance Toolkit) operate at runtime/inference on model I/O or agent actions, not on pre-deploy artefacts.",
+  "verdict": "verified",
+  "evidence": [
+    {
+      "source_id": "SRC-nemo-guardrails",
+      "quote": "Operates as a proxy layer: Request -> Input Rails -> LLM -> Output Rails -> Response. Input rails handle jailbreak detection, prompt injection filtering at runtime.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    },
+    {
+      "source_id": "SRC-ms-agent-gov-toolkit",
+      "quote": "a stateless policy engine that intercepts every agent's action before execution at sub-millisecond latency (<0.1ms p99).",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    },
+    {
+      "source_id": "SRC-lakera-guard",
+      "quote": "a real-time AI application firewall... screens any user or reference contents passed into an LLM and the output response in real time.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": false,
+  "falsifier": "If any of these tools documented a primary build-time/static artefact-gating mode, the runtime-centric framing would weaken.",
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency",
+    "vendor-baseline"
+  ],
+  "tags": [
+    "safety-layer"
+  ],
+  "date": "2026-06-01"
+}

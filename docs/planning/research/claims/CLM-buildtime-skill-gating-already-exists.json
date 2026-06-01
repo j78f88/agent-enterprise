@@ -1,0 +1,32 @@
+{
+  "id": "CLM-buildtime-skill-gating-already-exists",
+  "statement": "Build/submission-time, fail-closed gating of markdown agent skill files (SKILL.md) for prompt injection and supply-chain threats already exists as a shipped commercial product (Snyk Agent Scan + Vercel/npx skills installer).",
+  "verdict": "verified",
+  "evidence": [
+    {
+      "source_id": "SRC-snyk-vercel-skill-ecosystem",
+      "quote": "When a new agent skill is installed using the npx skills installer, Vercel's infrastructure triggers a call to Snyk's high-throughput scanning API... possible to deploy this as an automated gate at submission time — you can block truly malicious skills.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    },
+    {
+      "source_id": "SRC-snyk-skill-inspector",
+      "quote": "Agent Scan analyzes AI skills as a combination of Skill code and Natural language instructions to identify security risks before installation: prompt injection, malicious code, suspicious downloads, hardcoded secrets.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": false,
+  "falsifier": "If Snyk/Vercel gating were shown to be advisory-only (reports without blocking) and no other product blocked malicious skills pre-deploy, the claim would fail.",
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency",
+    "other-gov-orgs",
+    "vendor-baseline"
+  ],
+  "tags": [
+    "safety-layer"
+  ],
+  "date": "2026-06-01"
+}

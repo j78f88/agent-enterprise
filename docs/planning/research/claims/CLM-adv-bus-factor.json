@@ -1,0 +1,25 @@
+{
+  "id": "CLM-adv-bus-factor",
+  "statement": "A single-maintainer Markdown+git+Python project with no independent security assessment, no published threat-model review, and a not-yet-built safety roadmap (Sprints 3-6 still planned) fails ISM procurement expectations that suppliers demonstrate a sustained commitment to product security.",
+  "verdict": "plausible",
+  "evidence": [
+    {
+      "source_id": "SRC-adv-ism1730",
+      "quote": "products procured from suppliers that have demonstrated a commitment to the security of their products and services.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": false,
+  "falsifier": "Show the safety core is shipped and tested (not roadmap), CI gates green, plus governance evidence (CODEOWNERS, security policy, documented review cadence, more than one maintainer or a sponsoring team).",
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency"
+  ],
+  "tags": [
+    "adversarial",
+    "weakness"
+  ],
+  "date": "2026-06-01"
+}

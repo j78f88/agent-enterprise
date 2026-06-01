@@ -1,0 +1,37 @@
+{
+  "id": "CLM-pspf-classifications",
+  "statement": "The Australian information classification scheme (OFFICIAL, OFFICIAL:Sensitive, PROTECTED, SECRET, TOP SECRET) is defined by the PSPF; agent-enterprise's OFFICIAL/trust tagging aligns with this scheme.",
+  "verdict": "verified",
+  "evidence": [
+    {
+      "source_id": "SRC-pspf-classifications",
+      "quote": "The PSPF defines the protective marking scheme: OFFICIAL, OFFICIAL:Sensitive, and security classifications PROTECTED, SECRET, TOP SECRET",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    },
+    {
+      "source_id": "SRC-pspf-2025",
+      "quote": "Protective Security Policy Framework",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": false,
+  "falsifier": "PSPF policy showing the scheme no longer uses OFFICIAL:Sensitive / PROTECTED labels would falsify this.",
+  "control_anchor": {
+    "framework": "PSPF",
+    "control_id": "Information classification (Sensitive and classified information)",
+    "relationship": "supports"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency",
+    "other-gov-orgs",
+    "vendor-baseline"
+  ],
+  "tags": [
+    "compliance-anchor"
+  ],
+  "date": "2026-06-01"
+}

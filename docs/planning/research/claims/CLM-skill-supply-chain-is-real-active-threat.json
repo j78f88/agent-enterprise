@@ -1,0 +1,31 @@
+{
+  "id": "CLM-skill-supply-chain-is-real-active-threat",
+  "statement": "The agent-skill supply-chain attack surface is empirically real and active (not hypothetical), validating the problem agent-enterprise targets even if the tooling is not novel.",
+  "verdict": "verified",
+  "evidence": [
+    {
+      "source_id": "SRC-snyk-toxicskills",
+      "quote": "Scanned 3,984 agent skills from ClawHub... 36.82% (1,467 skills) have at least one security flaw... 76 malicious payloads designed for credential theft and data exfiltration.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    },
+    {
+      "source_id": "SRC-csa-unicode-skills",
+      "quote": "production agent platforms... will execute arbitrary shell commands and curl requests embedded as invisible instructions inside agent skill markdown files, surviving any visual code review.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": false,
+  "falsifier": "If independent re-scans found near-zero malicious skills, the threat's materiality would be in doubt.",
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency",
+    "other-gov-orgs"
+  ],
+  "tags": [
+    "safety-layer"
+  ],
+  "date": "2026-06-01"
+}

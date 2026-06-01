@@ -1,0 +1,18 @@
+{
+  "id": "SRC-prompt-injection-context",
+  "title": "Prompt injection — unsolved LLM weakness (security context)",
+  "source_tier": "practitioner-signal",
+  "publisher": "Trail of Bits",
+  "url": "https://blog.trailofbits.com/2025/10/22/prompt-injection-to-rce-in-ai-agents/",
+  "published_date": "2025-10-22",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://blog.trailofbits.com/2025/10/22/prompt-injection-to-rce-in-ai-agents/"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "Prompt injection is a fundamental, unsolved weakness: LLMs process trusted instructions and untrusted data through the same token stream with no architectural separation. Build-time concatenation tools do not address the runtime injection vector.",
+  "content_hash": "sha256:8b655be757aa3e92b7cbc7a9349caf2b57bbc731ef3f442359592b5f8e5d30be"
+}

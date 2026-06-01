@@ -1,0 +1,17 @@
+{
+  "id": "SRC-adv-owasp",
+  "title": "OWASP Top 10 for LLM Applications 2025 + Agentic Top 10 (late 2025)",
+  "source_tier": "authoritative-standard",
+  "publisher": "OWASP GenAI Security Project (via TrojAI analysis)",
+  "url": "https://troj.ai/blog/the-2025-owasp-top-10-for-llms",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://genai.owasp.org/llm-top-10/"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "Prompt injection holds the top spot for the second edition; Supply Chain Vulnerabilities rose to #3. In late 2025 OWASP released a separate Top 10 for Agentic AI covering uncontrolled autonomy, delegated identity abuse, cross-agent prompt injection.",
+  "content_hash": "sha256:3db8785f1a9e2f5f11e35b78629ba5982eff82ef9c226ba43414fd5252b0425e"
+}

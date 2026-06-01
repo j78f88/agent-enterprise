@@ -1,0 +1,18 @@
+{
+  "id": "SRC-e8-update",
+  "title": "November 2023 Essential Eight Maturity Model Update | Cyber.gov.au",
+  "source_tier": "authoritative-standard",
+  "publisher": "Australian Signals Directorate (ASD) / ACSC",
+  "url": "https://www.cyber.gov.au/about-us/view-all-content/news-and-media/november-2023-essential-eight-maturity-model-update",
+  "published_date": "2023-11-27",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://www.cyber.gov.au/business-government/asds-cyber-security-frameworks/essential-eight/essential-eight-maturity-model"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "The Essential Eight Maturity Model was last updated on 27 November 2023; ASD updates the E8MM annually. Focus: phishing-resistant MFA, 48-hour critical patching, cloud, logging.",
+  "content_hash": "sha256:086e14963a24cada152b687ba86524511114fa7a210aba4634fa7eec9ea2839c"
+}

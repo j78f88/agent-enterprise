@@ -1,0 +1,30 @@
+{
+  "id": "CLM-nist-ssdf-11",
+  "statement": "NIST SP 800-218 (SSDF) current published version is 1.1, finalized 3 February 2022; a Revision 1 (SSDF v1.2) exists only as an initial public draft.",
+  "verdict": "plausible",
+  "evidence": [
+    {
+      "source_id": "SRC-nist-ssdf",
+      "quote": "02/03/22: SP 800-218 (Final). Secure Software Development Framework (SSDF) Version 1.1",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": false,
+  "falsifier": "A finalized SP 800-218 Rev.1 (v1.2) on csrc.nist.gov would falsify '1.1 is current'.",
+  "control_anchor": {
+    "framework": "NIST SSDF",
+    "control_id": "PO/PS/PW/RV practices",
+    "relationship": "supports"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency",
+    "vendor-baseline"
+  ],
+  "tags": [
+    "compliance-anchor"
+  ],
+  "date": "2026-06-01"
+}

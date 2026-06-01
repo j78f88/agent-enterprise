@@ -1,0 +1,31 @@
+{
+  "id": "CLM-adv-skill-format-absorbed",
+  "statement": "Agent Skills became an open cross-platform standard (Dec 2025) adopted by OpenAI; the platforms themselves now carry portability, so a third-party build-time resolver for skill portability is a thin wrapper the vendors have already absorbed.",
+  "verdict": "verified",
+  "evidence": [
+    {
+      "source_id": "SRC-adv-skills-openstd",
+      "quote": "We've published Agent Skills as an open standard for cross-platform portability. (December 18, 2025).",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    },
+    {
+      "source_id": "SRC-adv-skills-adoption",
+      "quote": "In December 2025, Anthropic released the Agent Skills specification as an open standard, and OpenAI adopted the same format for Codex CLI and ChatGPT.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": true,
+  "falsifier": "Demonstrate the open SKILL.md standard does NOT cover the multi-platform divergence agent-enterprise resolves (Copilot/Cursor still use incompatible native formats) and that this divergence is durable rather than converging.",
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency"
+  ],
+  "tags": [
+    "adversarial",
+    "strategic"
+  ],
+  "date": "2026-06-01"
+}

@@ -1,0 +1,36 @@
+{
+  "id": "CLM-nist-airmf-genai",
+  "statement": "NIST AI RMF 1.0 was released 26 January 2023; its Generative AI Profile NIST AI 600-1 was published 26 July 2024 with 12 GenAI risk categories.",
+  "verdict": "verified",
+  "evidence": [
+    {
+      "source_id": "SRC-nist-airmf",
+      "quote": "The AI RMF was released in January 2023 ... released on January 26, 2023",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    },
+    {
+      "source_id": "SRC-nist-genai",
+      "quote": "NIST AI Risk Management Framework: Generative Artificial Intelligence Profile was published on July 26, 2024, with the official designation NIST AI 600-1",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": false,
+  "falsifier": "NIST publishing AI RMF 2.0 or re-dating AI 600-1 would alter these version anchors.",
+  "control_anchor": {
+    "framework": "NIST AI RMF",
+    "control_id": "Govern/Map/Measure/Manage; GenAI Profile (AI 600-1)",
+    "relationship": "informs"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency",
+    "vendor-baseline"
+  ],
+  "tags": [
+    "compliance-anchor"
+  ],
+  "date": "2026-06-01"
+}

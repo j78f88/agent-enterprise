@@ -1,0 +1,25 @@
+{
+  "id": "CLM-adv-scanners-not-bundled",
+  "statement": "agent-enterprise's supply-chain/secret/SBOM defence depends on external scanners (semgrep, grype, syft, detect-secrets) that it orchestrates but does not bundle, version-own, or guarantee — so the 'fail-closed' guarantee is only as strong as tools it neither ships nor controls, and an open decision still debates whether to degrade-gracefully when a scanner is absent.",
+  "verdict": "plausible",
+  "evidence": [
+    {
+      "source_id": "SRC-adv-msgov",
+      "quote": "Includes... Dependabot scanning, pinned dependencies with cryptographic hashes, Ed25519 signing + manifest verification.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": false,
+  "falsifier": "Show the build pins and vendors the scanner toolchain (locked versions, hermetic execution) AND fails closed when any scanner is missing — resolve the open decision in favour of hard-fail and prove it in CI.",
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency"
+  ],
+  "tags": [
+    "adversarial",
+    "weakness"
+  ],
+  "date": "2026-06-01"
+}

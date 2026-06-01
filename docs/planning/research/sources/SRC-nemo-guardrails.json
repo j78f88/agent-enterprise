@@ -1,0 +1,17 @@
+{
+  "id": "SRC-nemo-guardrails",
+  "title": "NeMo Guardrails Configuration & Architecture",
+  "source_tier": "primary",
+  "publisher": "NVIDIA",
+  "url": "https://docs.nvidia.com/nemo/guardrails/latest/index.html",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://docs.nvidia.com/nemo/guardrails/latest/index.html"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "Operates as a proxy layer: Request -> Input Rails -> LLM -> Output Rails -> Response. Input rails handle jailbreak detection, prompt injection filtering, content moderation at runtime.",
+  "content_hash": "sha256:b8e888ba75d485074a406ad6b1c0d678526400b47292c12da2d8f5e6e27f97c6"
+}

@@ -1,0 +1,17 @@
+{
+  "id": "SRC-osv-scanner",
+  "title": "OSV-Scanner usage & CI gating",
+  "source_tier": "primary",
+  "publisher": "Google / OpenSSF",
+  "url": "https://google.github.io/osv-scanner/usage/",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://github.com/google/osv-scanner"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "Connects a project's dependency list with known vulnerabilities from osv.dev; reusable GitHub workflows fail builds above a severity threshold. Operates on dependency manifests/SBOMs, not agent instruction artefacts.",
+  "content_hash": "sha256:d372526f6f44d3fbabddc7cf051662ae23c823d9d3709ff5c5214485f6c342cf"
+}

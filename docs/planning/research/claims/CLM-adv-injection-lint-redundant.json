@@ -1,0 +1,25 @@
+{
+  "id": "CLM-adv-injection-lint-redundant",
+  "statement": "Injection-detection and prompt-injection linting are commodity: NVIDIA garak (37+ injection probes) and promptfoo (50+ vuln types, runs as a CI check) already do build/CI-time injection scanning, so agent-enterprise's unicode/bidi + injection-marker linter is reinventing existing CI scanners.",
+  "verdict": "plausible",
+  "evidence": [
+    {
+      "source_id": "SRC-adv-garak",
+      "quote": "Garak (NVIDIA) is an OSS LLM vulnerability scanner with 37+ probes including direct/indirect/encoding-based prompt injection. Promptfoo covers 50+ vulnerability types... runs as a CI check on every deployment.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": false,
+  "falsifier": "Demonstrate garak/promptfoo test a live model's RESPONSES (dynamic red-teaming), whereas agent-enterprise statically lints authored artefact TEXT for hidden-instruction smuggling (zero-width/bidi) before any model runs — a distinct, complementary control they do not perform on static skill source.",
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency"
+  ],
+  "tags": [
+    "adversarial",
+    "redundancy"
+  ],
+  "date": "2026-06-01"
+}

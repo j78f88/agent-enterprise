@@ -1,0 +1,30 @@
+{
+  "id": "CLM-e8-nov2023",
+  "statement": "The Essential Eight Maturity Model's most recent substantive revision is the 27 November 2023 update (phishing-resistant MFA, 48-hour critical patching, logging/cloud uplift); it remains the current maturity model at retrieval.",
+  "verdict": "plausible",
+  "evidence": [
+    {
+      "source_id": "SRC-e8-update",
+      "quote": "The Essential Eight Maturity Model was last updated on 27 November 2023",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": false,
+  "falsifier": "A cyber.gov.au E8MM 'last updated' date after Nov 2023 would falsify this.",
+  "control_anchor": {
+    "framework": "ACSC Essential Eight",
+    "control_id": "ML1-ML3 (Application control, Patch applications, MFA)",
+    "relationship": "informs"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency",
+    "other-gov-orgs"
+  ],
+  "tags": [
+    "compliance-anchor"
+  ],
+  "date": "2026-06-01"
+}

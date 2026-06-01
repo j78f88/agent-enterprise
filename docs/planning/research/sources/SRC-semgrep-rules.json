@@ -1,0 +1,17 @@
+{
+  "id": "SRC-semgrep-rules",
+  "title": "Semgrep Custom Rules & CI deployment",
+  "source_tier": "primary",
+  "publisher": "Semgrep",
+  "url": "https://semgrep.dev/docs/running-rules",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://semgrep.dev/docs/running-rules"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "Custom YAML rules with pattern/severity; native CI plugins can block pull requests and fail builds when findings exceed threshold. Covers 30+ programming languages — code/IaC SAST, not agent-artefact markdown semantics.",
+  "content_hash": "sha256:339daa3be4c8bb856eb6f8f325eb73681401958cf0dfd7bfc7077d58fe90c005"
+}

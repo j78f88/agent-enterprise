@@ -1,0 +1,31 @@
+{
+  "id": "CLM-tokentemplating-not-confirmed-elsewhere",
+  "statement": "No surveyed commodity tool's primary docs confirm {{token}} build-time templating of rule content; ai-rulez ships a JSON schema and profiles/presets but does not document variable substitution.",
+  "verdict": "plausible",
+  "evidence": [
+    {
+      "source_id": "SRC-airulez-repo",
+      "quote": "33 builtin domains... content organization via domains/profiles, remote includes... JSON schema directory present — but README does not document template syntax or variable substitution.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    },
+    {
+      "source_id": "SRC-ruler-readme",
+      "quote": "No token templating or variable substitution... distributes Markdown verbatim.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": true,
+  "falsifier": "ai-rulez/rulesync source or docs showing a real variable-interpolation engine ({{var}}, includes-with-substitution); ai-rulez 'remote includes' may partly satisfy this and would weaken the gap.",
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency",
+    "vendor-baseline"
+  ],
+  "tags": [
+    "substrate"
+  ],
+  "date": "2026-06-01"
+}

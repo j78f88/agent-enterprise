@@ -1,0 +1,17 @@
+{
+  "id": "SRC-irap",
+  "title": "Infosec Registered Assessors Program (IRAP) | Cyber.gov.au",
+  "source_tier": "authoritative-standard",
+  "publisher": "Australian Signals Directorate (ASD) / ACSC",
+  "url": "https://www.cyber.gov.au/business-government/protecting-devices-systems/assessment-evaluation-programs/irap",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://www.cyber.gov.au/business-government/protecting-devices-systems/assessment-evaluation-programs/irap"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "IRAP, run by ASD, provides independent ICT security assessment against the ISM and PSPF; the program remains active with ongoing assessor enrolment.",
+  "content_hash": "sha256:0eb37131a50a9f0d82d73350e562dadbaa33e253b4549e9a1766d6b9f61669cd"
+}

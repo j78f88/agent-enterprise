@@ -1,0 +1,31 @@
+{
+  "id": "CLM-secure-ai-guidelines-2023",
+  "statement": "The CISA/NCSC 'Guidelines for Secure AI System Development' were published 26 November 2023 with 21+ international partners (including ASD ACSC), establishing secure-by-design across the AI lifecycle.",
+  "verdict": "plausible",
+  "evidence": [
+    {
+      "source_id": "SRC-secure-ai-guidelines",
+      "quote": "On 26 November 2023, the US CISA, together with the UK's NCSC, published joint 'Guidelines for Secure AI System Development' ... in cooperation with 21 other agencies",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": false,
+  "falsifier": "NCSC/CISA pages dating the guidelines other than November 2023 would falsify this.",
+  "control_anchor": {
+    "framework": "CISA/NCSC Secure AI Guidelines",
+    "control_id": "Secure design / secure development",
+    "relationship": "informs"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency",
+    "other-gov-orgs",
+    "vendor-baseline"
+  ],
+  "tags": [
+    "compliance-anchor"
+  ],
+  "date": "2026-06-01"
+}

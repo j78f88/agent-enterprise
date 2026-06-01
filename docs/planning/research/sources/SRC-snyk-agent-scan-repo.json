@@ -1,0 +1,17 @@
+{
+  "id": "SRC-snyk-agent-scan-repo",
+  "title": "snyk/agent-scan: Security scanner for AI agents, MCP servers and agent skills",
+  "source_tier": "primary",
+  "publisher": "Snyk",
+  "url": "https://github.com/snyk/agent-scan",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://github.com/snyk/agent-scan"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "Discover and scan agent components on your machine for prompt injections and vulnerabilities (including agents, MCP servers, skills). Detects Prompt Injection, Malware Payloads, Untrusted Content, Credential Handling, Hardcoded Secrets in skills.",
+  "content_hash": "sha256:7c7d90c0bfccc49a8741106611219e22508fc59239f0e7c91e775b5edb740822"
+}

@@ -1,0 +1,30 @@
+{
+  "id": "CLM-cisa-agentic-overlap",
+  "statement": "CISA's joint 'Careful Adoption of Agentic AI Services' (late 2025, co-authored by ASD ACSC + Five Eyes) is government-endorsed agentic-AI security guidance, but is adoption/risk guidance, not a packaged build-time agent-governance template like agent-enterprise.",
+  "verdict": "plausible",
+  "evidence": [
+    {
+      "source_id": "SRC-cisa-agentic",
+      "quote": "CISA, in collaboration with the Australian Signals Directorate's Australian Cyber Security Centre (ASD's ACSC) and other partners, released guidance ... 'Careful Adoption of Agentic Artificial Intelligence (AI) Services'",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": false,
+  "falsifier": "If CISA/ASD shipped an actual deployable agent-governance template or reference repo (not just principles), this 'not a template' framing would be falsified.",
+  "control_anchor": {
+    "framework": "CISA/ACSC Agentic AI Guidance",
+    "control_id": "Careful Adoption of Agentic AI Services",
+    "relationship": "informs"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency",
+    "other-gov-orgs"
+  ],
+  "tags": [
+    "redundancy-risk"
+  ],
+  "date": "2026-06-01"
+}

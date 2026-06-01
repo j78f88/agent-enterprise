@@ -1,0 +1,32 @@
+{
+  "id": "CLM-buildtime-novel-niche-overhyped",
+  "statement": "The claim that 'build-time fail-closed validation of agent artefacts against prompt-injection + supply-chain' is a NOVEL defensible niche is overhyped as stated.",
+  "verdict": "overhyped",
+  "evidence": [
+    {
+      "source_id": "SRC-snyk-skill-inspector",
+      "quote": "identify security risks before installation: prompt injection, malicious code, suspicious downloads, hardcoded secrets, improper credential handling.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    },
+    {
+      "source_id": "SRC-csa-unicode-skills",
+      "quote": "CI/CD pipelines should incorporate Unicode linting that rejects any skill file... containing Tags-block codepoints.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": false,
+  "falsifier": "Evidence that no shipped tool gates markdown agent artefacts pre-deploy for injection would restore novelty.",
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency",
+    "other-gov-orgs",
+    "vendor-baseline"
+  ],
+  "tags": [
+    "safety-layer"
+  ],
+  "date": "2026-06-01"
+}

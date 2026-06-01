@@ -1,0 +1,17 @@
+{
+  "id": "SRC-pspf-classifications",
+  "title": "Security classifications and protective markings | Style Manual (AU Gov)",
+  "source_tier": "official-guidance",
+  "publisher": "Australian Government (DTA Style Manual)",
+  "url": "https://www.stylemanual.gov.au/writing-and-designing-content/security-classifications-and-protective-markings",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://www.stylemanual.gov.au/writing-and-designing-content/security-classifications-and-protective-markings"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "The PSPF defines the protective marking scheme: OFFICIAL, OFFICIAL:Sensitive, and security classifications PROTECTED, SECRET, TOP SECRET.",
+  "content_hash": "sha256:212738c61593654621f6235481f58834730fd097e202a1cea6c55391513c9b4e"
+}

@@ -1,0 +1,17 @@
+{
+  "id": "SRC-adv-dta-techstd",
+  "title": "New AI technical standard to support responsible government adoption",
+  "source_tier": "official-guidance",
+  "publisher": "Australian Govt DTA",
+  "url": "https://www.dta.gov.au/articles/new-ai-technical-standard-support-responsible-government-adoption",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://www.dta.gov.au/articles/new-ai-technical-standard-support-responsible-government-adoption"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "The AI technical standard provides requirements/recommendations across three lifecycle phases — Discover, Operate and Retire — to embed transparency, accountability and safety from inception to decommission. Practices span the full system life cycle, including operate-phase (runtime) controls.",
+  "content_hash": "sha256:401aa1369d546d8612718691e127124e6b248349f377c7056c49af19017134fe"
+}

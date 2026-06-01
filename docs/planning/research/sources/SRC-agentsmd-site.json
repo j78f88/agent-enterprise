@@ -1,0 +1,17 @@
+{
+  "id": "SRC-agentsmd-site",
+  "title": "AGENTS.md — a simple, open format for guiding coding agents",
+  "source_tier": "authoritative-standard",
+  "publisher": "Agentic AI Foundation / Linux Foundation",
+  "url": "https://agents.md/",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://agents.md/"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "A simple, open format for guiding coding agents... just standard Markdown. No JSON schema, no YAML, no special syntax. Stewarded by the Agentic AI Foundation under the Linux Foundation. Over 60,000 open-source projects use it. No templating, build resolution, or security validation.",
+  "content_hash": "sha256:f2da3a2f2a70bc1ae5cc5e77dea5ae80e212b9fc67d661fbde932e6c0209e5be"
+}

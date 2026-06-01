@@ -1,0 +1,25 @@
+{
+  "id": "CLM-adv-provenance-self-anti-hype",
+  "statement": "By the project's own admission, the provenance manifest proves 'what the resolver recorded at build time, not that a downstream agent behaved correctly' — a hash proves an output was recorded, not that a command ran — so its headline tamper-evidence/provenance feature is materially weaker than the SLSA/in-toto signing other tools provide and cannot be marketed as runtime or execution assurance.",
+  "verdict": "plausible",
+  "evidence": [
+    {
+      "source_id": "SRC-adv-msgov",
+      "quote": "SLSA-compatible build provenance, cryptographic chain from source to artifact... Ed25519 signing + manifest verification.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": false,
+  "falsifier": "Ship the heavier supply-chain tier (Cosign signing + SLSA-style attestation) so provenance is cryptographically verifiable by a third party, not just an internally-recorded hash chain.",
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency"
+  ],
+  "tags": [
+    "adversarial",
+    "weakness"
+  ],
+  "date": "2026-06-01"
+}

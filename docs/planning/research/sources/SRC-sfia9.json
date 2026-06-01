@@ -1,0 +1,18 @@
+{
+  "id": "SRC-sfia9",
+  "title": "SFIA 9 Home | SFIA",
+  "source_tier": "authoritative-standard",
+  "publisher": "SFIA Foundation",
+  "url": "https://sfia-online.org/en/sfia-9",
+  "published_date": "2024-10-30",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://sfia-online.org/en/sfia-9"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "SFIA 9, the global skills and competency framework, published 30 October 2024; refreshes cyber/AI/data skills and expands the catalogue (121 to 147 skills with a health-informatics overlay).",
+  "content_hash": "sha256:5dd829f6cc2fa8822c731e4053d6d4c3ca6da3bd9d45c73a3c8e575e22c0df3a"
+}

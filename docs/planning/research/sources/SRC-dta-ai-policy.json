@@ -1,0 +1,18 @@
+{
+  "id": "SRC-dta-ai-policy",
+  "title": "Policy for the responsible use of AI in government - Version 2.0 | digital.gov.au",
+  "source_tier": "authoritative-standard",
+  "publisher": "Digital Transformation Agency (DTA)",
+  "url": "https://www.digital.gov.au/ai/ai-in-government-policy",
+  "published_date": "2025-12-15",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://www.digital.gov.au/ai/ai-in-government-policy"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "Policy for the responsible use of AI in government Version 2.0 in effect Monday 15 December 2025; v1.1 took effect 1 September 2024. Adds mandatory impact assessments and procurement guidance.",
+  "content_hash": "sha256:20d719e6ae548837e3ad6d57b71baf53439de601f3b7a8810ea0bab68817b8d9"
+}

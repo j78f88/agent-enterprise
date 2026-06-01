@@ -1,0 +1,30 @@
+{
+  "id": "CLM-pspf-2025",
+  "statement": "The current PSPF is the 2025 Annual Release (published 24 July 2025), which newly adds policy content on AI, quantum and connected peripherals and embeds Zero Trust.",
+  "verdict": "plausible",
+  "evidence": [
+    {
+      "source_id": "SRC-pspf-2025",
+      "quote": "PSPF 2025 embeds Zero Trust principles... introduces new policy content on AI, quantum computing, and connected peripheral technologies",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": false,
+  "falsifier": "A protectivesecurity.gov.au 'PSPF Annual Release 2026' superseding the 2025 release at retrieval would falsify 'current'.",
+  "control_anchor": {
+    "framework": "PSPF",
+    "control_id": "PSPF Release 2025 (Information Security)",
+    "relationship": "requires"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency",
+    "other-gov-orgs"
+  ],
+  "tags": [
+    "compliance-anchor"
+  ],
+  "date": "2026-06-01"
+}

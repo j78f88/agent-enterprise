@@ -1,0 +1,25 @@
+{
+  "id": "CLM-garak-promptfoo-are-model-redteam-not-artefact-gate",
+  "statement": "garak and promptfoo are model/app red-team evaluators (they probe a live model and can fail a CI build on regression), not static gates over the agent-artefact source files themselves.",
+  "verdict": "plausible",
+  "evidence": [
+    {
+      "source_id": "SRC-garak",
+      "quote": "Probes a deployed LLM endpoint for prompt injection, jailbreaks... evaluates model responses (dynamic probing of a live model).",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": false,
+  "falsifier": "If garak/promptfoo added a static SKILL.md content linter, the distinction would collapse.",
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency",
+    "vendor-baseline"
+  ],
+  "tags": [
+    "safety-layer"
+  ],
+  "date": "2026-06-01"
+}

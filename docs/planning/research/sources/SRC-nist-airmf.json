@@ -1,0 +1,18 @@
+{
+  "id": "SRC-nist-airmf",
+  "title": "AI Risk Management Framework (AI RMF 1.0) | NIST",
+  "source_tier": "authoritative-standard",
+  "publisher": "NIST",
+  "url": "https://www.nist.gov/itl/ai-risk-management-framework",
+  "published_date": "2023-01-26",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://www.nist.gov/itl/ai-risk-management-framework"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "The AI RMF (AI RMF 1.0) was released on 26 January 2023 for voluntary use to incorporate trustworthiness into AI design, development, use and evaluation.",
+  "content_hash": "sha256:22ade09ae0d706f0dfb26855a7648f6753587eafdad017f46c5ba5832a875f6e"
+}

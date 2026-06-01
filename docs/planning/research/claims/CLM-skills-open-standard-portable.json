@@ -1,0 +1,31 @@
+{
+  "id": "CLM-skills-open-standard-portable",
+  "statement": "Anthropic Agent Skills is an open cross-platform standard (adopted by OpenAI Codex/ChatGPT) using a single portable SKILL.md format — solving cross-agent portability by convergence rather than by build-time fan-out, with no templating/security-validation layer.",
+  "verdict": "verified",
+  "evidence": [
+    {
+      "source_id": "SRC-anthropic-skills",
+      "quote": "We've published Agent Skills as an open standard for cross-platform portability (Dec 18, 2025).",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    },
+    {
+      "source_id": "SRC-anthropic-skills-repo",
+      "quote": "Format released as open standard Dec 2025; OpenAI adopted the same format for Codex CLI and ChatGPT.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": false,
+  "falsifier": "Evidence OpenAI/others did NOT adopt the Skills format, or that Skills require per-platform recompilation rather than being read natively.",
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency",
+    "vendor-baseline"
+  ],
+  "tags": [
+    "substrate"
+  ],
+  "date": "2026-06-01"
+}

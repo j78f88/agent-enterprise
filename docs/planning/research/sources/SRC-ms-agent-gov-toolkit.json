@@ -1,0 +1,17 @@
+{
+  "id": "SRC-ms-agent-gov-toolkit",
+  "title": "Introducing the Agent Governance Toolkit: Open-source runtime security for AI agents",
+  "source_tier": "primary",
+  "publisher": "Microsoft Open Source Blog",
+  "url": "https://opensource.microsoft.com/blog/2026/04/02/introducing-the-agent-governance-toolkit-open-source-runtime-security-for-ai-agents/",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://opensource.microsoft.com/blog/2026/04/02/introducing-the-agent-governance-toolkit-open-source-runtime-security-for-ai-agents/"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "Brings runtime security governance to autonomous AI agents... a stateless policy engine that intercepts every agent's action before execution at sub-millisecond latency (<0.1ms p99). Governs autonomous decision-making as agents execute.",
+  "content_hash": "sha256:41bf45196d46329113ae5823423a27d829b25af01492e44f8f5d0dff89345abf"
+}

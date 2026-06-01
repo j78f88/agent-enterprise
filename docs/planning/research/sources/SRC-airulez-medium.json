@@ -1,0 +1,18 @@
+{
+  "id": "SRC-airulez-medium",
+  "title": "Agent RuleZ: A Deterministic Policy Engine for AI Coding Agents",
+  "source_tier": "practitioner-signal",
+  "publisher": "Rick Hightower / Spillwave Solutions (Medium)",
+  "url": "https://medium.com/@richardhightower/agent-rulez-a-deterministic-policy-engine-for-ai-coding-agents-9489e0561edf",
+  "published_date": "2026-02-01",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://medium.com/@richardhightower/agent-rulez-a-deterministic-policy-engine-for-ai-coding-agents-9489e0561edf"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "Practitioner write-up framing ai-rulez-class tooling as a 'deterministic policy engine' for AI coding agents — signalling that deterministic generation and validation are already a marketed differentiator in the multi-target-emit space, not unique to one tool.",
+  "content_hash": "sha256:8165724428775fcdc0b5813e8cb41c8bcc5db76247294cd2407cd5e2a4abd917"
+}

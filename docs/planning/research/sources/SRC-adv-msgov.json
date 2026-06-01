@@ -1,0 +1,17 @@
+{
+  "id": "SRC-adv-msgov",
+  "title": "Microsoft Agent Governance Toolkit — first OSS framework covering all 10 OWASP Agentic risks",
+  "source_tier": "community",
+  "publisher": "ChatForest (analysis of Microsoft MIT-licensed toolkit)",
+  "url": "https://chatforest.com/guides/microsoft-agent-governance-toolkit/",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://chatforest.com/guides/microsoft-agent-governance-toolkit/"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "MIT-licensed. Addresses all 10 OWASP agentic risks. Includes SLSA-compatible build provenance, cryptographic chain from source to artifact, Dependabot scanning, pinned dependencies with cryptographic hashes, Ed25519 signing + manifest verification. MCP Security Gateway addresses tool poisoning, typosquatting, hidden instructions. Trust scoring 0-1000; four-tier execution rings.",
+  "content_hash": "sha256:69c891b12f2709b83792aa9c58236428909c73db74cb7b9ccbda54d1a258c1d4"
+}

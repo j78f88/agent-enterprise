@@ -1,0 +1,31 @@
+{
+  "id": "CLM-adv-strategic-absorption",
+  "statement": "'Build-time shift-left for agent artefacts' is not a durable niche: frontier vendors are folding portability into open standards and shipping native permission/sandbox/governance layers, so the niche will be absorbed and a solo Markdown+Python project cannot out-iterate them.",
+  "verdict": "plausible",
+  "evidence": [
+    {
+      "source_id": "SRC-adv-skills-adoption",
+      "quote": "Anthropic released the Agent Skills specification as an open standard, and OpenAI adopted the same format for Codex CLI and ChatGPT.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    },
+    {
+      "source_id": "SRC-adv-msgov",
+      "quote": "MIT-licensed... four-tier execution rings... trust scoring 0-1000... MCP Security Gateway addresses tool poisoning, typosquatting, hidden instructions.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": true,
+  "falsifier": "Show a sustained, vendor-neutral need: agencies running heterogeneous agents (Claude+Copilot+Cursor+Codex) need ONE policy-governed artefact repo with a fail-closed gate no single vendor will provide cross-platform.",
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency"
+  ],
+  "tags": [
+    "adversarial",
+    "strategic"
+  ],
+  "date": "2026-06-01"
+}

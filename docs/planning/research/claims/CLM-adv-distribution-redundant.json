@@ -1,0 +1,31 @@
+{
+  "id": "CLM-adv-distribution-redundant",
+  "statement": "The author-once-deploy-to-many-platforms capability (Markdown source -> Claude Code/Copilot/Cursor/Codex) is fully covered by mature open-source tools (ruler, rulesync), so agent-enterprise's distribution layer is reinvention, not novelty.",
+  "verdict": "verified",
+  "evidence": [
+    {
+      "source_id": "SRC-adv-ruler",
+      "quote": "Ruler centralizes AI coding assistant instructions in a single .ruler/ directory and automatically distributes them across 30+ agents (Copilot, Claude Code, Cursor, Codex CLI...).",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    },
+    {
+      "source_id": "SRC-adv-rulesync",
+      "quote": "Generates configuration files... Supports rules, ignore files, MCP, commands, subagents, skills, hooks, and permissions across 30+ platforms.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": true,
+  "falsifier": "Show a concrete artefact transformation agent-enterprise performs that ruler/rulesync cannot — trust-label propagation across the include/@ref graph, capability-manifest validation, or per-target compiled approval gates — AND that bolting agent-enterprise's safety layer onto their output is materially harder than building distribution from scratch.",
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency"
+  ],
+  "tags": [
+    "adversarial",
+    "redundancy"
+  ],
+  "date": "2026-06-01"
+}

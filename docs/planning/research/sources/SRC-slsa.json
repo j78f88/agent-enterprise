@@ -1,0 +1,18 @@
+{
+  "id": "SRC-slsa",
+  "title": "SLSA - Supply-chain Levels for Software Artifacts",
+  "source_tier": "authoritative-standard",
+  "publisher": "OpenSSF (Linux Foundation)",
+  "url": "https://slsa.dev/spec/v1.0/",
+  "published_date": "2023-04-01",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://slsa.dev/"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "SLSA v1.0 released April 2023 by OpenSSF; later specification versions (v1.1/v1.2) published on slsa.dev with progressive build-integrity levels (SLSA 0-3).",
+  "content_hash": "sha256:f55de98ced345703ed75ccc17974e33ce2f736577051b50ef9fa7af7b24014e8"
+}

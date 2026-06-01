@@ -1,0 +1,32 @@
+{
+  "id": "CLM-multitarget-is-commoditised",
+  "statement": "Author-once -> multi-target agent-artefact emit is a commoditised category with at least three independent maintainers (ruler, rulesync, ai-rulez) plus a corporate entrant (block/ai-rules), not a novel capability.",
+  "verdict": "verified",
+  "evidence": [
+    {
+      "source_id": "SRC-airulez-repo",
+      "quote": "Complete AI development workflow for 19+ tools... generate native configs for Claude, Cursor, Copilot, Windsurf, Gemini, Codex and more.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    },
+    {
+      "source_id": "SRC-block-ai-rules",
+      "quote": "Manage AI rules, commands, and skills across multiple coding agents from one place.",
+      "retrieval_date": "2026-06-01",
+      "independent": true
+    }
+  ],
+  "contested": false,
+  "falsifier": "Demonstration that all named tools are forks of one codebase, or that none can actually emit to multiple targets simultaneously.",
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "consumer_profile": [
+    "own-agency",
+    "other-gov-orgs",
+    "vendor-baseline"
+  ],
+  "tags": [
+    "substrate"
+  ],
+  "date": "2026-06-01"
+}

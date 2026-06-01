@@ -1,0 +1,17 @@
+{
+  "id": "SRC-invariant-mcp-scan",
+  "title": "Introducing MCP-Scan: Protecting MCP with Invariant",
+  "source_tier": "primary",
+  "publisher": "Invariant Labs",
+  "url": "https://invariantlabs.ai/blog/introducing-mcp-scan",
+  "retrieval_date": "2026-06-01",
+  "accessed_via": "deep-research",
+  "locator": {
+    "kind": "web",
+    "ref": "https://invariantlabs.ai/blog/introducing-mcp-scan"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "excerpt": "MCP-Scan checks installed MCP servers for prompt injections, tool poisoning, and cross-origin escalations. Built-in Tool Pinning detects MCP Rug Pull attacks, verifying integrity of installed tools by tracking changes via tool hashing.",
+  "content_hash": "sha256:aeadd4c5f5c55d14433433b52a7832f52628276ae41fc8be6f8c0c44912606db"
+}
