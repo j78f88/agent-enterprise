@@ -1,0 +1,132 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://agent-enterprise/schemas/claim.schema.json",
+  "title": "Research Claim — v1",
+  "description": "One sourced claim in the research knowledge base. A claim carries a verdict, links to the source-note(s) that back it, and may anchor to an AU gov control. Claims are EVIDENCE, never decisions: the adopt/build-on/greenfield verdicts and ADRs are made by @architect/@pm plus owner ratification (see charter.md, evidence-vs-decision separation). Implements the citation/falsifiability contract in researcher.skill.md and trust-policy.md.",
+  "type": "object",
+  "required": ["id", "statement", "verdict", "evidence", "classification", "trust"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^CLM-[A-Za-z0-9][A-Za-z0-9._-]*$",
+      "description": "Stable claim identifier. Decisions (ADRs) cite these ids; the validator requires that every decision references claim ids.",
+      "examples": ["CLM-substrate-ruler-overlap", "CLM-buildtime-injection-gap"]
+    },
+    "statement": {
+      "type": "string",
+      "minLength": 10,
+      "description": "The claim itself, stated as a falsifiable proposition — not a recommendation. The researcher surfaces evidence; it never recommends."
+    },
+    "verdict": {
+      "type": "string",
+      "enum": ["verified", "plausible", "overhyped", "unverified"],
+      "description": "verified = corroborated by >=2 independent sources of sufficient tier; plausible = supported but not fully corroborated; overhyped = a claim others assert that the evidence does NOT support (anti-hype guardrail); unverified = no adequate source found. An unsourced claim is 'unverified' and is never smuggled in as fact."
+    },
+    "evidence": {
+      "type": "array",
+      "description": "Source-note links backing this claim. Each item references a source-note id that must exist under sources/ and validate. May be empty ONLY when verdict = unverified.",
+      "items": {
+        "type": "object",
+        "required": ["source_id", "retrieval_date"],
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "pattern": "^SRC-[A-Za-z0-9][A-Za-z0-9._-]*$",
+            "description": "id of a source-note under sources/. The validator resolves this reference."
+          },
+          "quote": {
+            "type": "string",
+            "description": "Verbatim supporting text from the source (attributed, not paraphrased)."
+          },
+          "retrieval_date": {
+            "type": "string",
+            "format": "date",
+            "description": "Date the supporting evidence was retrieved."
+          },
+          "independent": {
+            "type": "boolean",
+            "description": "True if this source is independent of the other evidence sources (not the same vendor/author). Used to satisfy the >=2-independent-sources rule for contested/verified claims."
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "contested": {
+      "type": "boolean",
+      "default": false,
+      "description": "True if the claim is disputed across sources. Contested claims require >=2 INDEPENDENT evidence items (enforced by the validator)."
+    },
+    "falsifier": {
+      "type": "string",
+      "description": "What evidence would overturn this verdict. Required discipline for verified/plausible claims — a claim with no stated falsifier is marketing, not research."
+    },
+    "control_anchor": {
+      "type": "object",
+      "description": "Optional link to an AU gov control in the control register (controls/). Makes the claim defensible by tracing to authoritative guidance.",
+      "required": ["framework", "control_id", "relationship"],
+      "properties": {
+        "framework": {
+          "type": "string",
+          "description": "Authoritative framework (e.g. 'ACSC ISM', 'Essential Eight', 'PSPF', 'DTA Policy for Responsible Use of AI', 'NIST SSDF', 'NIST AI RMF', 'SLSA', 'SFIA'). Candidate map — not ratified until the owner promotes the control register."
+        },
+        "control_id": {
+          "type": "string",
+          "description": "Control/clause identifier within the framework."
+        },
+        "relationship": {
+          "type": "string",
+          "enum": ["supports", "requires", "informs", "conflicts-with"],
+          "description": "How the claim relates to the control."
+        }
+      },
+      "additionalProperties": false
+    },
+    "classification": {
+      "type": "string",
+      "enum": ["OFFICIAL", "OFFICIAL:Sensitive", "PROTECTED"],
+      "description": "PSPF classification of the claim. Defaults to OFFICIAL; inherit the most restrictive classification of its evidence."
+    },
+    "trust": {
+      "type": "string",
+      "enum": ["trusted", "untrusted"],
+      "description": "Origin trust label (untrusted-wins). A claim inherits the most restrictive trust label of its evidence; an untrusted claim cannot be canonical."
+    },
+    "consumer_profile": {
+      "type": "array",
+      "description": "Which consumer profile(s) the claim is scoped to. A finding that is right for one can fail another, so scope is explicit.",
+      "items": {
+        "type": "string",
+        "enum": ["own-agency", "other-gov-orgs", "vendor-baseline"]
+      }
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Free-form labels (e.g. 'substrate', 'safety-layer', 'compliance-anchor')."
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the claim was recorded/last assessed."
+    },
+    "notes": {
+      "type": "string",
+      "description": "Free-text analyst notes (counter-evidence acknowledged, scope caveats)."
+    }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": { "properties": { "verdict": { "enum": ["verified", "plausible", "overhyped"] } } },
+      "then": { "properties": { "evidence": { "minItems": 1 } } }
+    },
+    {
+      "if": { "properties": { "contested": { "const": true } }, "required": ["contested"] },
+      "then": { "properties": { "evidence": { "minItems": 2 } } }
+    },
+    {
+      "if": { "properties": { "verdict": { "const": "verified" } } },
+      "then": { "properties": { "evidence": { "minItems": 2 } } }
+    }
+  ]
+}

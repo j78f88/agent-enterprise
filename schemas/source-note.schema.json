@@ -1,0 +1,123 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://agent-enterprise/schemas/source-note.schema.json",
+  "title": "Research Source-Note — v1",
+  "description": "One provenance record per cited source in the research knowledge base. A source-note is the atom of trust: a claim may only cite a source-note that exists and validates here. Implements the provenance contract in docs/planning/research/_meta/charter.md and trust-policy.md. Provenance depth (owner decision, 2026-06-01): checksums + provenance JSON only — Cosign/SLSA are deferred opt-ins, so signature fields are reserved but never required.",
+  "type": "object",
+  "required": ["id", "title", "source_tier", "publisher", "retrieval_date", "classification", "trust", "locator", "content_hash"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^SRC-[A-Za-z0-9][A-Za-z0-9._-]*$",
+      "description": "Stable source-note identifier. Claims reference this id.",
+      "examples": ["SRC-acsc-ism-2025", "SRC-nist-ssdf-800-218", "SRC-cursor-permissions-docs"]
+    },
+    "title": {
+      "type": "string",
+      "minLength": 3,
+      "description": "Human title of the source (document, page, spec, repo, or talk)."
+    },
+    "source_tier": {
+      "type": "string",
+      "enum": [
+        "authoritative-standard",
+        "official-guidance",
+        "primary",
+        "practitioner-signal",
+        "community"
+      ],
+      "description": "Trust tier per trust-policy.md. authoritative-standard = AU gov / international standards (ACSC ISM, PSPF, NIST, SLSA); official-guidance = official gov or first-party vendor guidance; primary = first-party spec/repo/RFC/commit; practitioner-signal = blogs, conference talks, the YouTube corpus (down-ranked); community = forums, Q&A, social."
+    },
+    "publisher": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Issuing organisation or author (e.g. 'Australian Cyber Security Centre', 'NIST', vendor, channel)."
+    },
+    "url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Canonical URL for external sources. Required unless the source is codebase-internal (then use locator.kind = codebase)."
+    },
+    "published_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the source itself was published/last revised, where knowable. Distinct from retrieval_date."
+    },
+    "retrieval_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date this source was retrieved/accessed. Every source-note carries a retrieval date — no exceptions (citation-without-date is a red flag)."
+    },
+    "accessed_via": {
+      "type": "string",
+      "enum": ["deep-research", "manual-web", "codebase", "imported-corpus"],
+      "description": "How the source was obtained. 'deep-research' = normalised from the deep-research engine; 'codebase' = self-validation against this repo (owner-approved); 'imported-corpus' = ingested under _imported/."
+    },
+    "locator": {
+      "type": "object",
+      "description": "Where the cited content lives, precisely enough to re-find it.",
+      "required": ["kind", "ref"],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["web", "codebase", "document", "corpus"],
+          "description": "web = URL; codebase = repo path; document = standard/spec section; corpus = entry in an _imported corpus."
+        },
+        "ref": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The locator value: a URL, a 'path@gitsha' for codebase, a 'standard §section' for document, or a corpus record id."
+        },
+        "anchor": {
+          "type": "string",
+          "description": "Optional sub-location: heading, line range, control id, or timestamp."
+        }
+      },
+      "additionalProperties": false
+    },
+    "classification": {
+      "type": "string",
+      "enum": ["OFFICIAL", "OFFICIAL:Sensitive", "PROTECTED"],
+      "description": "PSPF classification of the source-note's content. Defaults to OFFICIAL; escalate per trust-policy.md classification handling."
+    },
+    "trust": {
+      "type": "string",
+      "enum": ["trusted", "untrusted"],
+      "description": "Origin trust label. First-party authored = trusted; imported/fetched/third-party = untrusted. Untrusted source-notes live under _staging/ or _imported/ and cannot back a canonical claim until reviewed and promoted."
+    },
+    "content_hash": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$",
+      "description": "SHA-256 of the retrieved content (the provenance checksum). Lets a consumer verify what was recorded. Proves what was recorded at retrieval time, NOT downstream behaviour (corpus anti-hype: recorded != executed)."
+    },
+    "excerpt": {
+      "type": "string",
+      "maxLength": 2000,
+      "description": "Verbatim quoted evidence supporting any claim that cites this note. Quote, do not paraphrase."
+    },
+    "license": {
+      "type": "string",
+      "description": "Source licence/terms where relevant (e.g. for reuse of standard text)."
+    },
+    "retrieved_by": {
+      "type": "string",
+      "description": "Agent or person who retrieved the source (e.g. '@researcher', 'deep-research')."
+    },
+    "signature": {
+      "type": "object",
+      "description": "RESERVED — opt-in cryptographic signature over content_hash (Cosign/SLSA). Deferred per owner decision 2026-06-01; never required at v1.",
+      "additionalProperties": true
+    },
+    "notes": {
+      "type": "string",
+      "description": "Free-text provenance notes (e.g. retrieval caveats, paywall, archived copy)."
+    }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": { "properties": { "locator": { "properties": { "kind": { "const": "web" } } } } },
+      "then": { "required": ["url"] }
+    }
+  ]
+}

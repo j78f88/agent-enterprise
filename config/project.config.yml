@@ -22,6 +22,18 @@ paths:
   archive: "docs/archive/"
   validation: "docs/planning/validation/"
   research: "docs/planning/research/"
+  # Research knowledge base — sovereign, provenance-first, agency-owned KB.
+  # Container + contract; every path is tokenised so other gov orgs can re-home it.
+  # See {{paths.research}}_meta/charter.md for the governing contract.
+  research_sources: "docs/planning/research/sources/"      # source-notes — one record per cited source
+  research_claims: "docs/planning/research/claims/"        # claims — verdict + evidence link to a source-note
+  research_controls: "docs/planning/research/controls/"    # AU gov control register / compliance anchors
+  research_briefs: "docs/planning/research/briefs/"        # scoped research briefs (question + kill-questions)
+  research_staging: "docs/planning/research/_staging/"     # quarantine — untrusted, unconformed, never canonical
+  research_imported: "docs/planning/research/_imported/"   # ingested external corpora (provenance-tagged)
+  research_index: "docs/planning/research/INDEX.md"        # registry of canonical research artefacts
+  research_charter: "docs/planning/research/_meta/charter.md"
+  research_trust_policy: "docs/planning/research/_meta/trust-policy.md"
   handoffs: "docs/planning/_handoffs/"
   engagements: "docs/planning/engagements/"
   vision: "docs/planning/vision/"

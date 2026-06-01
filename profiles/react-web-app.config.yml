@@ -20,6 +20,17 @@ paths:
   archive: "docs/archive/"
   validation: "docs/planning/validation/"
   research: "docs/planning/research/"
+  # Research knowledge base — sovereign, provenance-first, agency-owned KB.
+  # Container + contract; every path is tokenised so other gov orgs can re-home it.
+  research_sources: "docs/planning/research/sources/"
+  research_claims: "docs/planning/research/claims/"
+  research_controls: "docs/planning/research/controls/"
+  research_briefs: "docs/planning/research/briefs/"
+  research_staging: "docs/planning/research/_staging/"
+  research_imported: "docs/planning/research/_imported/"
+  research_index: "docs/planning/research/INDEX.md"
+  research_charter: "docs/planning/research/_meta/charter.md"
+  research_trust_policy: "docs/planning/research/_meta/trust-policy.md"
   handoffs: "docs/planning/_handoffs/"
   engagements: "docs/planning/engagements/"
   vision: "docs/planning/vision/"

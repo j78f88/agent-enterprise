@@ -1,3 +1,17 @@
+---
+title: "Research: Multi-Adapter Integration Testing & Architecture Patterns"
+status: untrusted
+trust: untrusted
+classification: OFFICIAL
+date: 2026-05-28
+---
+
+> ⚠️ **QUARANTINED — `untrusted`, NOT canonical.** Prior-session research (2026-05-28)
+> authored before the knowledge base existed, using the old prose template with no
+> per-claim provenance. It **cannot back a canonical claim** until retro-conformed into
+> [source-notes](../sources/README.md) / [claims](../claims/README.md) and registered in
+> [`INDEX.md`](../INDEX.md). See [`_meta/trust-policy.md`](../_meta/trust-policy.md).
+
 # Research: Multi-Adapter Integration Testing & Architecture Patterns
 
 **Date:** 2026-05-28
