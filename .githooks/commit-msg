@@ -2,9 +2,11 @@
 # Reject commit messages that:
 #   1. Start with a UTF-8 BOM (EF BB BF).
 #   2. Do not start with a Conventional Commits prefix.
+#   3. Lack a `Tool:` trailer on durable commits (attribution).
 #
 # Install once per clone:
 #   git config core.hooksPath .githooks
+#   git config commit.template .gitmessage   # pre-fills the Tool: trailer
 #
 # Bypass (use sparingly, e.g. merge commits):
 #   git commit --no-verify ...
@@ -26,9 +28,11 @@ fi
 # 2. Conventional Commits prefix check.
 first_line=$(head -n1 "$msg_file")
 
-# Allow merge commits and revert commits unconditionally.
+# Allow merge/revert commits and ephemeral checkpoints unconditionally.
+# `wip`/`fixup!`/`squash!` are exempt from BOTH the Conventional Commits and
+# the Tool: trailer requirements (they collapse before they reach the door).
 case "$first_line" in
-  "Merge "*|"Revert "*) exit 0 ;;
+  "Merge "*|"Revert "*|wip|"fixup!"*|"squash!"*) exit 0 ;;
 esac
 
 # Strip an optional leading BOM that survived (shouldn't, given step 1)
@@ -43,6 +47,19 @@ if ! printf '%s' "$first_line_stripped" | grep -Eq "$pattern"; then
   echo "  Expected: <type>(<scope>)?: <subject>"
   echo "  Types:    feat fix chore docs refactor test perf build ci style revert"
   echo "  Example:  feat(schemas): add registry-v1"
+  exit 1
+fi
+
+# 3. Tool: trailer check (attribution on durable commits).
+# Every non-ephemeral commit must name the tool that authored it
+# (e.g. claude-cli | vscode | insiders). The .gitmessage template pre-fills it.
+if ! grep -Eq '^Tool: .+' "$msg_file"; then
+  echo "commit-msg: rejected — durable commits need a 'Tool:' trailer."
+  echo "  Add a trailer line naming the tool, e.g.:"
+  echo "      Tool: claude-cli"
+  echo "  The .gitmessage template pre-fills it:"
+  echo "      git config commit.template .gitmessage"
+  echo "  Ephemeral 'wip'/'fixup!'/'squash!' commits are exempt."
   exit 1
 fi
 

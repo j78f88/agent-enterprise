@@ -1,0 +1,9 @@
+# <type>(<scope>): <subject>        Conventional Commits — imperative, <=72 chars
+#
+# Why (body, wrap ~72). What changed is in the diff; capture the reasoning.
+#
+# --- trailers --------------------------------------------------------------
+# Keep `Tool:` on durable commits (name the tool: claude-cli | vscode | insiders).
+# Delete it for ephemeral `wip`/`fixup!`/`squash!` checkpoints. Agentic tools may
+# also add their own Co-Authored-By: automatically.
+Tool:

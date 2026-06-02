@@ -26,8 +26,12 @@ git clone https://github.com/j78f88/agent-enterprise.git
 cd agent-enterprise
 
 # One-time: install the commit-message hook (rejects BOM + enforces
-# Conventional Commits). Works on Linux, macOS, and Git Bash on Windows.
+# Conventional Commits + a Tool: attribution trailer on durable commits).
+# Works on Linux, macOS, and Git Bash on Windows.
 git config core.hooksPath .githooks
+
+# One-time: pre-fill the Tool: trailer in your commit editor.
+git config commit.template .gitmessage
 
 # Run the canonical smoke test (installs deps, builds, runs tests).
 #   Linux/macOS:
