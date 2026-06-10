@@ -277,7 +277,9 @@ class Dispatcher:
                 path = Path(spec["path"])
                 result.artifacts.append(
                     {
-                        "path": str(path),
+                        # Echo the manifest's declared path verbatim so
+                        # summaries are byte-identical across OSes.
+                        "path": spec["path"],
                         "required": spec.get("required", True),
                         "present": path.exists(),
                     }

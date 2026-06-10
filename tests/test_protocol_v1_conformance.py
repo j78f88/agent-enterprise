@@ -444,7 +444,11 @@ MODE2_REFERENCE_FROZEN_SHA256 = {
 @pytest.mark.parametrize("name", sorted(MODE2_REFERENCE_FROZEN_SHA256))
 def test_mode2_reference_impl_is_byte_frozen(name: str) -> None:
     path = MODE2_REFERENCE_DIR / name
-    actual = hashlib.sha256(path.read_bytes()).hexdigest()
+    # Normalize CRLF before hashing: Windows checkouts (core.autocrlf)
+    # rewrite line endings, which is checkout policy, not a content change.
+    # The pinned hashes are over LF bytes; any real edit still fails.
+    content = path.read_bytes().replace(b"\r\n", b"\n")
+    actual = hashlib.sha256(content).hexdigest()
     expected = MODE2_REFERENCE_FROZEN_SHA256[name]
     assert actual == expected, (
         f"{path} has been modified (sha256 {actual}, pinned {expected}). "
