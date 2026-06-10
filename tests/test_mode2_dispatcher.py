@@ -679,7 +679,11 @@ class TestDispatchCli:
         result = run_cli(["requeue", "wi-1"], cwd=project)
         assert result.returncode == 1
         assert "ERROR:" in result.stderr
-        assert "illegal transition" in result.stderr
+        if state == "in-progress":
+            # Crash-interrupted items get an operator hint pointing at 'run'.
+            assert "crash recovery happens on the next 'run'" in result.stderr
+        else:
+            assert "illegal transition" in result.stderr
         on_disk = yaml.safe_load((queue / "state.yml").read_text(encoding="utf-8"))
         assert on_disk == {"wi-1": state}  # nothing moved
 

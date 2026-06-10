@@ -96,6 +96,9 @@ A minimal sidecar manifest:
 ```yaml
 # callables/draft-prd.callable.yml
 id: my-org.draft-prd
+kind: callable
+version: 1.0.0
+applies_to: '**'
 name: Draft PRD
 description: Draft a product requirements document from a brief.
 inputs:
@@ -177,7 +180,8 @@ rewritten, and the snapshot rewrite itself is atomic (write-temp + fsync +
 always at least as new as the snapshot, and a crash can never leave a torn
 `state.yml`.
 
-After a crash, the next `run` (or any non-read-only command):
+After a crash, the next `run` (and only `run` — `status` and `requeue`
+never perform recovery):
 
 1. Replays the journal and reconciles it against the snapshot — the journal
    wins on divergence.

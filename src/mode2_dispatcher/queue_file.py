@@ -128,7 +128,9 @@ class QueueStore:
         self.queue_root = Path(queue_root)
         self.state_path = self.queue_root / "state.yml"
         self.journal_path = self.queue_root / "journal.ndjson"
-        self.queue_root.mkdir(parents=True, exist_ok=True)
+        if recover:
+            # Read-only loads (status) must not create the queue root.
+            self.queue_root.mkdir(parents=True, exist_ok=True)
 
         self.pins, self.pin_path = read_pins(self.queue_root)
         check_pins(self.pins, self.pin_path)
@@ -204,6 +206,11 @@ class QueueStore:
         current = self._state.get(item_id)
         if current is None:
             raise TransitionError(f"unknown item: {item_id}")
+        if current == "in-progress":
+            raise TransitionError(
+                f"{item_id} is in-progress (likely a crash-interrupted item); "
+                "crash recovery happens on the next 'run', not via requeue"
+            )
         self.transition(item_id, current, "queued", note="manual requeue")
 
     # -- load + reconcile ------------------------------------------------------
