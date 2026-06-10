@@ -44,3 +44,26 @@ non-interactively.
 Stop the dispatcher process. In-flight items remain in their current
 queue state; reconcile manually if the dispatcher crashed mid-dispatch.
 No substrate or registry rollback required.
+
+---
+
+## Supported implementation
+
+> Informative addition per
+> [ADR 0008](../decisions/0008-supported-mode-implementations.md)
+> criterion 4. The contract text above is unchanged and remains the
+> interface — any conforming dispatcher satisfies this install contract.
+
+The repo's supported Mode 2 implementation is the
+`src/mode2_dispatcher/` package with the root CLI `dispatch.py`
+(`python dispatch.py {run|status|requeue|validate-callables}`). It
+satisfies every step above out of the box: file-queue source
+(`queue/inbox/*.yml`), callable discovery from `*.callable.yml`
+sidecars and `callable-v1` skill frontmatter, ghost-done verification,
+contract-legal state transitions with a durable journal and
+crash-resume, and `.mode-2-pins` enforcement.
+
+Adopter documentation: [docs/ORCHESTRATION.md](../../docs/ORCHESTRATION.md).
+The reference implementation in
+[`reference-impls/file-queue-dispatcher/`](reference-impls/file-queue-dispatcher/)
+stays frozen as contract pedagogy (ADR 0008 criterion 5).

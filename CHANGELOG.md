@@ -41,6 +41,55 @@ The `scope:` → `applies_to` migrator
 
 ---
 
+## Unreleased — Sprint 5 — mode 2 dispatcher promotion
+
+Mode 2 (Orchestration) graduates from frozen contract + reference impl
+to a supported implementation per ADR 0008 — all five promotion
+criteria met; contracts, schemas, and the reference impl untouched.
+
+### Added
+- **`src/mode2_dispatcher/` — supported Mode 2 implementation.**
+  Dispatch core ported from the frozen reference impl (state machine,
+  ghost-done verifier, tier-3 summary), plus production hardening the
+  reference deliberately lacks: an fsynced append-only
+  `journal.ndjson` written before each atomic `state.yml` snapshot
+  (write-temp + `os.replace`), crash-resume that re-queues in-flight
+  items through contract-legal transitions only, and `.mode-2-pins`
+  enforcement (unsupported contract/protocol pins refuse to load).
+- **Root CLI `dispatch.py`** — `run` (drain inbox, emit tier-3 summary,
+  `--summary-out`), `status` (read-only, flags crash-interrupted
+  items), `requeue <item-id>` (contract-legal transitions only), and
+  `validate-callables` (non-zero exit on violations); `--queue-root`
+  is containment-guarded like the `init.py` deploy guard. Works in a
+  clean clone with no `init.py` build.
+- **Callable discovery** from `*.callable.yml` sidecars (the
+  non-enterprise path) and `callable-v1` skill frontmatter (the
+  enterprise path), deterministic order, every candidate
+  schema-validated — invalid callables are reported, never skipped.
+  Native `python` (`module:function`) invocation; custom runtimes via
+  `registry_from_manifests(runner=...)`.
+- **Return-tier validation** reusing the phase-1
+  `SubagentReturnValidator` against the
+  `subagent-return-tier{1,2,3}` schemas — session end with missing or
+  invalid evidence yields `rejected`, never `done`.
+- **`docs/ORCHESTRATION.md`** — adopter guide: install, queue layout,
+  callable authoring, `dispatch.py` usage, crash-recovery semantics,
+  and the relationship to the frozen reference impl.
+
+### Changed
+- **Mode 2 install contract** names `src/mode2_dispatcher/` +
+  `dispatch.py` as the supported implementation (ADR 0008 criterion 4)
+  in an informative section; the contract text itself is unchanged.
+- **Shared conformance parametrization.** The `mode-2-contract-v1`
+  checklist now runs against both the frozen reference impl and the
+  supported implementation; a byte-freeze test asserts the reference
+  impl is unchanged (ADR 0008 criterion 5).
+- README Mode 2 row updated from contract-plus-reference to supported
+  implementation, linking `docs/ORCHESTRATION.md`.
+
+---
+
+
 ## Unreleased — Sprint 4 — platform parity
 
 Native emission for every supported platform; the README "Works

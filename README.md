@@ -200,7 +200,7 @@ agent-enterprise ships as three **standalone, independently consumable** modes o
 | Mode | What It Is | When You Need It |
 |:-----|:-----------|:-----------------|
 | **Mode 1 — Team** | A substrate of skills, instructions, and agents for interactive use | You want `@planner`, `@qa`, `@security`, etc. in your project |
-| **Mode 2 — Orchestration** | A dispatcher that pulls work from a queue, invokes callables, and verifies results | You want non-interactive, issue-driven dispatch |
+| **Mode 2 — Orchestration** | A supported dispatcher (`python dispatch.py`) that pulls work from a queue, invokes callables, and verifies results — see [docs/ORCHESTRATION.md](docs/ORCHESTRATION.md) | You want non-interactive, issue-driven dispatch |
 | **Mode 3 — Choreography** | Coordinates a program of works across many projects with drift control | You manage multiple projects and need cross-repo visibility |
 
 Each mode is a standalone install. Adoption order is free. Adding a new mode doesn't modify existing ones.
@@ -386,6 +386,7 @@ resolved/         deploy artifacts (skills/, instructions/, agents/)
 | **[Skill Flow](docs/SKILL_FLOW.md)** | How agents orchestrate work |
 | **[Example Sprint](docs/EXAMPLE_SPRINT_FLOW.md)** | Complete sprint walkthrough |
 | **[Three Modes](command-centre/00-overview/three-modes.md)** | Team, Orchestration, Choreography explained |
+| **[Orchestration](docs/ORCHESTRATION.md)** | Running the supported Mode 2 dispatcher (`dispatch.py`) |
 | **[Customization](docs/CUSTOMIZATION.md)** | Adapting skills for your needs |
 | **[Extension Guide](docs/EXTENSION_GUIDE.md)** | Authoring new skills |
 | **[Troubleshooting](docs/TROUBLESHOOTING.md)** | Common issues & fixes |
