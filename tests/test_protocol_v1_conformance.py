@@ -23,6 +23,7 @@ from pathlib import Path
 import jsonschema
 import pytest
 import yaml
+from referencing import Registry, Resource
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMAS = ROOT / "schemas"
@@ -148,16 +149,14 @@ def test_fixture_registry_validates() -> None:
 
     registry_schema = _load_schema("registry-v1.schema.json")
     project_schema = _load_schema("project-v1.schema.json")
-    resolver = jsonschema.RefResolver(
-        base_uri=registry_schema["$id"],
-        referrer=registry_schema,
-        store={
-            registry_schema["$id"]: registry_schema,
-            project_schema["$id"]: project_schema,
-            "project-v1.schema.json": project_schema,
-        },
+    registry = Registry().with_resources(
+        [
+            (registry_schema["$id"], Resource.from_contents(registry_schema)),
+            (project_schema["$id"], Resource.from_contents(project_schema)),
+            ("project-v1.schema.json", Resource.from_contents(project_schema)),
+        ]
     )
-    jsonschema.validate(instance=data, schema=registry_schema, resolver=resolver)
+    jsonschema.validate(instance=data, schema=registry_schema, registry=registry)
 
 
 # ---------------------------------------------------------------------------
