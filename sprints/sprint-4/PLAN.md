@@ -1,8 +1,8 @@
 # Platform Parity — Native Emission for Claude Code, Cursor, and Codex
 
-**Status:** Planned (promoted to sprints/sprint-4/PLAN.md)
+**Status:** Active
 **Type:** Feature (claims-truth / build-system)
-**Sources:** session review 2026-06-10 (user-approved "close the gap upward" roadmap) · **Ledger:** ITEM-017
+**Sources:** session review 2026-06-10 (user-approved "close the gap upward" roadmap), Sprint 3 review SUGGESTION · **Ledger:** ITEM-017, ITEM-021
 **Dependencies:** Sprint 3 (claims foundation: ADR 0008, CI profile matrix, README Codex footnote)
 
 ## Goals
@@ -125,6 +125,9 @@ Files: `.github/workflows/ci.yml`
       on the existing fail-on-unresolved + token-free guardrails.
 - [ ] Keep the canonical-build-command doc check (ITEM-011) intact —
       target builds are additional, not a new canonical command.
+- [ ] ITEM-021: run the canonical example-config build last so the
+      post-build guardrail steps validate the canonical tree, not the
+      last profile/target build.
 
 ### Task Group 7: docs/PLATFORMS.md + README truth pass
 Files: `docs/PLATFORMS.md` (new), `README.md`, `skills/onboarding/onboarding.skill.md`, `docs/ONBOARDING.md`
@@ -187,7 +190,11 @@ Files: `docs/PLATFORMS.md` (new), `README.md`, `skills/onboarding/onboarding.ski
 
 ## Sprint Execution Guidelines
 
-_(left for @sprint-lead)_
+- One subagent per task group; subagents edit files only — the sprint
+  lead commits each TG with explicit pathspecs (Sprint 3 retro lesson).
+- CI on the PR branch is part of the sprint contract: any failing check
+  observed during the sprint is diagnosed and fixed before close.
+- TG order: 1 first, then 2/3/4 parallel, then 5 → 6 → 7.
 
 ## Commit Plan
 

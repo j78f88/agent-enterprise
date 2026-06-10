@@ -4,6 +4,39 @@
 
 ---
 
+## Sprint 4 — Platform Parity: Native Emission for Claude Code, Cursor, and Codex
+
+**Status:** Active  
+**Type:** Feature (claims-truth / build-system)  
+**Started:** 2026-06-10
+
+### Goals
+
+- [ ] Ungate agent generation per editor.target; add codex target (ITEM-017)
+- [ ] Native Claude Code subagents in .claude/agents/ (ITEM-017)
+- [ ] Cursor .cursor/commands/ seeding (ITEM-017)
+- [ ] Codex AGENTS.md managed-block emission, dogfooded (ITEM-017)
+- [ ] tests/test_platform_emission.py + CI editor.target dimension (ITEM-017)
+- [ ] CI canonical-build-last ordering fix (ITEM-021)
+- [ ] docs/PLATFORMS.md + README truth pass (ITEM-017)
+
+### Tasks
+
+- [ ] TG1: ungate agent generation per target
+- [ ] TG2: Claude Code native subagents
+- [ ] TG3: Cursor commands seeding
+- [ ] TG4: Codex AGENTS.md managed block
+- [ ] TG5: parametrized platform emission tests
+- [ ] TG6: CI editor.target dimension + ITEM-021 ordering
+- [ ] TG7: docs/PLATFORMS.md + README truth pass
+
+### Notes
+
+- Sprint started 2026-06-10 (promoted from platform-parity draft; user approved)
+- Sprint contract includes fixing any CI failures observed on the PR branch
+
+---
+
 ## Sprint 3 — Claims Foundation: ADR, Debt, and Roadmap Seeding
 
 **Status:** Complete  
