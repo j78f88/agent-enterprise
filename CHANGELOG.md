@@ -87,6 +87,8 @@ Everywhere" table is now backed by tests.
 ---
 
 
+## Unreleased — Sprint 3 — claims foundation
+
 Foundations for closing the gap between the README's three-modes /
 four-platforms claims and the implementation, per ADR 0008.
 
@@ -116,6 +118,51 @@ four-platforms claims and the implementation, per ADR 0008.
 - **README platform table.** The OpenAI Codex cell carries an interim
   footnote: Codex consumes deployed Markdown via the `AGENTS.md`
   convention today; a native emission target is staged (ITEM-017).
+
+---
+
+## 3.0.3 — 2026-06 — build-system hardening & commit attribution
+
+This release hardens `init.py` and the CI guardrails (Sprint 2) and adds a
+commit-attribution gate ported from `agent-homebase-e1`. No authoring-contract
+changes; existing skills, instructions, and agent bodies keep working.
+
+### Added
+- **Build fails on unresolved tokens.** `init.py` now hard-exits with an
+  actionable message if any `{{token}}` survives substitution, instead of
+  shipping raw tokens to adopters.
+- **`--deploy` seeds `.claude/commands/`** alongside `.github/`, so Claude Code
+  slash-commands are available in adopter projects out of the box.
+- **`scripts/check_tokens.py`** — a token-free guardrail for the deployed
+  `.github/` tree, wired in as a CI step.
+- **`scripts/check_build_command.py`** — asserts the docs reference the
+  canonical `--config config/project.config.example.yml` build command, wired in
+  as a CI step.
+- **`.githooks/commit-msg` requires a `Tool:` trailer on durable commits**
+  (attribution), porting e1's ADR-002/ADR-006 gate. Ephemeral
+  `wip`/`fixup!`/`squash!` checkpoints and merge/revert commits are exempt. A new
+  `.gitmessage` template pre-fills the trailer
+  (`git config commit.template .gitmessage`).
+- **Planner draft-approval checkpoint** — planner mode now blocks on an explicit
+  approval before writing a sprint plan.
+- **Onboarding `CLAUDE_CODE_SETUP.md` companion** covering Claude Code
+  slash-command setup.
+
+### Changed
+- **`src/__init__.py` `__version__`** and **`config/plugin.json` `version`**
+  bumped to `3.0.3`.
+- **`init.py` `ALLOWED_COMMANDS`** extended with the security tool commands.
+- **`docs/CONTRIBUTING.md` and the commit-conventions instruction** document the
+  `Tool:` trailer and the one-time template setup.
+
+### Fixed
+- **Absolute-path guard in `deploy_resolved()`** prevents deploy writes from
+  escaping the target tree.
+
+### Verified
+- 431 pytest tests pass (up from 401 in 3.0.2).
+- `python init.py --config config/project.config.example.yml` builds with 0
+  unresolved-token warnings and byte-identical output across consecutive runs.
 
 ---
 
