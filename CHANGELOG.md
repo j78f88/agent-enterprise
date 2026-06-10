@@ -41,7 +41,51 @@ The `scope:` → `applies_to` migrator
 
 ---
 
-## Unreleased — Sprint 3 — claims foundation
+## Unreleased — Sprint 4 — platform parity
+
+Native emission for every supported platform; the README "Works
+Everywhere" table is now backed by tests.
+
+### Added
+- **`codex` editor target.** `editor.target` accepts `codex`; deploy
+  merges a managed agent-roster block into the adopter's `AGENTS.md`
+  between `agent-enterprise:begin/end` markers — idempotent, CRLF-safe,
+  never touches content outside the markers, and skips (with a warning)
+  on malformed or duplicate markers.
+- **Claude Code native subagents** seeded to `paths.claude_agents`
+  (default `.claude/agents`) for `claude-code`/`both`/`all` targets.
+- **Cursor commands** seeded to `paths.cursor_commands` (default
+  `.cursor/commands`) for `cursor`/`all` targets.
+- **`docs/PLATFORMS.md`** — the per-platform artifact map, with every
+  matrix cell pinned by the new `tests/test_platform_emission.py`
+  (parametrized over all six targets).
+- CI builds the example config for every `editor.target` value and runs
+  the canonical build last so post-build guardrails validate the
+  canonical tree.
+
+### Changed
+- **Agent wrappers now generate for every valid `editor.target`** (was
+  vscode-gated). Existing `claude-code`/`cursor` configs that previously
+  skipped agent generation now produce `resolved/agents/*.agent.md` and
+  their native platform surfaces on deploy. Skill `user-invocable`
+  suppression remains vscode-only.
+- The repo dogfoods `editor.target: all` on itself: `.claude/agents/`,
+  `.cursor/rules/`, `.cursor/commands/`, and the `AGENTS.md` managed
+  block are committed platform surfaces.
+
+### Fixed
+- **Post-deploy token scan no longer flags documentation literals.**
+  Deployed trees are scanned with the same dotted `namespace.key`
+  pattern as `scripts/check_tokens.py` (a drift-guard test pins the two
+  patterns equal); both scanners now also catch multi-level tokens.
+- **Stale agent wrappers are pruned.** Setup-skipped or deleted skills
+  no longer leave zombie wrappers in `resolved/agents/` or deployed
+  artifacts in the platform directories.
+- The canonical-build-command guardrail no longer captures trailing
+  quote punctuation from commands embedded in quoted code.
+
+---
+
 
 Foundations for closing the gap between the README's three-modes /
 four-platforms claims and the implementation, per ADR 0008.

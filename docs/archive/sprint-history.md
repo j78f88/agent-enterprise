@@ -5,6 +5,42 @@ Entries moved out of SPRINTS.md per the archive rule
 
 ---
 
+## Sprint 2 — Build-System Hardening & Process Hygiene
+
+**Status:** Complete  
+**Type:** Mixed (bug-fix / debt)  
+**Started:** 2026-05-31  
+**Completed:** 2026-05-31
+
+### Goals
+
+- [x] Automated deploy-copy + fail-on-unresolved (BUG-006 / ITEM-012)
+- [x] Token-free guardrail for the deployed `.github/` tree (ITEM-012)
+- [x] CI canonical-build-command check (ITEM-011)
+- [x] Derive `SOURCE_STYLE_REFS` from config/resolved tree (ITEM-009)
+- [x] Claude Code `/command` seeding + onboarding docs (BUG-003 / ITEM-006)
+- [x] Planner-mode draft-approval checkpoint (BUG-004 / ITEM-007)
+- [x] Purge demo/template content from ledger and SPRINTS (ITEM-010)
+
+### Tasks
+
+- [x] TG1: deploy-copy step + fail-on-missing-key (ITEM-012)
+- [x] TG2: token-free guardrail script + CI step (ITEM-012)
+- [x] TG3: CI canonical-build-command check (ITEM-011)
+- [x] TG4: derive `SOURCE_STYLE_REFS` from config/resolved tree (ITEM-009)
+- [x] TG5: Claude Code `/command` seeding + onboarding docs (ITEM-006)
+- [x] TG6: planner-mode checkpoint enforcement (ITEM-007)
+- [x] TG7: purge demo/template content — ledger, bug backlog, SPRINTS (ITEM-010)
+
+### Notes
+
+- Sprint started 2026-05-31
+- Sprint completed 2026-05-31
+
+---
+
+---
+
 ## Sprint 1 — Onboarding Path Resolution Remediation
 
 **Status:** Complete  
