@@ -5,6 +5,8 @@ version: 1.0.0
 applies_to: '**'
 description: observability instruction
 applyTo: '**'
+paths:
+- '**'
 ---
 
 # Observability & Traceability

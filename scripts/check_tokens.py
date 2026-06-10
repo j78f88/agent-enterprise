@@ -23,12 +23,16 @@ import sys
 from pathlib import Path
 
 # Stricter than init.py _TOKEN_RE: only matches real build tokens of the form
-# {{namespace.key}} (at least one dot required).  Documentation examples like
-# {{tokens}} (no dot) are intentional literals and must NOT be flagged.
+# {{namespace.key}} (at least one dot required; flatten() can emit multi-level
+# keys like {{a.b.c}}, so one-or-more dot segments are accepted).
+# Documentation examples like {{tokens}} (no dot) are intentional literals and
+# must NOT be flagged.
 # Group 1: optional leading backslash (escape marker — NOT flagged as unresolved).
 # Group 2: token body in namespace.key form (lowercase letters, digits, underscores).
 # Negative lookbehind for '$' excludes GitHub Actions ${{...}} syntax.
-_TOKEN_RE = re.compile(r"(?<!\$)(\\?)\{\{([a-z_][a-z0-9_]*\.[a-z_][a-z0-9_]*)\}\}")
+# MUST stay byte-identical to init.py _REAL_TOKEN_RE (pinned by a drift-guard
+# test in tests/test_init.py).
+_TOKEN_RE = re.compile(r"(?<!\$)(\\?)\{\{([a-z_][a-z0-9_]*(?:\.[a-z_][a-z0-9_]*)+)\}\}")
 
 # Directories under project root to scan (relative paths).
 _SCAN_DIRS = [

@@ -7,6 +7,8 @@ description: Use when writing or seeding RETRO.md files, defining complexity ass
   or assembling sprint retrospectives. Defines the schema, complexity scale, forecast
   format, and finalized structure for sprint retrospectives.
 applyTo: '**'
+paths:
+- '**'
 ---
 
 # Retrospective Report Format

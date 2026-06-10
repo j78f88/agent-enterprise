@@ -1,0 +1,50 @@
+---
+description: severity-levels instruction
+globs: '**'
+alwaysApply: false
+---
+
+# Severity Levels — Finding Classification
+
+Shared rule for all agents that report findings. Defines the three severity levels and the required action each triggers.
+
+## Definitions
+
+| Level      | Definition                    | Action (code-touching agents: @qa, @reviewer, @a11y, @perf, @security) | Action (@docs)                                        |
+| ---------- | ----------------------------- | ------------------------------------------------------------ | ----------------------------------------------------- |
+| CRITICAL   | Blocks gate, must be resolved | Blocks sprint advancement and git push                       | Must resolve in same session; does **not** block push |
+| WARNING    | Does not block                | Logged to `docs/TECHNICAL_DEBT.md` with sprint number + agent source | Fix or defer in session                            |
+| SUGGESTION | Optional improvement          | Recorded in sprint report's "Notes" section                  | Recorded in sprint report's "Notes" section           |
+
+## Prioritisation Order
+
+When multiple findings exist, prioritise: **security > correctness > performance > style**.
+
+## @bug Severity Carve-Out
+
+The `@bug` agent uses a separate **user-impact triage** taxonomy (🔴 Blocks / 🟡 Degraded / 🟢 Cosmetic / ⚪ Edge case). This is orthogonal to the gate-finding severity above. When a bug flagged 🟡 later surfaces in `@reviewer` analysis, it may be flagged WARNING or CRITICAL per code impact — both classifications coexist on different axes.
+
+## Example CRITICAL Findings (non-exhaustive)
+
+- Store with a new persisted field but no `version` bump or `migrate()` function (Sprint 32 data-safety rule).
+- E2E test suite regressing by >5% after a merge (Sprint 31 lesson).
+- Coverage dropping below threshold (80% store / 0% web).
+- Commit modifying `docs/NON_GOALS.md` without the required approval marker.
+- Missing dependencies flagged by `depcheck`.
+
+## Recommended-Default Gates
+
+For any sprint touching `/src/components/**`, the `a11y` gate should be checked by default in PLAN.md Quality Gates unless explicitly waived with rationale.
+
+## Report Format for Findings
+
+```
+### CRITICAL (must fix before gate passes)
+1. [file:line] Description — required fix
+
+### WARNING (should fix, not blocking)
+1. [file:line] Description and recommendation
+
+### SUGGESTION (nice to have)
+1. [file:line] Description
+```

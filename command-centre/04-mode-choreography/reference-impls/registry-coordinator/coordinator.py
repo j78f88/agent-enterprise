@@ -11,7 +11,7 @@ Implements every responsibility in
 * Hosts three meta-agent stubs (``meta_agents/``).
 * Handles mixed-fleet (team + orchestration) registries by construction.
 
-Pure stdlib + jsonschema + PyYAML.
+Pure stdlib + jsonschema + referencing + PyYAML.
 """
 
 from __future__ import annotations
@@ -23,6 +23,7 @@ from pathlib import Path
 
 import jsonschema
 import yaml
+from referencing import Registry, Resource
 
 
 # ---------------------------------------------------------------------------
@@ -39,18 +40,19 @@ def _load_schema(name: str) -> dict:
     return json.loads((_SCHEMAS_DIR / name).read_text(encoding="utf-8"))
 
 
-def _registry_resolver() -> jsonschema.RefResolver:
+def _schema_registry() -> Registry:
     registry = _load_schema("registry-v1.schema.json")
     project = _load_schema("project-v1.schema.json")
-    # Seed the resolver store so $ref lookups resolve locally rather
+    # Seed the registry so $ref lookups resolve locally rather
     # than trying to fetch the canonical $id over the network.
-    store = {
-        registry["$id"]: registry,
-        project["$id"]: project,
-        # Relative reference used in registry-v1.schema.json.
-        "project-v1.schema.json": project,
-    }
-    return jsonschema.RefResolver(base_uri=registry["$id"], referrer=registry, store=store)
+    return Registry().with_resources(
+        [
+            (registry["$id"], Resource.from_contents(registry)),
+            (project["$id"], Resource.from_contents(project)),
+            # Relative reference used in registry-v1.schema.json.
+            ("project-v1.schema.json", Resource.from_contents(project)),
+        ]
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -82,7 +84,7 @@ class Coordinator:
         jsonschema.validate(
             instance=data,
             schema=_load_schema("registry-v1.schema.json"),
-            resolver=_registry_resolver(),
+            registry=_schema_registry(),
         )
         # Per-entry project-v1 validation (single source of truth).
         project_schema = _load_schema("project-v1.schema.json")

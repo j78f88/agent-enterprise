@@ -80,7 +80,7 @@ def check_file(path: Path) -> list[tuple[int, str]]:
     findings: list[tuple[int, str]] = []
     for lineno, line in enumerate(text.splitlines(), start=1):
         for m in _BUILD_CMD_RE.finditer(line):
-            config_arg = m.group(1).strip("`")
+            config_arg = m.group(1).strip("`'\",();")
             if config_arg != _CANONICAL_CONFIG:
                 findings.append((lineno, config_arg))
     return findings

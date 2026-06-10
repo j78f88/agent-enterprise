@@ -1,0 +1,225 @@
+---
+description: security-model instruction
+globs: '**'
+alwaysApply: false
+---
+
+# Security Model
+
+**Phase 0 — Production Security Hardening**
+
+This instruction establishes the formal security model for agent-enterprise operations, implementing defense-in-depth to prevent command injection, path traversal, secrets leakage, and supply chain attacks.
+
+---
+
+## Threat Model
+
+### Attack Vectors
+
+1. **Malicious Configuration** — Attacker provides config with command injection
+2. **Compromised Subagent** — Malicious subagent attempts data exfiltration
+3. **Path Traversal** — Config or subagent writes outside project scope
+4. **Secrets Leakage** — Credentials exposed in resolved files or logs
+5. **Supply Chain** — Malicious skills/instructions injected
+
+### Trust Boundaries
+
+```
+┌─────────────────────────────────────┐
+│         TRUSTED ZONE                │
+│  • init.py (security validator)     │
+│  • Core instructions (signed)       │
+│  • User's project code              │
+└─────────────────────────────────────┘
+           ↓ validated config
+┌─────────────────────────────────────┐
+│       SEMI-TRUSTED ZONE             │
+│  • User-provided config             │
+│  • Generated resolved/ artifacts    │
+└─────────────────────────────────────┘
+           ↓ sandboxed invocation
+┌─────────────────────────────────────┐
+│       UNTRUSTED ZONE                │
+│  • Subagent execution               │
+│  • External tool calls              │
+│  • Network operations               │
+└─────────────────────────────────────┘
+```
+
+---
+
+## Security Controls
+
+### 1. Command Sanitization
+
+**Enforcement:** `init.py` validates all `commands.*` config keys.
+
+**Whitelist:**
+- Package managers: `npm`, `pnpm`, `yarn`, `pip`, `cargo`, `go`, `dotnet`, `mvn`
+- Test runners: `pytest`, `jest`, `vitest`, `mocha`
+- Linters: `eslint`, `prettier`, `ruff`, `black`
+- Type checkers: `tsc`, `mypy`, `pyright`
+- Version control: `git`, `gh`
+
+**Blocked Patterns:**
+- Command chaining: `; rm`, `&& rm`, `| rm`
+- Command substitution: `` `cmd` ``, `$(cmd)`
+- Device writes: `> /dev/`
+- Curl/wget pipes: `curl ... | sh`
+
+**Example:**
+```yaml
+commands:
+  test: "npm test"           # ✓ ALLOWED
+  test: "rm -rf / && npm"    # ✗ BLOCKED (dangerous pattern)
+  test: "malware-tool"       # ⚠ WARNING (not whitelisted)
+```
+
+### 2. Path Validation
+
+**Enforcement:** `init.py` validates all `paths.*` config keys.
+
+**Rules:**
+- NO parent directory references: `../` blocked
+- NO absolute paths: `/etc/passwd` or `C:\Windows` warned
+- Paths must be relative to project root
+
+**Example:**
+```yaml
+paths:
+  sprints: "sprints/"            # ✓ ALLOWED
+  sprints: "../../../etc/passwd" # ✗ BLOCKED (traversal)
+  sprints: "/etc/passwd"         # ⚠ WARNING (absolute)
+```
+
+### 3. Secret Detection
+
+**Enforcement:** `init.py` scans config for common secret patterns.
+
+**Patterns Detected:**
+- API keys: `api_key: sk-...`
+- Tokens: `token: ghp_...`
+- Passwords: `password: ...`
+- Generic secrets: `secret: ...`
+
+**Remediation:**
+```yaml
+# ✗ BAD — secrets in config
+commands:
+  deploy: "curl -H 'Authorization: Bearer sk-abc123...'"
+
+# ✓ GOOD — reference environment variables
+commands:
+  deploy: "curl -H \"Authorization: Bearer $OPENAI_API_KEY\""
+```
+
+**Secret Management:**
+- Use environment variables: `$VAR_NAME` in commands
+- Use secret managers: HashiCorp Vault, AWS Secrets Manager
+- Never commit secrets to git: `.gitignore` for `*.secret.yml`
+
+### 4. Execution Sandboxing (Roadmap)
+
+**Status:** Not yet implemented — see Phase 3 plan
+
+**Future Design:**
+```python
+# Replace direct subprocess execution
+subprocess.run(config['commands.test'])  # CURRENT (unsafe)
+
+# With sandboxed execution
+sandbox.execute(
+    command='test',
+    allowed_commands=['npm', 'pytest'],
+    timeout=300,
+    network_policy='deny-egress',
+    filesystem_scope='/workspace',
+    max_memory_mb=2048,
+)
+```
+
+### 5. Capability-Based Security (Roadmap)
+
+**Status:** Not yet implemented — see Phase 3 plan
+
+**Future Model:**
+- Fine-grained permissions beyond write permits
+- Capabilities: `file:read`, `file:write`, `network:http`, `git:commit`
+- Least-privilege principle: agents only get required capabilities
+- Attestation and verification before execution
+
+### 6. Supply Chain Verification (Roadmap)
+
+**Status:** Not yet implemented — see Phase 3 plan
+
+**Future Design:**
+- Cryptographic signing of all skills/instructions
+- Signature verification before loading
+- Content trust policy (require signatures for production)
+- Vulnerability scanning for Python dependencies
+
+---
+
+## Audit Logging
+
+All security-relevant events must be logged to an immutable append-only log.
+
+**Events to Log:**
+- Config validation pass/fail
+- Security warnings and errors
+- Command executions
+- File writes (path, agent, timestamp)
+- Subagent invocations
+- Policy violations
+
+**Format (JSON Lines):**
+```json
+{"timestamp": "2026-04-27T10:15:30Z", "event": "config_validated", "status": "pass", "warnings": 2}
+{"timestamp": "2026-04-27T10:16:45Z", "event": "command_executed", "command": "npm test", "agent": "qa", "exit_code": 0}
+{"timestamp": "2026-04-27T10:17:00Z", "event": "security_violation", "type": "path_traversal", "agent": "malicious", "path": "../../etc/passwd", "blocked": true}
+```
+
+**Storage:** `.agent-state/security-audit.jsonl` (append-only, never truncated)
+
+---
+
+## Security Checklist
+
+Before deploying agent-enterprise in production, verify:
+
+- [ ] Config validated by `init.py` security checks
+- [ ] No secrets in config files (use environment variables)
+- [ ] All command whitelists reviewed and approved
+- [ ] Audit logging enabled and monitored
+- [ ] `.gitignore` includes `resolved/`, `.agent-state/`, `*.secret.yml`
+- [ ] External security audit completed (Phase 7)
+- [ ] Incident response plan documented
+
+---
+
+## Incident Response
+
+If a security violation is detected:
+
+1. **Immediate:** Block execution (exit code 1)
+2. **Log:** Record violation to audit log
+3. **Alert:** Notify security contact (if configured)
+4. **Investigate:** Review audit log for blast radius
+5. **Remediate:** Fix config or code, re-validate
+6. **Post-Mortem:** Document root cause and prevention
+
+---
+
+## Security Contact
+
+For security vulnerabilities in agent-enterprise framework itself:
+- Open a private GitHub security advisory
+- **Do not** open public issues for security bugs
+
+---
+
+## References
+
+- [OWASP Top 10](https://owasp.org/www-project-top-ten/)
+- [OpenAI Agentic AI Governance](https://openai.com/research/practices-for-governing-agentic-ai-systems)
+- [NIST Cybersecurity Framework](https://www.nist.gov/cyberframework)

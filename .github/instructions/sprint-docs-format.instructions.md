@@ -5,6 +5,8 @@ version: 1.0.0
 applies_to: '**'
 description: sprint-docs-format instruction
 applyTo: '**'
+paths:
+- '**'
 ---
 
 # Sprint Documentation Format

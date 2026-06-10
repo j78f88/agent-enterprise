@@ -24,7 +24,37 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements-dev.txt
 
-      - name: Build resolved/ artifacts
+      - name: Build all profile configs
+        run: |
+          for profile in profiles/*.config.yml; do
+            echo "::group::python init.py --config $profile"
+            python init.py --config "$profile"
+            echo "::endgroup::"
+          done
+
+      - name: Build example config per editor.target
+        run: |
+          for target in vscode claude-code cursor codex both all; do
+            echo "::group::python init.py --config /tmp/target-$target.yml (editor.target=$target)"
+            python - "$target" <<'EOF'
+          import sys
+          import yaml
+
+          target = sys.argv[1]
+          with open("config/project.config.example.yml") as f:
+              config = yaml.safe_load(f)
+          config["editor"]["target"] = target
+          with open(f"/tmp/target-{target}.yml", "w") as f:
+              yaml.safe_dump(config, f, sort_keys=False)
+          EOF
+            python init.py --config "/tmp/target-$target.yml"
+            echo "::endgroup::"
+          done
+
+      # ITEM-021: the canonical example-config build runs LAST so the
+      # post-build guardrail steps below validate the canonical tree,
+      # not the last profile/target build.
+      - name: Build resolved/ artifacts (canonical)
         run: python init.py --config config/project.config.example.yml
 
       - name: Check for unresolved tokens in .github/ tree

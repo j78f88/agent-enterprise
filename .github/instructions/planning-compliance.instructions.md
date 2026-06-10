@@ -6,6 +6,8 @@ applies_to: '**'
 description: Use when reviewing draft plans for architecture compliance, checking
   sprint plans against project conventions, or validating technical design decisions.
 applyTo: '**'
+paths:
+- '**'
 ---
 
 # Planning Compliance Checklist

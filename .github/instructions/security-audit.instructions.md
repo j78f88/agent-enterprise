@@ -6,6 +6,8 @@ applies_to: docs/security/SECURITY_CHANGELOG.md, docs/security/FILE_HASHES.md
 description: Procedures the @security agent follows for audits, changelog governance,
   hash registry management, and sprint gate integration.
 applyTo: docs/security/SECURITY_CHANGELOG.md, docs/security/FILE_HASHES.md
+paths:
+- docs/security/SECURITY_CHANGELOG.md, docs/security/FILE_HASHES.md
 ---
 
 # Security Audit Procedures

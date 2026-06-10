@@ -7,6 +7,8 @@ description: Use when creating, updating, or reading engagement tracking files (
   gate-log.md, deployment-log.md). Defines the ENG-NNN numbering scheme, engagement
   folder structure, file formats, and status lifecycle.
 applyTo: '**'
+paths:
+- '**'
 ---
 
 # Engagement Tracking Format

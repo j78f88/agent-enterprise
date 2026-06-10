@@ -106,7 +106,7 @@ def validate_frontmatter(text: str, kind: str, path: Path) -> list[str]:
 # SECURITY VALIDATION — Phase 0 Enhancement
 # =============================================================================
 
-VALID_EDITOR_TARGETS = {'vscode', 'claude-code', 'cursor', 'both', 'all'}
+VALID_EDITOR_TARGETS = {'vscode', 'claude-code', 'cursor', 'codex', 'both', 'all'}
 
 
 class SecurityValidator:
@@ -406,6 +406,7 @@ def transform_frontmatter_for_target(fm: dict, target: str) -> dict:
     - vscode / both: emit ``applyTo`` (comma-joined string).
     - claude-code:   emit ``paths`` (list).
     - cursor:        leave ``scope`` for the .mdc emitter.
+    - codex:         no rewrite — AGENTS.md has no scoping frontmatter.
     - all:           emit both ``applyTo`` and ``paths``.
 
     If neither field is present, the frontmatter is returned unchanged.
@@ -423,6 +424,7 @@ def transform_frontmatter_for_target(fm: dict, target: str) -> dict:
         out['applyTo'] = _scope_as_string(scope)
         out['paths'] = _scope_as_list(scope)
     # cursor: handled by emit_cursor_mdc, no rewrite here
+    # codex: no rewrite — AGENTS.md carries no per-file scoping frontmatter
     return out
 
 
@@ -568,10 +570,12 @@ def generate_agent_md(name: str, fm: dict, agent_body: str) -> str:
     if len(full_desc) > 1024:
         full_desc = full_desc[:1021] + '...'
 
-    # Build frontmatter
+    # Build frontmatter. json.dumps produces a double-quoted scalar whose
+    # escapes (\" \\ \uXXXX) are all valid YAML — safe even when the
+    # description itself contains double quotes.
     fm_lines = ['---']
     fm_lines.append(f'name: {name}')
-    fm_lines.append(f'description: "{full_desc}"')
+    fm_lines.append(f'description: {json.dumps(full_desc, ensure_ascii=False)}')
     if tools:
         fm_lines.append(f'tools: [{", ".join(tools)}]')
     if agents_list:
@@ -583,6 +587,25 @@ def generate_agent_md(name: str, fm: dict, agent_body: str) -> str:
     fm_lines.append('---')
 
     return '\n'.join(fm_lines) + '\n\n' + agent_body + '\n'
+
+
+def generate_claude_subagent_md(name: str, fm: dict, body: str) -> str:
+    """Render a Claude Code native subagent file from a resolved agent wrapper.
+
+    Claude Code discovers subagents as <claude_agents>/<name>.md with YAML
+    frontmatter carrying `name` and `description`. The wrapper's `tools` list
+    uses VS Code tool identifiers (read/search/edit/...) which have no clean
+    mapping onto Claude Code tool names, so `tools` is deliberately omitted —
+    Claude Code then gives the subagent its default (full) tool set.
+    """
+    description = fm.get('description', '')
+    fm_lines = ['---']
+    fm_lines.append(f"name: {fm.get('name', name)}")
+    # json.dumps yields a YAML-valid double-quoted scalar even when the
+    # description contains double quotes (see generate_agent_md).
+    fm_lines.append(f'description: {json.dumps(description, ensure_ascii=False)}')
+    fm_lines.append('---')
+    return '\n'.join(fm_lines) + '\n\n' + body.strip() + '\n'
 
 
 def generate_agents(output: Path, tokens: dict) -> list[str]:
@@ -704,6 +727,11 @@ def suppress_skill_invocability(output: Path, agent_names: list[str]) -> int:
 # literal apart from a genuinely-unresolved token. The backslash is removed
 # only at the very end of the build by `strip_escapes()`, after every scan
 # has run, leaving a clean '{{...}}' literal in the deployed files.
+#
+# Authoring convention for brace literals in deployable docs: only the
+# no-dot form (e.g. '\{{tokens}}') may be used — after strip_escapes() it is
+# still distinguishable from a real {{namespace.key}} leak. Dotted token
+# names in prose must be written without braces (e.g. `paths.claude_commands`).
 
 _TOKEN_RE = re.compile(r"(?<!\$)(\\?)\{\{([^}]+)\}\}")
 
@@ -737,6 +765,39 @@ def find_unresolved_tokens(text: str) -> list:
     return [
         "{{" + m.group(2) + "}}"
         for m in _TOKEN_RE.finditer(text)
+        if m.group(1) != "\\"
+    ]
+
+
+# Stricter detector for the DEPLOYED tree: only matches real build tokens of
+# the form {{namespace.key}} (at least one dot required; flatten() can emit
+# multi-level keys like {{a.b.c}}, so one-or-more dot segments are accepted).
+# Mirrors scripts/check_tokens.py `_TOKEN_RE` so the post-deploy scan and the
+# CI guardrail agree on what counts as a leak.
+_REAL_TOKEN_RE = re.compile(
+    r"(?<!\$)(\\?)\{\{([a-z_][a-z0-9_]*(?:\.[a-z_][a-z0-9_]*)+)\}\}"
+)
+
+
+def find_unresolved_real_tokens(text: str) -> list:
+    """Return the {{namespace.key}} tokens that are genuine substitution leaks.
+
+    Deployed-tree semantics: the post-deploy scan runs on FINAL files, AFTER
+    strip_escapes() has removed the authoring backslashes — so an intentional
+    documentation literal like '{{tokens}}' is indistinguishable by shape from
+    an escaped one. Only dotted namespace.key forms can be real config tokens
+    (all config keys are namespaced); no-dot brace literals are documentation
+    and are NOT flagged. This matches scripts/check_tokens.py's `_TOKEN_RE`
+    exactly, so a deploy that passes here also passes the CI guardrail.
+
+    Do NOT use this for the pre-strip scans during resolution — there,
+    find_unresolved_tokens() must keep flagging every non-escaped {{...}}
+    regardless of shape, because escapes still carry their backslash and
+    anything else brace-wrapped is a likely authoring mistake.
+    """
+    return [
+        "{{" + m.group(2) + "}}"
+        for m in _REAL_TOKEN_RE.finditer(text)
         if m.group(1) != "\\"
     ]
 
@@ -779,7 +840,126 @@ def substitute(text: str, tokens: dict) -> str:
     return result
 
 
-def deploy_resolved(output: Path, config: dict, agent_count: int) -> int:
+# Markers delimiting the managed block init.py owns inside an adopter's
+# AGENTS.md. Everything outside these markers belongs to the adopter and is
+# never modified.
+CODEX_BLOCK_BEGIN = "<!-- agent-enterprise:begin -->"
+CODEX_BLOCK_END = "<!-- agent-enterprise:end -->"
+
+
+def emit_codex_agents_md(output_dir: Path, tokens: dict, target_file: Path) -> bool:
+    """Merge the agent-enterprise managed block into an adopter-owned AGENTS.md.
+
+    Renders a block delimited by CODEX_BLOCK_BEGIN / CODEX_BLOCK_END containing
+    a provenance note (no timestamps — output must be deterministic), the agent
+    roster from ``output_dir/agents/*.agent.md`` (name + description from
+    frontmatter, sorted by name), and a pointer to the deployed skills and
+    instructions directories (``paths.skills_deploy_dir`` /
+    ``paths.instructions_dir`` tokens).
+
+    Merge semantics — content outside the markers is NEVER touched:
+      - both markers present: replace only the content between the first begin
+        marker and the first end marker (the marker lines are preserved);
+      - no markers: append the block at the end, separated by a blank line;
+      - file missing: create it containing just the block;
+      - malformed markers (begin without end, end without begin, or end before
+        begin): print a warning and leave the file untouched — no data loss;
+      - duplicate markers (more than one begin or end marker, e.g. a verbatim
+        marker example elsewhere in the file): print a warning and leave the
+        file untouched — splicing at the first occurrence could eat adopter
+        content.
+
+    Line endings: the file is read and written without newline translation, so
+    out-of-marker bytes are preserved exactly. The managed block itself is
+    rendered with the file's dominant newline convention (CRLF files stay
+    CRLF; everything else, and newly created files, use LF).
+
+    A second run with unchanged inputs is byte-identical.
+    Returns True if the file was written, False if it was skipped.
+    """
+    # --- Render the managed block (deterministic: sorted roster, no dates) ---
+    roster = []
+    src_agents = output_dir / "agents"
+    if src_agents.exists():
+        for md in sorted(src_agents.glob("*.agent.md")):
+            fm, _body = parse_frontmatter(md.read_text(encoding="utf-8"))
+            name = str(fm.get("name") or md.name[: -len(".agent.md")])
+            desc = str(fm.get("description", "")).strip()
+            roster.append((name, desc))
+    roster.sort(key=lambda item: item[0])
+
+    skills_dir = tokens.get("paths.skills_deploy_dir", ".github/agents/")
+    instructions_dir = tokens.get("paths.instructions_dir", ".github/instructions")
+
+    lines = [
+        CODEX_BLOCK_BEGIN,
+        "<!-- Generated by agent-enterprise init.py — edit the sources under "
+        "skills/, instructions/, and agents/, not this block. -->",
+        "",
+        "## Agent roster (agent-enterprise)",
+        "",
+    ]
+    if roster:
+        for name, desc in roster:
+            lines.append(f"- **{name}** — {desc}" if desc else f"- **{name}**")
+    else:
+        lines.append("_No agents generated._")
+    lines += [
+        "",
+        f"Deployed skills live under `{skills_dir}` and shared instructions "
+        f"under `{instructions_dir}`.",
+        CODEX_BLOCK_END,
+    ]
+    block = "\n".join(lines)
+
+    # --- Merge into the target file without touching out-of-marker content ---
+    if target_file.exists():
+        # newline="" disables universal-newline translation: the exact bytes
+        # (CRLF included) are spliced, so out-of-marker content round-trips.
+        with open(target_file, encoding="utf-8", newline="") as f:
+            existing = f.read()
+        begin_count = existing.count(CODEX_BLOCK_BEGIN)
+        end_count = existing.count(CODEX_BLOCK_END)
+        if begin_count > 1 or end_count > 1:
+            print(
+                f"  ⚠  {target_file}: multiple agent-enterprise markers found "
+                f"({begin_count} begin / {end_count} end) — leaving file "
+                "untouched (keep exactly one marker pair; indent or alter any "
+                "marker examples so they don't match verbatim)."
+            )
+            return False
+        begin = existing.find(CODEX_BLOCK_BEGIN)
+        end = existing.find(CODEX_BLOCK_END)
+        if (begin == -1) != (end == -1) or (begin != -1 and end < begin):
+            print(
+                f"  ⚠  {target_file}: malformed agent-enterprise markers — "
+                "leaving file untouched (fix or remove the markers and re-run)."
+            )
+            return False
+        # Render the block with the file's dominant newline convention.
+        crlf_count = existing.count("\r\n")
+        bare_lf_count = existing.count("\n") - crlf_count
+        newline = "\r\n" if crlf_count > bare_lf_count else "\n"
+        nl_block = block.replace("\n", newline) if newline != "\n" else block
+        if begin != -1:
+            # Replace marker-to-marker (inclusive); everything else verbatim.
+            merged = existing[:begin] + nl_block + existing[end + len(CODEX_BLOCK_END):]
+        elif not existing.strip():
+            merged = nl_block + newline
+        else:
+            merged = existing.rstrip("\r\n") + newline * 2 + nl_block + newline
+    else:
+        merged = block + "\n"
+
+    target_file.parent.mkdir(parents=True, exist_ok=True)
+    with open(target_file, "w", encoding="utf-8", newline="") as f:
+        f.write(merged)
+    return True
+
+
+def deploy_resolved(
+    output: Path, config: dict, agent_count: int, stale_agent_names=()
+) -> int:
     """Copy resolved/ into the configured deploy dirs under .github/.
 
     Mirrors the manual "Next steps" copy so the deployed tree (the files
@@ -787,14 +967,33 @@ def deploy_resolved(output: Path, config: dict, agent_count: int) -> int:
     number of unresolved-token hits found in the deployed tree (0 = clean).
     Callers should treat a non-zero return as a deploy failure.
 
+    ``stale_agent_names`` lists agents the build itself flagged as stale
+    (setup-only skills skipped after setup_complete flipped, or wrappers
+    pruned because their source skill is gone). Their previously deployed
+    artifacts — the <name>.agent.md wrapper and <name>/ skill bundle under
+    skills_deploy_dir, plus <name>.md in claude_commands / claude_agents /
+    cursor_commands — are removed so the deployed tree matches what a clean
+    clone would produce. Only build-flagged names are touched; adopter-owned
+    files in those directories are never pruning candidates.
+
     Also seeds paths.claude_commands (default: .claude/commands/) with one
     <name>.md file per agent — the filename (without .md) becomes the Claude
-    Code slash-command name.
+    Code slash-command name. When editor.target is 'claude-code', 'both', or
+    'all', paths.claude_agents (default: .claude/agents/) is seeded with one
+    native Claude Code subagent per agent. When editor.target is 'cursor' or
+    'all', paths.cursor_commands (default: .cursor/commands/) is seeded the
+    same way as claude_commands. When editor.target is 'codex' or 'all', a
+    managed block is merged into paths.codex_agents_md (default: AGENTS.md)
+    via emit_codex_agents_md().
     """
     paths = config.get("paths", {})
     instructions_dir = paths.get("instructions_dir")
     skills_deploy_dir = paths.get("skills_deploy_dir")
     claude_commands = paths.get("claude_commands")
+    claude_agents = paths.get("claude_agents")
+    cursor_commands = paths.get("cursor_commands")
+    codex_agents_md = paths.get("codex_agents_md")
+    editor_target = config.get("editor", {}).get("target", "both")
 
     if not instructions_dir or not skills_deploy_dir:
         print("⚠  Cannot deploy: paths.instructions_dir and/or "
@@ -806,6 +1005,9 @@ def deploy_resolved(output: Path, config: dict, agent_count: int) -> int:
         ("paths.instructions_dir", instructions_dir),
         ("paths.skills_deploy_dir", skills_deploy_dir),
         ("paths.claude_commands", claude_commands),
+        ("paths.claude_agents", claude_agents),
+        ("paths.cursor_commands", cursor_commands),
+        ("paths.codex_agents_md", codex_agents_md),
     ]:
         if _dest_val and Path(_dest_val).is_absolute():
             print(
@@ -821,6 +1023,23 @@ def deploy_resolved(output: Path, config: dict, agent_count: int) -> int:
     skills_dest.mkdir(parents=True, exist_ok=True)
 
     deployed = 0
+
+    # Prune deployed artifacts of agents the build flagged as stale (e.g. the
+    # setup-only onboarding skill after setup_complete flips). Without this,
+    # a committed tree keeps zombie files a clean clone can never reproduce.
+    for stale_name in sorted(set(stale_agent_names)):
+        stale_files = [skills_dest / f"{stale_name}.agent.md"]
+        for seeded_dir in (claude_commands, claude_agents, cursor_commands):
+            if seeded_dir:
+                stale_files.append(Path(seeded_dir) / f"{stale_name}.md")
+        for stale_file in stale_files:
+            if stale_file.is_file():
+                stale_file.unlink()
+                print(f"  removed stale deployed file: {stale_file}")
+        stale_bundle = skills_dest / stale_name
+        if stale_bundle.is_dir():
+            shutil.rmtree(stale_bundle)
+            print(f"  removed stale deployed skill bundle: {stale_bundle}")
 
     # Instructions: resolved/instructions/*.md -> instructions_dir/
     src_instr = output / "instructions"
@@ -859,19 +1078,86 @@ def deploy_resolved(output: Path, config: dict, agent_count: int) -> int:
             deployed += 1
         print(f"  seeded {len(list(src_agents.glob('*.agent.md')))} Claude Code slash command(s) → {claude_dest}")
 
+    # Claude Code native subagents: resolved/agents/*.agent.md -> claude_agents/<name>.md
+    # Gated on the Claude Code-consuming targets ('claude-code', 'both',
+    # 'all'). Each file re-renders the wrapper with Claude Code subagent
+    # frontmatter (name + description; tools omitted — see
+    # generate_claude_subagent_md). Sorted iteration, plain overwrite: a
+    # second deploy with unchanged inputs is byte-identical.
+    seed_claude_agents = editor_target in ('claude-code', 'both', 'all')
+    if agent_count and src_agents.exists() and claude_agents and seed_claude_agents:
+        subagents_dest = Path(claude_agents)
+        subagents_dest.mkdir(parents=True, exist_ok=True)
+        seeded_subagents = 0
+        for md in sorted(src_agents.glob("*.agent.md")):
+            # planner.agent.md → planner.md
+            name = md.name[: -len(".agent.md")]
+            fm, body = parse_frontmatter(md.read_text(encoding="utf-8"))
+            (subagents_dest / f"{name}.md").write_text(
+                generate_claude_subagent_md(name, fm or {}, body),
+                encoding="utf-8",
+            )
+            deployed += 1
+            seeded_subagents += 1
+        print(f"  seeded {seeded_subagents} Claude Code subagent(s) → {subagents_dest}")
+
+    # Cursor commands: resolved/agents/*.agent.md -> cursor_commands/<name>.md
+    # Gated on cursor's composite memberships ('cursor', 'all') — mirrors the
+    # emit_cursor gate for .cursor/rules/*.mdc. Wrappers are copied verbatim,
+    # consistent with the Claude commands seeding: agent wrapper frontmatter
+    # carries no applies_to/scope field, and transform_frontmatter_for_target
+    # is a deliberate no-op for 'cursor' (scoping is the .mdc emitter's job).
+    seed_cursor_commands = editor_target in ('cursor', 'all')
+    if agent_count and src_agents.exists() and cursor_commands and seed_cursor_commands:
+        cursor_dest = Path(cursor_commands)
+        cursor_dest.mkdir(parents=True, exist_ok=True)
+        for md in sorted(src_agents.glob("*.agent.md")):
+            # planner.agent.md → planner.md
+            name = md.name[: -len(".agent.md")]
+            shutil.copy(md, cursor_dest / f"{name}.md")
+            deployed += 1
+        print(f"  seeded {len(list(src_agents.glob('*.agent.md')))} Cursor command(s) → {cursor_dest}")
+
+    # Codex AGENTS.md managed block: agent roster + deploy-dir pointers merged
+    # idempotently between <!-- agent-enterprise:begin/end --> markers in the
+    # adopter-owned file. Gated on codex's composite memberships ('codex',
+    # 'all'), mirroring the cursor_commands gate above. Content outside the
+    # markers is never modified; the file is deliberately excluded from the
+    # post-deploy token scan because the adopter owns everything around the
+    # managed block.
+    if editor_target in ('codex', 'all') and codex_agents_md:
+        if emit_codex_agents_md(output, flatten(config), Path(codex_agents_md)):
+            print(f"  merged Codex managed block → {codex_agents_md}")
+
     print(f"  deployed {deployed} file(s) to {instr_dest} and {skills_dest}")
 
-    # Post-deploy guardrail: the deployed tree must be token-free.
+    # Post-deploy guardrail: the deployed tree must be free of REAL token
+    # leaks. These files are post-strip_escapes(), so intentional no-dot
+    # documentation literals like '{{tokens}}' are clean output here —
+    # find_unresolved_real_tokens() flags only dotted {{namespace.key}}
+    # forms, matching scripts/check_tokens.py.
     leftover = []
     for md in sorted(skills_dest.rglob("*.md")):
-        if find_unresolved_tokens(md.read_text(encoding="utf-8")):
+        if find_unresolved_real_tokens(md.read_text(encoding="utf-8")):
             leftover.append(md)
     for md in sorted(instr_dest.rglob("*.md")):
-        if find_unresolved_tokens(md.read_text(encoding="utf-8")):
+        if find_unresolved_real_tokens(md.read_text(encoding="utf-8")):
             leftover.append(md)
     if claude_commands:
         for md in sorted(Path(claude_commands).rglob("*.md")):
-            if find_unresolved_tokens(md.read_text(encoding="utf-8")):
+            if find_unresolved_real_tokens(md.read_text(encoding="utf-8")):
+                leftover.append(md)
+    # Scan claude_agents whenever the token is set — even when the current
+    # target gates the seeding off, a previously seeded (or stale) file in
+    # the directory must still fail the deploy if it leaks tokens. Mirrors
+    # the ungated claude_commands / cursor_commands scans above and below.
+    if claude_agents and Path(claude_agents).is_dir():
+        for md in sorted(Path(claude_agents).rglob("*.md")):
+            if find_unresolved_real_tokens(md.read_text(encoding="utf-8")):
+                leftover.append(md)
+    if cursor_commands:
+        for md in sorted(Path(cursor_commands).rglob("*.md")):
+            if find_unresolved_real_tokens(md.read_text(encoding="utf-8")):
                 leftover.append(md)
 
     return len(leftover)
@@ -998,6 +1284,10 @@ def main():
 
     # --- Skills (SKILL.md or {name}.skill.md files → resolved as SKILL.md) ---
     setup_complete = config.get('setup_complete', False)
+    # Agents whose artifacts must be purged from resolved/ and the deployed
+    # tree: setup-only skills skipped this build, plus any wrapper whose
+    # source skill no longer produces it (pruned after generation below).
+    stale_agent_names: set[str] = set()
     skills_src = Path("skills")
     if skills_src.exists():
         for skill_dir in sorted(skills_src.iterdir()):
@@ -1016,10 +1306,19 @@ def main():
             fm, _ = parse_frontmatter(original)
             if fm.get('lifecycle') == 'setup-only' and setup_complete:
                 print(f"  skipped (setup complete): {skill_dir.name}")
+                skipped_name = fm.get('name', skill_dir.name)
+                stale_agent_names.add(skipped_name)
                 # Clean stale resolved output if it exists
                 stale_dir = output / "skills" / skill_dir.name
                 if stale_dir.exists():
                     shutil.rmtree(stale_dir)
+                # Mirror the cleanup for the skill's agent wrapper — a stale
+                # resolved/agents/<name>.agent.md would otherwise be
+                # re-deployed as a zombie artifact.
+                stale_wrapper = output / "agents" / f"{skipped_name}.agent.md"
+                if stale_wrapper.exists():
+                    stale_wrapper.unlink()
+                    print(f"  removed stale agent wrapper: {stale_wrapper}")
                 continue
 
             # Output as SKILL.md (VS Code convention) regardless of source filename
@@ -1098,19 +1397,36 @@ def main():
             copied_count += 1
             _apply_scope_and_emit(instr.stem.replace('.instructions', ''), dest, dest.read_text(encoding="utf-8"))
 
-    # --- Agent wrappers (VS Code only) ---
+    # --- Agent wrappers (all valid targets) ---
+    # Every valid editor.target gets resolved/agents/*.agent.md — per-target
+    # emission (Claude Code subagents, Cursor commands, Codex AGENTS.md
+    # managed block) consumes these wrappers downstream.
     editor_target = config.get('editor', {}).get('target', 'both')
     agent_count = 0
     suppressed_count = 0
 
-    if editor_target in ('vscode', 'both', 'all'):
+    if editor_target in VALID_EDITOR_TARGETS:
         print()
         print("Generating agent wrappers...")
         agent_names = generate_agents(output, tokens)
         agent_count = len(agent_names)
 
+        # Prune wrappers from previous builds whose skill is now skipped,
+        # renamed, or deleted — resolved/agents/ must contain exactly the
+        # wrappers generated by THIS build.
+        agents_out = output / "agents"
+        if agents_out.exists():
+            for stale in sorted(agents_out.glob("*.agent.md")):
+                stale_name = stale.name[: -len(".agent.md")]
+                if stale_name not in agent_names:
+                    stale.unlink()
+                    stale_agent_names.add(stale_name)
+                    print(f"  removed stale agent wrapper: {stale}")
+
         if editor_target == 'vscode' and agent_names:
-            # Phase 6: suppress skill discoverability when agents exist
+            # Phase 6 (vscode-only): suppress skill discoverability when
+            # agents exist. Claude Code / Cursor / Codex must NOT get
+            # user-invocable: false skills.
             suppressed_count = suppress_skill_invocability(output, agent_names)
 
         if agent_count:
@@ -1168,7 +1484,10 @@ def main():
                   "Fix the config and re-run with --deploy.")
             sys.exit(1)
         print("Deploying resolved/ into configured deploy dirs...")
-        leftover = deploy_resolved(output, config, agent_count)
+        leftover = deploy_resolved(
+            output, config, agent_count,
+            stale_agent_names=sorted(stale_agent_names),
+        )
         if leftover < 0:
             sys.exit(1)
         if leftover > 0:

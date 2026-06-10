@@ -5,6 +5,8 @@ version: 1.0.0
 applies_to: '**'
 description: severity-levels instruction
 applyTo: '**'
+paths:
+- '**'
 ---
 
 # Severity Levels — Finding Classification
