@@ -60,7 +60,7 @@ This agent reads and follows:
 
 ```bash
 cd 
-python init.py --config config/project.config.yml
+python init.py --config config/project.config.example.yml
 ```
 
 After build completes, report:
@@ -99,10 +99,10 @@ Time the build:
 
 ```bash
 # Cross-platform: use Node.js timer
-node -e "const s=Date.now(); require('child_process').execSync('python init.py --config config/project.config.yml', {stdio:'inherit'}); console.log(\`Build time: \${((Date.now()-s)/1000).toFixed(1)}s\`)"
+node -e "const s=Date.now(); require('child_process').execSync('python init.py --config config/project.config.example.yml', {stdio:'inherit'}); console.log(\`Build time: \${((Date.now()-s)/1000).toFixed(1)}s\`)"
 ```
 
-(On Windows/PowerShell, `Measure-Command { python init.py --config config/project.config.yml 2>&1 } | Select-Object TotalSeconds` also works.)
+(On Windows/PowerShell, `Measure-Command { python init.py --config config/project.config.example.yml 2>&1 } | Select-Object TotalSeconds` also works.)
 
 Report build duration. Flag if over 30 as WARNING.
 

@@ -106,7 +106,7 @@ commands:
   test: "python -m pytest tests/ -v"
   typecheck: ""
   lint: ""
-  build: "python init.py --config config/project.config.yml"
+  build: "python init.py --config config/project.config.example.yml"
   e2e: "python -m pytest tests/ -v"
   coverage: "python -m pytest tests/ --cov=. -v"
   coverage_store: "python -m pytest tests/ --cov=. -v"

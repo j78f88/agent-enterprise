@@ -51,6 +51,33 @@ def test_private_config_flagged(tmp_path: Path) -> None:
     assert config_arg == "config/project.config.yml"
 
 
+def test_canonical_config_in_quoted_command_not_flagged(tmp_path: Path) -> None:
+    """Trailing quote/comma punctuation around the path must not be captured.
+
+    The deployed perf skill embeds the build command inside a JS string:
+    execSync('python init.py --config <path>', ...) — the closing quote and
+    comma belong to the surrounding code, not the config path.
+    """
+    md = _write_md(
+        tmp_path,
+        "node -e \"require('child_process').execSync("
+        "'python init.py --config config/project.config.example.yml',"
+        " {stdio:'inherit'})\"\n",
+    )
+    assert cbc.check_file(md) == []
+
+
+def test_private_config_in_quoted_command_still_flagged(tmp_path: Path) -> None:
+    """Punctuation stripping must not mask a real non-canonical reference."""
+    md = _write_md(
+        tmp_path,
+        "execSync('python init.py --config config/project.config.yml',)\n",
+    )
+    findings = cbc.check_file(md)
+    assert len(findings) == 1
+    assert findings[0][1] == "config/project.config.yml"
+
+
 def test_init_without_config_not_flagged(tmp_path: Path) -> None:
     """`python init.py` without --config should not be flagged."""
     md = _write_md(tmp_path, "Run `python init.py` to build.\n")
