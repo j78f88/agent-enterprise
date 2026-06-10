@@ -17,8 +17,8 @@
 - CI builds every shipped profile, not just the example config, proving all
   profiles resolve token-free.
 - README platform claims are honest in the interim: the OpenAI Codex "Ready"
-  cell carries a footnote until Sprint 4 (platform parity) delivers it.
-- Sprints 4–7 are staged: one draft plan each in `docs/planning/drafts/` and
+  cell carries a footnote until the platform-parity sprint delivers it.
+- The four roadmap themes are staged: one draft plan each in `docs/planning/drafts/` and
   ledger ITEMs, ready for promotion sprint-by-sprint.
 
 ## Why This Sprint
@@ -30,7 +30,7 @@ to close the gap upward — make the claims true. Nothing downstream can start
 cleanly until (a) the PLAN.md non-goal that forbids owning a dispatcher is
 revised by ADR, (b) the deprecated-API debt that Mode 3 code would inherit is
 paid, and (c) the planning surface (drafts, ledger, CI matrix) is trustworthy.
-All six task groups are low blast radius and unblock Sprints 4–7.
+All six task groups are low blast radius and unblock the four staged roadmap drafts.
 
 ## Technical Tasks
 
@@ -89,10 +89,10 @@ Files: `README.md`
 
 - [ ] Add a footnote to the OpenAI Codex "✅ Ready" cell (README ~L321):
       Codex consumes the deployed Markdown + AGENTS.md convention today;
-      native target emission lands with platform parity (Sprint 4).
+      native target emission lands with the platform-parity draft.
 - [ ] No badge changes; the Works Everywhere table stays.
 
-### Task Group 6: Seed Sprint 4–7 draft plans + ledger (ITEM-017..020)
+### Task Group 6: Seed the four roadmap draft plans + ledger (ITEM-017..020)
 Files: `docs/planning/drafts/platform-parity-draft-plan.md`, `docs/planning/drafts/mode2-dispatcher-promotion-draft-plan.md`, `docs/planning/drafts/mode3-coordinator-promotion-draft-plan.md`, `docs/planning/drafts/adopter-bootstrap-draft-plan.md`, `docs/planning/BACKLOG_LEDGER.md`
 
 - [ ] Author the four roadmap draft plans (same template as this one), each
@@ -125,7 +125,7 @@ Files: `docs/planning/drafts/platform-parity-draft-plan.md`, `docs/planning/draf
 - [ ] `docs/planning/drafts/` contains only pending work; archive rule applied.
 - [ ] CI builds 4 configs (example + 3 profiles) token-free.
 - [ ] README Codex cell footnoted.
-- [ ] Sprints 4–7 staged as drafts + ledger ITEMs.
+- [ ] Four roadmap drafts staged + ledger ITEMs.
 
 ## Risks
 

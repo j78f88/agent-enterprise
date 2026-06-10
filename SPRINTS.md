@@ -17,7 +17,7 @@
 - [ ] Stale drafts cleanup + archive (ITEM-015)
 - [ ] CI builds all profiles (ITEM-016)
 - [ ] Interim README Codex honesty footnote
-- [ ] Seed Sprint 4–7 draft plans + ledger ITEMs (ITEM-017..020)
+- [ ] Seed four roadmap draft plans + ledger ITEMs (ITEM-017..020)
 
 ### Tasks
 
@@ -26,7 +26,7 @@
 - [ ] TG3: stale drafts cleanup/archive (ITEM-015)
 - [ ] TG4: CI profile build matrix (ITEM-016)
 - [ ] TG5: README Codex footnote
-- [ ] TG6: seed Sprint 4–7 drafts + ledger (ITEM-017..020)
+- [ ] TG6: seed four roadmap drafts + ledger (ITEM-017..020)
 
 ### Notes
 
