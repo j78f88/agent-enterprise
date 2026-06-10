@@ -70,7 +70,7 @@ Ask the deployer about their project:
 4. Main branch name (main vs master)
 5. Monorepo namespace (if applicable, or "none")
 6. Team size context (solo / small team / larger team)
-7. Platform target (VS Code only / Claude Code only / both)
+7. Platform target (VS Code / Claude Code / Cursor / Codex / a mix)
 
 ### Step 2 — Profile Selection
 
@@ -131,12 +131,10 @@ Check for `✓ All tokens resolved`. If unresolved tokens remain, identify missi
 
 ### Step 6 — Deploy Resolved Files
 
-Copy resolved output to the deployer's project. Adapt paths to their structure:
+Re-run the build with `--deploy` — it copies the `.github` tree (skills, instructions, agent wrappers) and seeds the platform surfaces for their `editor.target`: `paths.claude_commands` always, plus `paths.claude_agents`, `paths.cursor_commands` + `.cursor/rules/`, or an `AGENTS.md` managed block per target. See `CLAUDE_CODE_SETUP.md` for details.
 
 ```bash
-cp -r resolved/skills/* <their-agents-dir>/
-cp -r resolved/instructions/* <their-instructions-dir>/
-cp -r resolved/agents/* <their-agents-dir>/   # VS Code only
+python init.py --config config/project.config.example.yml --deploy
 ```
 
 ### Step 7 — Seed Planning Files
@@ -145,7 +143,7 @@ Check what planning infrastructure already exists. Only seed what is missing fro
 
 ### Step 8 — Verification
 
-Confirm: skill files exist, instructions exist, agent wrappers exist (VS Code), no unresolved `\{{tokens}}` in resolved files, planning files seeded. Report as a checklist.
+Confirm: skill files exist, instructions exist, agent wrappers exist, the platform surfaces for their `editor.target` are seeded, no unresolved `\{{tokens}}` in resolved files, planning files seeded. Report as a checklist.
 
 ### Step 9 — Self-Removal
 
@@ -157,13 +155,13 @@ Once verification passes:
 
 ---
 
-> **Claude Code setup:** See `CLAUDE_CODE_SETUP.md` in this directory for Claude Code slash-command configuration and deploy path details.
+> **Platform setup:** See `CLAUDE_CODE_SETUP.md` in this directory for Claude Code slash-command and subagent configuration, plus the Cursor and Codex deploy surfaces.
 
 ## If Something Goes Wrong
 
 - Config validation fails — read the error, identify the problematic value, help fix it.
 - Token not resolving — check spelling against `project.config.example.yml` field names.
-- Agent wrapper not generating — verify `editor.target` is `"vscode"` or `"both"`.
+- Agent wrapper not generating — verify `editor.target` is a valid value and the skill carries `agent:` metadata.
 - Permission denied — suggest creating target directories first.
 
 ---

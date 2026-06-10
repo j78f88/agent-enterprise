@@ -14,6 +14,7 @@
 [![Copilot](https://img.shields.io/badge/GitHub%20Copilot-Ready-blue?logo=github)](https://github.com/features/copilot)
 [![Claude](https://img.shields.io/badge/Claude%20Code-Ready-orange)](https://claude.ai)
 [![Cursor](https://img.shields.io/badge/Cursor-Ready-purple)](https://cursor.sh)
+[![Codex](https://img.shields.io/badge/OpenAI%20Codex-Ready-green)](https://openai.com/codex/)
 
 <br />
 
@@ -318,9 +319,9 @@ author once → resolve with tokens → deploy to any platform:
 | **GitHub Copilot** | ✅ Ready |
 | **Claude Code** | ✅ Ready |
 | **Cursor** | ✅ Ready |
-| **OpenAI Codex** | ✅ Ready\* |
+| **OpenAI Codex** | ✅ Ready |
 
-\*Codex consumes the deployed Markdown artifacts via the repo's `AGENTS.md` convention today; a native emission target (`editor.target: codex`) is planned ([ITEM-017](docs/planning/BACKLOG_LEDGER.md)).
+Every cell is backed by `tests/test_platform_emission.py`. See **[docs/PLATFORMS.md](docs/PLATFORMS.md)** for the per-platform artifact map — what each `editor.target` emits, where it lands, and how each platform consumes it.
 
 ---
 
