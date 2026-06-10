@@ -4,7 +4,7 @@
 # Copy to project.config.yml and replace project.name, namespace, URLs, and repo with your values.
 
 editor:
-  target: "both"                    # "vscode" | "claude-code" | "both"
+  target: "both"                    # "vscode" | "claude-code" | "cursor" | "codex" | "both" | "all"
 
 project:
   name: "DIY Project Helper"

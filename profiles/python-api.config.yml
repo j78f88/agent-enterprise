@@ -4,7 +4,7 @@
 # Note: bundle size checks in @perf are not applicable — set thresholds to 0.
 
 editor:
-  target: "both"                    # "vscode" | "claude-code" | "both"
+  target: "both"                    # "vscode" | "claude-code" | "cursor" | "codex" | "both" | "all"
 
 project:
   name: "My Python API"            # FIXME

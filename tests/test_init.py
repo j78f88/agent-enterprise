@@ -184,7 +184,7 @@ class TestSecurityValidator:
 class TestEditorTargetValidation:
 
     def test_valid_targets(self):
-        for target in ('vscode', 'claude-code', 'both'):
+        for target in ('vscode', 'claude-code', 'cursor', 'codex', 'both', 'all'):
             assert target in VALID_EDITOR_TARGETS
 
     def test_invalid_target_rejected(self):
@@ -783,6 +783,14 @@ class TestEditorTargetsExtended:
         errors, _ = SecurityValidator.validate_config({"editor": {"target": "all"}})
         assert not any("editor.target" in e for e in errors)
 
+    def test_codex_is_valid_target(self):
+        """Sprint 4 TG1: 'codex' is a first-class editor.target value."""
+        assert "codex" in VALID_EDITOR_TARGETS
+
+    def test_codex_target_passes_validator(self):
+        errors, _ = SecurityValidator.validate_config({"editor": {"target": "codex"}})
+        assert not any("editor.target" in e for e in errors)
+
 
 class TestTransformFrontmatterForTarget:
     """3.1: scope: in source frontmatter rewrites to platform-native field."""
@@ -828,6 +836,15 @@ class TestTransformFrontmatterForTarget:
         )
         assert out.get("title") == "X"
         assert out.get("extra") == [1, 2]
+
+    def test_codex_target_is_a_noop(self):
+        """Sprint 4 TG1: AGENTS.md has no scoping frontmatter — codex leaves
+        the frontmatter untouched (no applyTo/paths rewrite)."""
+        fm = {"scope": "docs/**", "description": "d"}
+        out = transform_frontmatter_for_target(fm, "codex")
+        assert out == fm
+        assert "applyTo" not in out
+        assert "paths" not in out
 
 
 class TestEmitCursorMdc:
@@ -933,12 +950,9 @@ class TestSkillCrossReferencePaths:
 # Fail-on-unresolved: hard failure when config key is missing
 # =============================================================================
 
-class TestFailOnUnresolved:
-    """Build must exit non-zero when output contains an unresolved {{token}}."""
-
-    def _make_minimal_config(self, tmp_path: Path, **overrides) -> Path:
-        """Write a minimal valid config YAML to tmp_path/config.yml."""
-        cfg = {
+def make_minimal_config(tmp_path: Path, **overrides) -> Path:
+    """Write a minimal valid config YAML to tmp_path/config.yml."""
+    cfg = {
             "setup_complete": True,
             "editor": {"target": "vscode"},
             "project": {"name": "TestProj", "language": "Python",
@@ -1017,12 +1031,19 @@ class TestFailOnUnresolved:
                          "license_gate": False,
                          "license_denylist": ["GPL-3.0-only"],
                          "license_allowlist": ["MIT"]},
-        }
-        cfg.update(overrides)
-        import yaml as _yaml
-        config_path = tmp_path / "config.yml"
-        config_path.write_text(_yaml.dump(cfg), encoding="utf-8")
-        return config_path
+    }
+    cfg.update(overrides)
+    import yaml as _yaml
+    config_path = tmp_path / "config.yml"
+    config_path.write_text(_yaml.dump(cfg), encoding="utf-8")
+    return config_path
+
+
+class TestFailOnUnresolved:
+    """Build must exit non-zero when output contains an unresolved {{token}}."""
+
+    def _make_minimal_config(self, tmp_path: Path, **overrides) -> Path:
+        return make_minimal_config(tmp_path, **overrides)
 
     def test_missing_config_key_exits_nonzero(self, tmp_path):
         """A skill referencing an unmapped token must cause a non-zero exit."""
@@ -1095,6 +1116,88 @@ class TestFailOnUnresolved:
         finally:
             os.chdir(old_cwd)
             sys.argv = old_argv
+
+
+# =============================================================================
+# Agent-wrapper gate: every valid editor.target generates wrappers
+# (Sprint 4, Task Group 1)
+# =============================================================================
+
+class TestAgentWrapperGate:
+    """Agent wrappers are generated for every valid editor.target, and
+    suppress_skill_invocability fires only for 'vscode'."""
+
+    AGENT_SKILL = (
+        "---\n"
+        "name: architect\n"
+        "kind: skill\n"
+        "description: Designs technical approaches.\n"
+        "when_to_use: write an ADR\n"
+        "user-invocable: true\n"
+        "agent:\n"
+        "  tools: [read, search]\n"
+        "---\n\n"
+        "# Architect\n\nYou design things for {{project.name}}.\n"
+    )
+
+    def _build(self, tmp_path: Path, monkeypatch, target: str) -> Path:
+        """Run a full build in tmp_path with one agent-bearing skill."""
+        config_path = make_minimal_config(tmp_path, editor={"target": target})
+        skill_dir = tmp_path / "skills" / "architect"
+        skill_dir.mkdir(parents=True)
+        (skill_dir / "SKILL.md").write_text(self.AGENT_SKILL, encoding="utf-8")
+        monkeypatch.chdir(tmp_path)
+        monkeypatch.setattr(
+            sys, "argv",
+            ["init.py", "--config", str(config_path),
+             "--allow-frontmatter-warnings"],
+        )
+        main()
+        return tmp_path / "resolved"
+
+    @pytest.mark.parametrize("target", sorted(VALID_EDITOR_TARGETS))
+    def test_every_valid_target_generates_agent_wrappers(
+        self, tmp_path, monkeypatch, target
+    ):
+        resolved = self._build(tmp_path, monkeypatch, target)
+        agent_md = resolved / "agents" / "architect.agent.md"
+        assert agent_md.exists(), (
+            f"editor.target '{target}' must produce resolved/agents/*.agent.md"
+        )
+        text = agent_md.read_text(encoding="utf-8")
+        assert "name: architect" in text
+        assert "{{" not in text, "agent wrapper must be token-free"
+
+    def test_invalid_target_fails_build(self, tmp_path, monkeypatch):
+        with pytest.raises(SystemExit) as exc_info:
+            self._build(tmp_path, monkeypatch, "sublime")
+        assert exc_info.value.code != 0
+        assert not (tmp_path / "resolved" / "agents" / "architect.agent.md").exists(), (
+            "invalid editor.target must not generate agent wrappers"
+        )
+
+    def test_vscode_suppresses_skill_invocability(self, tmp_path, monkeypatch):
+        resolved = self._build(tmp_path, monkeypatch, "vscode")
+        text = (resolved / "skills" / "architect" / "SKILL.md").read_text(
+            encoding="utf-8"
+        )
+        assert "user-invocable: false" in text, (
+            "vscode target must suppress skill invocability for agent-backed skills"
+        )
+
+    @pytest.mark.parametrize(
+        "target", sorted(VALID_EDITOR_TARGETS - {"vscode"})
+    )
+    def test_non_vscode_targets_keep_skills_invocable(
+        self, tmp_path, monkeypatch, target
+    ):
+        resolved = self._build(tmp_path, monkeypatch, target)
+        text = (resolved / "skills" / "architect" / "SKILL.md").read_text(
+            encoding="utf-8"
+        )
+        assert "user-invocable: true" in text, (
+            f"editor.target '{target}' must NOT get user-invocable: false skills"
+        )
 
 
 # =============================================================================

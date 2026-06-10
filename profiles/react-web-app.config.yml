@@ -3,7 +3,7 @@
 # Replace placeholder values (marked with FIXME) before running init.py.
 
 editor:
-  target: "both"                    # "vscode" | "claude-code" | "both"
+  target: "both"                    # "vscode" | "claude-code" | "cursor" | "codex" | "both" | "all"
 
 project:
   name: "My React App"             # FIXME

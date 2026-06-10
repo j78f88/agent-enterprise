@@ -106,7 +106,7 @@ def validate_frontmatter(text: str, kind: str, path: Path) -> list[str]:
 # SECURITY VALIDATION — Phase 0 Enhancement
 # =============================================================================
 
-VALID_EDITOR_TARGETS = {'vscode', 'claude-code', 'cursor', 'both', 'all'}
+VALID_EDITOR_TARGETS = {'vscode', 'claude-code', 'cursor', 'codex', 'both', 'all'}
 
 
 class SecurityValidator:
@@ -406,6 +406,7 @@ def transform_frontmatter_for_target(fm: dict, target: str) -> dict:
     - vscode / both: emit ``applyTo`` (comma-joined string).
     - claude-code:   emit ``paths`` (list).
     - cursor:        leave ``scope`` for the .mdc emitter.
+    - codex:         no rewrite — AGENTS.md has no scoping frontmatter.
     - all:           emit both ``applyTo`` and ``paths``.
 
     If neither field is present, the frontmatter is returned unchanged.
@@ -423,6 +424,7 @@ def transform_frontmatter_for_target(fm: dict, target: str) -> dict:
         out['applyTo'] = _scope_as_string(scope)
         out['paths'] = _scope_as_list(scope)
     # cursor: handled by emit_cursor_mdc, no rewrite here
+    # codex: no rewrite — AGENTS.md carries no per-file scoping frontmatter
     return out
 
 
@@ -1098,19 +1100,24 @@ def main():
             copied_count += 1
             _apply_scope_and_emit(instr.stem.replace('.instructions', ''), dest, dest.read_text(encoding="utf-8"))
 
-    # --- Agent wrappers (VS Code only) ---
+    # --- Agent wrappers (all valid targets) ---
+    # Every valid editor.target gets resolved/agents/*.agent.md — per-target
+    # emission (Claude Code subagents, Cursor commands, Codex AGENTS.md
+    # managed block) consumes these wrappers downstream.
     editor_target = config.get('editor', {}).get('target', 'both')
     agent_count = 0
     suppressed_count = 0
 
-    if editor_target in ('vscode', 'both', 'all'):
+    if editor_target in VALID_EDITOR_TARGETS:
         print()
         print("Generating agent wrappers...")
         agent_names = generate_agents(output, tokens)
         agent_count = len(agent_names)
 
         if editor_target == 'vscode' and agent_names:
-            # Phase 6: suppress skill discoverability when agents exist
+            # Phase 6 (vscode-only): suppress skill discoverability when
+            # agents exist. Claude Code / Cursor / Codex must NOT get
+            # user-invocable: false skills.
             suppressed_count = suppress_skill_invocability(output, agent_names)
 
         if agent_count:
