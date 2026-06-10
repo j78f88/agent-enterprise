@@ -7,6 +7,8 @@ description: Use when running engagement gates, checking scope upgrade threshold
   building subagent prompts for validation or planning, or determining deployment
   workflow details. Defines Gate 1-4 criteria, scope upgrade rules, and platform configuration.
 applyTo: '**'
+paths:
+- '**'
 ---
 
 # Engagement Gates

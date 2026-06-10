@@ -7,6 +7,8 @@ description: Use when running pre-flight checks on planning documents, scanning 
   docs before drafting sprint plans, or reviewing architecture constraints for feature
   planning.
 applyTo: '**'
+paths:
+- '**'
 ---
 
 # Planning Pre-flight Checklists

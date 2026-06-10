@@ -5,6 +5,8 @@ version: 1.0.0
 applies_to: '**'
 description: honesty-contract instruction
 applyTo: '**'
+paths:
+- '**'
 ---
 
 # Honesty Contract

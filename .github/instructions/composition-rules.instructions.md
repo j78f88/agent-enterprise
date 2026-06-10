@@ -5,6 +5,8 @@ version: 1.0.0
 applies_to: '**'
 description: composition-rules instruction
 applyTo: '**'
+paths:
+- '**'
 ---
 
 # Sprint Composition Rules

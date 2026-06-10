@@ -5,6 +5,8 @@ version: 1.0.0
 applies_to: '**'
 description: state-management instruction
 applyTo: '**'
+paths:
+- '**'
 ---
 
 # State Management & Durable Execution
