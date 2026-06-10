@@ -22,13 +22,17 @@ Set `editor.target` in your `project.config.yml`:
 
 All targets share the same build: `init.py` resolves `{{tokens}}` from your
 config, validates frontmatter, and writes `resolved/`. The target controls
-which platform-native artifacts the `--deploy` step emits on top of that.
+which platform-native artifacts are emitted on top of that — most by the
+`--deploy` step, except Cursor rules (`.cursor/rules/*.mdc`), which the build
+phase writes whenever the target includes Cursor, with or without `--deploy`.
 
 ---
 
 ## Artifact matrix
 
-Built and deployed with `python init.py --config <config> --deploy`:
+Emitted by `python init.py --config <config> --deploy`. Every row is written
+during the `--deploy` step except Cursor rules (`*.mdc`), which the build
+phase emits regardless of `--deploy`:
 
 | Artifact | Path token (default) | vscode | claude-code | cursor | codex | both | all |
 |:---------|:---------------------|:------:|:-----------:|:------:|:-----:|:----:|:---:|
@@ -135,6 +139,13 @@ Merge semantics — content outside the markers is never touched:
 - **Malformed markers** (begin without end, end without begin, or end before
   begin) — the build prints a warning and leaves the file untouched. Fix or
   remove the markers and re-run; no data is lost.
+- **Duplicate markers** (more than one begin or end marker anywhere in the
+  file) — the build prints a warning and leaves the file untouched, same as
+  the malformed case.
+
+Marker detection is textual and code fences do not hide markers from it — a
+verbatim marker example anywhere in the file counts as a duplicate, so keep
+exactly one real marker pair and indent or alter any examples you write.
 
 The block is deterministic (sorted roster, no timestamps), so a second run
 with unchanged inputs is byte-identical — safe to run in CI and diff-review.

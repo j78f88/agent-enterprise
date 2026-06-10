@@ -34,7 +34,7 @@ jobs:
 
       - name: Build example config per editor.target
         run: |
-          for target in vscode claude-code cursor codex; do
+          for target in vscode claude-code cursor codex both all; do
             echo "::group::python init.py --config /tmp/target-$target.yml (editor.target=$target)"
             python - "$target" <<'EOF'
           import sys

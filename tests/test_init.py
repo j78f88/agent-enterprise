@@ -32,6 +32,7 @@ from init import (
     parse_frontmatter,
     extract_agent_body,
     generate_agent_md,
+    generate_claude_subagent_md,
     generate_agents,
     suppress_skill_invocability,
     transform_frontmatter_for_target,
@@ -355,6 +356,12 @@ class TestFindUnresolvedRealTokens:
             "Dir: {{paths.claude_commands}}"
         ) == ["{{paths.claude_commands}}"]
 
+    def test_multi_dot_leak_flagged(self):
+        """flatten() can emit multi-level keys — {{a.b.c}} is a real leak (S4)."""
+        assert find_unresolved_real_tokens(
+            "Memory: {{paths.memory.architecture}}"
+        ) == ["{{paths.memory.architecture}}"]
+
     def test_escaped_dotted_literal_not_flagged(self):
         # Defensive: should a backslash ever survive into a scanned file,
         # it still marks an intentional literal (same as check_tokens.py).
@@ -491,6 +498,34 @@ class TestGenerateAgentMd:
         result = generate_agent_md("architect", fm, sample_body_md.strip())
         assert "technical advisor" in result
         assert "skills/architect/SKILL.md" in result
+
+    def test_description_with_double_quote_is_valid_yaml(self):
+        """A double quote inside the description must not break the
+        frontmatter — the scalar is emitted with safe quoting (S1)."""
+        fm = {
+            "description": 'Reviews "PR" changes for quality.',
+            "when_to_use": 'check a "pull request"',
+            "agent": {"tools": ["read"]},
+        }
+        result = generate_agent_md("reviewer", fm, "Body")
+        parsed, _ = parse_frontmatter(result)
+        assert parsed, "frontmatter with quoted description must parse as YAML"
+        assert parsed["description"] == (
+            'Reviews "PR" changes for quality. Use when: check a "pull request"'
+        )
+
+
+class TestGenerateClaudeSubagentMd:
+
+    def test_description_with_double_quote_is_valid_yaml(self):
+        """Same safe-quoting guarantee for the Claude Code subagent renderer (S1)."""
+        fm = {"name": "qa", "description": 'Runs the "QA" suite.'}
+        result = generate_claude_subagent_md("qa", fm, "# QA\n\nBody.\n")
+        parsed, body = parse_frontmatter(result)
+        assert parsed, "subagent frontmatter must parse as YAML"
+        assert parsed["name"] == "qa"
+        assert parsed["description"] == 'Runs the "QA" suite.'
+        assert "# QA" in body
 
 
 # =============================================================================
@@ -1544,6 +1579,29 @@ class TestClaudeAgentsSeeding:
             deploy_resolved(output, config, agent_count=2)
         assert exc_info.value.code != 0
 
+    def test_scan_covers_claude_agents_even_when_seeding_gated_off(
+        self, tmp_path, monkeypatch
+    ):
+        """Post-deploy scan symmetry (S5): .claude/agents is scanned whenever
+        paths.claude_agents is set and the directory exists, even on targets
+        that don't seed it — matching the ungated claude_commands and
+        cursor_commands scans."""
+        monkeypatch.chdir(tmp_path)
+        output = self._make_resolved_agents(tmp_path)
+        config = self._load_config(tmp_path, "vscode")
+        stale_dir = tmp_path / ".claude" / "agents"
+        stale_dir.mkdir(parents=True)
+        (stale_dir / "stale.md").write_text(
+            "# Stale\n\n{{commands.missing_key}}\n", encoding="utf-8"
+        )
+
+        leftover = deploy_resolved(output, config, agent_count=2)
+
+        assert leftover > 0, (
+            "vscode deploy must still flag token leaks in an existing "
+            ".claude/agents/ directory"
+        )
+
 
 # =============================================================================
 # Cursor commands seeding: deploy_resolved seeds .cursor/commands/ from
@@ -1783,6 +1841,78 @@ class TestCodexAgentsMdEmission:
         assert target.read_bytes() == original, "malformed file must not be modified"
         assert "malformed" in capsys.readouterr().out.lower()
 
+    @pytest.mark.parametrize(
+        "duplicated",
+        [
+            # two full marker pairs
+            "# Mine\n\n<!-- agent-enterprise:begin -->\nfirst\n"
+            "<!-- agent-enterprise:end -->\n\n<!-- agent-enterprise:begin -->\n"
+            "second\n<!-- agent-enterprise:end -->\n",
+            # fenced example of the markers BEFORE the real block
+            "# Mine\n\n```markdown\n<!-- agent-enterprise:begin -->\nexample\n"
+            "<!-- agent-enterprise:end -->\n```\n\n"
+            "<!-- agent-enterprise:begin -->\nreal\n<!-- agent-enterprise:end -->\n",
+            # duplicate begin only
+            "# Mine\n\n<!-- agent-enterprise:begin -->\nx\n"
+            "<!-- agent-enterprise:begin -->\ny\n<!-- agent-enterprise:end -->\n",
+        ],
+        ids=["two-pairs", "fenced-example-before-block", "duplicate-begin"],
+    )
+    def test_duplicate_markers_leave_file_untouched(
+        self, tmp_path, capsys, duplicated
+    ):
+        """More than one begin or end marker must skip the write with a
+        warning (S2) — splicing at the first occurrence could eat content."""
+        output = self._make_resolved_agents(tmp_path)
+        target = tmp_path / "AGENTS.md"
+        target.write_text(duplicated, encoding="utf-8")
+        original = target.read_bytes()
+
+        assert emit_codex_agents_md(output, self.TOKENS, target) is False
+
+        assert target.read_bytes() == original, (
+            "file with duplicate markers must not be modified"
+        )
+        assert "multiple agent-enterprise markers" in capsys.readouterr().out
+
+    def test_crlf_round_trip_preserves_out_of_marker_bytes(self, tmp_path):
+        """A CRLF AGENTS.md must not be silently rewritten to LF (S3): bytes
+        outside the markers survive exactly, and the spliced block adopts the
+        file's CRLF convention."""
+        output = self._make_resolved_agents(tmp_path)
+        target = tmp_path / "AGENTS.md"
+        before = "# Mine\r\n\r\nCRLF adopter prose.\r\n\r\n"
+        stale = f"{CODEX_BLOCK_BEGIN}\r\nstale\r\n{CODEX_BLOCK_END}"
+        after = "\r\n\r\n## Tail\r\n\r\nMore CRLF prose.\r\n"
+        target.write_bytes((before + stale + after).encode("utf-8"))
+
+        assert emit_codex_agents_md(output, self.TOKENS, target) is True
+
+        merged = target.read_bytes().decode("utf-8")
+        begin = merged.find(CODEX_BLOCK_BEGIN)
+        end = merged.find(CODEX_BLOCK_END) + len(CODEX_BLOCK_END)
+        assert merged[:begin] == before, "CRLF bytes before the block changed"
+        assert merged[end:] == after, "CRLF bytes after the block changed"
+        block = merged[begin:end]
+        assert "- **qa**" in block, "block content must still be merged"
+        assert "\n" not in block.replace("\r\n", ""), (
+            "spliced block must use the file's CRLF convention"
+        )
+        # Idempotency holds for CRLF files too.
+        first = target.read_bytes()
+        assert emit_codex_agents_md(output, self.TOKENS, target) is True
+        assert target.read_bytes() == first
+
+    def test_lf_file_stays_lf(self, tmp_path):
+        """An LF file keeps LF endings end-to-end (no CRLF leaks in)."""
+        output = self._make_resolved_agents(tmp_path)
+        target = tmp_path / "AGENTS.md"
+        target.write_bytes(b"# Mine\n\nProse.\n")
+
+        assert emit_codex_agents_md(output, self.TOKENS, target) is True
+
+        assert b"\r" not in target.read_bytes()
+
     @pytest.mark.parametrize("target_value", ["codex", "all"])
     def test_deploy_merges_block_for_codex_targets(
         self, tmp_path, monkeypatch, target_value
@@ -1825,6 +1955,140 @@ class TestCodexAgentsMdEmission:
         with pytest.raises(SystemExit) as exc_info:
             deploy_resolved(output, config, agent_count=2)
         assert exc_info.value.code != 0
+
+
+# =============================================================================
+# Stale setup-only skill cleanup: a skill skipped after a prior build that
+# included it must leave NO zombie artifacts anywhere (Sprint 4 review B1)
+# =============================================================================
+
+class TestStaleSetupOnlySkillCleanup:
+    """B1 regression: building with setup_complete: true after a prior build
+    that included the setup-only skill must purge every trace of it —
+    resolved/agents, all deployed dirs, and the AGENTS.md roster — so the
+    committed tree always matches what a clean clone produces."""
+
+    SETUP_SKILL = (
+        "---\n"
+        "name: onboarding\n"
+        "kind: skill\n"
+        "description: Guides first-time setup.\n"
+        "when_to_use: onboard\n"
+        "user-invocable: true\n"
+        "lifecycle: setup-only\n"
+        "agent:\n"
+        "  tools: [read]\n"
+        "---\n\n"
+        "# Onboarding\n\nSet up {{project.name}}.\n"
+    )
+
+    KEPT_SKILL = (
+        "---\n"
+        "name: architect\n"
+        "kind: skill\n"
+        "description: Designs technical approaches.\n"
+        "when_to_use: write an ADR\n"
+        "user-invocable: true\n"
+        "agent:\n"
+        "  tools: [read, search]\n"
+        "---\n\n"
+        "# Architect\n\nYou design things for {{project.name}}.\n"
+    )
+
+    def _write_config(self, tmp_path: Path, setup_complete: bool) -> Path:
+        import yaml as _yaml
+        config_path = make_minimal_config(tmp_path, editor={"target": "all"})
+        cfg = _yaml.safe_load(config_path.read_text(encoding="utf-8"))
+        cfg["paths"]["claude_commands"] = ".claude/commands"
+        cfg["setup_complete"] = setup_complete
+        config_path.write_text(_yaml.dump(cfg), encoding="utf-8")
+        return config_path
+
+    def _build_deploy(self, tmp_path: Path, monkeypatch, config_path: Path):
+        monkeypatch.chdir(tmp_path)
+        monkeypatch.setattr(
+            sys, "argv",
+            ["init.py", "--config", str(config_path),
+             "--allow-frontmatter-warnings", "--deploy"],
+        )
+        main()
+
+    # Every location a skipped skill could leave a zombie artifact in.
+    def _onboarding_artifacts(self, tmp_path: Path) -> dict:
+        return {
+            "resolved wrapper": tmp_path / "resolved" / "agents" / "onboarding.agent.md",
+            "resolved skill": tmp_path / "resolved" / "skills" / "onboarding",
+            "deployed wrapper": tmp_path / ".github" / "agents" / "onboarding.agent.md",
+            "deployed bundle": tmp_path / ".github" / "agents" / "onboarding",
+            "claude command": tmp_path / ".claude" / "commands" / "onboarding.md",
+            "claude subagent": tmp_path / ".claude" / "agents" / "onboarding.md",
+            "cursor command": tmp_path / ".cursor" / "commands" / "onboarding.md",
+        }
+
+    def test_skipped_setup_skill_leaves_no_zombie_artifacts(
+        self, tmp_path, monkeypatch
+    ):
+        for name, content in (
+            ("onboarding", self.SETUP_SKILL),
+            ("architect", self.KEPT_SKILL),
+        ):
+            skill_dir = tmp_path / "skills" / name
+            skill_dir.mkdir(parents=True)
+            (skill_dir / "SKILL.md").write_text(content, encoding="utf-8")
+
+        # First build+deploy (setup not complete): onboarding everywhere.
+        self._build_deploy(
+            tmp_path, monkeypatch, self._write_config(tmp_path, False)
+        )
+        for label, path in self._onboarding_artifacts(tmp_path).items():
+            assert path.exists(), f"first build must emit the {label}"
+        roster = (tmp_path / "AGENTS.md").read_text(encoding="utf-8")
+        assert "**onboarding**" in roster
+
+        # Second build+deploy (setup complete): every trace removed.
+        self._build_deploy(
+            tmp_path, monkeypatch, self._write_config(tmp_path, True)
+        )
+        for label, path in self._onboarding_artifacts(tmp_path).items():
+            assert not path.exists(), (
+                f"zombie {label} survived the setup_complete build: {path}"
+            )
+        roster = (tmp_path / "AGENTS.md").read_text(encoding="utf-8")
+        assert "**onboarding**" not in roster, (
+            "AGENTS.md roster must drop the skipped skill's row"
+        )
+        # The kept skill is unaffected.
+        assert (tmp_path / ".github" / "agents" / "architect.agent.md").exists()
+        assert (tmp_path / "resolved" / "agents" / "architect.agent.md").exists()
+        assert "**architect**" in roster
+
+    def test_stale_wrapper_of_deleted_skill_is_pruned(
+        self, tmp_path, monkeypatch
+    ):
+        """A wrapper whose source skill was deleted (not just skipped) is also
+        pruned from resolved/agents on the next build."""
+        skill_dir = tmp_path / "skills" / "architect"
+        skill_dir.mkdir(parents=True)
+        (skill_dir / "SKILL.md").write_text(self.KEPT_SKILL, encoding="utf-8")
+        config_path = self._write_config(tmp_path, True)
+
+        # Simulate a previous build's wrapper for a now-deleted skill.
+        stale_dir = tmp_path / "resolved" / "agents"
+        stale_dir.mkdir(parents=True)
+        (stale_dir / "ghost.agent.md").write_text(
+            '---\nname: ghost\ndescription: "Gone"\n---\n\n# Ghost\n',
+            encoding="utf-8",
+        )
+
+        self._build_deploy(tmp_path, monkeypatch, config_path)
+
+        assert not (stale_dir / "ghost.agent.md").exists(), (
+            "wrapper of a deleted skill must be pruned from resolved/agents"
+        )
+        assert (stale_dir / "architect.agent.md").exists()
+        assert "**ghost**" not in (tmp_path / "AGENTS.md").read_text(
+            encoding="utf-8"
+        )
 
 
 # =============================================================================
@@ -1906,6 +2170,18 @@ class TestCheckTokensGuardrail:
 
         rc = _check_tokens.main([str(tmp_path)])
         assert rc == 0
+
+    def test_multi_dot_token_flagged(self, tmp_path):
+        """flatten() can emit multi-level keys — {{a.b.c}} must be flagged (S4)."""
+        instr_dir = tmp_path / ".github" / "instructions"
+        instr_dir.mkdir(parents=True)
+        (instr_dir / "deep.instructions.md").write_text(
+            "# Deep\n\nMemory file: {{paths.memory.architecture}}\n",
+            encoding="utf-8",
+        )
+
+        rc = _check_tokens.main([str(tmp_path)])
+        assert rc == 1
 
     def test_missing_scan_dirs_exit_0(self, tmp_path):
         """No .github/ subdirs present → nothing to scan → returns 0."""

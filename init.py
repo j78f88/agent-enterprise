@@ -570,10 +570,12 @@ def generate_agent_md(name: str, fm: dict, agent_body: str) -> str:
     if len(full_desc) > 1024:
         full_desc = full_desc[:1021] + '...'
 
-    # Build frontmatter
+    # Build frontmatter. json.dumps produces a double-quoted scalar whose
+    # escapes (\" \\ \uXXXX) are all valid YAML — safe even when the
+    # description itself contains double quotes.
     fm_lines = ['---']
     fm_lines.append(f'name: {name}')
-    fm_lines.append(f'description: "{full_desc}"')
+    fm_lines.append(f'description: {json.dumps(full_desc, ensure_ascii=False)}')
     if tools:
         fm_lines.append(f'tools: [{", ".join(tools)}]')
     if agents_list:
@@ -599,7 +601,9 @@ def generate_claude_subagent_md(name: str, fm: dict, body: str) -> str:
     description = fm.get('description', '')
     fm_lines = ['---']
     fm_lines.append(f"name: {fm.get('name', name)}")
-    fm_lines.append(f'description: "{description}"')
+    # json.dumps yields a YAML-valid double-quoted scalar even when the
+    # description contains double quotes (see generate_agent_md).
+    fm_lines.append(f'description: {json.dumps(description, ensure_ascii=False)}')
     fm_lines.append('---')
     return '\n'.join(fm_lines) + '\n\n' + body.strip() + '\n'
 
@@ -766,11 +770,12 @@ def find_unresolved_tokens(text: str) -> list:
 
 
 # Stricter detector for the DEPLOYED tree: only matches real build tokens of
-# the form {{namespace.key}} (at least one dot required). Mirrors
-# scripts/check_tokens.py `_TOKEN_RE` so the post-deploy scan and the CI
-# guardrail agree on what counts as a leak.
+# the form {{namespace.key}} (at least one dot required; flatten() can emit
+# multi-level keys like {{a.b.c}}, so one-or-more dot segments are accepted).
+# Mirrors scripts/check_tokens.py `_TOKEN_RE` so the post-deploy scan and the
+# CI guardrail agree on what counts as a leak.
 _REAL_TOKEN_RE = re.compile(
-    r"(?<!\$)(\\?)\{\{([a-z_][a-z0-9_]*\.[a-z_][a-z0-9_]*)\}\}"
+    r"(?<!\$)(\\?)\{\{([a-z_][a-z0-9_]*(?:\.[a-z_][a-z0-9_]*)+)\}\}"
 )
 
 
@@ -858,7 +863,16 @@ def emit_codex_agents_md(output_dir: Path, tokens: dict, target_file: Path) -> b
       - no markers: append the block at the end, separated by a blank line;
       - file missing: create it containing just the block;
       - malformed markers (begin without end, end without begin, or end before
-        begin): print a warning and leave the file untouched — no data loss.
+        begin): print a warning and leave the file untouched — no data loss;
+      - duplicate markers (more than one begin or end marker, e.g. a verbatim
+        marker example elsewhere in the file): print a warning and leave the
+        file untouched — splicing at the first occurrence could eat adopter
+        content.
+
+    Line endings: the file is read and written without newline translation, so
+    out-of-marker bytes are preserved exactly. The managed block itself is
+    rendered with the file's dominant newline convention (CRLF files stay
+    CRLF; everything else, and newly created files, use LF).
 
     A second run with unchanged inputs is byte-identical.
     Returns True if the file was written, False if it was skipped.
@@ -900,7 +914,20 @@ def emit_codex_agents_md(output_dir: Path, tokens: dict, target_file: Path) -> b
 
     # --- Merge into the target file without touching out-of-marker content ---
     if target_file.exists():
-        existing = target_file.read_text(encoding="utf-8")
+        # newline="" disables universal-newline translation: the exact bytes
+        # (CRLF included) are spliced, so out-of-marker content round-trips.
+        with open(target_file, encoding="utf-8", newline="") as f:
+            existing = f.read()
+        begin_count = existing.count(CODEX_BLOCK_BEGIN)
+        end_count = existing.count(CODEX_BLOCK_END)
+        if begin_count > 1 or end_count > 1:
+            print(
+                f"  ⚠  {target_file}: multiple agent-enterprise markers found "
+                f"({begin_count} begin / {end_count} end) — leaving file "
+                "untouched (keep exactly one marker pair; indent or alter any "
+                "marker examples so they don't match verbatim)."
+            )
+            return False
         begin = existing.find(CODEX_BLOCK_BEGIN)
         end = existing.find(CODEX_BLOCK_END)
         if (begin == -1) != (end == -1) or (begin != -1 and end < begin):
@@ -909,28 +936,45 @@ def emit_codex_agents_md(output_dir: Path, tokens: dict, target_file: Path) -> b
                 "leaving file untouched (fix or remove the markers and re-run)."
             )
             return False
+        # Render the block with the file's dominant newline convention.
+        crlf_count = existing.count("\r\n")
+        bare_lf_count = existing.count("\n") - crlf_count
+        newline = "\r\n" if crlf_count > bare_lf_count else "\n"
+        nl_block = block.replace("\n", newline) if newline != "\n" else block
         if begin != -1:
             # Replace marker-to-marker (inclusive); everything else verbatim.
-            merged = existing[:begin] + block + existing[end + len(CODEX_BLOCK_END):]
+            merged = existing[:begin] + nl_block + existing[end + len(CODEX_BLOCK_END):]
         elif not existing.strip():
-            merged = block + "\n"
+            merged = nl_block + newline
         else:
-            merged = existing.rstrip("\n") + "\n\n" + block + "\n"
+            merged = existing.rstrip("\r\n") + newline * 2 + nl_block + newline
     else:
         merged = block + "\n"
 
     target_file.parent.mkdir(parents=True, exist_ok=True)
-    target_file.write_text(merged, encoding="utf-8")
+    with open(target_file, "w", encoding="utf-8", newline="") as f:
+        f.write(merged)
     return True
 
 
-def deploy_resolved(output: Path, config: dict, agent_count: int) -> int:
+def deploy_resolved(
+    output: Path, config: dict, agent_count: int, stale_agent_names=()
+) -> int:
     """Copy resolved/ into the configured deploy dirs under .github/.
 
     Mirrors the manual "Next steps" copy so the deployed tree (the files
     agents actually load) cannot silently drift from resolved/. Returns the
     number of unresolved-token hits found in the deployed tree (0 = clean).
     Callers should treat a non-zero return as a deploy failure.
+
+    ``stale_agent_names`` lists agents the build itself flagged as stale
+    (setup-only skills skipped after setup_complete flipped, or wrappers
+    pruned because their source skill is gone). Their previously deployed
+    artifacts — the <name>.agent.md wrapper and <name>/ skill bundle under
+    skills_deploy_dir, plus <name>.md in claude_commands / claude_agents /
+    cursor_commands — are removed so the deployed tree matches what a clean
+    clone would produce. Only build-flagged names are touched; adopter-owned
+    files in those directories are never pruning candidates.
 
     Also seeds paths.claude_commands (default: .claude/commands/) with one
     <name>.md file per agent — the filename (without .md) becomes the Claude
@@ -979,6 +1023,23 @@ def deploy_resolved(output: Path, config: dict, agent_count: int) -> int:
     skills_dest.mkdir(parents=True, exist_ok=True)
 
     deployed = 0
+
+    # Prune deployed artifacts of agents the build flagged as stale (e.g. the
+    # setup-only onboarding skill after setup_complete flips). Without this,
+    # a committed tree keeps zombie files a clean clone can never reproduce.
+    for stale_name in sorted(set(stale_agent_names)):
+        stale_files = [skills_dest / f"{stale_name}.agent.md"]
+        for seeded_dir in (claude_commands, claude_agents, cursor_commands):
+            if seeded_dir:
+                stale_files.append(Path(seeded_dir) / f"{stale_name}.md")
+        for stale_file in stale_files:
+            if stale_file.is_file():
+                stale_file.unlink()
+                print(f"  removed stale deployed file: {stale_file}")
+        stale_bundle = skills_dest / stale_name
+        if stale_bundle.is_dir():
+            shutil.rmtree(stale_bundle)
+            print(f"  removed stale deployed skill bundle: {stale_bundle}")
 
     # Instructions: resolved/instructions/*.md -> instructions_dir/
     src_instr = output / "instructions"
@@ -1086,7 +1147,11 @@ def deploy_resolved(output: Path, config: dict, agent_count: int) -> int:
         for md in sorted(Path(claude_commands).rglob("*.md")):
             if find_unresolved_real_tokens(md.read_text(encoding="utf-8")):
                 leftover.append(md)
-    if claude_agents and seed_claude_agents:
+    # Scan claude_agents whenever the token is set — even when the current
+    # target gates the seeding off, a previously seeded (or stale) file in
+    # the directory must still fail the deploy if it leaks tokens. Mirrors
+    # the ungated claude_commands / cursor_commands scans above and below.
+    if claude_agents and Path(claude_agents).is_dir():
         for md in sorted(Path(claude_agents).rglob("*.md")):
             if find_unresolved_real_tokens(md.read_text(encoding="utf-8")):
                 leftover.append(md)
@@ -1219,6 +1284,10 @@ def main():
 
     # --- Skills (SKILL.md or {name}.skill.md files → resolved as SKILL.md) ---
     setup_complete = config.get('setup_complete', False)
+    # Agents whose artifacts must be purged from resolved/ and the deployed
+    # tree: setup-only skills skipped this build, plus any wrapper whose
+    # source skill no longer produces it (pruned after generation below).
+    stale_agent_names: set[str] = set()
     skills_src = Path("skills")
     if skills_src.exists():
         for skill_dir in sorted(skills_src.iterdir()):
@@ -1237,10 +1306,19 @@ def main():
             fm, _ = parse_frontmatter(original)
             if fm.get('lifecycle') == 'setup-only' and setup_complete:
                 print(f"  skipped (setup complete): {skill_dir.name}")
+                skipped_name = fm.get('name', skill_dir.name)
+                stale_agent_names.add(skipped_name)
                 # Clean stale resolved output if it exists
                 stale_dir = output / "skills" / skill_dir.name
                 if stale_dir.exists():
                     shutil.rmtree(stale_dir)
+                # Mirror the cleanup for the skill's agent wrapper — a stale
+                # resolved/agents/<name>.agent.md would otherwise be
+                # re-deployed as a zombie artifact.
+                stale_wrapper = output / "agents" / f"{skipped_name}.agent.md"
+                if stale_wrapper.exists():
+                    stale_wrapper.unlink()
+                    print(f"  removed stale agent wrapper: {stale_wrapper}")
                 continue
 
             # Output as SKILL.md (VS Code convention) regardless of source filename
@@ -1333,6 +1411,18 @@ def main():
         agent_names = generate_agents(output, tokens)
         agent_count = len(agent_names)
 
+        # Prune wrappers from previous builds whose skill is now skipped,
+        # renamed, or deleted — resolved/agents/ must contain exactly the
+        # wrappers generated by THIS build.
+        agents_out = output / "agents"
+        if agents_out.exists():
+            for stale in sorted(agents_out.glob("*.agent.md")):
+                stale_name = stale.name[: -len(".agent.md")]
+                if stale_name not in agent_names:
+                    stale.unlink()
+                    stale_agent_names.add(stale_name)
+                    print(f"  removed stale agent wrapper: {stale}")
+
         if editor_target == 'vscode' and agent_names:
             # Phase 6 (vscode-only): suppress skill discoverability when
             # agents exist. Claude Code / Cursor / Codex must NOT get
@@ -1394,7 +1484,10 @@ def main():
                   "Fix the config and re-run with --deploy.")
             sys.exit(1)
         print("Deploying resolved/ into configured deploy dirs...")
-        leftover = deploy_resolved(output, config, agent_count)
+        leftover = deploy_resolved(
+            output, config, agent_count,
+            stale_agent_names=sorted(stale_agent_names),
+        )
         if leftover < 0:
             sys.exit(1)
         if leftover > 0:
