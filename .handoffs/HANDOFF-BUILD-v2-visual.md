@@ -1,6 +1,6 @@
 # Handoff Prompt: Build Command Centre Visual v2
 
-**Task:** Implement the command centre visual v2 overhaul per `drafts/command-centre-visual-v2-plan.md`. Replace `docs/command-centre-visual.html` with a complete rewrite that adds Instructions tab, Purpose & Intent, binding matrix, and expanded Architecture section.
+**Task:** Implement the command centre visual v2 overhaul per `docs/archive/command-centre-visual-v2-plan.md`. Replace `docs/command-centre-visual.html` with a complete rewrite that adds Instructions tab, Purpose & Intent, binding matrix, and expanded Architecture section.
 
 ## What to do
 
@@ -57,7 +57,7 @@ Follow the 19-step implementation workflow in the plan (Phases 1-4):
 - Schemas: `schemas/*.schema.json` (7 files)
 - Profiles: `profiles/*.yml` (3 files)
 - Current visual: `docs/command-centre-visual.html` (v1, use as skeleton)
-- Plan reference: `drafts/command-centre-visual-v2-plan.md` (full specs)
+- Plan reference: `docs/archive/command-centre-visual-v2-plan.md` (full specs)
 
 ## Verification checklist (must pass all)
 

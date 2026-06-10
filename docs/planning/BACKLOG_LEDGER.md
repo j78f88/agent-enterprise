@@ -6,7 +6,7 @@ Single source of truth for all backlog item status. Detail and context live in B
 |----|------|--------|-----|-----|--------|--------|---------|-------|-------|
 | ITEM-006 | bug | BUG-003 | 0 | 0 | 2 | done | | | Onboarding missing Claude Code /command setup |
 | ITEM-007 | bug | BUG-004 | 0 | 0 | 2 | done | | | Planner-mode workflow bypassed before approved sprint draft |
-| ITEM-008 | bug | BUG-005 | 0 | 0 | 1 | done | | drafts/onboarding-path-resolution-remediation-draft-plan.md | RESOLVED Sprint 1 — companion-file resolution, skills_deploy_dir cross-refs, inline code-span resolution + escape; all 3 BUG-005 mechanisms closed |
+| ITEM-008 | bug | BUG-005 | 0 | 0 | 1 | done | | ../archive/onboarding-path-resolution-remediation-draft-plan.md | RESOLVED Sprint 1 — companion-file resolution, skills_deploy_dir cross-refs, inline code-span resolution + escape; all 3 BUG-005 mechanisms closed |
 | ITEM-009 | audit-finding | Sprint 1 review SUGGESTION #2 | 1 | 0 | 2 | done | | | `SOURCE_STYLE_REFS` in tests/test_init.py is a hardcoded 7-item allowlist; consider deriving it from config/resolved tree instead of maintaining by hand |
 | ITEM-010 | debt | Sprint 1 retro | 1 | 0 | 2 | done | | | Decide whether SPRINTS.md and BACKLOG_LEDGER.md hold real repo history or stay as template demo content |
 | ITEM-011 | debt | Sprint 1 retro | 1 | 0 | 2 | done | | | Consider a CI check asserting all docs use config/project.config.example.yml for the canonical build command |
