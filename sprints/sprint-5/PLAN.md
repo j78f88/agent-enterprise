@@ -1,6 +1,6 @@
 # Mode 2 Dispatcher Promotion — Supported Implementation in `src/`
 
-**Status:** Planned (promoted to sprints/sprint-5/PLAN.md)
+**Status:** Active
 **Type:** Feature (mode promotion per ADR 0008)
 **Sources:** session review 2026-06-10 (user-approved "close the gap upward" roadmap), ADR-0008 (supported mode implementations) · **Ledger:** ITEM-018
 **Dependencies:** ADR-0008 (Sprint 3); platform parity work referenced by slug `platform-parity-draft-plan.md` is independent — no hard dependency
@@ -188,7 +188,15 @@ Files: `docs/ORCHESTRATION.md` (new), `command-centre/03-mode-orchestration/inst
 
 ## Sprint Execution Guidelines
 
-_(left for @sprint-lead)_
+- One subagent per task-group batch; subagents edit files only — the
+  sprint lead commits each batch with explicit pathspecs.
+- Deploy-capable subagents are told exactly which config to use
+  (Sprint 4 retro lesson); this sprint should not need `--deploy` at all.
+- Tests include a stale-state dimension where applicable (Sprint 4
+  retro lesson): crash-resume IS that dimension here.
+- CI on the PR branch is part of the sprint contract: any failing check
+  observed during the sprint is diagnosed and fixed before close.
+- Batch order: TG1-4 (package + CLI) → TG5+TG6 (tests) ∥ TG7 (docs).
 
 ## Commit Plan
 

@@ -4,6 +4,36 @@
 
 ---
 
+## Sprint 5 — Mode 2 Dispatcher Promotion: Supported Implementation in src/
+
+**Status:** Active  
+**Type:** Feature (mode promotion per ADR 0008)  
+**Started:** 2026-06-10
+
+### Goals
+
+- [ ] src/mode2_dispatcher/ package: core port, discovery, durable queue, return validation (ITEM-018)
+- [ ] Root CLI dispatch.py (run/status/requeue/validate-callables) (ITEM-018)
+- [ ] Crash-resume + atomic state proven by tests (ITEM-018)
+- [ ] Shared mode-2-contract-v1 conformance over both impls; reference impl byte-frozen (ITEM-018)
+- [ ] docs/ORCHESTRATION.md + install-contract names the supported impl (ITEM-018)
+
+### Tasks
+
+- [ ] TG1: src/mode2_dispatcher/ core port
+- [ ] TG2: callable discovery (discovery.py)
+- [ ] TG3: durable queue (queue_file.py) + returns.py
+- [ ] TG4: root CLI dispatch.py
+- [ ] TG5: tests/test_mode2_dispatcher.py
+- [ ] TG6: shared conformance parametrization + byte-freeze test
+- [ ] TG7: adopter docs + install contract + README/CHANGELOG
+
+### Notes
+
+- Sprint started 2026-06-10 (promoted from mode2-dispatcher-promotion draft; user approved)
+
+---
+
 ## Sprint 4 — Platform Parity: Native Emission for Claude Code, Cursor, and Codex
 
 **Status:** Complete  
