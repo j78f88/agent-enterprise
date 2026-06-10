@@ -21,7 +21,7 @@ and portable. Produce a landed / missing / different / not-applicable table.
 - **agent-homebase → renamed → agent-enterprise.** Same repo. This repo's own
   release history is tagged `agent-homebase@3.0.x`; the rename to
   `agent-enterprise` happened ~2026-05-29 (see
-  `docs/planning/drafts/repo-rename-agent-enterprise-draft-plan.md`). So
+  `docs/archive/repo-rename-agent-enterprise-draft-plan.md`). So
   "agent-homebase fixes" are already in this history by definition.
 - **agent-homebase-e1 is a SEPARATE fork** that pivoted to a **TypeScript /
   Ports & Adapters** rewrite (ADR-003, accepted 2026-05-27). It is *not* this

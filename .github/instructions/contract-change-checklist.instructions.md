@@ -5,6 +5,8 @@ version: 1.0.0
 applies_to: '**'
 description: contract-change-checklist instruction
 applyTo: '**'
+paths:
+- '**'
 ---
 
 # Contract-Change Checklist

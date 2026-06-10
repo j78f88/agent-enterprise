@@ -5,6 +5,8 @@ version: 1.0.0
 applies_to: '**'
 description: fsm-orchestration instruction
 applyTo: '**'
+paths:
+- '**'
 ---
 
 # Sprint Orchestration FSM

@@ -5,6 +5,8 @@ version: 1.0.0
 applies_to: '**'
 description: validation-framework instruction
 applyTo: '**'
+paths:
+- '**'
 ---
 
 # Validation Framework
