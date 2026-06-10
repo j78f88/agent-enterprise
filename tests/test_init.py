@@ -36,6 +36,9 @@ from init import (
     transform_frontmatter_for_target,
     emit_cursor_mdc,
     deploy_resolved,
+    emit_codex_agents_md,
+    CODEX_BLOCK_BEGIN,
+    CODEX_BLOCK_END,
     main,
 )
 
@@ -992,6 +995,9 @@ def make_minimal_config(tmp_path: Path, **overrides) -> Path:
                 "copilot_instructions": ".github/copilot-instructions.md",
                 "instructions_dir": ".github/instructions",
                 "skills_deploy_dir": ".github/agents/",
+                "claude_agents": ".claude/agents",
+                "cursor_commands": ".cursor/commands",
+                "codex_agents_md": "AGENTS.md",
                 "memory_architecture": ".claude/memory/architecture.md",
                 "memory_conventions": ".claude/memory/conventions.md",
             },
@@ -1305,6 +1311,414 @@ class TestDeployCopy:
         assert leftover > 0, (
             "Expected deploy_resolved to return > 0 when deployed file has unresolved token"
         )
+
+
+# =============================================================================
+# Claude Code subagent seeding: deploy_resolved seeds .claude/agents/ from
+# resolved/agents/*.agent.md for claude-code/both/all targets (Sprint 4, TG2)
+# =============================================================================
+
+class TestClaudeAgentsSeeding:
+    """deploy_resolved seeds paths.claude_agents with one native Claude Code
+    subagent per agent wrapper, gated on editor.target in
+    ('claude-code', 'both', 'all')."""
+
+    def _load_config(self, tmp_path: Path, target: str) -> dict:
+        import yaml as _yaml
+        config_path = make_minimal_config(tmp_path, editor={"target": target})
+        return _yaml.safe_load(config_path.read_text(encoding="utf-8"))
+
+    def _make_resolved_agents(self, tmp_path: Path) -> Path:
+        output = tmp_path / "resolved"
+        agents_dir = output / "agents"
+        agents_dir.mkdir(parents=True)
+        (agents_dir / "qa.agent.md").write_text(
+            '---\nname: qa\ndescription: "Runs the QA suite. Use when: verify a sprint"\n'
+            "tools: [read, search]\n---\n\n# QA\n\nYou verify things.\n",
+            encoding="utf-8",
+        )
+        (agents_dir / "architect.agent.md").write_text(
+            '---\nname: architect\ndescription: "Designs technical approaches."\n'
+            "---\n\n# Architect\n\nYou design things.\n",
+            encoding="utf-8",
+        )
+        return output
+
+    @pytest.mark.parametrize("target", ["claude-code", "both", "all"])
+    def test_seeds_one_subagent_per_agent_with_valid_frontmatter(
+        self, tmp_path, monkeypatch, target
+    ):
+        monkeypatch.chdir(tmp_path)
+        output = self._make_resolved_agents(tmp_path)
+        config = self._load_config(tmp_path, target)
+
+        leftover = deploy_resolved(output, config, agent_count=2)
+
+        assert leftover == 0
+        agents_dest = tmp_path / ".claude" / "agents"
+        seeded = sorted(p.name for p in agents_dest.glob("*.md"))
+        assert seeded == ["architect.md", "qa.md"], (
+            f"editor.target '{target}' must seed one subagent per agent wrapper"
+        )
+        fm, body = parse_frontmatter(
+            (agents_dest / "qa.md").read_text(encoding="utf-8")
+        )
+        assert fm.get("name") == "qa"
+        assert fm.get("description") == "Runs the QA suite. Use when: verify a sprint"
+        assert "tools" not in fm, (
+            "VS Code tool ids are not Claude Code tool names — tools must be omitted"
+        )
+        assert "# QA" in body and "You verify things." in body
+
+    @pytest.mark.parametrize("target", ["vscode", "cursor", "codex"])
+    def test_no_subagents_for_other_targets(self, tmp_path, monkeypatch, target):
+        monkeypatch.chdir(tmp_path)
+        output = self._make_resolved_agents(tmp_path)
+        config = self._load_config(tmp_path, target)
+
+        leftover = deploy_resolved(output, config, agent_count=2)
+
+        assert leftover == 0
+        assert not (tmp_path / ".claude" / "agents").exists(), (
+            f"editor.target '{target}' must NOT seed .claude/agents/"
+        )
+
+    def test_subagent_seeding_is_deterministic_and_token_free(
+        self, tmp_path, monkeypatch
+    ):
+        monkeypatch.chdir(tmp_path)
+        output = self._make_resolved_agents(tmp_path)
+        config = self._load_config(tmp_path, "claude-code")
+
+        assert deploy_resolved(output, config, agent_count=2) == 0
+        first = {
+            p.name: p.read_bytes()
+            for p in sorted((tmp_path / ".claude" / "agents").glob("*.md"))
+        }
+        assert deploy_resolved(output, config, agent_count=2) == 0
+        second = {
+            p.name: p.read_bytes()
+            for p in sorted((tmp_path / ".claude" / "agents").glob("*.md"))
+        }
+
+        assert first == second, "re-running deploy must be byte-identical"
+        assert sorted(first) == ["architect.md", "qa.md"]
+        for name, content in first.items():
+            assert b"{{" not in content, f"{name} must be token-free"
+
+    def test_unresolved_token_in_subagent_counts_as_leftover(
+        self, tmp_path, monkeypatch
+    ):
+        monkeypatch.chdir(tmp_path)
+        output = tmp_path / "resolved"
+        agents_dir = output / "agents"
+        agents_dir.mkdir(parents=True)
+        (agents_dir / "broken.agent.md").write_text(
+            '---\nname: broken\ndescription: "Broken agent"\n---\n\n'
+            "{{commands.missing_key}}\n",
+            encoding="utf-8",
+        )
+        config = self._load_config(tmp_path, "claude-code")
+
+        leftover = deploy_resolved(output, config, agent_count=1)
+
+        assert leftover > 0, (
+            "post-deploy scan must flag unresolved tokens in .claude/agents/"
+        )
+
+    def test_absolute_claude_agents_path_refuses_deploy(
+        self, tmp_path, monkeypatch
+    ):
+        monkeypatch.chdir(tmp_path)
+        output = self._make_resolved_agents(tmp_path)
+        config = self._load_config(tmp_path, "claude-code")
+        config["paths"]["claude_agents"] = str(tmp_path / "abs-claude-agents")
+
+        with pytest.raises(SystemExit) as exc_info:
+            deploy_resolved(output, config, agent_count=2)
+        assert exc_info.value.code != 0
+
+
+# =============================================================================
+# Cursor commands seeding: deploy_resolved seeds .cursor/commands/ from
+# resolved/agents/*.agent.md for cursor/all targets only (Sprint 4, TG3)
+# =============================================================================
+
+class TestCursorCommandsSeeding:
+    """deploy_resolved seeds paths.cursor_commands with one <name>.md per
+    agent wrapper, gated on editor.target in ('cursor', 'all')."""
+
+    def _load_config(self, tmp_path: Path, target: str) -> dict:
+        import yaml as _yaml
+        config_path = make_minimal_config(tmp_path, editor={"target": target})
+        return _yaml.safe_load(config_path.read_text(encoding="utf-8"))
+
+    def _make_resolved_agents(self, tmp_path: Path) -> Path:
+        output = tmp_path / "resolved"
+        agents_dir = output / "agents"
+        agents_dir.mkdir(parents=True)
+        (agents_dir / "qa.agent.md").write_text(
+            "---\nname: qa\ndescription: QA agent\n---\n\n# QA\n",
+            encoding="utf-8",
+        )
+        (agents_dir / "architect.agent.md").write_text(
+            "---\nname: architect\ndescription: Architect agent\n---\n\n# Architect\n",
+            encoding="utf-8",
+        )
+        return output
+
+    @pytest.mark.parametrize("target", ["cursor", "all"])
+    def test_seeds_cursor_commands_for_cursor_targets(
+        self, tmp_path, monkeypatch, target
+    ):
+        monkeypatch.chdir(tmp_path)
+        output = self._make_resolved_agents(tmp_path)
+        config = self._load_config(tmp_path, target)
+
+        leftover = deploy_resolved(output, config, agent_count=2)
+
+        assert leftover == 0
+        for name in ("qa", "architect"):
+            assert (tmp_path / ".cursor" / "commands" / f"{name}.md").exists(), (
+                f"editor.target '{target}' must seed .cursor/commands/{name}.md"
+            )
+
+    @pytest.mark.parametrize("target", ["vscode", "claude-code", "both", "codex"])
+    def test_no_cursor_commands_for_other_targets(
+        self, tmp_path, monkeypatch, target
+    ):
+        monkeypatch.chdir(tmp_path)
+        output = self._make_resolved_agents(tmp_path)
+        config = self._load_config(tmp_path, target)
+
+        leftover = deploy_resolved(output, config, agent_count=2)
+
+        assert leftover == 0
+        assert not (tmp_path / ".cursor" / "commands").exists(), (
+            f"editor.target '{target}' must NOT seed .cursor/commands/"
+        )
+
+    def test_cursor_seeding_is_deterministic_and_token_free(
+        self, tmp_path, monkeypatch
+    ):
+        monkeypatch.chdir(tmp_path)
+        output = self._make_resolved_agents(tmp_path)
+        config = self._load_config(tmp_path, "cursor")
+
+        assert deploy_resolved(output, config, agent_count=2) == 0
+        first = {
+            p.name: p.read_bytes()
+            for p in sorted((tmp_path / ".cursor" / "commands").glob("*.md"))
+        }
+        assert deploy_resolved(output, config, agent_count=2) == 0
+        second = {
+            p.name: p.read_bytes()
+            for p in sorted((tmp_path / ".cursor" / "commands").glob("*.md"))
+        }
+
+        assert first == second, "re-running deploy must be byte-identical"
+        assert sorted(first) == ["architect.md", "qa.md"]
+        for name, content in first.items():
+            assert b"{{" not in content, f"{name} must be token-free"
+
+    def test_unresolved_token_in_cursor_command_counts_as_leftover(
+        self, tmp_path, monkeypatch
+    ):
+        monkeypatch.chdir(tmp_path)
+        output = tmp_path / "resolved"
+        agents_dir = output / "agents"
+        agents_dir.mkdir(parents=True)
+        (agents_dir / "broken.agent.md").write_text(
+            "---\nname: broken\ndescription: Broken agent\n---\n\n"
+            "{{commands.missing_key}}\n",
+            encoding="utf-8",
+        )
+        config = self._load_config(tmp_path, "cursor")
+
+        leftover = deploy_resolved(output, config, agent_count=1)
+
+        assert leftover > 0, (
+            "post-deploy scan must flag unresolved tokens in .cursor/commands/"
+        )
+
+    def test_absolute_cursor_commands_path_refuses_deploy(
+        self, tmp_path, monkeypatch
+    ):
+        monkeypatch.chdir(tmp_path)
+        output = self._make_resolved_agents(tmp_path)
+        config = self._load_config(tmp_path, "cursor")
+        config["paths"]["cursor_commands"] = str(tmp_path / "abs-cursor-commands")
+
+        with pytest.raises(SystemExit) as exc_info:
+            deploy_resolved(output, config, agent_count=2)
+        assert exc_info.value.code != 0
+
+
+# =============================================================================
+# Codex AGENTS.md managed-block emission: emit_codex_agents_md merges a
+# marker-delimited block into the adopter-owned AGENTS.md without ever
+# touching content outside the markers (Sprint 4, TG4)
+# =============================================================================
+
+class TestCodexAgentsMdEmission:
+    """emit_codex_agents_md merges the managed block idempotently and never
+    modifies adopter-owned content outside the begin/end markers."""
+
+    TOKENS = {
+        "paths.skills_deploy_dir": ".github/agents/",
+        "paths.instructions_dir": ".github/instructions",
+    }
+
+    def _load_config(self, tmp_path: Path, target: str) -> dict:
+        import yaml as _yaml
+        config_path = make_minimal_config(tmp_path, editor={"target": target})
+        return _yaml.safe_load(config_path.read_text(encoding="utf-8"))
+
+    def _make_resolved_agents(self, tmp_path: Path) -> Path:
+        output = tmp_path / "resolved"
+        agents_dir = output / "agents"
+        agents_dir.mkdir(parents=True)
+        (agents_dir / "qa.agent.md").write_text(
+            '---\nname: qa\ndescription: "Runs the QA suite."\n---\n\n# QA\n',
+            encoding="utf-8",
+        )
+        (agents_dir / "architect.agent.md").write_text(
+            '---\nname: architect\ndescription: "Designs technical approaches."\n'
+            "---\n\n# Architect\n",
+            encoding="utf-8",
+        )
+        return output
+
+    def test_merge_preserves_content_before_and_after_block(self, tmp_path):
+        """Content before AND after an existing block survives byte-for-byte."""
+        output = self._make_resolved_agents(tmp_path)
+        target = tmp_path / "AGENTS.md"
+        before = "# My AGENTS.md\n\nAdopter prose before.\n\n"
+        stale = f"{CODEX_BLOCK_BEGIN}\nstale old roster\n{CODEX_BLOCK_END}"
+        after = "\n\n## Adopter section after\n\nMore adopter prose.\n"
+        target.write_text(before + stale + after, encoding="utf-8")
+
+        assert emit_codex_agents_md(output, self.TOKENS, target) is True
+
+        merged = target.read_text(encoding="utf-8")
+        begin = merged.find(CODEX_BLOCK_BEGIN)
+        end = merged.find(CODEX_BLOCK_END) + len(CODEX_BLOCK_END)
+        assert merged[:begin] == before, "content before the block must be untouched"
+        assert merged[end:] == after, "content after the block must be untouched"
+        block = merged[begin:end]
+        assert "stale old roster" not in block
+        assert "- **architect** — Designs technical approaches." in block
+        assert "- **qa** — Runs the QA suite." in block
+        # Sorted roster: architect before qa.
+        assert block.index("**architect**") < block.index("**qa**")
+        assert "`.github/agents/`" in block
+        assert "`.github/instructions`" in block
+
+    def test_appends_block_when_no_markers(self, tmp_path):
+        """An AGENTS.md without markers gets the block appended after a blank line."""
+        output = self._make_resolved_agents(tmp_path)
+        target = tmp_path / "AGENTS.md"
+        existing = "# My AGENTS.md\n\nAdopter prose only.\n"
+        target.write_text(existing, encoding="utf-8")
+
+        assert emit_codex_agents_md(output, self.TOKENS, target) is True
+
+        merged = target.read_text(encoding="utf-8")
+        assert merged.startswith("# My AGENTS.md\n\nAdopter prose only.\n\n" + CODEX_BLOCK_BEGIN)
+        assert merged.rstrip("\n").endswith(CODEX_BLOCK_END)
+
+    def test_creates_file_when_missing(self, tmp_path):
+        """A missing AGENTS.md is created containing just the block."""
+        output = self._make_resolved_agents(tmp_path)
+        target = tmp_path / "AGENTS.md"
+        assert not target.exists()
+
+        assert emit_codex_agents_md(output, self.TOKENS, target) is True
+
+        content = target.read_text(encoding="utf-8")
+        assert content.startswith(CODEX_BLOCK_BEGIN)
+        assert content.rstrip("\n").endswith(CODEX_BLOCK_END)
+        assert "timestamp" not in content.lower()
+
+    def test_idempotent_two_runs_byte_identical(self, tmp_path):
+        """A second run with unchanged inputs is byte-identical (append + merge)."""
+        output = self._make_resolved_agents(tmp_path)
+        target = tmp_path / "AGENTS.md"
+        target.write_text("# Mine\n\nProse.\n", encoding="utf-8")
+
+        assert emit_codex_agents_md(output, self.TOKENS, target) is True
+        first = target.read_bytes()
+        assert emit_codex_agents_md(output, self.TOKENS, target) is True
+        second = target.read_bytes()
+
+        assert first == second, "re-running the merge must be byte-identical"
+
+    @pytest.mark.parametrize(
+        "malformed",
+        [
+            # begin without end
+            "# Mine\n\n<!-- agent-enterprise:begin -->\norphaned\n",
+            # end without begin
+            "# Mine\n\n<!-- agent-enterprise:end -->\norphaned\n",
+            # end before begin
+            "# Mine\n\n<!-- agent-enterprise:end -->\nx\n<!-- agent-enterprise:begin -->\n",
+        ],
+        ids=["begin-without-end", "end-without-begin", "end-before-begin"],
+    )
+    def test_malformed_markers_leave_file_untouched(self, tmp_path, capsys, malformed):
+        """Malformed markers must skip the write with a warning — no data loss."""
+        output = self._make_resolved_agents(tmp_path)
+        target = tmp_path / "AGENTS.md"
+        target.write_text(malformed, encoding="utf-8")
+        original = target.read_bytes()
+
+        assert emit_codex_agents_md(output, self.TOKENS, target) is False
+
+        assert target.read_bytes() == original, "malformed file must not be modified"
+        assert "malformed" in capsys.readouterr().out.lower()
+
+    @pytest.mark.parametrize("target_value", ["codex", "all"])
+    def test_deploy_merges_block_for_codex_targets(
+        self, tmp_path, monkeypatch, target_value
+    ):
+        monkeypatch.chdir(tmp_path)
+        output = self._make_resolved_agents(tmp_path)
+        config = self._load_config(tmp_path, target_value)
+        (tmp_path / "AGENTS.md").write_text("# Adopter file\n", encoding="utf-8")
+
+        leftover = deploy_resolved(output, config, agent_count=2)
+
+        assert leftover == 0
+        content = (tmp_path / "AGENTS.md").read_text(encoding="utf-8")
+        assert content.startswith("# Adopter file\n"), (
+            f"editor.target '{target_value}' must preserve adopter content"
+        )
+        assert CODEX_BLOCK_BEGIN in content and CODEX_BLOCK_END in content
+
+    @pytest.mark.parametrize("target_value", ["vscode", "claude-code", "cursor", "both"])
+    def test_no_emission_for_other_targets(self, tmp_path, monkeypatch, target_value):
+        monkeypatch.chdir(tmp_path)
+        output = self._make_resolved_agents(tmp_path)
+        config = self._load_config(tmp_path, target_value)
+
+        leftover = deploy_resolved(output, config, agent_count=2)
+
+        assert leftover == 0
+        assert not (tmp_path / "AGENTS.md").exists(), (
+            f"editor.target '{target_value}' must NOT touch AGENTS.md"
+        )
+
+    def test_absolute_codex_agents_md_path_refuses_deploy(
+        self, tmp_path, monkeypatch
+    ):
+        monkeypatch.chdir(tmp_path)
+        output = self._make_resolved_agents(tmp_path)
+        config = self._load_config(tmp_path, "codex")
+        config["paths"]["codex_agents_md"] = str(tmp_path / "abs-AGENTS.md")
+
+        with pytest.raises(SystemExit) as exc_info:
+            deploy_resolved(output, config, agent_count=2)
+        assert exc_info.value.code != 0
 
 
 # =============================================================================

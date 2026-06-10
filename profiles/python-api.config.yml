@@ -51,6 +51,9 @@ paths:
   instructions_dir: ".github/instructions"
   skills_deploy_dir: ".github/agents/"  # Where resolved skills are copied in the adopter project
   claude_commands: ".claude/commands"   # Claude Code slash-command directory
+  claude_agents: ".claude/agents"       # Claude Code native subagent directory (seeded for claude-code/both/all targets)
+  cursor_commands: ".cursor/commands"   # Cursor command directory (seeded for cursor/all targets)
+  codex_agents_md: "AGENTS.md"          # Codex AGENTS.md managed-block target (codex/all targets)
   memory_architecture: ".claude/memory/architecture.md"
   memory_conventions: ".claude/memory/conventions.md"
 
