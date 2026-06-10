@@ -1,6 +1,6 @@
 # Sprint 3 — Claims Foundation: ADR, Debt, and Roadmap Seeding
 
-**Status:** Active
+**Status:** Complete
 **Type:** Mixed (feature-enabling / debt / hygiene)
 **Sources:** session review 2026-06-10 (user-approved "close the gap upward" roadmap) · **Ledger:** ITEM-013, ITEM-014, ITEM-015, ITEM-016, ITEM-017, ITEM-018, ITEM-019, ITEM-020
 **Dependencies:** None (Sprint 2 build hardening is the foundation this builds on)
@@ -40,67 +40,67 @@ independent and can run in parallel after 1.
 ### Task Group 1: ADR 0008 — supported mode implementations (ITEM-014)
 Files: `command-centre/decisions/0008-supported-mode-implementations.md`, `command-centre/PLAN.md`
 
-- [ ] Write ADR 0008 (format of `0004-mode-2-contract-not-absorption.md`):
+- [x] Write ADR 0008 (format of `0004-mode-2-contract-not-absorption.md`):
       revise the "Owning a specific Mode 2 dispatcher implementation"
       non-goal; define the 5-point supported-implementation contract
       (lives in `src/` with root CLI; contract checklist proven by pytest in
       CI on both OSes; crash-safety/idempotency beyond the reference impl;
       adopter doc in `docs/` + named in the mode's `install-contract.md`;
       reference impl stays frozen byte-unchanged).
-- [ ] Update `command-centre/PLAN.md` Non-goals to reference ADR 0008.
-- [ ] No contract/schema changes — `protocol-v1`, `mode-2-contract-v1`,
+- [x] Update `command-centre/PLAN.md` Non-goals to reference ADR 0008.
+- [x] No contract/schema changes — `protocol-v1`, `mode-2-contract-v1`,
       `mode-3-contract-v1` remain frozen.
 
 ### Task Group 2: ITEM-013 — migrate RefResolver to `referencing`
 Files: `command-centre/04-mode-choreography/reference-impls/registry-coordinator/coordinator.py`, `tests/test_protocol_v1_conformance.py`, `requirements.txt`
 
-- [ ] Replace `jsonschema.RefResolver` usage (coordinator.py ~L42–53) with
+- [x] Replace `jsonschema.RefResolver` usage (coordinator.py ~L42–53) with
       the `referencing` registry API.
-- [ ] Migrate the same pattern in `tests/test_protocol_v1_conformance.py`
+- [x] Migrate the same pattern in `tests/test_protocol_v1_conformance.py`
       (~L151–160).
-- [ ] Add `referencing` to `requirements.txt`.
-- [ ] Full suite green with zero jsonschema deprecation warnings.
+- [x] Add `referencing` to `requirements.txt`.
+- [x] Full suite green with zero jsonschema deprecation warnings.
 
 ### Task Group 3: Stale drafts cleanup (ITEM-015)
 Files: `docs/planning/drafts/*`, `docs/archive/` (new), `docs/planning/BACKLOG_LEDGER.md`
 
-- [ ] Create `docs/archive/`; move completed drafts there:
+- [x] Create `docs/archive/`; move completed drafts there:
       `sprint-2-build-hardening-draft-plan.md` (Sprint 2 done),
       `onboarding-path-resolution-remediation-draft-plan.md` (Sprint 1 done),
       `repo-rename-agent-enterprise-draft-plan.md` (rename done 2026-05-29).
-- [ ] `e1-fix-reconciliation-handoff.md` is a handoff, not a draft — relocate
+- [x] `e1-fix-reconciliation-handoff.md` is a handoff, not a draft — relocate
       alongside `HANDOFF_REJECTIONS.md` context in `docs/planning/` (or a
       `_handoffs/` subdir) and leave a pointer.
-- [ ] Triage `repo-structure-cleanup.md` and `command-centre-visual-v2-plan.md`:
+- [x] Triage `repo-structure-cleanup.md` and `command-centre-visual-v2-plan.md`:
       convert still-pending work to ledger ITEMs or archive if done.
-- [ ] Grep check: no doc links break (ledger Draft column updated).
+- [x] Grep check: no doc links break (ledger Draft column updated).
 
 ### Task Group 4: CI profile build matrix (ITEM-016)
 Files: `.github/workflows/ci.yml`
 
-- [ ] Build all three `profiles/*.config.yml` in CI in addition to
+- [x] Build all three `profiles/*.config.yml` in CI in addition to
       `config/project.config.example.yml` (loop or matrix); rely on the
       existing fail-on-unresolved guardrail.
-- [ ] Keep the canonical-build-command doc check (ITEM-011) intact — profiles
+- [x] Keep the canonical-build-command doc check (ITEM-011) intact — profiles
       are additional builds, not a new canonical command.
 
 ### Task Group 5: Interim README honesty footnote
 Files: `README.md`
 
-- [ ] Add a footnote to the OpenAI Codex "✅ Ready" cell (README ~L321):
+- [x] Add a footnote to the OpenAI Codex "✅ Ready" cell (README ~L321):
       Codex consumes the deployed Markdown + AGENTS.md convention today;
       native target emission lands with the platform-parity draft.
-- [ ] No badge changes; the Works Everywhere table stays.
+- [x] No badge changes; the Works Everywhere table stays.
 
 ### Task Group 6: Seed the four roadmap draft plans + ledger (ITEM-017..020)
 Files: `docs/planning/drafts/platform-parity-draft-plan.md`, `docs/planning/drafts/mode2-dispatcher-promotion-draft-plan.md`, `docs/planning/drafts/mode3-coordinator-promotion-draft-plan.md`, `docs/planning/drafts/adopter-bootstrap-draft-plan.md`, `docs/planning/BACKLOG_LEDGER.md`
 
-- [ ] Author the four roadmap draft plans (same template as this one), each
+- [x] Author the four roadmap draft plans (same template as this one), each
       scoped to 5–8 task groups, with Files:, gates, risks.
-- [ ] Ledger rows ITEM-017 (platform parity), ITEM-018 (Mode 2 promotion),
+- [x] Ledger rows ITEM-017 (platform parity), ITEM-018 (Mode 2 promotion),
       ITEM-019 (Mode 3 promotion), ITEM-020 (adopter bootstrap) point at
       their drafts.
-- [ ] No sprint numbers assigned to future work (slug references only).
+- [x] No sprint numbers assigned to future work (slug references only).
 
 ## Files to Create/Modify
 
@@ -113,19 +113,19 @@ Files: `docs/planning/drafts/platform-parity-draft-plan.md`, `docs/planning/draf
 
 ## Quality Gates
 
-- [ ] standard — `python -m pytest tests/ -v` stays green (401+), zero new warnings
-- [ ] Determinism — re-run `init.py` twice, output identical
-- [ ] guardrail — token-free `.github/**` check passes
-- [ ] docs — voice/heading tests green for the ADR and new drafts
+- [x] standard — 431 passed / 7 skipped, green with `-W error::DeprecationWarning` (2026-06-10)
+- [x] Determinism — double-build byte-identical, 59 files, zero hash diffs (2026-06-10)
+- [x] guardrail — check_tokens.py exit 0; check_build_command.py exit 0 (2026-06-10)
+- [x] docs — 104 passed / 6 skipped (2026-06-10)
 
 ## Success Criteria
 
-- [ ] ADR 0008 accepted; PLAN.md non-goal revised; no frozen contract touched.
-- [ ] ITEM-013 closed; suite green with zero jsonschema deprecation warnings.
-- [ ] `docs/planning/drafts/` contains only pending work; archive rule applied.
-- [ ] CI builds 4 configs (example + 3 profiles) token-free.
-- [ ] README Codex cell footnoted.
-- [ ] Four roadmap drafts staged + ledger ITEMs.
+- [x] ADR 0008 accepted; PLAN.md non-goal revised; no frozen contract touched.
+- [x] ITEM-013 closed; suite green with zero jsonschema deprecation warnings.
+- [x] `docs/planning/drafts/` contains only pending work; archive rule applied.
+- [x] CI builds 4 configs (example + 3 profiles) token-free.
+- [x] README Codex cell footnoted.
+- [x] Four roadmap drafts staged + ledger ITEMs.
 
 ## Risks
 

@@ -1,36 +1,38 @@
 # Sprint Tracking
 
-**Last Completed: Sprint 2**
+**Last Completed: Sprint 3**
 
 ---
 
 ## Sprint 3 — Claims Foundation: ADR, Debt, and Roadmap Seeding
 
-**Status:** Active  
+**Status:** Complete  
 **Type:** Mixed (feature-enabling / debt / hygiene)  
-**Started:** 2026-06-10
+**Started:** 2026-06-10  
+**Completed:** 2026-06-10
 
 ### Goals
 
-- [ ] ADR 0008 supported-mode-implementations; revise PLAN.md non-goal (ITEM-014)
-- [ ] Migrate `jsonschema.RefResolver` → `referencing` (ITEM-013)
-- [ ] Stale drafts cleanup + archive (ITEM-015)
-- [ ] CI builds all profiles (ITEM-016)
-- [ ] Interim README Codex honesty footnote
-- [ ] Seed four roadmap draft plans + ledger ITEMs (ITEM-017..020)
+- [x] ADR 0008 supported-mode-implementations; revise PLAN.md non-goal (ITEM-014)
+- [x] Migrate `jsonschema.RefResolver` → `referencing` (ITEM-013)
+- [x] Stale drafts cleanup + archive (ITEM-015)
+- [x] CI builds all profiles (ITEM-016)
+- [x] Interim README Codex honesty footnote
+- [x] Seed four roadmap draft plans + ledger ITEMs (ITEM-017..020)
 
 ### Tasks
 
-- [ ] TG1: ADR 0008 + PLAN.md non-goal revision (ITEM-014)
-- [ ] TG2: RefResolver → referencing migration (ITEM-013)
-- [ ] TG3: stale drafts cleanup/archive (ITEM-015)
-- [ ] TG4: CI profile build matrix (ITEM-016)
-- [ ] TG5: README Codex footnote
-- [ ] TG6: seed four roadmap drafts + ledger (ITEM-017..020)
+- [x] TG1: ADR 0008 + PLAN.md non-goal revision (ITEM-014)
+- [x] TG2: RefResolver → referencing migration (ITEM-013)
+- [x] TG3: stale drafts cleanup/archive (ITEM-015)
+- [x] TG4: CI profile build matrix (ITEM-016)
+- [x] TG5: README Codex footnote
+- [x] TG6: seed four roadmap drafts + ledger (ITEM-017..020)
 
 ### Notes
 
 - Sprint started 2026-06-10 (roadmap approved in-session)
+- Sprint completed 2026-06-10; retro at sprints/sprint-3/RETRO.md
 
 ---
 
@@ -68,34 +70,6 @@
 
 ---
 
-## Sprint 1 — Onboarding Path Resolution Remediation
-
-**Status:** Complete  
-**Type:** fix (build-system debt / bug-fix)  
-**Started:** 2026-04-27  
-**Completed:** 2026-05-30
-
-### Goals
-
-- [x] Resolve and deploy skill companion files
-- [x] Resolve inline code-span tokens with two-phase escape
-- [x] Cross-references use deploy path (`paths.skills_deploy_dir` token)
-
-### Tasks
-
-- [x] TG1 (A): companion-file resolution loop + setup-skip interaction
-- [x] TG2 (C): `paths.skills_deploy_dir` token + cross-reference rewrites
-- [x] TG3 (B): inline code-span policy + two-phase escape (preserve → strip after scans)
-- [x] Review fix: agent-wrapper refs corrected to deploy path
-
-### Retro Summary
-
-- **Velocity:** 3 task groups + 1 review-fix; 100% completion rate
-- **Carry-over:** none
-- **Forecast calibration:** 100% (3/3 assumptions, 3/3 complexity)
-- **Process notes:** Escape must preserve marker through scans; strip-after-scan ordering is now test-locked.
-
----
 
 <!-- 
 Archive rule: when Sprint N completes, move Sprint N-2 entry to docs/archive/

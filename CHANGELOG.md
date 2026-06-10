@@ -25,7 +25,6 @@ The `scope:` → `applies_to` migrator
 
 ## Planned for 2.1
 
-- Migrate off `jsonschema.RefResolver` to `referencing`.
 - Adopter template repository (one-line `git clone` + `init.py`).
 - PyPI distribution (`pip install agent-enterprise`).
 - Authoring linter for skill/instruction/agent frontmatter (catches
@@ -38,10 +37,41 @@ The `scope:` → `applies_to` migrator
 - Windows authoring requires UTF-8-without-BOM git config; the
   `.githooks/commit-msg` hook (installed via
   `git config core.hooksPath .githooks`) rejects BOM commits.
-- `jsonschema.RefResolver` deprecation warning surfaces in
-  `tests/test_protocol_v1_conformance.py`. Functional; planned
-  migration in 2.1.
 - macOS is not exercised in CI; reports welcome.
+
+---
+
+## Unreleased — Sprint 3 — claims foundation
+
+Foundations for closing the gap between the README's three-modes /
+four-platforms claims and the implementation, per ADR 0008.
+
+### Added
+- **ADR 0008 — supported mode implementations.** Defines the 5-point
+  promotion contract for shipping one supported implementation per
+  delivery mode; revises the `command-centre/PLAN.md` non-goal it
+  supersedes. Frozen contracts untouched.
+- **Four roadmap draft plans** staged in `docs/planning/drafts/`
+  (platform parity, Mode 2 dispatcher promotion, Mode 3 coordinator
+  promotion, adopter bootstrap; ledger ITEM-017..020).
+- **CI builds every profile.** `profiles/*.config.yml` now build in CI
+  alongside the canonical example config, proving each resolves
+  token-free.
+
+### Fixed
+- **`jsonschema.RefResolver` migration (ITEM-013).** The registry
+  coordinator reference impl and conformance tests now use the
+  `referencing` API; the suite is green with `DeprecationWarning`
+  escalated to error. Declared floor raised to `jsonschema>=4.18`.
+
+### Changed
+- **Planning hygiene.** Completed draft plans archived to
+  `docs/archive/`; the e1 reconciliation handoff relocated beside
+  `HANDOFF_REJECTIONS.md`; `docs/planning/drafts/` now holds only
+  pending work.
+- **README platform table.** The OpenAI Codex cell carries an interim
+  footnote: Codex consumes deployed Markdown via the `AGENTS.md`
+  convention today; a native emission target is staged (ITEM-017).
 
 ---
 
