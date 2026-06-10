@@ -27,6 +27,7 @@ from init import (
     flatten,
     substitute,
     find_unresolved_tokens,
+    find_unresolved_real_tokens,
     strip_escapes,
     parse_frontmatter,
     extract_agent_body,
@@ -334,6 +335,41 @@ class TestTokenDetectorFalsePositives:
         # this is the failure the ordering guards against.
         stripped_first = strip_escapes(resolved)
         assert find_unresolved_tokens(stripped_first) == ["{{tokens}}"]
+        # The deployed-tree detector is the post-strip counterpart: a no-dot
+        # literal is documentation, not a leak, even with the backslash gone.
+        assert find_unresolved_real_tokens(stripped_first) == []
+
+
+class TestFindUnresolvedRealTokens:
+    """Deployed-tree detector: post-strip files where escapes are already
+    gone. Only dotted {{namespace.key}} forms are real config-token leaks;
+    no-dot brace literals are documentation. Semantics must match
+    scripts/check_tokens.py's _TOKEN_RE."""
+
+    def test_no_dot_literal_not_flagged(self):
+        # A stripped documentation literal in a deployed file is clean output.
+        assert find_unresolved_real_tokens("Check for `{{tokens}}` in output.") == []
+
+    def test_dotted_leak_flagged(self):
+        assert find_unresolved_real_tokens(
+            "Dir: {{paths.claude_commands}}"
+        ) == ["{{paths.claude_commands}}"]
+
+    def test_escaped_dotted_literal_not_flagged(self):
+        # Defensive: should a backslash ever survive into a scanned file,
+        # it still marks an intentional literal (same as check_tokens.py).
+        assert find_unresolved_real_tokens("Use `\\{{paths.x}}` syntax.") == []
+
+    def test_github_actions_syntax_not_flagged(self):
+        assert find_unresolved_real_tokens(
+            "Use ${{ secrets.GITHUB_TOKEN }} in your workflow."
+        ) == []
+
+    def test_matches_check_tokens_regex(self):
+        """The init.py detector and the CI guardrail must use the exact same
+        token pattern — drift here recreates the deploy/CI disagreement."""
+        from init import _REAL_TOKEN_RE
+        assert _check_tokens._TOKEN_RE.pattern == _REAL_TOKEN_RE.pattern
 
 
 # =============================================================================
@@ -1289,7 +1325,8 @@ class TestDeployCopy:
         )
 
     def test_deploy_fails_if_deployed_file_has_unresolved_token(self, tmp_path, monkeypatch):
-        """deploy_resolved returns non-zero when a copied file still has {{tokens}}."""
+        """deploy_resolved returns non-zero when a copied file still carries a
+        dotted {{namespace.key}} token — a real substitution leak."""
         monkeypatch.chdir(tmp_path)
         output = tmp_path / "resolved"
         skill_dir = output / "skills" / "broken"
@@ -1311,6 +1348,75 @@ class TestDeployCopy:
         assert leftover > 0, (
             "Expected deploy_resolved to return > 0 when deployed file has unresolved token"
         )
+
+    def test_deploy_passes_with_no_dot_documentation_literal(self, tmp_path, monkeypatch):
+        """The post-deploy scan must NOT flag a stripped no-dot literal like
+        `{{tokens}}` — by deploy time strip_escapes() has already removed the
+        authoring backslash, so the no-dot form is intentional documentation
+        (mirrors scripts/check_tokens.py semantics)."""
+        monkeypatch.chdir(tmp_path)
+        output = tmp_path / "resolved"
+        skill_dir = output / "skills" / "onboarding"
+        skill_dir.mkdir(parents=True)
+        (skill_dir / "SKILL.md").write_text(
+            "# Onboarding\n\nConfirm no unresolved `{{tokens}}` remain.\n",
+            encoding="utf-8",
+        )
+
+        config = {
+            "paths": {
+                "instructions_dir": ".github/instructions",
+                "skills_deploy_dir": ".github/agents",
+            }
+        }
+
+        leftover = deploy_resolved(output, config, agent_count=0)
+
+        assert leftover == 0, (
+            "post-deploy scan flagged a no-dot documentation literal as a leak"
+        )
+
+    def test_full_deploy_with_escaped_no_dot_literal_exits_zero(
+        self, tmp_path, monkeypatch
+    ):
+        """Regression (Sprint 4 deploy blocker): a full --deploy of a config
+        whose skills include an escaped no-dot literal must exit 0. The
+        pipeline strips '\\{{tokens}}' to '{{tokens}}' before the post-deploy
+        scan, which must treat the no-dot form as documentation."""
+        config_path = make_minimal_config(tmp_path)
+        skill_dir = tmp_path / "skills" / "onboarding"
+        skill_dir.mkdir(parents=True)
+        (skill_dir / "SKILL.md").write_text(
+            "---\n"
+            "name: onboarding\n"
+            "kind: skill\n"
+            "description: Onboarding skill.\n"
+            "when_to_use: onboard\n"
+            "user-invocable: false\n"
+            "---\n\n"
+            "Project: {{project.name}}\n\n"
+            "Confirm no unresolved `\\{{tokens}}` remain in resolved files.\n",
+            encoding="utf-8",
+        )
+        monkeypatch.chdir(tmp_path)
+        monkeypatch.setattr(
+            sys, "argv",
+            ["init.py", "--config", str(config_path),
+             "--allow-frontmatter-warnings", "--deploy"],
+        )
+
+        try:
+            main()
+        except SystemExit as e:
+            pytest.fail(
+                f"--deploy with an escaped no-dot literal exited {e.code}"
+            )
+
+        deployed = tmp_path / ".github" / "agents" / "onboarding" / "SKILL.md"
+        assert deployed.exists(), "skill bundle was not deployed"
+        text = deployed.read_text(encoding="utf-8")
+        assert "`{{tokens}}`" in text, "literal must ship clean (backslash stripped)"
+        assert "\\{{tokens}}" not in text, "escape marker leaked into deployed file"
 
 
 # =============================================================================

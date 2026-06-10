@@ -723,6 +723,11 @@ def suppress_skill_invocability(output: Path, agent_names: list[str]) -> int:
 # literal apart from a genuinely-unresolved token. The backslash is removed
 # only at the very end of the build by `strip_escapes()`, after every scan
 # has run, leaving a clean '{{...}}' literal in the deployed files.
+#
+# Authoring convention for brace literals in deployable docs: only the
+# no-dot form (e.g. '\{{tokens}}') may be used — after strip_escapes() it is
+# still distinguishable from a real {{namespace.key}} leak. Dotted token
+# names in prose must be written without braces (e.g. `paths.claude_commands`).
 
 _TOKEN_RE = re.compile(r"(?<!\$)(\\?)\{\{([^}]+)\}\}")
 
@@ -756,6 +761,38 @@ def find_unresolved_tokens(text: str) -> list:
     return [
         "{{" + m.group(2) + "}}"
         for m in _TOKEN_RE.finditer(text)
+        if m.group(1) != "\\"
+    ]
+
+
+# Stricter detector for the DEPLOYED tree: only matches real build tokens of
+# the form {{namespace.key}} (at least one dot required). Mirrors
+# scripts/check_tokens.py `_TOKEN_RE` so the post-deploy scan and the CI
+# guardrail agree on what counts as a leak.
+_REAL_TOKEN_RE = re.compile(
+    r"(?<!\$)(\\?)\{\{([a-z_][a-z0-9_]*\.[a-z_][a-z0-9_]*)\}\}"
+)
+
+
+def find_unresolved_real_tokens(text: str) -> list:
+    """Return the {{namespace.key}} tokens that are genuine substitution leaks.
+
+    Deployed-tree semantics: the post-deploy scan runs on FINAL files, AFTER
+    strip_escapes() has removed the authoring backslashes — so an intentional
+    documentation literal like '{{tokens}}' is indistinguishable by shape from
+    an escaped one. Only dotted namespace.key forms can be real config tokens
+    (all config keys are namespaced); no-dot brace literals are documentation
+    and are NOT flagged. This matches scripts/check_tokens.py's `_TOKEN_RE`
+    exactly, so a deploy that passes here also passes the CI guardrail.
+
+    Do NOT use this for the pre-strip scans during resolution — there,
+    find_unresolved_tokens() must keep flagging every non-escaped {{...}}
+    regardless of shape, because escapes still carry their backslash and
+    anything else brace-wrapped is a likely authoring mistake.
+    """
+    return [
+        "{{" + m.group(2) + "}}"
+        for m in _REAL_TOKEN_RE.finditer(text)
         if m.group(1) != "\\"
     ]
 
@@ -1033,25 +1070,29 @@ def deploy_resolved(output: Path, config: dict, agent_count: int) -> int:
 
     print(f"  deployed {deployed} file(s) to {instr_dest} and {skills_dest}")
 
-    # Post-deploy guardrail: the deployed tree must be token-free.
+    # Post-deploy guardrail: the deployed tree must be free of REAL token
+    # leaks. These files are post-strip_escapes(), so intentional no-dot
+    # documentation literals like '{{tokens}}' are clean output here —
+    # find_unresolved_real_tokens() flags only dotted {{namespace.key}}
+    # forms, matching scripts/check_tokens.py.
     leftover = []
     for md in sorted(skills_dest.rglob("*.md")):
-        if find_unresolved_tokens(md.read_text(encoding="utf-8")):
+        if find_unresolved_real_tokens(md.read_text(encoding="utf-8")):
             leftover.append(md)
     for md in sorted(instr_dest.rglob("*.md")):
-        if find_unresolved_tokens(md.read_text(encoding="utf-8")):
+        if find_unresolved_real_tokens(md.read_text(encoding="utf-8")):
             leftover.append(md)
     if claude_commands:
         for md in sorted(Path(claude_commands).rglob("*.md")):
-            if find_unresolved_tokens(md.read_text(encoding="utf-8")):
+            if find_unresolved_real_tokens(md.read_text(encoding="utf-8")):
                 leftover.append(md)
     if claude_agents and seed_claude_agents:
         for md in sorted(Path(claude_agents).rglob("*.md")):
-            if find_unresolved_tokens(md.read_text(encoding="utf-8")):
+            if find_unresolved_real_tokens(md.read_text(encoding="utf-8")):
                 leftover.append(md)
     if cursor_commands:
         for md in sorted(Path(cursor_commands).rglob("*.md")):
-            if find_unresolved_tokens(md.read_text(encoding="utf-8")):
+            if find_unresolved_real_tokens(md.read_text(encoding="utf-8")):
                 leftover.append(md)
 
     return len(leftover)

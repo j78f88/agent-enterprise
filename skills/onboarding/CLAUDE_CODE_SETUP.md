@@ -5,9 +5,9 @@ Agent-enterprise supports two agent invocation mechanisms depending on your edit
 | Platform | How agents are invoked | Deploy directory |
 |---|---|---|
 | GitHub Copilot (VS Code) | `@agent-name` in chat | `.github/agents/` |
-| Claude Code | `/agent-name` slash commands | `\{{paths.claude_commands}}` |
+| Claude Code | `/agent-name` slash commands | the `paths.claude_commands` directory |
 
-When you run `python init.py --config config/project.config.example.yml --deploy`, the deploy step **automatically seeds `\{{paths.claude_commands}}`** with one `.md` file per agent. Claude Code reads the filename (without `.md`) as the slash-command name — so `planner.md` becomes `/planner`.
+When you run `python init.py --config config/project.config.example.yml --deploy`, the deploy step **automatically seeds the `paths.claude_commands` directory** with one `.md` file per agent. Claude Code reads the filename (without `.md`) as the slash-command name — so `planner.md` becomes `/planner`.
 
 ## How it works
 
@@ -15,12 +15,12 @@ When you run `python init.py --config config/project.config.example.yml --deploy
 python init.py --config config/project.config.example.yml --deploy
 ```
 
-This creates files such as:
+This creates files under the `paths.claude_commands` directory (default `.claude/commands`), such as:
 
 ```
-\{{paths.claude_commands}}/planner.md
-\{{paths.claude_commands}}/sprint-lead.md
-\{{paths.claude_commands}}/reviewer.md
+.claude/commands/planner.md
+.claude/commands/sprint-lead.md
+.claude/commands/reviewer.md
 ...
 ```
 
@@ -32,4 +32,4 @@ The slash-command directory is set via `paths.claude_commands` in your project c
 
 ## If you are using Claude Code only
 
-Set `editor.target: "claude-code"` in your config. Agent wrapper generation (`.agent.md` files for VS Code) is skipped, but the `\{{paths.claude_commands}}` seeding still runs on `--deploy`.
+Set `editor.target: "claude-code"` in your config. Agent wrapper generation (`.agent.md` files for VS Code) is skipped, but the `paths.claude_commands` seeding still runs on `--deploy`.
