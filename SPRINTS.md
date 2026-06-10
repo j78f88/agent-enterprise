@@ -1,36 +1,38 @@
 # Sprint Tracking
 
-**Last Completed: Sprint 4**
+**Last Completed: Sprint 5**
 
 ---
 
 ## Sprint 5 — Mode 2 Dispatcher Promotion: Supported Implementation in src/
 
-**Status:** Active  
+**Status:** Complete  
 **Type:** Feature (mode promotion per ADR 0008)  
-**Started:** 2026-06-10
+**Started:** 2026-06-10  
+**Completed:** 2026-06-10
 
 ### Goals
 
-- [ ] src/mode2_dispatcher/ package: core port, discovery, durable queue, return validation (ITEM-018)
-- [ ] Root CLI dispatch.py (run/status/requeue/validate-callables) (ITEM-018)
-- [ ] Crash-resume + atomic state proven by tests (ITEM-018)
-- [ ] Shared mode-2-contract-v1 conformance over both impls; reference impl byte-frozen (ITEM-018)
-- [ ] docs/ORCHESTRATION.md + install-contract names the supported impl (ITEM-018)
+- [x] src/mode2_dispatcher/ package: core port, discovery, durable queue, return validation (ITEM-018)
+- [x] Root CLI dispatch.py (run/status/requeue/validate-callables) (ITEM-018)
+- [x] Crash-resume + atomic state proven by tests (ITEM-018)
+- [x] Shared mode-2-contract-v1 conformance over both impls; reference impl byte-frozen (ITEM-018)
+- [x] docs/ORCHESTRATION.md + install-contract names the supported impl (ITEM-018)
 
 ### Tasks
 
-- [ ] TG1: src/mode2_dispatcher/ core port
-- [ ] TG2: callable discovery (discovery.py)
-- [ ] TG3: durable queue (queue_file.py) + returns.py
-- [ ] TG4: root CLI dispatch.py
-- [ ] TG5: tests/test_mode2_dispatcher.py
-- [ ] TG6: shared conformance parametrization + byte-freeze test
-- [ ] TG7: adopter docs + install contract + README/CHANGELOG
+- [x] TG1: src/mode2_dispatcher/ core port
+- [x] TG2: callable discovery (discovery.py)
+- [x] TG3: durable queue (queue_file.py) + returns.py
+- [x] TG4: root CLI dispatch.py
+- [x] TG5: tests/test_mode2_dispatcher.py
+- [x] TG6: shared conformance parametrization + byte-freeze test
+- [x] TG7: adopter docs + install contract + README/CHANGELOG
 
 ### Notes
 
 - Sprint started 2026-06-10 (promoted from mode2-dispatcher-promotion draft; user approved)
+- Sprint completed 2026-06-10; retro at sprints/sprint-5/RETRO.md
 
 ---
 
@@ -66,38 +68,6 @@
 - Sprint started 2026-06-10 (promoted from platform-parity draft; user approved)
 - Sprint contract includes fixing any CI failures observed on the PR branch
 - Sprint completed 2026-06-10; retro at sprints/sprint-4/RETRO.md
-
----
-
-## Sprint 3 — Claims Foundation: ADR, Debt, and Roadmap Seeding
-
-**Status:** Complete  
-**Type:** Mixed (feature-enabling / debt / hygiene)  
-**Started:** 2026-06-10  
-**Completed:** 2026-06-10
-
-### Goals
-
-- [x] ADR 0008 supported-mode-implementations; revise PLAN.md non-goal (ITEM-014)
-- [x] Migrate `jsonschema.RefResolver` → `referencing` (ITEM-013)
-- [x] Stale drafts cleanup + archive (ITEM-015)
-- [x] CI builds all profiles (ITEM-016)
-- [x] Interim README Codex honesty footnote
-- [x] Seed four roadmap draft plans + ledger ITEMs (ITEM-017..020)
-
-### Tasks
-
-- [x] TG1: ADR 0008 + PLAN.md non-goal revision (ITEM-014)
-- [x] TG2: RefResolver → referencing migration (ITEM-013)
-- [x] TG3: stale drafts cleanup/archive (ITEM-015)
-- [x] TG4: CI profile build matrix (ITEM-016)
-- [x] TG5: README Codex footnote
-- [x] TG6: seed four roadmap drafts + ledger (ITEM-017..020)
-
-### Notes
-
-- Sprint started 2026-06-10 (roadmap approved in-session)
-- Sprint completed 2026-06-10; retro at sprints/sprint-3/RETRO.md
 
 ---
 

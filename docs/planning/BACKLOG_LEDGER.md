@@ -16,12 +16,15 @@ Single source of truth for all backlog item status. Detail and context live in B
 | ITEM-015 | debt | session review 2026-06-10 | 0 | 0 | 3 | done | | ../archive/claims-foundation-draft-plan.md | Stale drafts cleanup: archive completed draft plans, relocate handoff, triage remaining |
 | ITEM-016 | debt | session review 2026-06-10 | 0 | 0 | 3 | done | | ../archive/claims-foundation-draft-plan.md | CI builds all profiles/*.config.yml, not just the example config |
 | ITEM-017 | feature | session review 2026-06-10 | 0 | 0 | 3 | done | | ../archive/platform-parity-draft-plan.md | Platform parity: ungate agent generation; native Claude Code subagents, Cursor commands, Codex AGENTS.md target |
-| ITEM-018 | feature | session review 2026-06-10 | 0 | 0 | 3 | assigned | | drafts/mode2-dispatcher-promotion-draft-plan.md | Promote Mode 2 file-queue dispatcher to supported implementation in src/ per ADR 0008 |
+| ITEM-018 | feature | session review 2026-06-10 | 0 | 0 | 3 | done | | ../archive/mode2-dispatcher-promotion-draft-plan.md | Promote Mode 2 file-queue dispatcher to supported implementation in src/ per ADR 0008 |
 | ITEM-019 | feature | session review 2026-06-10 | 0 | 0 | 3 | open | | drafts/mode3-coordinator-promotion-draft-plan.md | Promote Mode 3 registry coordinator to supported implementation in src/ per ADR 0008 |
 | ITEM-020 | feature | session review 2026-06-10 | 0 | 0 | 3 | open | | drafts/adopter-bootstrap-draft-plan.md | Adopter bootstrap: init.py --target/--bootstrap one-line setup into external projects |
 | ITEM-021 | debt | Sprint 3 review SUGGESTION | 0 | 0 | 3 | done | | | CI: run canonical example-config build last so post-build guardrail steps validate the canonical tree, not the last profile build |
 | ITEM-022 | debt | Sprint 3 review SUGGESTION | 0 | 0 | 3 | open | | | ADR 0008 wording: disambiguate "promotion contract" vs 05-promotion-contract.md; add explicit ADR 0004 cross-reference |
 | ITEM-023 | debt | Sprint 4 review SUGGESTION | 0 | 0 | 4 | open | | | Onboarding skill walks adopters through project.config.yml but build/deploy examples must use the canonical example config to satisfy the guardrail — decouple (exemption or placeholder phrasing) |
+| ITEM-024 | debt | Sprint 5 review (test-author finding a) | 0 | 0 | 5 | open | | | callable-contract.md non-enterprise example invalid against callable-v1 schema (missing kind/version/applies_to) — frozen surface; fix as additive informative note or at -v2 |
+| ITEM-025 | debt | Sprint 5 review SUGGESTIONs S3/S4/d/e | 0 | 0 | 5 | open | | | dispatch.py hardening: containment for --summary-out/--callables; distinct exit when all callables invalid; scope _resolve_python_entry sys.path insertion; requeue/recover UX |
+| ITEM-026 | debt | Sprint 5 review SUGGESTIONs S5/S6 | 0 | 0 | 5 | open | | | queue journal robustness: document tail-tolerance assumption, wrap bad seq in QueueStateError, journal compaction, directory fsync |
 
 <!-- 
 Column guide:
