@@ -318,7 +318,9 @@ author once → resolve with tokens → deploy to any platform:
 | **GitHub Copilot** | ✅ Ready |
 | **Claude Code** | ✅ Ready |
 | **Cursor** | ✅ Ready |
-| **OpenAI Codex** | ✅ Ready |
+| **OpenAI Codex** | ✅ Ready\* |
+
+\*Codex consumes the deployed Markdown artifacts via the repo's `AGENTS.md` convention today; a native emission target (`editor.target: codex`) is planned ([ITEM-017](docs/planning/BACKLOG_LEDGER.md)).
 
 ---
 
