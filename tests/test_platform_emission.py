@@ -137,7 +137,9 @@ def _setup_project(tmp_path: Path, target: str) -> Path:
         SCOPED_INSTRUCTION, encoding="utf-8"
     )
 
-    (tmp_path / "AGENTS.md").write_text(ADOPTER_AGENTS_MD, encoding="utf-8")
+    # write_bytes pins LF on every OS — write_text would translate to CRLF
+    # on Windows and break the byte-level preservation assertions.
+    (tmp_path / "AGENTS.md").write_bytes(ADOPTER_AGENTS_MD.encode("utf-8"))
     return config_path
 
 
