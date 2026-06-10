@@ -27,6 +27,17 @@ jobs:
       - name: Build resolved/ artifacts
         run: python init.py --config config/project.config.example.yml
 
+      - name: Build all profile configs
+        run: |
+          for profile in \
+            profiles/react-web-app.config.yml \
+            profiles/monorepo-fullstack.config.yml \
+            profiles/python-api.config.yml; do
+            echo "::group::python init.py --config $profile"
+            python init.py --config "$profile"
+            echo "::endgroup::"
+          done
+
       - name: Check for unresolved tokens in .github/ tree
         run: python scripts/check_tokens.py
 
