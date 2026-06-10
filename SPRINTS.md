@@ -4,6 +4,36 @@
 
 ---
 
+## Sprint 3 — Claims Foundation: ADR, Debt, and Roadmap Seeding
+
+**Status:** Active  
+**Type:** Mixed (feature-enabling / debt / hygiene)  
+**Started:** 2026-06-10
+
+### Goals
+
+- [ ] ADR 0008 supported-mode-implementations; revise PLAN.md non-goal (ITEM-014)
+- [ ] Migrate `jsonschema.RefResolver` → `referencing` (ITEM-013)
+- [ ] Stale drafts cleanup + archive (ITEM-015)
+- [ ] CI builds all profiles (ITEM-016)
+- [ ] Interim README Codex honesty footnote
+- [ ] Seed Sprint 4–7 draft plans + ledger ITEMs (ITEM-017..020)
+
+### Tasks
+
+- [ ] TG1: ADR 0008 + PLAN.md non-goal revision (ITEM-014)
+- [ ] TG2: RefResolver → referencing migration (ITEM-013)
+- [ ] TG3: stale drafts cleanup/archive (ITEM-015)
+- [ ] TG4: CI profile build matrix (ITEM-016)
+- [ ] TG5: README Codex footnote
+- [ ] TG6: seed Sprint 4–7 drafts + ledger (ITEM-017..020)
+
+### Notes
+
+- Sprint started 2026-06-10 (roadmap approved in-session)
+
+---
+
 ## Sprint 2 — Build-System Hardening & Process Hygiene
 
 **Status:** Complete  
