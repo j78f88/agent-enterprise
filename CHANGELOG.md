@@ -41,6 +41,41 @@ The `scope:` → `applies_to` migrator
 
 ---
 
+## Unreleased — Sprint 6 — worktree bootstrap
+
+Tooling for multi-agent workflows where each agent runs in its own git
+worktree (default-on in Claude Code / Codex). A linked worktree starts
+with no `resolved/` tree and no installed runtime deps; git has no native
+"post-worktree-create" hook, so a fresh worktree must be bootstrapped
+explicitly.
+
+### Added
+- **`scripts/setup-worktree.{sh,ps1}` — fresh-worktree bootstrap.**
+  Resolves the repo root via `git rev-parse --show-toplevel`
+  (worktree-safe — no absolute-path assumptions), installs runtime deps
+  from `requirements.txt`, then runs
+  `python init.py --config <config>` (default
+  `config/project.config.example.yml`) to produce a working `resolved/`
+  tree. Usage: `./scripts/setup-worktree.sh [config]` /
+  `.\scripts\setup-worktree.ps1 [-Config <path>]`. The `.sh` auto-detects
+  `python3` vs `python` and forces UTF-8
+  (`PYTHONUTF8`/`PYTHONIOENCODING`) so `init.py` status glyphs do not
+  crash a legacy console codepage; the `.ps1` sets `$env:PYTHONUTF8`.
+
+### Operational notes
+- **Removed the dangling `extensions.worktreeConfig` git setting.** It was
+  set to `true` with no `config.worktree` file present, so it did nothing
+  while carrying a latent risk — the extension makes older/non-canonical
+  Git refuse to access the repo. Unset with
+  `git config --unset extensions.worktreeConfig`. This is a local
+  git-config change, not a tracked file. Git hooks were investigated and
+  deliberately not adopted for the build: CI
+  (`.github/workflows/ci.yml`) already enforces multi-target build
+  health, and `resolved/` is gitignored so there is nothing committed to
+  diff against.
+
+---
+
 ## Unreleased — Sprint 5 — mode 2 dispatcher promotion
 
 Mode 2 (Orchestration) graduates from frozen contract + reference impl
