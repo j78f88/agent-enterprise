@@ -44,7 +44,7 @@ Grounding checked in-repo before labelling:
   It does **not** ship Claude Code-style PreToolUse/PostToolUse model-override hooks —
   those belong to the harness the template *runs on*, not the template itself.
 - **Context-serialization handoff** — partial / adjacent. Tier-2/3 return summaries and
-  `docs/planning/e1-fix-reconciliation-handoff.md` show the serialize-state-across-a-boundary
+  `docs/archive/e1-fix-reconciliation-handoff.md` show the serialize-state-across-a-boundary
   posture, but compaction-vs-handoff is explicitly Cluster 7 territory (context management).
 - **Human checkpoints / approval gates** — partial. The `flaggedDecisions` field and
   `status: needs-input` are the checkpoint primitive; the whole `@pm → @planner → human`

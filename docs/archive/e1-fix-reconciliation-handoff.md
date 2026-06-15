@@ -1,5 +1,16 @@
 # Handoff: Reconcile agent-homebase-e1 fixes into agent-enterprise
 
+> **SUPERSEDED 2026-06-16 — archived, not actioned as a live task.** `agent-homebase-e1`
+> is a separate TypeScript / Ports-&-Adapters fork; per this doc's own analysis the
+> adapter work is "N/A — TS-only" and does not port into this Python + Jinja2 generator.
+> The three portable process/governance fixes (R1 dangling-reference guard, R2 researcher
+> honesty-guard, ADR-006 process gates) were already confirmed landed here (see
+> "Already-verified equivalents" below). No remaining portable fix was identified, so the
+> reconciliation is closed without a separate landed/missing table. The "State of this repo"
+> snapshot below is a 2026-06-02 point-in-time capture and is **stale** — current backlog
+> status lives in `BACKLOG_LEDGER.md` (e.g. ITEM-013 is done; repo is v3.0.3). Kept for
+> provenance only.
+
 **Created:** 2026-06-02
 **Reason for handoff:** The reconciliation needs read access to the
 `agent-homebase-e1` repo, which is **not reachable from a Claude Code on the

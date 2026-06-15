@@ -3,7 +3,7 @@
 **Status:** DRAFT
 **Type:** Feature (adopter experience / build-system)
 **Sources:** session review 2026-06-10 (user-approved "close the gap upward" roadmap) · **Ledger:** ITEM-020
-**Dependencies:** Sprint 2 (deploy + token-free guardrail) and Sprint 3 (CI profile matrix); platform work referenced by slug `platform-parity-draft-plan.md` (bootstrap should deploy whichever `editor.target` artifacts exist when it lands)
+**Dependencies:** Sprint 2 (deploy + token-free guardrail) and Sprint 3 (CI profile matrix); platform work shipped in Sprint 4 (ITEM-017; draft now at `docs/archive/platform-parity-draft-plan.md`) — bootstrap should deploy whichever `editor.target` artifacts exist when it lands
 
 ## Goals
 
@@ -31,7 +31,7 @@ adoption easy. Today the deploy guard hard-exits on any absolute path
 copying — the README's multi-step setup is the single biggest friction
 for new adopters. This lands last among the roadmap drafts because it
 packages everything the earlier rungs produce (hardened build from
-Sprint 2, per-platform emission from `platform-parity-draft-plan.md`,
+Sprint 2, per-platform emission from Sprint 4 platform parity (`docs/archive/platform-parity-draft-plan.md`),
 mode CLIs from the promotion drafts) into the front door. The
 containment rework is deliberate security surface — the original
 guardrail exists for a reason — so containment tests are non-negotiable

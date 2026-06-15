@@ -2,6 +2,8 @@
 
 Single source of truth for all backlog item status. Detail and context live in BUG_BACKLOG.md and HANDOFF_REJECTIONS.md — this file tracks status only.
 
+> **Phased feature work** from the 2026-06-15 vault-candidate validation sweep is tracked at the phase level in `ROADMAP.md` (`@pm` owns the why/when). Items are added here as discrete backlog entries when they are concrete and ready to enter planning — not bulk-imported, to avoid duplicating the roadmap.
+
 | ID | Type | Source | Age | Def | Sprint | Status | Blocked | Draft | Notes |
 |----|------|--------|-----|-----|--------|--------|---------|-------|-------|
 | ITEM-006 | bug | BUG-003 | 0 | 0 | 2 | done | | | Onboarding missing Claude Code /command setup |
@@ -17,14 +19,15 @@ Single source of truth for all backlog item status. Detail and context live in B
 | ITEM-016 | debt | session review 2026-06-10 | 0 | 0 | 3 | done | | ../archive/claims-foundation-draft-plan.md | CI builds all profiles/*.config.yml, not just the example config |
 | ITEM-017 | feature | session review 2026-06-10 | 0 | 0 | 3 | done | | ../archive/platform-parity-draft-plan.md | Platform parity: ungate agent generation; native Claude Code subagents, Cursor commands, Codex AGENTS.md target |
 | ITEM-018 | feature | session review 2026-06-10 | 0 | 0 | 3 | done | | ../archive/mode2-dispatcher-promotion-draft-plan.md | Promote Mode 2 file-queue dispatcher to supported implementation in src/ per ADR 0008 |
-| ITEM-019 | feature | session review 2026-06-10 | 0 | 0 | 3 | open | | drafts/mode3-coordinator-promotion-draft-plan.md | Promote Mode 3 registry coordinator to supported implementation in src/ per ADR 0008 |
-| ITEM-020 | feature | session review 2026-06-10 | 0 | 0 | 3 | open | | drafts/adopter-bootstrap-draft-plan.md | Adopter bootstrap: init.py --target/--bootstrap one-line setup into external projects |
+| ITEM-019 | feature | session review 2026-06-10 | 2 | 2 | 3 | open | | drafts/mode3-coordinator-promotion-draft-plan.md | Promote Mode 3 registry coordinator to supported implementation in src/ per ADR 0008 |
+| ITEM-020 | feature | session review 2026-06-10 | 2 | 2 | 3 | open | | drafts/adopter-bootstrap-draft-plan.md | Adopter bootstrap: init.py --target/--bootstrap one-line setup into external projects |
 | ITEM-021 | debt | Sprint 3 review SUGGESTION | 0 | 0 | 3 | done | | | CI: run canonical example-config build last so post-build guardrail steps validate the canonical tree, not the last profile build |
-| ITEM-022 | debt | Sprint 3 review SUGGESTION | 0 | 0 | 3 | open | | | ADR 0008 wording: disambiguate "promotion contract" vs 05-promotion-contract.md; add explicit ADR 0004 cross-reference |
-| ITEM-023 | debt | Sprint 4 review SUGGESTION | 0 | 0 | 4 | open | | | Onboarding skill walks adopters through project.config.yml but build/deploy examples must use the canonical example config to satisfy the guardrail — decouple (exemption or placeholder phrasing) |
+| ITEM-022 | debt | Sprint 3 review SUGGESTION | 2 | 2 | 3 | open | | | ADR 0008 wording: disambiguate "promotion contract" vs 05-promotion-contract.md; add explicit ADR 0004 cross-reference |
+| ITEM-023 | debt | Sprint 4 review SUGGESTION | 1 | 1 | 4 | open | | | Onboarding skill walks adopters through project.config.yml but build/deploy examples must use the canonical example config to satisfy the guardrail — decouple (exemption or placeholder phrasing) |
 | ITEM-024 | debt | Sprint 5 review (test-author finding a) | 0 | 0 | 5 | open | | | callable-contract.md non-enterprise example invalid against callable-v1 schema (missing kind/version/applies_to) — frozen surface; fix as additive informative note or at -v2 |
 | ITEM-025 | debt | Sprint 5 review SUGGESTIONs S3/S4/d/e | 0 | 0 | 5 | open | | | dispatch.py hardening: containment for --summary-out/--callables; distinct exit when all callables invalid; scope _resolve_python_entry sys.path insertion; requeue/recover UX |
 | ITEM-026 | debt | Sprint 5 review SUGGESTIONs S5/S6 | 0 | 0 | 5 | open | | | queue journal robustness: document tail-tolerance assumption, wrap bad seq in QueueStateError, journal compaction, directory fsync |
+| ITEM-027 | feature | ROADMAP Phase A · validation 2026-06-15 (Cluster 2 P6) | 0 | 0 | — | open | | | Secrets-hygiene guard (NEW, roadmap top pick): build-time validator that resolved + emitted MCP/agent config carry no inline secrets — extend `SecurityValidator.detect_secrets` from input-only to the output/emit path + `.gitignore`/external-manager requirement. Extends DG-6/DG-1; threats T1/T5 |
 
 <!-- 
 Column guide:

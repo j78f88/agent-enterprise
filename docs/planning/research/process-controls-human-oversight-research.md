@@ -153,7 +153,7 @@ Real WebSearch/WebFetch sweeps run 2026-06-15, primary sources preferred. Fetche
 **Schema-gated build / constrained decoding**
 - OpenAI Structured Outputs — https://openai.com/index/introducing-structured-outputs-in-the-api/
 - JSONSchemaBench (six frameworks; constrained decoding as dominant tech) — https://arxiv.org/abs/2501.10868
-- "Format Tax" / reasoning degradation (10–30%; Hermes-4-405B 92.5%→35.0%; "constrain the wire format not the thinking") — https://arxiv.org/html/2604.03616v1 *(recent preprint — verify exact numbers)*
+- "Format Tax" / reasoning degradation (10–30%; Hermes-4-405B 92.5%→35.0%; "constrain the wire format not the thinking") — https://arxiv.org/html/2603.03306v1 *(recent preprint — verify exact numbers)*
 
 **Thin / deterministic orchestration & durable execution**
 - Temporal for AI (deterministic Workflow vs Activities) — https://temporal.io/blog/durable-execution-meets-ai-why-temporal-is-the-perfect-foundation-for-ai ; customers/scale — https://temporal.io/news/temporal-technologies-secures-valuation-to-fuel-durable-execution ; https://thenewstack.io/temporal-durable-execution-ai-workflows/ *(vendor figures — verify)*

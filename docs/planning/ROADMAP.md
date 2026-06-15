@@ -88,6 +88,11 @@ is the product's spine.
 - **Banned-vendor/model exclusion list** *(NEW from the AU-lens correction)* —
   config denylist for government-banned models/vendors (DeepSeek-class), mirroring
   `license_denylist`. *Extends DG-5; makes "operates within AU compliance" concrete.*
+  **Scope note for `@planner`:** this item is **thesis-derived (thesis #2, the
+  AU-lens correction), NOT backed by any of the 59 validated patterns.** It has no
+  validation verdict behind it — it traces to the roadmap thesis, not to the
+  vault-candidate sweep. Acceptable as a derived in-scope build, but plan it on
+  the strength of the AU-compliance rationale, not on a pattern validation record.
 - **Thin policy stubs** *(Cluster 1 P2/P4, mixed-frame)* — two-phase-network
   profile (setup-online → agent-offline, secrets wiped); default permission-mode
   + protected-path policy. *Extends DG-4/DG-8. Policy artifacts, NOT isolation
@@ -107,9 +112,14 @@ Converts the curated controls into the deliverable that makes the toolset
   tool-surface, evidence-gating, control-plane), each as a control objective with
   documented caveats and its framework mappings.
 - **"Gate-becomes-target" assurance catalogue** *(NEW template content, Cluster 4)*
-  — the four failure classes (false success, eval gaming, approval fatigue,
-  guardrail bypass) + layered-defense rationale. *Extends DG-1 ("gates are the
-  control, prose is not").*
+  — the four Cluster-4 failure classes (reward hacking, fabrication/false-success,
+  verifier unreliability/collusion, flaky/weak oracles) + layered-defense
+  rationale. *Extends DG-1 ("gates are the control, prose is not"). Source:
+  `validation/evidence-verification-gating-validation.md` (flagged decision #2).
+  Note: approval-fatigue (process-controls, Cluster 6) and guardrail-bypass
+  (control-plane, Cluster 5) are related failure modes owned by other clusters —
+  the template may cross-reference them, but they are not part of this Cluster-4
+  catalogue.*
 - **Residual-risk register** — the controls that are real but have **no shipped
   default-on implementation**: egress / lethal-trifecta (Cluster 1 P5 — the
   cluster's primary unsolved risk), guardrail-bypass ASR (Cluster 5 P3), memory
@@ -120,9 +130,15 @@ Converts the curated controls into the deliverable that makes the toolset
 Lower-urgency. Mostly documentation of shipped capability + opt-in hardening.
 
 - **Map already-shipped capability** into the Phase-B catalogue: Mode 2 thin
-  orchestration, tiered returns (Cluster 6); declared cost/time ceiling
-  (Cluster 8 / DG-4 / T8 — already Sprint 4 work, *not new scope*); determinism
-  (DG-10). Documentation, not build.
+  orchestration, tiered returns (Cluster 6); determinism (DG-10). Documentation,
+  not build.
+- **Declared cost/time ceiling** (Cluster 8 / DG-4 / T8) — `maxUsd`/`timeoutMs`/
+  kill-switch as declared manifest fields. This is **planned scope, not yet
+  shipped**: it lives in the design-goals doc's capability-manifest plan but no
+  `maxUsd` code exists in `src/` (the executed Sprint 4 was Platform Parity,
+  Sprint 5 the Mode 2 Dispatcher). Therefore this is a **real build** for
+  `@planner`, not a documentation-only mapping — do not file it under
+  already-shipped. Low-cost and in-boundary, but unbuilt.
 - **Risk-scoped human step-up** *(REFRAMED, Cluster 2)* — HITL only for a defined
   high-risk/irreversible action class (avoids approval fatigue). *Extends DG-8.*
 - **Dynamic/leased-credential guidance** *(REFRAMED, Cluster 2)* — require short
