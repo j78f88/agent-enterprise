@@ -69,7 +69,7 @@ Single `@researcher` pass on 2026-06-15 running iterative WebSearch sweeps plus 
 - **Source apps / benchmarks:**
   - *Lost in the Middle* (Liu et al., arXiv **2307.03172**, Jul 2023): multi-document QA + key-value retrieval; performance highest when relevant info is at the beginning or end, "significantly degrades" in the middle, even for explicitly long-context models. Established the canonical U-shape with strong primacy/recency bias (GPT-3.5-Turbo, Claude).
   - *RULER* (NVIDIA, Hsieh et al., arXiv **2404.06654**): 13 synthetic tasks across 4 categories, adding multi-hop tracing and aggregation beyond vanilla needle-in-haystack. Of models claiming ≥32K, only ~half clear the 85.6% threshold at 32K; GPT-4-128K's *effective* length is ~64K; many "32K" models effectively handle 4K–16K.
-  - *NoLiMa* (Adobe, Modarressi et al., arXiv **2502.05167**, ICML 2025): needle-in-haystack with *minimal lexical overlap* forcing latent-association retrieval. GPT-4o falls from **99.3% (<1K) to 69.7% at 32K**; **10 of 12 models** (all claiming ≥128K) fall below 50% of their short-context baseline at 32K.
+  - *NoLiMa* (Adobe, Modarressi et al., arXiv **2502.05167**, ICML 2025): needle-in-haystack with *minimal lexical overlap* forcing latent-association retrieval. GPT-4o falls from **99.3% (<1K) to 69.7% at 32K**; **11 of 12 models** (all claiming ≥128K) fall below 50% of their short-context baseline at 32K.
   - *Chroma "Context Rot"* (technical report, 2025-07): 18 SOTA models (GPT-4.1, Claude 4, Gemini 2.5, Qwen3); reliability decreases with input length "even on simple tasks like retrieval and text replication"; failure modes include hallucination, position bias, and distractor susceptibility.
 - **Adoption scale:** Not a product; the relevance is breadth of replication (4 independent efforts, 12–18 models each) and that Anthropic adopts the framing.
 - **User complaints:** The practitioner-level complaint is that vendors advertise context windows (200K, 1M) that imply uniform usability the models do not deliver — "the 10,000th token is not as reliable as the 100th" (Chroma framing).
@@ -158,7 +158,7 @@ Single `@researcher` pass on 2026-06-15 running iterative WebSearch sweeps plus 
 
 **Failure mode — memory poisoning (security tie-in; verify attack-success numbers against the primary arXiv papers)**
 - OWASP ASI06 memory poisoning / Mem0 feature request — https://github.com/mem0ai/mem0/issues/5331 ; https://mem0.ai/blog/ai-memory-security-best-practices
-- MINJA / memory-injection attack & defense (arXiv) — https://arxiv.org/pdf/2601.05504
+- MINJA / memory-injection attack & defense (arXiv) — https://arxiv.org/pdf/2503.03704
 - MemMorph (tool hijacking via memory poisoning) — https://arxiv.org/html/2605.26154v1
 - "Sleeper" memory poisoning — https://arxiv.org/html/2605.15338
 - Practitioner explainer — https://medium.com/@michael.hannecke/agent-memory-poisoning-the-attack-that-waits-9400f806fbd7
