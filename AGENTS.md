@@ -64,7 +64,7 @@ deterministic output.
 | `tests/` | Pytest suite |
 | `docs/` | Guides, examples, architecture reference |
 | `src/` | Standalone Python phase library (not imported by init.py) |
-| `scripts/` | CI smoke tests and hash-chain verification |
+| `scripts/` | CI smoke tests, hash-chain verification, and worktree bootstrap |
 | `tools/` | Developer CLI utilities (frontmatter migration, sprint lint) |
 | `hooks/` | VS Code session hooks (source freshness check) |
 | `prompts/` | Sprint workflow prompt templates |

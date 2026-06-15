@@ -44,6 +44,24 @@ The same `smoke-test.{sh,ps1}` script is what `.github/workflows/release.yml`
 runs in CI on every push, PR, and tag — so a green local smoke test
 means a green CI run.
 
+### Working in a git worktree
+
+A linked worktree (`git worktree add`) starts with no `resolved/` tree and
+no installed runtime deps. Bootstrap it once so it can build:
+
+```bash
+# Linux/macOS — optional [config] arg (default: config/project.config.example.yml)
+./scripts/setup-worktree.sh [config]
+#   Windows (PowerShell):
+.\scripts\setup-worktree.ps1 [-Config <path>]
+```
+
+The script resolves the repo root via `git rev-parse --show-toplevel`
+(worktree-safe), installs runtime deps from `requirements.txt`, then runs
+`python init.py --config <config>` to produce a working `resolved/` tree.
+This is the bootstrap multi-agent workflows need when each agent runs in
+its own worktree, since git has no native post-worktree-create hook.
+
 ---
 
 ## Project Structure
