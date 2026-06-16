@@ -25,7 +25,6 @@ The `scope:` → `applies_to` migrator
 
 ## Planned for 2.1
 
-- Migrate off `jsonschema.RefResolver` to `referencing`.
 - Adopter template repository (one-line `git clone` + `init.py`).
 - PyPI distribution (`pip install agent-enterprise`).
 - Authoring linter for skill/instruction/agent frontmatter (catches
@@ -38,10 +37,216 @@ The `scope:` → `applies_to` migrator
 - Windows authoring requires UTF-8-without-BOM git config; the
   `.githooks/commit-msg` hook (installed via
   `git config core.hooksPath .githooks`) rejects BOM commits.
-- `jsonschema.RefResolver` deprecation warning surfaces in
-  `tests/test_protocol_v1_conformance.py`. Functional; planned
-  migration in 2.1.
 - macOS is not exercised in CI; reports welcome.
+
+---
+
+## Unreleased — Sprint 6 — worktree bootstrap
+
+Tooling for multi-agent workflows where each agent runs in its own git
+worktree (default-on in Claude Code / Codex). A linked worktree starts
+with no `resolved/` tree and no installed runtime deps; git has no native
+"post-worktree-create" hook, so a fresh worktree must be bootstrapped
+explicitly.
+
+### Added
+- **`scripts/setup-worktree.{sh,ps1}` — fresh-worktree bootstrap.**
+  Resolves the repo root via `git rev-parse --show-toplevel`
+  (worktree-safe — no absolute-path assumptions), installs runtime deps
+  from `requirements.txt`, then runs
+  `python init.py --config <config>` (default
+  `config/project.config.example.yml`) to produce a working `resolved/`
+  tree. Usage: `./scripts/setup-worktree.sh [config]` /
+  `.\scripts\setup-worktree.ps1 [-Config <path>]`. The `.sh` auto-detects
+  `python3` vs `python` and forces UTF-8
+  (`PYTHONUTF8`/`PYTHONIOENCODING`) so `init.py` status glyphs do not
+  crash a legacy console codepage; the `.ps1` sets `$env:PYTHONUTF8`.
+
+### Operational notes
+- **Removed the dangling `extensions.worktreeConfig` git setting.** It was
+  set to `true` with no `config.worktree` file present, so it did nothing
+  while carrying a latent risk — the extension makes older/non-canonical
+  Git refuse to access the repo. Unset with
+  `git config --unset extensions.worktreeConfig`. This is a local
+  git-config change, not a tracked file. Git hooks were investigated and
+  deliberately not adopted for the build: CI
+  (`.github/workflows/ci.yml`) already enforces multi-target build
+  health, and `resolved/` is gitignored so there is nothing committed to
+  diff against.
+
+---
+
+## Unreleased — Sprint 5 — mode 2 dispatcher promotion
+
+Mode 2 (Orchestration) graduates from frozen contract + reference impl
+to a supported implementation per ADR 0008 — all five promotion
+criteria met; contracts, schemas, and the reference impl untouched.
+
+### Added
+- **`src/mode2_dispatcher/` — supported Mode 2 implementation.**
+  Dispatch core ported from the frozen reference impl (state machine,
+  ghost-done verifier, tier-3 summary), plus production hardening the
+  reference deliberately lacks: an fsynced append-only
+  `journal.ndjson` written before each atomic `state.yml` snapshot
+  (write-temp + `os.replace`), crash-resume that re-queues in-flight
+  items through contract-legal transitions only, and `.mode-2-pins`
+  enforcement (unsupported contract/protocol pins refuse to load).
+- **Root CLI `dispatch.py`** — `run` (drain inbox, emit tier-3 summary,
+  `--summary-out`), `status` (read-only, flags crash-interrupted
+  items), `requeue <item-id>` (contract-legal transitions only), and
+  `validate-callables` (non-zero exit on violations); `--queue-root`
+  is containment-guarded like the `init.py` deploy guard. Works in a
+  clean clone with no `init.py` build.
+- **Callable discovery** from `*.callable.yml` sidecars (the
+  non-enterprise path) and `callable-v1` skill frontmatter (the
+  enterprise path), deterministic order, every candidate
+  schema-validated — invalid callables are reported, never skipped.
+  Native `python` (`module:function`) invocation; custom runtimes via
+  `registry_from_manifests(runner=...)`.
+- **Return-tier validation** reusing the phase-1
+  `SubagentReturnValidator` against the
+  `subagent-return-tier{1,2,3}` schemas — session end with missing or
+  invalid evidence yields `rejected`, never `done`.
+- **`docs/ORCHESTRATION.md`** — adopter guide: install, queue layout,
+  callable authoring, `dispatch.py` usage, crash-recovery semantics,
+  and the relationship to the frozen reference impl.
+
+### Changed
+- **Mode 2 install contract** names `src/mode2_dispatcher/` +
+  `dispatch.py` as the supported implementation (ADR 0008 criterion 4)
+  in an informative section; the contract text itself is unchanged.
+- **Shared conformance parametrization.** The `mode-2-contract-v1`
+  checklist now runs against both the frozen reference impl and the
+  supported implementation; a byte-freeze test asserts the reference
+  impl is unchanged (ADR 0008 criterion 5).
+- README Mode 2 row updated from contract-plus-reference to supported
+  implementation, linking `docs/ORCHESTRATION.md`.
+
+---
+
+
+## Unreleased — Sprint 4 — platform parity
+
+Native emission for every supported platform; the README "Works
+Everywhere" table is now backed by tests.
+
+### Added
+- **`codex` editor target.** `editor.target` accepts `codex`; deploy
+  merges a managed agent-roster block into the adopter's `AGENTS.md`
+  between `agent-enterprise:begin/end` markers — idempotent, CRLF-safe,
+  never touches content outside the markers, and skips (with a warning)
+  on malformed or duplicate markers.
+- **Claude Code native subagents** seeded to `paths.claude_agents`
+  (default `.claude/agents`) for `claude-code`/`both`/`all` targets.
+- **Cursor commands** seeded to `paths.cursor_commands` (default
+  `.cursor/commands`) for `cursor`/`all` targets.
+- **`docs/PLATFORMS.md`** — the per-platform artifact map, with every
+  matrix cell pinned by the new `tests/test_platform_emission.py`
+  (parametrized over all six targets).
+- CI builds the example config for every `editor.target` value and runs
+  the canonical build last so post-build guardrails validate the
+  canonical tree.
+
+### Changed
+- **Agent wrappers now generate for every valid `editor.target`** (was
+  vscode-gated). Existing `claude-code`/`cursor` configs that previously
+  skipped agent generation now produce `resolved/agents/*.agent.md` and
+  their native platform surfaces on deploy. Skill `user-invocable`
+  suppression remains vscode-only.
+- The repo dogfoods `editor.target: all` on itself: `.claude/agents/`,
+  `.cursor/rules/`, `.cursor/commands/`, and the `AGENTS.md` managed
+  block are committed platform surfaces.
+
+### Fixed
+- **Post-deploy token scan no longer flags documentation literals.**
+  Deployed trees are scanned with the same dotted `namespace.key`
+  pattern as `scripts/check_tokens.py` (a drift-guard test pins the two
+  patterns equal); both scanners now also catch multi-level tokens.
+- **Stale agent wrappers are pruned.** Setup-skipped or deleted skills
+  no longer leave zombie wrappers in `resolved/agents/` or deployed
+  artifacts in the platform directories.
+- The canonical-build-command guardrail no longer captures trailing
+  quote punctuation from commands embedded in quoted code.
+
+---
+
+
+## Unreleased — Sprint 3 — claims foundation
+
+Foundations for closing the gap between the README's three-modes /
+four-platforms claims and the implementation, per ADR 0008.
+
+### Added
+- **ADR 0008 — supported mode implementations.** Defines the 5-point
+  promotion contract for shipping one supported implementation per
+  delivery mode; revises the `command-centre/PLAN.md` non-goal it
+  supersedes. Frozen contracts untouched.
+- **Four roadmap draft plans** staged in `docs/planning/drafts/`
+  (platform parity, Mode 2 dispatcher promotion, Mode 3 coordinator
+  promotion, adopter bootstrap; ledger ITEM-017..020).
+- **CI builds every profile.** `profiles/*.config.yml` now build in CI
+  alongside the canonical example config, proving each resolves
+  token-free.
+
+### Fixed
+- **`jsonschema.RefResolver` migration (ITEM-013).** The registry
+  coordinator reference impl and conformance tests now use the
+  `referencing` API; the suite is green with `DeprecationWarning`
+  escalated to error. Declared floor raised to `jsonschema>=4.18`.
+
+### Changed
+- **Planning hygiene.** Completed draft plans archived to
+  `docs/archive/`; the e1 reconciliation handoff relocated beside
+  `HANDOFF_REJECTIONS.md`; `docs/planning/drafts/` now holds only
+  pending work.
+- **README platform table.** The OpenAI Codex cell carries an interim
+  footnote: Codex consumes deployed Markdown via the `AGENTS.md`
+  convention today; a native emission target is staged (ITEM-017).
+
+---
+
+## 3.0.3 — 2026-06 — build-system hardening & commit attribution
+
+This release hardens `init.py` and the CI guardrails (Sprint 2) and adds a
+commit-attribution gate ported from `agent-homebase-e1`. No authoring-contract
+changes; existing skills, instructions, and agent bodies keep working.
+
+### Added
+- **Build fails on unresolved tokens.** `init.py` now hard-exits with an
+  actionable message if any `{{token}}` survives substitution, instead of
+  shipping raw tokens to adopters.
+- **`--deploy` seeds `.claude/commands/`** alongside `.github/`, so Claude Code
+  slash-commands are available in adopter projects out of the box.
+- **`scripts/check_tokens.py`** — a token-free guardrail for the deployed
+  `.github/` tree, wired in as a CI step.
+- **`scripts/check_build_command.py`** — asserts the docs reference the
+  canonical `--config config/project.config.example.yml` build command, wired in
+  as a CI step.
+- **`.githooks/commit-msg` requires a `Tool:` trailer on durable commits**
+  (attribution), porting e1's ADR-002/ADR-006 gate. Ephemeral
+  `wip`/`fixup!`/`squash!` checkpoints and merge/revert commits are exempt. A new
+  `.gitmessage` template pre-fills the trailer
+  (`git config commit.template .gitmessage`).
+- **Planner draft-approval checkpoint** — planner mode now blocks on an explicit
+  approval before writing a sprint plan.
+- **Onboarding `CLAUDE_CODE_SETUP.md` companion** covering Claude Code
+  slash-command setup.
+
+### Changed
+- **`src/__init__.py` `__version__`** and **`config/plugin.json` `version`**
+  bumped to `3.0.3`.
+- **`init.py` `ALLOWED_COMMANDS`** extended with the security tool commands.
+- **`docs/CONTRIBUTING.md` and the commit-conventions instruction** document the
+  `Tool:` trailer and the one-time template setup.
+
+### Fixed
+- **Absolute-path guard in `deploy_resolved()`** prevents deploy writes from
+  escaping the target tree.
+
+### Verified
+- 431 pytest tests pass (up from 401 in 3.0.2).
+- `python init.py --config config/project.config.example.yml` builds with 0
+  unresolved-token warnings and byte-identical output across consecutive runs.
 
 ---
 

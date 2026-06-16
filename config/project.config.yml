@@ -4,7 +4,7 @@
 setup_complete: true
 
 editor:
-  target: "both"                    # vscode + claude-code
+  target: "all"                     # dogfood every platform surface (vscode + claude-code + cursor + codex)
 
 project:
   name: "agent-enterprise"
@@ -70,6 +70,9 @@ paths:
   instructions_dir: ".github/instructions"
   skills_deploy_dir: ".github/agents/"
   claude_commands: ".claude/commands"          # Claude Code slash-command directory
+  claude_agents: ".claude/agents"              # Claude Code native subagent directory (seeded for claude-code/both/all targets)
+  cursor_commands: ".cursor/commands"          # Cursor command directory (one .md per agent; seeded for cursor/all targets)
+  codex_agents_md: "AGENTS.md"                 # Codex AGENTS.md — managed block merged between agent-enterprise markers (codex/all targets)
   memory_architecture: ".claude/memory/architecture.md"
   memory_conventions: ".claude/memory/conventions.md"
 
@@ -115,7 +118,7 @@ commands:
   test: "python -m pytest tests/ -v"
   typecheck: ""
   lint: ""
-  build: "python init.py --config config/project.config.yml"
+  build: "python init.py --config config/project.config.example.yml"
   e2e: "python -m pytest tests/ -v"
   coverage: "python -m pytest tests/ --cov=. -v"
   coverage_store: "python -m pytest tests/ --cov=. -v"

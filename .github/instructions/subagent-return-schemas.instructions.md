@@ -5,6 +5,8 @@ version: 1.0.0
 applies_to: '**'
 description: subagent-return-schemas instruction
 applyTo: '**'
+paths:
+- '**'
 ---
 
 # Subagent Return Schemas

@@ -43,6 +43,23 @@ Sprint prefix is included when the commit is part of a sprint.
 
 Must include `(approved by <User> YYYY-MM-DD)` in the commit body. See `.github/instructions/non-goals-governance.instructions.md`.
 
+## Tool Attribution Trailer
+
+Every durable commit must carry a `Tool:` trailer naming the tool that authored
+it (e.g. `Tool: claude-cli`, `Tool: vscode`). This makes authorship queryable by
+tool without surfacing a personal identity. Ephemeral `wip`/`fixup!`/`squash!`
+checkpoints are exempt. The `.gitmessage` template pre-fills the trailer; enable
+it once per clone with `git config commit.template .gitmessage`. The
+`.githooks/commit-msg` hook rejects durable commits that omit it.
+
+```
+feat(schemas): add registry-v1
+
+Why this change is needed.
+
+Tool: claude-cli
+```
+
 ## Squashing
 
 Each task is its own commit by default. Squash only on explicit user request.

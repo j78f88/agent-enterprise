@@ -5,6 +5,8 @@ version: 1.0.0
 applies_to: '**'
 description: bug-backlog-format instruction
 applyTo: '**'
+paths:
+- '**'
 ---
 
 # Bug Backlog Format

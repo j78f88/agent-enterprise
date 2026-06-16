@@ -134,7 +134,7 @@ Raw `{{tokens}}` appear across deployed skills and agent docs; companion files a
 ### Notes
 
 - Build-system gap in `init.py`, affects every adopter (not a config error from onboarding)
-- Remediation draft: `docs/planning/drafts/onboarding-path-resolution-remediation-draft-plan.md`
+- Remediation draft: `docs/archive/onboarding-path-resolution-remediation-draft-plan.md`
 - Linked ledger item: ITEM-008
 
 ---

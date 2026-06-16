@@ -1,71 +1,76 @@
 # Sprint Tracking
 
-**Last Completed: Sprint 2**
+**Last Completed: Sprint 5**
 
 ---
 
-## Sprint 2 — Build-System Hardening & Process Hygiene
+## Sprint 5 — Mode 2 Dispatcher Promotion: Supported Implementation in src/
 
 **Status:** Complete  
-**Type:** Mixed (bug-fix / debt)  
-**Started:** 2026-05-31  
-**Completed:** 2026-05-31
+**Type:** Feature (mode promotion per ADR 0008)  
+**Started:** 2026-06-10  
+**Completed:** 2026-06-10
 
 ### Goals
 
-- [x] Automated deploy-copy + fail-on-unresolved (BUG-006 / ITEM-012)
-- [x] Token-free guardrail for the deployed `.github/` tree (ITEM-012)
-- [x] CI canonical-build-command check (ITEM-011)
-- [x] Derive `SOURCE_STYLE_REFS` from config/resolved tree (ITEM-009)
-- [x] Claude Code `/command` seeding + onboarding docs (BUG-003 / ITEM-006)
-- [x] Planner-mode draft-approval checkpoint (BUG-004 / ITEM-007)
-- [x] Purge demo/template content from ledger and SPRINTS (ITEM-010)
+- [x] src/mode2_dispatcher/ package: core port, discovery, durable queue, return validation (ITEM-018)
+- [x] Root CLI dispatch.py (run/status/requeue/validate-callables) (ITEM-018)
+- [x] Crash-resume + atomic state proven by tests (ITEM-018)
+- [x] Shared mode-2-contract-v1 conformance over both impls; reference impl byte-frozen (ITEM-018)
+- [x] docs/ORCHESTRATION.md + install-contract names the supported impl (ITEM-018)
 
 ### Tasks
 
-- [x] TG1: deploy-copy step + fail-on-missing-key (ITEM-012)
-- [x] TG2: token-free guardrail script + CI step (ITEM-012)
-- [x] TG3: CI canonical-build-command check (ITEM-011)
-- [x] TG4: derive `SOURCE_STYLE_REFS` from config/resolved tree (ITEM-009)
-- [x] TG5: Claude Code `/command` seeding + onboarding docs (ITEM-006)
-- [x] TG6: planner-mode checkpoint enforcement (ITEM-007)
-- [x] TG7: purge demo/template content — ledger, bug backlog, SPRINTS (ITEM-010)
+- [x] TG1: src/mode2_dispatcher/ core port
+- [x] TG2: callable discovery (discovery.py)
+- [x] TG3: durable queue (queue_file.py) + returns.py
+- [x] TG4: root CLI dispatch.py
+- [x] TG5: tests/test_mode2_dispatcher.py
+- [x] TG6: shared conformance parametrization + byte-freeze test
+- [x] TG7: adopter docs + install contract + README/CHANGELOG
 
 ### Notes
 
-- Sprint started 2026-05-31
-- Sprint completed 2026-05-31
+- Sprint started 2026-06-10 (promoted from mode2-dispatcher-promotion draft; user approved)
+- Sprint completed 2026-06-10; retro at sprints/sprint-5/RETRO.md
 
 ---
 
-## Sprint 1 — Onboarding Path Resolution Remediation
+## Sprint 4 — Platform Parity: Native Emission for Claude Code, Cursor, and Codex
 
 **Status:** Complete  
-**Type:** fix (build-system debt / bug-fix)  
-**Started:** 2026-04-27  
-**Completed:** 2026-05-30
+**Type:** Feature (claims-truth / build-system)  
+**Started:** 2026-06-10  
+**Completed:** 2026-06-10
 
 ### Goals
 
-- [x] Resolve and deploy skill companion files
-- [x] Resolve inline code-span tokens with two-phase escape
-- [x] Cross-references use deploy path (`paths.skills_deploy_dir` token)
+- [x] Ungate agent generation per editor.target; add codex target (ITEM-017)
+- [x] Native Claude Code subagents in .claude/agents/ (ITEM-017)
+- [x] Cursor .cursor/commands/ seeding (ITEM-017)
+- [x] Codex AGENTS.md managed-block emission, dogfooded (ITEM-017)
+- [x] tests/test_platform_emission.py + CI editor.target dimension (ITEM-017)
+- [x] CI canonical-build-last ordering fix (ITEM-021)
+- [x] docs/PLATFORMS.md + README truth pass (ITEM-017)
 
 ### Tasks
 
-- [x] TG1 (A): companion-file resolution loop + setup-skip interaction
-- [x] TG2 (C): `paths.skills_deploy_dir` token + cross-reference rewrites
-- [x] TG3 (B): inline code-span policy + two-phase escape (preserve → strip after scans)
-- [x] Review fix: agent-wrapper refs corrected to deploy path
+- [x] TG1: ungate agent generation per target
+- [x] TG2: Claude Code native subagents
+- [x] TG3: Cursor commands seeding
+- [x] TG4: Codex AGENTS.md managed block
+- [x] TG5: parametrized platform emission tests
+- [x] TG6: CI editor.target dimension + ITEM-021 ordering
+- [x] TG7: docs/PLATFORMS.md + README truth pass
 
-### Retro Summary
+### Notes
 
-- **Velocity:** 3 task groups + 1 review-fix; 100% completion rate
-- **Carry-over:** none
-- **Forecast calibration:** 100% (3/3 assumptions, 3/3 complexity)
-- **Process notes:** Escape must preserve marker through scans; strip-after-scan ordering is now test-locked.
+- Sprint started 2026-06-10 (promoted from platform-parity draft; user approved)
+- Sprint contract includes fixing any CI failures observed on the PR branch
+- Sprint completed 2026-06-10; retro at sprints/sprint-4/RETRO.md
 
 ---
+
 
 <!-- 
 Archive rule: when Sprint N completes, move Sprint N-2 entry to docs/archive/

@@ -5,6 +5,8 @@ version: 1.0.0
 applies_to: '**'
 description: non-goals-governance instruction
 applyTo: '**'
+paths:
+- '**'
 ---
 
 # Non-Goals Governance

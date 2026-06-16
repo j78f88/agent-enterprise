@@ -26,8 +26,12 @@ git clone https://github.com/j78f88/agent-enterprise.git
 cd agent-enterprise
 
 # One-time: install the commit-message hook (rejects BOM + enforces
-# Conventional Commits). Works on Linux, macOS, and Git Bash on Windows.
+# Conventional Commits + a Tool: attribution trailer on durable commits).
+# Works on Linux, macOS, and Git Bash on Windows.
 git config core.hooksPath .githooks
+
+# One-time: pre-fill the Tool: trailer in your commit editor.
+git config commit.template .gitmessage
 
 # Run the canonical smoke test (installs deps, builds, runs tests).
 #   Linux/macOS:
@@ -39,6 +43,24 @@ git config core.hooksPath .githooks
 The same `smoke-test.{sh,ps1}` script is what `.github/workflows/release.yml`
 runs in CI on every push, PR, and tag — so a green local smoke test
 means a green CI run.
+
+### Working in a git worktree
+
+A linked worktree (`git worktree add`) starts with no `resolved/` tree and
+no installed runtime deps. Bootstrap it once so it can build:
+
+```bash
+# Linux/macOS — optional [config] arg (default: config/project.config.example.yml)
+./scripts/setup-worktree.sh [config]
+#   Windows (PowerShell):
+.\scripts\setup-worktree.ps1 [-Config <path>]
+```
+
+The script resolves the repo root via `git rev-parse --show-toplevel`
+(worktree-safe), installs runtime deps from `requirements.txt`, then runs
+`python init.py --config <config>` to produce a working `resolved/` tree.
+This is the bootstrap multi-agent workflows need when each agent runs in
+its own worktree, since git has no native post-worktree-create hook.
 
 ---
 

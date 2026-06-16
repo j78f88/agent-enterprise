@@ -23,8 +23,10 @@
   content.
 - Building a CLI for cross-project synchronisation. Native git is
   sufficient.
-- Owning a specific Mode 2 dispatcher implementation. Reference impls
-  only; runtimes are interchangeable.
+- Owning a *mandatory* Mode 2 dispatcher implementation. Runtimes are
+  interchangeable; the contract is the interface. Shipping an optional
+  supported implementation per mode is in scope per
+  [ADR 0008](decisions/0008-supported-mode-implementations.md).
 - Owning a specific runtime (Copilot, Claude Code, etc.). Build
   artifacts target multiple runtimes; the framework prefers none.
 - Backward compatibility with v1 layout. v1 retires; v2 supersedes.

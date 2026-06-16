@@ -1,6 +1,6 @@
 {
   "name": "agent-enterprise",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "Reusable agent skills for software delivery: product validation, sprint planning, execution, quality gates, and documentation.",
   "author": {
     "name": "agent-enterprise contributors",

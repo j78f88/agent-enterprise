@@ -131,13 +131,18 @@ This prompts for the essential values (project name, repo, namespace, branch) an
 
 Open `project.config.yml` and fill in every `FIXME` value. **If you skip this step, agents won't run correctly** - the system will show which values are missing (marked with ⚠) when you run `init.py`.
 
-**Platform selection:** Set `editor.target` to control what gets generated:
+**Platform selection:** Set `editor.target` to control which platform-native artifacts are emitted. Every target gets the base set (skills, agent wrappers, instructions, Claude Code slash commands); the target adds the platform's own surface on top:
 
-| Value | Generates | Best For |
-|:------|:----------|:---------|
-| `"both"` (default) | Skills + agent wrappers + instructions | Teams on mixed platforms |
-| `"vscode"` | Agent wrappers + instructions (skills set to non-invocable) | VS Code-only teams |
-| `"claude-code"` | Skills + instructions (no agent wrappers) | Claude Code-only teams |
+| Value | Adds on top of the base set | Best For |
+|:------|:----------------------------|:---------|
+| `"both"` (default) | Claude Code subagents (`.claude/agents/`) | Teams on Copilot + Claude Code |
+| `"vscode"` | Skills set to non-invocable (use `@agent` instead) | VS Code-only teams |
+| `"claude-code"` | Claude Code subagents (`.claude/agents/`) | Claude Code-only teams |
+| `"cursor"` | Cursor rules (`.cursor/rules/`) + commands (`.cursor/commands/`) | Cursor-only teams |
+| `"codex"` | Managed block merged into your `AGENTS.md` | Codex-only teams |
+| `"all"` | Everything above (without the vscode skill suppression) | Mixed/every platform |
+
+See [PLATFORMS.md](PLATFORMS.md) for the full per-platform artifact map and how each platform consumes its files.
 
 The key fields to get right:
 
@@ -170,19 +175,17 @@ Watch for `⚠` warnings — each one is a token with no config value. Fix them 
 python init.py --config project.config.yml --deploy
 ```
 
-`--deploy` copies `resolved/` into the configured target directories (`.github/agents/`, `.github/instructions/`) and additionally seeds `.claude/commands/` with one `.md` file per agent for Claude Code slash-command support.
+`--deploy` copies `resolved/` into the configured target directories (`.github/agents/`, `.github/instructions/`) and additionally seeds `.claude/commands/` with one `.md` file per agent for Claude Code slash-command support. Depending on `editor.target`, it also seeds `.claude/agents/` (Claude Code subagents), `.cursor/rules/` + `.cursor/commands/` (Cursor), or merges a managed block into your `AGENTS.md` (Codex) — see [PLATFORMS.md](PLATFORMS.md).
 
 If you prefer manual control:
 
 ```bash
 cp -r resolved/skills/*        ../.github/agents/
 cp -r resolved/instructions/*  ../.github/instructions/
-
-# If using VS Code agents (editor.target: "vscode" or "both"):
 cp -r resolved/agents/*        ../.github/agents/
 ```
 
-> **Note:** When `editor.target` includes `"vscode"`, `init.py` generates thin `.agent.md` wrappers in `resolved/agents/` with native tool restrictions and subagent delegation. These go alongside skills in `.github/agents/`.
+> **Note:** `init.py` generates thin `.agent.md` wrappers in `resolved/agents/` for every `editor.target` — they carry native tool restrictions and subagent delegation, and the per-platform emitters (Claude Code subagents, Cursor commands, the Codex `AGENTS.md` block) are rendered from them. They go alongside skills in `.github/agents/`. Manual copying covers only the `.github/` tree; prefer `--deploy` so the platform directories for your target are seeded too.
 
 ---
 
@@ -233,7 +236,7 @@ Run these checks to confirm everything is working:
 ls ../.github/agents/
 # Expected: architect/ bug/ docs/ a11y/ onboarding/ perf/ planner/ pm/ qa/ reviewer/ researcher/ security/ sprint-lead/
 
-# Agent wrappers (if editor.target includes "vscode")
+# Agent wrappers (generated for every editor.target)
 ls ../.github/agents/*.agent.md
 # Expected: 13 .agent.md files (one per skill)
 

@@ -98,7 +98,8 @@ Flag multiple versions of the same package as WARNING.
 Time the build:
 
 ```bash
-time python init.py --config config/project.config.example.yml
+# Cross-platform: use Node.js timer
+node -e "const s=Date.now(); require('child_process').execSync('python init.py --config config/project.config.example.yml', {stdio:'inherit'}); console.log(\`Build time: \${((Date.now()-s)/1000).toFixed(1)}s\`)"
 ```
 
 (On Windows/PowerShell, `Measure-Command { python init.py --config config/project.config.example.yml 2>&1 } | Select-Object TotalSeconds` also works.)

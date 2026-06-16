@@ -3,7 +3,7 @@ from: "@docs"
 to: "user"
 date: 2026-05-29
 feature: command-centre-visual-v2
-artifact: drafts/command-centre-visual-v2-plan.md
+artifact: docs/archive/command-centre-visual-v2-plan.md
 status: draft-ready-for-review
 ---
 
@@ -29,10 +29,10 @@ Plan document for overhauling `docs/command-centre-visual.html` from v1 (missing
 - Implementation steps are step-by-step executable
 
 **Action needed:**
-- Review the plan at `drafts/command-centre-visual-v2-plan.md`
+- Review the plan at `docs/archive/command-centre-visual-v2-plan.md`
 - Approve, request changes, or ask questions
 - Once approved, implementation can begin
 
 ---
 
-**File location:** `drafts/command-centre-visual-v2-plan.md`
+**File location:** `docs/archive/command-centre-visual-v2-plan.md`

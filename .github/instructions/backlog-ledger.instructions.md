@@ -5,6 +5,8 @@ version: 1.0.0
 applies_to: '**'
 description: backlog-ledger instruction
 applyTo: '**'
+paths:
+- '**'
 ---
 
 # Backlog Ledger — Schema & Governance
