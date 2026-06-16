@@ -1,3 +1,11 @@
+---
+title: "Research: Identity, credentials & permissions for enterprise agents (Cluster 2)"
+status: proposal
+trust: trusted
+classification: OFFICIAL
+date: 2026-06-15
+---
+
 # Research: Identity, credentials & permissions for enterprise agents (Cluster 2)
 
 **Date:** 2026-06-15

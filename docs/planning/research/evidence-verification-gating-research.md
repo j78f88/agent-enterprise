@@ -1,3 +1,11 @@
+---
+title: "Research: Evidence & verification gating for agent autonomy (Cluster 4)"
+status: proposal
+trust: trusted
+classification: OFFICIAL
+date: 2026-06-15
+---
+
 # Research: Evidence & verification gating for agent autonomy (Cluster 4)
 
 **Date:** 2026-06-15

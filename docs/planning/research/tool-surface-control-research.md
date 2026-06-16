@@ -1,3 +1,11 @@
+---
+title: "Research: Tool-surface control for agent systems (Cluster 3)"
+status: proposal
+trust: trusted
+classification: OFFICIAL
+date: 2026-06-15
+---
+
 # Research: Tool-surface control for agent systems (Cluster 3)
 
 **Date:** 2026-06-15

@@ -1,3 +1,11 @@
+---
+title: "Research: Control plane & observability for enterprise agents (Cluster 5)"
+status: proposal
+trust: trusted
+classification: OFFICIAL
+date: 2026-06-15
+---
+
 # Research: Control plane & observability for enterprise agents (Cluster 5)
 
 **Date:** 2026-06-15

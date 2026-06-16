@@ -1,3 +1,11 @@
+---
+title: "Research Brief: Vault candidate sweep for agent-enterprise"
+status: proposal
+trust: trusted
+classification: OFFICIAL
+date: 2026-06-14
+---
+
 # Research Brief: Vault candidate sweep for agent-enterprise
 
 **Date:** 2026-06-14

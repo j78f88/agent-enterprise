@@ -1,3 +1,11 @@
+---
+title: "Research: Sandboxing & runtime isolation for tool-using agents (Cluster 1)"
+status: proposal
+trust: trusted
+classification: OFFICIAL
+date: 2026-06-15
+---
+
 # Research: Sandboxing & runtime isolation for tool-using agents (Cluster 1)
 
 **Date:** 2026-06-15

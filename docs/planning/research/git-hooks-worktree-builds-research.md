@@ -1,3 +1,11 @@
+---
+title: "Research: Git hooks for worktree-based, multi-target build processes"
+status: proposal
+trust: trusted
+classification: OFFICIAL
+date: 2026-06-16
+---
+
 # Research: Git hooks for worktree-based, multi-target build processes
 
 **Date:** 2026-06-16

@@ -1,3 +1,11 @@
+---
+title: "Research: Cost & model governance for agent fleets (Cluster 8)"
+status: proposal
+trust: trusted
+classification: OFFICIAL
+date: 2026-06-15
+---
+
 # Research: Cost & model governance for agent fleets (Cluster 8)
 
 **Date:** 2026-06-15

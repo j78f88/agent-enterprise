@@ -1,3 +1,11 @@
+---
+title: "Research: Context management for agents (Cluster 7)"
+status: proposal
+trust: trusted
+classification: OFFICIAL
+date: 2026-06-15
+---
+
 # Research: Context management for agents (Cluster 7)
 
 **Date:** 2026-06-15

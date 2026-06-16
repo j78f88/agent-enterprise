@@ -1,3 +1,11 @@
+---
+title: "Research: Process controls & human oversight for long-horizon agents (Cluster 6)"
+status: proposal
+trust: trusted
+classification: OFFICIAL
+date: 2026-06-15
+---
+
 # Research: Process controls & human oversight for long-horizon agents (Cluster 6)
 
 **Date:** 2026-06-15
