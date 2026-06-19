@@ -5,6 +5,7 @@ init.py — Token substitution for agent-enterprise skills library.
 Usage:
     python init.py --config project.config.yml
     python init.py --config profiles/react-web-app.config.yml
+    python init.py --config config/project.config.example.yml --deploy --deploy-root ..
     python init.py --quick-setup                 # Interactive setup for key values
 
 Output:
@@ -957,8 +958,37 @@ def emit_codex_agents_md(output_dir: Path, tokens: dict, target_file: Path) -> b
     return True
 
 
+def _deploy_destination(deploy_root: Path, rel_value: str, label: str) -> Path:
+    """Return a deploy destination under deploy_root for a safe config path.
+
+    Deploy path tokens are adopter-root relative. They must not be absolute and
+    must not contain traversal segments; embedded installs should use
+    ``--deploy-root ..`` rather than putting ``..`` into config ``paths.*``.
+    """
+    dest = Path(rel_value)
+    if dest.is_absolute():
+        print(
+            f"ERROR: Deploy target '{label}' is an absolute path — "
+            "refusing to deploy outside project directory.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+    if ".." in dest.parts:
+        print(
+            f"ERROR: Deploy target '{label}' contains '..' — "
+            "use --deploy-root for embedded installs instead.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+    return deploy_root / dest
+
+
 def deploy_resolved(
-    output: Path, config: dict, agent_count: int, stale_agent_names=()
+    output: Path,
+    config: dict,
+    agent_count: int,
+    stale_agent_names=(),
+    deploy_root: Path | str = Path("."),
 ) -> int:
     """Copy resolved/ into the configured deploy dirs under .github/.
 
@@ -975,6 +1005,9 @@ def deploy_resolved(
     cursor_commands — are removed so the deployed tree matches what a clean
     clone would produce. Only build-flagged names are touched; adopter-owned
     files in those directories are never pruning candidates.
+
+    Deploy destinations are rooted under ``deploy_root`` (default: current
+    working directory). Configured deploy paths remain relative to that root.
 
     Also seeds paths.claude_commands (default: .claude/commands/) with one
     <name>.md file per agent — the filename (without .md) becomes the Claude
@@ -1000,7 +1033,11 @@ def deploy_resolved(
               "paths.skills_deploy_dir not set in config.")
         return -1
 
-    # Guard against absolute deploy paths that could write outside the project.
+    deploy_root = Path(deploy_root)
+    print(f"  deploy root: {deploy_root.resolve()}")
+
+    # Guard against absolute or traversal deploy paths that could write outside
+    # the deploy root. Embedded installs should pass --deploy-root .. instead.
     for _label, _dest_val in [
         ("paths.instructions_dir", instructions_dir),
         ("paths.skills_deploy_dir", skills_deploy_dir),
@@ -1009,16 +1046,27 @@ def deploy_resolved(
         ("paths.cursor_commands", cursor_commands),
         ("paths.codex_agents_md", codex_agents_md),
     ]:
-        if _dest_val and Path(_dest_val).is_absolute():
-            print(
-                f"ERROR: Deploy target '{_label}' is an absolute path — "
-                "refusing to deploy outside project directory.",
-                file=sys.stderr,
-            )
-            sys.exit(1)
+        if _dest_val:
+            _deploy_destination(deploy_root, _dest_val, _label)
 
-    instr_dest = Path(instructions_dir)
-    skills_dest = Path(skills_deploy_dir)
+    instr_dest = _deploy_destination(deploy_root, instructions_dir, "paths.instructions_dir")
+    skills_dest = _deploy_destination(deploy_root, skills_deploy_dir, "paths.skills_deploy_dir")
+    claude_commands_dest = (
+        _deploy_destination(deploy_root, claude_commands, "paths.claude_commands")
+        if claude_commands else None
+    )
+    claude_agents_dest = (
+        _deploy_destination(deploy_root, claude_agents, "paths.claude_agents")
+        if claude_agents else None
+    )
+    cursor_commands_dest = (
+        _deploy_destination(deploy_root, cursor_commands, "paths.cursor_commands")
+        if cursor_commands else None
+    )
+    codex_agents_md_dest = (
+        _deploy_destination(deploy_root, codex_agents_md, "paths.codex_agents_md")
+        if codex_agents_md else None
+    )
     instr_dest.mkdir(parents=True, exist_ok=True)
     skills_dest.mkdir(parents=True, exist_ok=True)
 
@@ -1029,9 +1077,9 @@ def deploy_resolved(
     # a committed tree keeps zombie files a clean clone can never reproduce.
     for stale_name in sorted(set(stale_agent_names)):
         stale_files = [skills_dest / f"{stale_name}.agent.md"]
-        for seeded_dir in (claude_commands, claude_agents, cursor_commands):
+        for seeded_dir in (claude_commands_dest, claude_agents_dest, cursor_commands_dest):
             if seeded_dir:
-                stale_files.append(Path(seeded_dir) / f"{stale_name}.md")
+                stale_files.append(seeded_dir / f"{stale_name}.md")
         for stale_file in stale_files:
             if stale_file.is_file():
                 stale_file.unlink()
@@ -1068,8 +1116,8 @@ def deploy_resolved(
 
     # Claude Code slash commands: resolved/agents/*.agent.md -> claude_commands/<name>.md
     # The filename without .md becomes the slash-command name (e.g. planner.md → /planner).
-    if agent_count and src_agents.exists() and claude_commands:
-        claude_dest = Path(claude_commands)
+    if agent_count and src_agents.exists() and claude_commands_dest:
+        claude_dest = claude_commands_dest
         claude_dest.mkdir(parents=True, exist_ok=True)
         for md in sorted(src_agents.glob("*.agent.md")):
             # planner.agent.md → planner.md
@@ -1085,8 +1133,8 @@ def deploy_resolved(
     # generate_claude_subagent_md). Sorted iteration, plain overwrite: a
     # second deploy with unchanged inputs is byte-identical.
     seed_claude_agents = editor_target in ('claude-code', 'both', 'all')
-    if agent_count and src_agents.exists() and claude_agents and seed_claude_agents:
-        subagents_dest = Path(claude_agents)
+    if agent_count and src_agents.exists() and claude_agents_dest and seed_claude_agents:
+        subagents_dest = claude_agents_dest
         subagents_dest.mkdir(parents=True, exist_ok=True)
         seeded_subagents = 0
         for md in sorted(src_agents.glob("*.agent.md")):
@@ -1108,8 +1156,8 @@ def deploy_resolved(
     # carries no applies_to/scope field, and transform_frontmatter_for_target
     # is a deliberate no-op for 'cursor' (scoping is the .mdc emitter's job).
     seed_cursor_commands = editor_target in ('cursor', 'all')
-    if agent_count and src_agents.exists() and cursor_commands and seed_cursor_commands:
-        cursor_dest = Path(cursor_commands)
+    if agent_count and src_agents.exists() and cursor_commands_dest and seed_cursor_commands:
+        cursor_dest = cursor_commands_dest
         cursor_dest.mkdir(parents=True, exist_ok=True)
         for md in sorted(src_agents.glob("*.agent.md")):
             # planner.agent.md → planner.md
@@ -1125,9 +1173,9 @@ def deploy_resolved(
     # markers is never modified; the file is deliberately excluded from the
     # post-deploy token scan because the adopter owns everything around the
     # managed block.
-    if editor_target in ('codex', 'all') and codex_agents_md:
-        if emit_codex_agents_md(output, flatten(config), Path(codex_agents_md)):
-            print(f"  merged Codex managed block → {codex_agents_md}")
+    if editor_target in ('codex', 'all') and codex_agents_md_dest:
+        if emit_codex_agents_md(output, flatten(config), codex_agents_md_dest):
+            print(f"  merged Codex managed block → {codex_agents_md_dest}")
 
     print(f"  deployed {deployed} file(s) to {instr_dest} and {skills_dest}")
 
@@ -1143,20 +1191,20 @@ def deploy_resolved(
     for md in sorted(instr_dest.rglob("*.md")):
         if find_unresolved_real_tokens(md.read_text(encoding="utf-8")):
             leftover.append(md)
-    if claude_commands:
-        for md in sorted(Path(claude_commands).rglob("*.md")):
+    if claude_commands_dest and claude_commands_dest.is_dir():
+        for md in sorted(claude_commands_dest.rglob("*.md")):
             if find_unresolved_real_tokens(md.read_text(encoding="utf-8")):
                 leftover.append(md)
     # Scan claude_agents whenever the token is set — even when the current
     # target gates the seeding off, a previously seeded (or stale) file in
     # the directory must still fail the deploy if it leaks tokens. Mirrors
     # the ungated claude_commands / cursor_commands scans above and below.
-    if claude_agents and Path(claude_agents).is_dir():
-        for md in sorted(Path(claude_agents).rglob("*.md")):
+    if claude_agents_dest and claude_agents_dest.is_dir():
+        for md in sorted(claude_agents_dest.rglob("*.md")):
             if find_unresolved_real_tokens(md.read_text(encoding="utf-8")):
                 leftover.append(md)
-    if cursor_commands:
-        for md in sorted(Path(cursor_commands).rglob("*.md")):
+    if cursor_commands_dest and cursor_commands_dest.is_dir():
+        for md in sorted(cursor_commands_dest.rglob("*.md")):
             if find_unresolved_real_tokens(md.read_text(encoding="utf-8")):
                 leftover.append(md)
 
@@ -1190,6 +1238,14 @@ def main():
              "if any unresolved token remains in the output."
     )
     parser.add_argument(
+        "--deploy-root",
+        default=".",
+        help="Root directory for deploy destinations (default: current directory). "
+             "Use --deploy-root .. when agent-enterprise is embedded as "
+             "<adopter>/skills-library. Config paths remain relative and must not "
+             "contain '..'."
+    )
+    parser.add_argument(
         "--strict",
         action="store_true",
         help="Legacy flag — hard failure on unresolved tokens is now the default behaviour. "
@@ -1198,6 +1254,7 @@ def main():
     args = parser.parse_args()
 
     config_path = Path(args.config)
+    deploy_root = Path(args.deploy_root)
     
     # Handle quick setup mode
     if args.quick_setup:
@@ -1355,7 +1412,7 @@ def main():
 
     # --- Configurable instructions ---
     editor_target_early = config.get('editor', {}).get('target', 'both')
-    cursor_dir = Path(".cursor") / "rules"
+    cursor_dir = (deploy_root if args.deploy else Path(".")) / ".cursor" / "rules"
     emit_cursor = editor_target_early in ('cursor', 'all')
 
     def _apply_scope_and_emit(name: str, dest: Path, resolved_text: str) -> None:
@@ -1487,6 +1544,7 @@ def main():
         leftover = deploy_resolved(
             output, config, agent_count,
             stale_agent_names=sorted(stale_agent_names),
+            deploy_root=deploy_root,
         )
         if leftover < 0:
             sys.exit(1)
@@ -1501,6 +1559,7 @@ def main():
 
     print("Next steps:")
     print("  python init.py --config <config> --deploy   # build + copy into .github/ (recommended)")
+    print("  python init.py --config <config> --deploy --deploy-root ..   # embedded skills-library/ checkout")
     print("  — or copy manually —")
     print("  cp -r resolved/skills/*        .github/agents/")
     print("  cp -r resolved/instructions/*  .github/instructions/")

@@ -231,26 +231,29 @@ First time in the repo? Clone it, open the folder in your agent, and paste the s
 git clone https://github.com/j78f88/agent-enterprise.git
 ```
 
-**Rather drive it yourself?** Two terminal paths produce the same build.
+**Rather drive it yourself?** Two terminal paths produce the same build. The
+supported embedded topology is to keep this repo under your project as
+`skills-library/`, run `init.py` from that directory, and deploy into the
+adopter root with `--deploy-root ..`.
 
 *Guided CLI* — interactive prompts, no agent:
 
 ```powershell
-cd agent-enterprise
+cd skills-library
 pip install -r requirements.txt
-python init.py --quick-setup          # prompts for name, repo, branch, namespace
+python init.py --config config/project.config.example.yml --quick-setup
 ```
 
 *Full manual* — edit the config yourself, most control:
 
 ```powershell
-cd agent-enterprise
+cd skills-library
 pip install -r requirements.txt
 
-# Choose a profile and generate + deploy resolved files
-python init.py --config profiles/python-api.config.yml --deploy
-# → resolved/skills, resolved/instructions, resolved/agents
-# → copies automatically into .github/ and seeds .claude/commands/
+# Generate from the canonical example config and deploy into the adopter root
+python init.py --config config/project.config.example.yml --deploy --deploy-root ..
+# → skills-library/resolved/skills, resolved/instructions, resolved/agents
+# → ../.github/, ../.claude/ (and other target surfaces from editor.target)
 
 # Initialize planning files (first time only)
 cp starters/SPRINTS.md ../

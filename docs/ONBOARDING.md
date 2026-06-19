@@ -1,7 +1,17 @@
 # Onboarding Guide
 
 Setup for a new project consuming agent-enterprise. Pick the path that fits how
-hands-on you want to be — all three produce the same result.
+hands-on you want to be — all three produce the same result. The supported
+embedded topology is:
+
+```text
+adopter-project/
+└── skills-library/        # agent-enterprise checkout/submodule
+```
+
+Run `init.py` from `skills-library/`. Use `--deploy-root ..` so deploy artifacts
+land in the adopter project root, while `resolved/` remains inside the library
+checkout.
 
 > **Visual overview:** open [command-centre-visual.html](command-centre-visual.html) in a browser to see all agents, modes, and flows at a glance before diving in.
 
@@ -12,8 +22,8 @@ hands-on you want to be — all three produce the same result.
 | Path | First action | Best for |
 |:-----|:-------------|:---------|
 | **Chat** ⭐ | Open the repo in your agent and ask it to set you up | First-timers, "just do it for me" |
-| **Guided CLI** | `python init.py --quick-setup` | Comfortable in a terminal, want prompts not YAML |
-| **Manual** | Edit `project.config.yml`, then run `init.py` | Maximum control, reproducible/CI setups |
+| **Guided CLI** | `python init.py --config config/project.config.example.yml --quick-setup` | Comfortable in a terminal, want prompts not YAML |
+| **Manual** | Edit `config/project.config.example.yml`, then run `init.py` | Maximum control, reproducible/CI setups |
 
 ---
 
@@ -110,26 +120,29 @@ rm -rf skills-library/.git   # detach from library history
 
 ## Step 3 — Choose a profile and fill in config
 
-Copy the closest profile to `project.config.yml`:
+For a clean adopter smoke or a first embedded setup, start with the canonical
+config path used by the build/deploy examples: `config/project.config.example.yml`.
+If you prefer one of the prebuilt profiles, copy it into that path (or pass your
+own config path consistently in the commands below):
 
 ```bash
 cd skills-library
-cp profiles/react-web-app.config.yml project.config.yml
-# or: cp profiles/python-api.config.yml project.config.yml
-# or: cp profiles/monorepo-fullstack.config.yml project.config.yml
+cp profiles/react-web-app.config.yml config/project.config.example.yml
+# or: cp profiles/python-api.config.yml config/project.config.example.yml
+# or: cp profiles/monorepo-fullstack.config.yml config/project.config.example.yml
 ```
 
 ### Option A — Interactive setup (recommended for first-time)
 
 ```bash
-python init.py --quick-setup
+python init.py --config config/project.config.example.yml --quick-setup
 ```
 
 This prompts for the essential values (project name, repo, namespace, branch) and updates your config.
 
 ### Option B — Manual edit
 
-Open `project.config.yml` and fill in every `FIXME` value. **If you skip this step, agents won't run correctly** - the system will show which values are missing (marked with ⚠) when you run `init.py`.
+Open `config/project.config.example.yml` and fill in every `FIXME` value. **If you skip this step, agents won't run correctly** - the system will show which values are missing (marked with ⚠) when you run `init.py`.
 
 **Platform selection:** Set `editor.target` to control which platform-native artifacts are emitted. Every target gets the base set (skills, agent wrappers, instructions, Claude Code slash commands); the target adds the platform's own surface on top:
 
@@ -161,10 +174,10 @@ The key fields to get right:
 
 ```bash
 cd skills-library
-python init.py --config project.config.yml
+python init.py --config config/project.config.example.yml
 ```
 
-Watch for `⚠` warnings — each one is a token with no config value. Fix them in `project.config.yml` and re-run until the output shows `✓ All tokens resolved`. Missing required keys cause `init.py` to exit non-zero with an actionable error message indicating which key is absent.
+Watch for `⚠` warnings — each one is a token with no config value. Fix your config and re-run until the output shows `✓ All tokens resolved`. Missing required keys cause `init.py` to exit non-zero with an actionable error message indicating which key is absent.
 
 ---
 
@@ -172,10 +185,10 @@ Watch for `⚠` warnings — each one is a token with no config value. Fix them 
 
 ```bash
 # Recommended: build + copy in one step
-python init.py --config project.config.yml --deploy
+python init.py --config config/project.config.example.yml --deploy --deploy-root ..
 ```
 
-`--deploy` copies `resolved/` into the configured target directories (`.github/agents/`, `.github/instructions/`) and additionally seeds `.claude/commands/` with one `.md` file per agent for Claude Code slash-command support. Depending on `editor.target`, it also seeds `.claude/agents/` (Claude Code subagents), `.cursor/rules/` + `.cursor/commands/` (Cursor), or merges a managed block into your `AGENTS.md` (Codex) — see [PLATFORMS.md](PLATFORMS.md).
+`--deploy` copies `resolved/` into the configured target directories (`.github/agents/`, `.github/instructions/`) under `--deploy-root` and additionally seeds `.claude/commands/` with one `.md` file per agent for Claude Code slash-command support. Depending on `editor.target`, it also seeds `.claude/agents/` (Claude Code subagents), `.cursor/rules/` + `.cursor/commands/` (Cursor), or merges a managed block into your `AGENTS.md` (Codex) — see [PLATFORMS.md](PLATFORMS.md). Keep `paths.*` values relative and traversal-free; do not put `../` in config paths to target the adopter root.
 
 If you prefer manual control:
 
@@ -281,10 +294,10 @@ When the library is updated:
 ```bash
 cd skills-library
 git pull                                  # if submodule: git submodule update --remote skills-library
-python init.py --config project.config.yml --deploy
+python init.py --config config/project.config.example.yml --deploy --deploy-root ..
 ```
 
-Your `project.config.yml` is not overwritten — config is yours to keep.
+Your config file is not overwritten — keep it under `skills-library/config/` (or pass its explicit path) and keep `paths.*` relative to the adopter root. `--deploy-root ..` sends refreshed platform artifacts back into the project root.
 
 ---
 

@@ -22,17 +22,21 @@ Set `editor.target` in your `project.config.yml`:
 
 All targets share the same build: `init.py` resolves `{{tokens}}` from your
 config, validates frontmatter, and writes `resolved/`. The target controls
-which platform-native artifacts are emitted on top of that — most by the
-`--deploy` step, except Cursor rules (`.cursor/rules/*.mdc`), which the build
-phase writes whenever the target includes Cursor, with or without `--deploy`.
+which platform-native artifacts are emitted on top of that. In the supported
+embedded topology (`<adopter>/skills-library`), run from `skills-library/` with
+`python init.py --config config/project.config.example.yml --deploy --deploy-root ..`
+so deploy artifacts land in the adopter root while `resolved/` stays in the
+library checkout. Cursor rules (`.cursor/rules/*.mdc`) are generated during the
+build phase; when `--deploy` is used they are also rooted under `--deploy-root`.
 
 ---
 
 ## Artifact matrix
 
-Emitted by `python init.py --config <config> --deploy`. Every row is written
-during the `--deploy` step except Cursor rules (`*.mdc`), which the build
-phase emits regardless of `--deploy`:
+Emitted by `python init.py --config config/project.config.example.yml --deploy --deploy-root ..`
+for an embedded checkout. Every row is written during the `--deploy` step
+except Cursor rules (`*.mdc`), which the build phase emits and follows
+`--deploy-root` when deploy mode is active:
 
 | Artifact | Path token (default) | vscode | claude-code | cursor | codex | both | all |
 |:---------|:---------------------|:------:|:-----------:|:------:|:-----:|:----:|:---:|
@@ -55,8 +59,9 @@ Notes on the matrix:
   `vscode` build still gets working `/commands` in Claude Code.
 - Skill suppression is strictly vscode-only. On other targets, skills keep
   `user-invocable: true` so the platform can discover them directly.
-- A path token left unset skips that emission; an absolute path aborts the
-  deploy (the build refuses to write outside the project directory).
+- A path token left unset skips that emission; an absolute path or a path with
+  `..` aborts the deploy. Keep config paths relative to `--deploy-root`; use
+  `--deploy-root ..` for embedded installs instead of path-token traversal.
 
 ---
 

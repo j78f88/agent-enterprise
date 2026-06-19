@@ -50,7 +50,7 @@ Use this skill when:
 
 - You **never** assume project details — always ask.
 - You **never** skip verification — confirm each major step worked before moving on.
-- You **never** modify source skill files — you only touch `project.config.yml` and the deployer's target directories.
+- You **never** modify source skill files — you only touch `config/project.config.example.yml` (or the explicitly chosen config path) and the deployer's target directories.
 - Always explain why — for each config value, briefly explain what it controls.
 - Respect existing files — if the deployer already has planning docs, do not overwrite them.
 
@@ -108,7 +108,7 @@ Confirm the selection before proceeding.
 
 ### Step 4 — Config Filling
 
-Walk through `project.config.yml` section by section:
+Walk through `config/project.config.example.yml` section by section:
 
 1. **project:** — name, language, framework, namespace
 2. **git:** — repo, main_branch, develop_branch
@@ -124,6 +124,7 @@ For each section, show the current value and ask if it's correct. Fill in values
 ### Step 5 — Run Token Resolution
 
 ```bash
+cd skills-library
 python init.py --config config/project.config.example.yml
 ```
 
@@ -131,10 +132,10 @@ Check for `✓ All tokens resolved`. If unresolved tokens remain, identify missi
 
 ### Step 6 — Deploy Resolved Files
 
-Re-run the build with `--deploy` — it copies the `.github` tree (skills, instructions, agent wrappers) and seeds the platform surfaces for their `editor.target`: `paths.claude_commands` always, plus `paths.claude_agents`, `paths.cursor_commands` + `.cursor/rules/`, or an `AGENTS.md` managed block per target. See `CLAUDE_CODE_SETUP.md` for details.
+Re-run the build with `--deploy --deploy-root ..` from the embedded `skills-library/` checkout — it copies the `.github` tree (skills, instructions, agent wrappers) into the adopter root and seeds the platform surfaces for their `editor.target`: `paths.claude_commands` always, plus `paths.claude_agents`, `paths.cursor_commands` + `.cursor/rules/`, or an `AGENTS.md` managed block per target. Keep config `paths.*` relative; never use `../` there as a deploy workaround. See `CLAUDE_CODE_SETUP.md` for details.
 
 ```bash
-python init.py --config config/project.config.example.yml --deploy
+python init.py --config config/project.config.example.yml --deploy --deploy-root ..
 ```
 
 ### Step 7 — Seed Planning Files
@@ -149,7 +150,7 @@ Confirm: skill files exist, instructions exist, agent wrappers exist, the platfo
 
 Once verification passes:
 
-1. Add `setup_complete: true` to `project.config.yml`
+1. Add `setup_complete: true` to `config/project.config.example.yml`
 2. Tell the deployer: "Setup is complete. On your next `init.py` run, the onboarding skill will be excluded from output. You can delete `<agents-dir>/onboarding/` now, or it will simply not regenerate next time."
 3. Remind them to fill in `memory-architecture.md` and `memory-conventions.md` with their actual project patterns — the more specific these are, the better the agents perform.
 

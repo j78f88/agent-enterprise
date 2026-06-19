@@ -1453,6 +1453,96 @@ class TestDeployCopy:
         assert "`{{tokens}}`" in text, "literal must ship clean (backslash stripped)"
         assert "\\{{tokens}}" not in text, "escape marker leaked into deployed file"
 
+    def test_embedded_deploy_root_writes_to_adopter_root_not_library(
+        self, tmp_path, monkeypatch
+    ):
+        """Embedded adopter regression: running from adopter/skills-library with
+        --deploy-root .. writes deploy artifacts to adopter/, while source dirs
+        and resolved/ stay relative to skills-library/.
+        """
+        import yaml as _yaml
+
+        adopter = tmp_path / "adopter"
+        library = adopter / "skills-library"
+        library.mkdir(parents=True)
+
+        config_path = make_minimal_config(library, editor={"target": "both"})
+        cfg = _yaml.safe_load(config_path.read_text(encoding="utf-8"))
+        cfg["paths"]["claude_commands"] = ".claude/commands"
+        config_path.write_text(_yaml.dump(cfg), encoding="utf-8")
+
+        skill_dir = library / "skills" / "qa"
+        skill_dir.mkdir(parents=True)
+        (skill_dir / "SKILL.md").write_text(
+            "---\n"
+            "name: qa\n"
+            "kind: skill\n"
+            "description: QA agent.\n"
+            "when_to_use: run tests\n"
+            "user-invocable: true\n"
+            "agent:\n"
+            "  tools: [read, search]\n"
+            "  agents: []\n"
+            "  model: null\n"
+            "  handoffs: []\n"
+            "---\n\n"
+            "# QA\n\nProject: {{project.name}}\n",
+            encoding="utf-8",
+        )
+        instr_dir = library / "instructions" / "generic"
+        instr_dir.mkdir(parents=True)
+        (instr_dir / "team.instructions.md").write_text(
+            "---\napplyTo: '**'\n---\n\n# Team\n",
+            encoding="utf-8",
+        )
+
+        monkeypatch.chdir(library)
+        monkeypatch.setattr(
+            sys,
+            "argv",
+            [
+                "init.py",
+                "--config",
+                str(config_path),
+                "--allow-frontmatter-warnings",
+                "--deploy",
+                "--deploy-root",
+                "..",
+            ],
+        )
+
+        main()
+
+        assert (library / "resolved" / "skills" / "qa" / "SKILL.md").exists()
+        assert (adopter / ".github" / "agents" / "qa.agent.md").exists()
+        assert (adopter / ".github" / "agents" / "qa" / "SKILL.md").exists()
+        assert (adopter / ".github" / "instructions" / "team.instructions.md").exists()
+        assert (adopter / ".claude" / "commands" / "qa.md").exists()
+        assert (adopter / ".claude" / "agents" / "qa.md").exists()
+        assert not (library / ".github").exists(), "deploy leaked .github into skills-library"
+        assert not (library / ".claude").exists(), "deploy leaked .claude into skills-library"
+
+    def test_config_deploy_path_traversal_refuses_deploy(
+        self, tmp_path, monkeypatch
+    ):
+        """Config paths must stay deploy-root relative; use --deploy-root for
+        embedded installs instead of '../' path-token workarounds.
+        """
+        monkeypatch.chdir(tmp_path)
+        output = tmp_path / "resolved"
+        (output / "instructions").mkdir(parents=True)
+        (output / "instructions" / "test.md").write_text("# Test\n", encoding="utf-8")
+        config = {
+            "paths": {
+                "instructions_dir": "../.github/instructions",
+                "skills_deploy_dir": ".github/agents",
+            }
+        }
+
+        with pytest.raises(SystemExit) as exc_info:
+            deploy_resolved(output, config, agent_count=0)
+        assert exc_info.value.code != 0
+
 
 # =============================================================================
 # Claude Code subagent seeding: deploy_resolved seeds .claude/agents/ from

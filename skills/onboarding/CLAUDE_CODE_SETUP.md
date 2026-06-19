@@ -13,10 +13,10 @@ This file covers the Claude Code surfaces in detail, with a short section on Cur
 
 ## Slash commands
 
-When you run `python init.py --config config/project.config.example.yml --deploy`, the deploy step **automatically seeds the `paths.claude_commands` directory** with one `.md` file per agent. Claude Code reads the filename (without `.md`) as the slash-command name — so `planner.md` becomes `/planner`. This seeding runs for every `editor.target` whenever `paths.claude_commands` is set.
+When agent-enterprise is embedded as `<adopter>/skills-library`, run `init.py` from `skills-library/` with `--deploy-root ..`. The deploy step **automatically seeds the `paths.claude_commands` directory under the adopter root** with one `.md` file per agent. Claude Code reads the filename (without `.md`) as the slash-command name — so `planner.md` becomes `/planner`. This seeding runs for every `editor.target` whenever `paths.claude_commands` is set.
 
 ```bash
-python init.py --config config/project.config.example.yml --deploy
+python init.py --config config/project.config.example.yml --deploy --deploy-root ..
 ```
 
 This creates files under the `paths.claude_commands` directory (default `.claude/commands`), such as:
@@ -46,7 +46,7 @@ Slash commands and subagents are complementary: a command is something you invok
 
 ## Configuring the paths
 
-Both directories are set in your project config: `paths.claude_commands` (default `.claude/commands`) and `paths.claude_agents` (default `.claude/agents`). Change them if your project uses different locations — the deploy step always reads the configured paths. Seeding is deterministic and idempotent: re-running deploy with unchanged inputs rewrites identical bytes.
+Both directories are set in your project config: `paths.claude_commands` (default `.claude/commands`) and `paths.claude_agents` (default `.claude/agents`). Change them if your project uses different locations — the deploy step always reads the configured paths relative to `--deploy-root`. Config paths must stay relative and traversal-free; use `--deploy-root ..` for embedded installs instead of putting `../` into `paths.*`. Seeding is deterministic and idempotent: re-running deploy with unchanged inputs rewrites identical bytes.
 
 ## If you are using Claude Code only
 
