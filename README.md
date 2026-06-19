@@ -227,8 +227,8 @@ profile, run init.py, deploy the resolved files, and verify it works.
 The `@onboarding` agent takes it from there — it interviews you (about five
 questions), recommends a profile, fills the config, runs the build, deploys
 the files, and checks everything works. **No YAML editing. No copy commands.**
-When setup is verified, it removes itself.
-
+After `setup_complete: true` and a final deploy, the setup-only onboarding
+agent removes itself from generated/deployed surfaces.
 First time in the repo? Clone it, open the folder in your agent, and paste the sentence above.
 
 ```powershell
@@ -246,6 +246,7 @@ adopter root with `--deploy-root ..`.
 cd skills-library
 pip install -r requirements.txt
 python init.py --config config/project.config.example.yml --quick-setup
+python init.py --config config/project.config.example.yml --deploy --deploy-root ..
 ```
 
 *Full manual* — edit the config yourself, most control:

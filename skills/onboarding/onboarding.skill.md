@@ -144,15 +144,25 @@ Check what planning infrastructure already exists. Only seed what is missing fro
 
 ### Step 8 — Verification
 
-Confirm: skill files exist, instructions exist, agent wrappers exist, the platform surfaces for their `editor.target` are seeded, no unresolved `\{{tokens}}` in resolved files, planning files seeded. Report as a checklist.
+Confirm the pre-completion state first: skill bundles exist, agent wrappers exist, instructions exist, the platform surfaces for their `editor.target` are seeded, no unresolved `\{{tokens}}` remain in deployed files, and missing planning files were seeded. The onboarding skill should still be present before setup is marked complete because it is running this checklist.
+
+Report the checklist in groups:
+
+- Files: `.github/agents/`, `.github/instructions/`, `<agent>.agent.md`, and selected skill bundles exist.
+- Tokens: no unresolved config tokens in `.github/`, plus `.claude/`, `.cursor/`, or `AGENTS.md` when those surfaces exist.
+- Platform surfaces: `.claude/commands/` always, plus `.claude/agents/`, `.cursor/commands/` + `.cursor/rules/`, or the Codex managed block according to `editor.target`.
+- Planning: starter files were copied only when absent.
+- Onboarding before completion: onboarding files are still present.
 
 ### Step 9 — Self-Removal
 
-Once verification passes:
+Once pre-completion verification passes:
 
-1. Add `setup_complete: true` to `config/project.config.example.yml`
-2. Tell the deployer: "Setup is complete. On your next `init.py` run, the onboarding skill will be excluded from output. You can delete `<agents-dir>/onboarding/` now, or it will simply not regenerate next time."
-3. Remind them to fill in `memory-architecture.md` and `memory-conventions.md` with their actual project patterns — the more specific these are, the better the agents perform.
+1. Add `setup_complete: true` to `config/project.config.example.yml`.
+2. Rerun `python init.py --config config/project.config.example.yml --deploy --deploy-root ..` from `skills-library/`.
+3. Verify onboarding artifacts were pruned from generated and deployed surfaces: `resolved/skills/onboarding`, `resolved/agents/onboarding.agent.md`, `.github/agents/onboarding`, `.github/agents/onboarding.agent.md`, `.claude/commands/onboarding.md`, `.claude/agents/onboarding.md`, `.cursor/commands/onboarding.md`, and the Codex `AGENTS.md` roster if applicable.
+4. Tell the deployer: "Setup is complete. Onboarding was intentionally present during setup and has now been removed from the generated/deployed agent surfaces. If you did not redeploy immediately, rerun the deploy command before deleting anything by hand."
+5. Remind them to fill in `memory-architecture.md` and `memory-conventions.md` with their actual project patterns — the more specific these are, the better the agents perform.
 
 ---
 

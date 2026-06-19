@@ -45,7 +45,7 @@ The `@onboarding` agent drives the whole flow for you:
 4. **Deploys the resolved files** into your project's directories.
 5. **Seeds only the planning files you're missing** — never overwrites yours.
 6. **Verifies** everything (files in place, no unresolved tokens) and reports a checklist.
-7. **Self-removes** once setup is confirmed.
+7. **Self-removes after confirmation** — before `setup_complete: true`, the onboarding agent is present so it can finish setup; after `setup_complete: true` and the next `init.py --deploy --deploy-root ..`, setup-only onboarding artifacts are pruned.
 
 If anything is unclear it asks rather than guessing. When it finishes, jump
 straight to a real task: `@planner scope my first feature`.
@@ -240,45 +240,112 @@ Create `.github/copilot-instructions.md` with project-level context: what the pr
 
 ## Step 9 — Verify your setup
 
-Run these checks to confirm everything is working:
+Run these checks from `skills-library/` after `python init.py --config config/project.config.example.yml --deploy --deploy-root ..`.
 
-### 9.1 Check resolved files exist
+### 9.1 Before marking setup complete
 
-```bash
-# Skills should be in place
-ls ../.github/agents/
-# Expected: architect/ bug/ docs/ a11y/ onboarding/ perf/ planner/ pm/ qa/ reviewer/ researcher/ security/ sprint-lead/
-
-# Agent wrappers (generated for every editor.target)
-ls ../.github/agents/*.agent.md
-# Expected: 13 .agent.md files (one per skill)
-
-# Instructions should be in place
-ls ../.github/instructions/
-# Expected: Multiple .instructions.md files
-```
-
-### 9.2 Verify no unresolved tokens
+The onboarding skill is still present at this point because it is the setup assistant.
 
 ```bash
-# Search for leftover {{tokens}} — should return nothing
-grep -r "{{" ../.github/agents/ ../.github/instructions/ || echo "✓ No unresolved tokens"
+# Core Mode 1 files should be deployed into the adopter root
+test -d ../.github/agents
+test -d ../.github/instructions
+test -f ../.github/agents/planner.agent.md
+test -d ../.github/agents/planner
+
+# Onboarding should still exist before setup_complete flips
+test -f ../.github/agents/onboarding.agent.md
+test -d ../.github/agents/onboarding
 ```
+
+Check platform surfaces for your `editor.target`:
+
+| `editor.target` | Smoke check |
+| --- | --- |
+| `both` / `claude-code` / `all` | `test -f ../.claude/commands/planner.md` and `test -f ../.claude/agents/planner.md` |
+| `vscode` | `test -f ../.claude/commands/planner.md` and `test ! -f ../.claude/agents/planner.md` |
+| `cursor` / `all` | `test -f ../.cursor/commands/planner.md` and `test -d ../.cursor/rules` |
+| `codex` / `all` | `grep -q "agent-enterprise:begin" ../AGENTS.md` |
+
+Verify no real unresolved config tokens remain in deployed files. This intentionally checks only dotted build tokens like `{{project.name}}`; documentation literals such as `{{tokens}}` and GitHub Actions syntax such as `${{ secrets.TOKEN }}` are allowed.
+
+```bash
+python - <<'PY'
+import re
+import sys
+from pathlib import Path
+
+root = Path('..')
+scan_roots = [
+    root / '.github' / 'agents',
+    root / '.github' / 'instructions',
+    root / '.claude',
+    root / '.cursor',
+    root / 'AGENTS.md',
+]
+token_re = re.compile(r'(?<!\$)(\\?)\{\{([a-z_][a-z0-9_]*(?:\.[a-z_][a-z0-9_]*)+)\}\}')
+findings = []
+for scan_root in scan_roots:
+    if not scan_root.exists():
+        continue
+    files = [scan_root] if scan_root.is_file() else sorted(scan_root.rglob('*.md'))
+    for file_path in files:
+        try:
+            lines = file_path.read_text(encoding='utf-8').splitlines()
+        except UnicodeDecodeError:
+            continue
+        for line_no, line in enumerate(lines, start=1):
+            for match in token_re.finditer(line):
+                if match.group(1) != '\\':
+                    findings.append(f'{file_path}:{line_no}: {{{{{match.group(2)}}}}}')
+if findings:
+    print('⚠ Unresolved config tokens found:')
+    print('\n'.join(findings))
+    sys.exit(1)
+print('✓ No unresolved config tokens in deployed surfaces')
+PY
+```
+
+### 9.2 Mark setup complete and verify self-removal
+
+After the onboarding checklist passes, set `setup_complete: true` in `config/project.config.example.yml`, then rerun deploy:
+
+```bash
+python init.py --config config/project.config.example.yml --deploy --deploy-root ..
+```
+
+Expected after this second deploy:
+
+```bash
+# Setup-only onboarding artifacts are pruned from generated and deployed surfaces
+test ! -e resolved/skills/onboarding
+test ! -e resolved/agents/onboarding.agent.md
+test ! -e ../.github/agents/onboarding
+test ! -e ../.github/agents/onboarding.agent.md
+test ! -e ../.claude/commands/onboarding.md
+test ! -e ../.claude/agents/onboarding.md
+test ! -e ../.cursor/commands/onboarding.md
+
+# If editor.target includes codex, onboarding should also be absent from the managed roster
+! grep -Fq "**onboarding**" ../AGENTS.md 2>/dev/null || echo "⚠ onboarding still appears in AGENTS.md"
+```
+
+This before/after state is intentional: onboarding exists while setup is in progress, then disappears once setup is complete so future agent rosters contain only day-to-day roles.
 
 ### 9.3 Test the library (optional but recommended)
 
 ```bash
 cd skills-library
 pytest tests/ -v
-# Expected: All tests pass (69+ tests)
+# Expected: all tests pass
 ```
 
-### 9.4 Quick smoke test
+### 9.4 Quick interactive smoke test
 
 In VS Code with Copilot Chat:
-1. Open your project (not the skills-library)
-2. Type `@planner` and hit Enter
-3. If the agent responds, your setup is working
+1. Open your project root (not the `skills-library` checkout).
+2. Type `@planner` and hit Enter.
+3. If the agent responds, your setup is working.
 
 **Troubleshooting:** If the agent isn't found:
 - Reload VS Code: `Ctrl+Shift+P` → "Developer: Reload Window"
