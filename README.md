@@ -18,7 +18,7 @@
 
 <br />
 
-**[Quick Start](#-quick-start)** · **[What You Get](#-what-you-get)** · **[Three Modes](#-three-delivery-modes)** · **[Why It Works](#-why-it-works)** · **[Full Docs](docs/ONBOARDING.md)**
+**[Quick Start](#-quick-start)** · **[What You Get](#-what-you-get)** · **[Three Modes](#-three-delivery-modes)** · **[Work Loop](docs/WORK_LOOP.md)** · **[Why It Works](#-why-it-works)** · **[Full Docs](docs/ONBOARDING.md)**
 
 <br />
 
@@ -202,6 +202,10 @@ agent-enterprise ships as three **standalone, independently consumable** modes o
 | **Mode 1 — Team** | A substrate of skills, instructions, and agents for interactive use | You want `@planner`, `@qa`, `@security`, etc. in your project |
 | **Mode 2 — Orchestration** | A supported dispatcher (`python dispatch.py`) that pulls work from a queue, invokes callables, and verifies results — see [docs/ORCHESTRATION.md](docs/ORCHESTRATION.md) | You want non-interactive, issue-driven dispatch |
 | **Mode 3 — Choreography** | Coordinates a program of works across many projects with drift control | You manage multiple projects and need cross-repo visibility |
+
+The [Work Loop guide](docs/WORK_LOOP.md) shows how chat intake, the backlog
+ledger, Mode 2 queue execution, verification, and retro updates fit together
+for project-embedded usage.
 
 Each mode is a standalone install. Adoption order is free. Adding a new mode doesn't modify existing ones.
 
