@@ -88,7 +88,16 @@ Install dependencies first:
 pip install -r requirements.txt
 ```
 
-Run the reference conformance smoke:
+Run the repo-root CLI:
+
+```bash
+python choreography.py validate-registry
+python choreography.py drift
+python choreography.py impact mode-2-contract-v1
+python choreography.py harvest --out-dir audit
+```
+
+For direct reference-implementation conformance, run:
 
 ```bash
 python command-centre/04-mode-choreography/reference-impls/registry-coordinator/conformance_test.py

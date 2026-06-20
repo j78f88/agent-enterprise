@@ -201,7 +201,7 @@ agent-enterprise ships as three **standalone, independently consumable** modes o
 |:-----|:-----------|:-----------------|
 | **Mode 1 — Team** | A substrate of skills, instructions, and agents for interactive use | You want `@planner`, `@qa`, `@security`, etc. in your project |
 | **Mode 2 — Orchestration** | A supported dispatcher (`python dispatch.py`) that pulls work from a queue, invokes callables, and verifies results — see [docs/ORCHESTRATION.md](docs/ORCHESTRATION.md) | You want non-interactive, issue-driven dispatch |
-| **Mode 3 — Choreography** | Coordinates a program of works across many projects with drift control | You manage multiple projects and need cross-repo visibility |
+| **Mode 3 — Choreography** | Coordinates a program of works across many projects with drift control — see [docs/CHOREOGRAPHY.md](docs/CHOREOGRAPHY.md) and `python choreography.py` | You manage multiple projects and need cross-repo visibility |
 
 The [Work Loop guide](docs/WORK_LOOP.md) shows how chat intake, the backlog
 ledger, Mode 2 queue execution, verification, and retro updates fit together

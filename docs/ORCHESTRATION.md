@@ -171,6 +171,31 @@ any violation. Use it in CI to keep callable manifests honest.
 
 ---
 
+## CI smoke: backlog ledger → queue → execution → reconciliation
+
+For a permanent end-to-end smoke of the project work loop, run:
+
+```bash
+python scripts/smoke_mode2_work_loop.py
+```
+
+The smoke creates a temporary project workspace, writes a `BACKLOG_LEDGER.md`
+row, materializes that row as `queue/inbox/*.yml`, dispatches it through
+`dispatch.py`, verifies the declared output artifact, and reconciles the ledger
+row back to `done`.
+
+Expected summary fields:
+
+- `status: pass`
+- `ledger_id: ITEM-042`
+- `queue_state: done`
+- tier-3 dispatch summary with the item in `done`
+
+Use this in CI when you need proof that the ingest/handoff loop still works,
+not just that individual dispatcher functions pass unit tests.
+
+---
+
 ## Crash recovery
 
 The durability design rests on one invariant: every state transition is
