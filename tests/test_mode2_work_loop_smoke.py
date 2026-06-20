@@ -32,7 +32,7 @@ def test_mode2_work_loop_smoke_reconciles_ledger(tmp_path: Path) -> None:
     assert summary["dispatch_summary"]["tier"] == 3
     assert summary["dispatch_summary"]["status"] == "complete"
     assert summary["dispatch_summary"]["dispatched"][0]["state"] == "done"
-    assert summary["artifact_path"].endswith("docs/WORK_LOOP_RESULT.md")
+    assert Path(summary["artifact_path"]).parts[-2:] == ("docs", "WORK_LOOP_RESULT.md")
 
     ledger = (workdir / "docs" / "planning" / "BACKLOG_LEDGER.md").read_text(
         encoding="utf-8"
