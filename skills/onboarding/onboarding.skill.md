@@ -160,12 +160,9 @@ Once pre-completion verification passes:
 
 1. Add `setup_complete: true` to `config/project.config.example.yml`.
 2. Rerun `python init.py --config config/project.config.example.yml --deploy --deploy-root ..` from `skills-library/`.
-3. Verify onboarding artifacts were pruned from generated and deployed surfaces: `resolved/skills/onboarding`, `resolved/agents/onboarding.agent.md`, `.github/agents/onboarding`, `.github/agents/onboarding.agent.md`, `.claude/commands/onboarding.md`, `.claude/agents/onboarding.md`, `.cursor/commands/onboarding.md`, and the Codex `AGENTS.md` roster if applicable.
+3. Verify onboarding artifacts were pruned from generated and deployed surfaces, including `resolved/skills/onboarding`, `resolved/agents/onboarding.agent.md`, `.github/agents/onboarding*`, `.claude/*/onboarding.md`, `.cursor/commands/onboarding.md`, and the Codex `AGENTS.md` roster if applicable.
 4. Tell the deployer: "Setup is complete. Onboarding was intentionally present during setup and has now been removed from the generated/deployed agent surfaces. If you did not redeploy immediately, rerun the deploy command before deleting anything by hand."
 5. Remind them to fill in `memory-architecture.md` and `memory-conventions.md` with their actual project patterns — the more specific these are, the better the agents perform.
-
----
-
 > **Platform setup:** See `CLAUDE_CODE_SETUP.md` in this directory for Claude Code slash-command and subagent configuration, plus the Cursor and Codex deploy surfaces.
 
 ## If Something Goes Wrong
@@ -183,20 +180,13 @@ Be conversational and helpful. This is likely the deployer's first interaction w
 
 ---
 
-## Common Rationalizations
-
-| Excuse | Why It's Tempting | Counter |
-| --- | --- | --- |
-| "They'll figure it out." | Skips the boring write-up. | Onboarding cost compounds across every new hire. Pay it once. |
-| "It works on my machine, the doc must be right." | Your machine has years of state. | Test on a clean VM or container. Anything you forgot to write down breaks there. |
-| "The README plus the wiki is enough." | Scatter feels comprehensive. | A new hire needs one path, not three. Provide a single onboarding doc that links out. |
-
 ## Red Flags
 
 - Setup instructions were never run on a clean machine.
 - Jargon (ADR, REJ-NNN, write permits) used with no glossary.
 - Estimated setup time missing or wildly off from reality.
 - No 'first task you can ship' described.
+- The README, onboarding guide, and actual `init.py` commands disagree.
 
 ## Verification
 
