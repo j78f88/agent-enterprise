@@ -395,6 +395,7 @@ resolved/         deploy artifacts (skills/, instructions/, agents/)
 | **[Example Sprint](docs/EXAMPLE_SPRINT_FLOW.md)** | Complete sprint walkthrough |
 | **[Three Modes](command-centre/00-overview/three-modes.md)** | Team, Orchestration, Choreography explained |
 | **[Orchestration](docs/ORCHESTRATION.md)** | Running the supported Mode 2 dispatcher (`dispatch.py`) |
+| **[Choreography](docs/CHOREOGRAPHY.md)** | Coordinating multiple projects with Mode 3 registry/drift/harvest |
 | **[Customization](docs/CUSTOMIZATION.md)** | Adapting skills for your needs |
 | **[Extension Guide](docs/EXTENSION_GUIDE.md)** | Authoring new skills |
 | **[Troubleshooting](docs/TROUBLESHOOTING.md)** | Common issues & fixes |

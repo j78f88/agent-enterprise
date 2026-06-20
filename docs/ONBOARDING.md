@@ -25,6 +25,14 @@ checkout.
 | **Guided CLI** | `python init.py --config config/project.config.example.yml --quick-setup` | Comfortable in a terminal, want prompts not YAML |
 | **Manual** | Edit `config/project.config.example.yml`, then run `init.py` | Maximum control, reproducible/CI setups |
 
+## Choose the delivery modes you need
+
+- **Mode 1 — Team:** install project-local agents/instructions with `init.py`; this is the normal onboarding path.
+- **Mode 2 — Orchestration:** add non-interactive queue dispatch with `dispatch.py`; see [ORCHESTRATION.md](ORCHESTRATION.md).
+- **Mode 3 — Choreography:** coordinate multiple projects from a separate registry workspace; see [CHOREOGRAPHY.md](CHOREOGRAPHY.md).
+
+Mode 1 is the default first install. Add Mode 2 when you want queued, verified work execution. Add Mode 3 when you have multiple projects to coordinate and harvest learning from.
+
 ---
 
 ## Chat-driven setup (recommended)
