@@ -1,0 +1,20 @@
+{
+  "id": "SRC-msfoundry-skills",
+  "title": "Use skills in Foundry (preview) — versioned Skills API + MCP toolbox delivery",
+  "source_tier": "official-guidance",
+  "publisher": "Microsoft (Azure AI Foundry docs / Microsoft Learn)",
+  "url": "https://learn.microsoft.com/azure/foundry/agents/how-to/tools/skills",
+  "retrieval_date": "2026-06-21",
+  "accessed_via": "manual-web",
+  "locator": {
+    "kind": "web",
+    "ref": "https://learn.microsoft.com/azure/foundry/agents/how-to/tools/skills",
+    "anchor": "#attach-skills-to-a-toolbox-preview"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "retrieved_by": "@researcher",
+  "notes": "Retrieved via Microsoft Learn MCP (official docs channel); raw HTML fetch returned HTTP 403 (bot protection), so content_hash is SHA-256 over the verbatim recorded excerpt rather than the full page. Page marked public preview.",
+  "excerpt": "A skill is a `SKILL.md` file that you author once and store centrally in Foundry through the versioned Skills API. You then deliver it to agents in two modes. Attach to a toolbox so any MCP client discovers and loads skills alongside tools. Or download directly into a Hosted or local agent project to inject the content into each session's context. Skills are versioned: every update creates a new immutable version, and the parent skill tracks a `default_version`. To update a skill, you create a new version, test it, then promote it to default without changing any agent code. When an agent or MCP client connects to the toolbox endpoint, skills appear as MCP Resources. Clients that support the MCP Resources protocol call `resources/list` once at startup to discover all attached skills, then `resources/read` to download the content. Any MCP client — GitHub Copilot, Claude Code, or your own agent harness — can consume skills this way without any Foundry SDK. Toolbox-based skill discovery is in preview and follows the Skills extension for the Model Context Protocol specification (SEP-2640).",
+  "content_hash": "sha256:d6cc7316532eef349bce95c07b5d84ffcdd95b5009bfcb2cace9018daa80cef3"
+}

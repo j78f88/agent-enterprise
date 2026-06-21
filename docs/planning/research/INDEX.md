@@ -57,7 +57,9 @@ date: 2026-06-01
 | `SRC-irap` | Infosec Registered Assessors Program (IRAP) | Cyb… | authoritative-standard | Australian Signals Director… | 2026-06-01 | OFFICIAL | `sha256:0eb3713…` |
 | `SRC-lakera-guard` | Lakera Guard: Runtime visibility and protection f… | primary | Lakera (Cisco AI Defense) | 2026-06-01 | OFFICIAL | `sha256:c560081…` |
 | `SRC-llama-guard` | Llama Guard: LLM-based Input-Output Safeguard for… | primary | Meta AI | 2026-06-01 | OFFICIAL | `sha256:d75a449…` |
+| `SRC-mcp-sep2640` | SEP-2640: Skills Extension for the Model Context … | primary | Model Context Protocol (mod… | 2026-06-21 | OFFICIAL | `sha256:bd199dc…` |
 | `SRC-ms-agent-gov-toolkit` | Introducing the Agent Governance Toolkit: Open-so… | primary | Microsoft Open Source Blog | 2026-06-01 | OFFICIAL | `sha256:41bf451…` |
+| `SRC-msfoundry-skills` | Use skills in Foundry (preview) — versioned Skill… | official-guidance | Microsoft (Azure AI Foundry… | 2026-06-21 | OFFICIAL | `sha256:d6cc731…` |
 | `SRC-nemo-guardrails` | NeMo Guardrails Configuration & Architecture | primary | NVIDIA | 2026-06-01 | OFFICIAL | `sha256:b8e888b…` |
 | `SRC-nist-airmf` | AI Risk Management Framework (AI RMF 1.0) | NIST | authoritative-standard | NIST | 2026-06-01 | OFFICIAL | `sha256:22ade09…` |
 | `SRC-nist-genai` | AI RMF: Generative AI Profile (NIST AI 600-1) | N… | authoritative-standard | NIST | 2026-06-01 | OFFICIAL | `sha256:c517a1a…` |
@@ -113,6 +115,7 @@ date: 2026-06-01
 | `CLM-irap-hosting` | IRAP (run by ASD, assessing against ISM/PSPF) remains an ac… | **verified** | SRC-irap, SRC-hosting-cert | IRAP ISM/PSPF assessment | OFFICIAL |
 | `CLM-ism-march-2026` | The ACSC/ASD Information Security Manual (ISM) current rele… | **verified** | SRC-acsc-ism, SRC-e8-update | ACSC ISM Guidelines for Softw… | OFFICIAL |
 | `CLM-most-named-guardrails-are-runtime` | The majority of the named guardrail tools (NeMo Guardrails,… | **verified** | SRC-nemo-guardrails, SRC-ms-agent-gov-t… | — | OFFICIAL |
+| `CLM-msfoundry-skills-productization` | Microsoft has productised Anthropic-format Agent Skills (SK… | **plausible** | SRC-msfoundry-skills, SRC-mcp-sep2640 | — | OFFICIAL |
 | `CLM-multitarget-is-commoditised` | Author-once -> multi-target agent-artefact emit is a commod… | **verified** | SRC-airulez-repo, SRC-block-ai-rules | — | OFFICIAL |
 | `CLM-nist-airmf-genai` | NIST AI RMF 1.0 was released 26 January 2023; its Generativ… | **verified** | SRC-nist-airmf, SRC-nist-genai | NIST AI RMF Govern/Map/Measur… | OFFICIAL |
 | `CLM-nist-ssdf-11` | NIST SP 800-218 (SSDF) current published version is 1.1, fi… | **plausible** | SRC-nist-ssdf | NIST SSDF PO/PS/PW/RV practic… | OFFICIAL |

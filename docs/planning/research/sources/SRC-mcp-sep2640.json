@@ -1,0 +1,19 @@
+{
+  "id": "SRC-mcp-sep2640",
+  "title": "SEP-2640: Skills Extension for the Model Context Protocol",
+  "source_tier": "primary",
+  "publisher": "Model Context Protocol (modelcontextprotocol/modelcontextprotocol PR #2640)",
+  "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2640",
+  "retrieval_date": "2026-06-21",
+  "accessed_via": "manual-web",
+  "locator": {
+    "kind": "web",
+    "ref": "https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2640"
+  },
+  "classification": "OFFICIAL",
+  "trust": "trusted",
+  "retrieved_by": "@researcher",
+  "notes": "Retrieved via WebFetch summariser; quotes are as surfaced from the PR. This is an open (unmerged) MCP spec PR — an evolving proposal, not a ratified standard. Method naming differs from the Microsoft prose: SEP-2640's current text centres on `skill://index.json` + direct `resources/read`, whereas Microsoft describes `resources/list`/`resources/read`. Cited only to corroborate that Foundry serves skills over the MCP Resources primitive per SEP-2640.",
+  "excerpt": "SEP-2640: Skills Extension (status: Open). Defines a transport binding for serving Agent Skills over MCP using the Resources primitive, establishing the `skill://` URI scheme. \"A skill's URI is directly readable via `resources/read` whether or not it appears in any index.\" \"A server SHOULD expose a resource at the well-known URI `skill://index.json` whose content is a JSON index.\" \"This extension does not redefine, constrain, or extend the skill format. Future revisions of the Agent Skills specification apply automatically.\" Extension identifier: `io.modelcontextprotocol/skills`; URI pattern `skill://<skill-path>/SKILL.md`; requires SHA-256 digest verification for integrity.",
+  "content_hash": "sha256:bd199dcdbe9ef80d7a91c5570a0513245c1c854bd89932c2417c9387dcf73834"
+}

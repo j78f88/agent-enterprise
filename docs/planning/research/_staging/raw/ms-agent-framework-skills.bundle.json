@@ -1,0 +1,72 @@
+{
+  "topic": "Microsoft Agent Framework / Azure AI Foundry — Skills productisation (versioned Skills API + MCP-resource delivery)",
+  "_tier_note": "Prior-art extension (2026-06-21): the MS Agent Framework / Foundry skills coverage corroborates the existing 2026-06-01 skills claims; only the Foundry-specific productisation (versioned Skills API + MCP toolbox delivery) is net-new. One new claim, held at 'plausible' because the versioned-API specifics are single-vendor-sourced.",
+  "source_notes": [
+    {
+      "id": "SRC-msfoundry-skills",
+      "title": "Use skills in Foundry (preview) — versioned Skills API + MCP toolbox delivery",
+      "source_tier": "official-guidance",
+      "publisher": "Microsoft (Azure AI Foundry docs / Microsoft Learn)",
+      "url": "https://learn.microsoft.com/azure/foundry/agents/how-to/tools/skills",
+      "retrieval_date": "2026-06-21",
+      "accessed_via": "manual-web",
+      "locator": {
+        "kind": "web",
+        "ref": "https://learn.microsoft.com/azure/foundry/agents/how-to/tools/skills",
+        "anchor": "#attach-skills-to-a-toolbox-preview"
+      },
+      "classification": "OFFICIAL",
+      "trust": "untrusted",
+      "retrieved_by": "@researcher",
+      "notes": "Retrieved via Microsoft Learn MCP (official docs channel); raw HTML fetch returned HTTP 403 (bot protection), so content_hash is SHA-256 over the verbatim recorded excerpt rather than the full page. Page marked public preview.",
+      "excerpt": "A skill is a `SKILL.md` file that you author once and store centrally in Foundry through the versioned Skills API. You then deliver it to agents in two modes. Attach to a toolbox so any MCP client discovers and loads skills alongside tools. Or download directly into a Hosted or local agent project to inject the content into each session's context. Skills are versioned: every update creates a new immutable version, and the parent skill tracks a `default_version`. To update a skill, you create a new version, test it, then promote it to default without changing any agent code. When an agent or MCP client connects to the toolbox endpoint, skills appear as MCP Resources. Clients that support the MCP Resources protocol call `resources/list` once at startup to discover all attached skills, then `resources/read` to download the content. Any MCP client — GitHub Copilot, Claude Code, or your own agent harness — can consume skills this way without any Foundry SDK. Toolbox-based skill discovery is in preview and follows the Skills extension for the Model Context Protocol specification (SEP-2640)."
+    },
+    {
+      "id": "SRC-mcp-sep2640",
+      "title": "SEP-2640: Skills Extension for the Model Context Protocol",
+      "source_tier": "primary",
+      "publisher": "Model Context Protocol (modelcontextprotocol/modelcontextprotocol PR #2640)",
+      "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2640",
+      "retrieval_date": "2026-06-21",
+      "accessed_via": "manual-web",
+      "locator": {
+        "kind": "web",
+        "ref": "https://github.com/modelcontextprotocol/modelcontextprotocol/pull/2640"
+      },
+      "classification": "OFFICIAL",
+      "trust": "untrusted",
+      "retrieved_by": "@researcher",
+      "notes": "Retrieved via WebFetch summariser; quotes are as surfaced from the PR. This is an open (unmerged) MCP spec PR — an evolving proposal, not a ratified standard. Method naming differs from the Microsoft prose: SEP-2640's current text centres on `skill://index.json` + direct `resources/read`, whereas Microsoft describes `resources/list`/`resources/read`. Cited only to corroborate that Foundry serves skills over the MCP Resources primitive per SEP-2640.",
+      "excerpt": "SEP-2640: Skills Extension (status: Open). Defines a transport binding for serving Agent Skills over MCP using the Resources primitive, establishing the `skill://` URI scheme. \"A skill's URI is directly readable via `resources/read` whether or not it appears in any index.\" \"A server SHOULD expose a resource at the well-known URI `skill://index.json` whose content is a JSON index.\" \"This extension does not redefine, constrain, or extend the skill format. Future revisions of the Agent Skills specification apply automatically.\" Extension identifier: `io.modelcontextprotocol/skills`; URI pattern `skill://<skill-path>/SKILL.md`; requires SHA-256 digest verification for integrity."
+    }
+  ],
+  "claims": [
+    {
+      "id": "CLM-msfoundry-skills-productization",
+      "statement": "Microsoft has productised Anthropic-format Agent Skills (SKILL.md) in Azure AI Foundry as a server-side 'versioned Skills API' — every update creates a new immutable version and the parent skill tracks a promotable `default_version` — and delivers skills either by direct download into a hosted/local agent or by attaching them to an MCP toolbox, where they are exposed as MCP Resources that any MCP client (GitHub Copilot, Claude Code, or a custom harness) can discover and read with no Foundry SDK, following the MCP Skills extension (SEP-2640).",
+      "verdict": "plausible",
+      "evidence": [
+        {
+          "source_id": "SRC-msfoundry-skills",
+          "quote": "A skill is a `SKILL.md` file that you author once and store centrally in Foundry through the versioned Skills API ... Skills are versioned: every update creates a new immutable version, and the parent skill tracks a `default_version`. ... skills appear as MCP Resources. ... Any MCP client — GitHub Copilot, Claude Code, or your own agent harness — can consume skills this way without any Foundry SDK.",
+          "retrieval_date": "2026-06-21",
+          "independent": true
+        },
+        {
+          "source_id": "SRC-mcp-sep2640",
+          "quote": "Defines a transport binding for serving Agent Skills over MCP using the Resources primitive, establishing the `skill://` URI scheme. \"A skill's URI is directly readable via `resources/read` whether or not it appears in any index.\"",
+          "retrieval_date": "2026-06-21",
+          "independent": true
+        }
+      ],
+      "contested": false,
+      "falsifier": "Show Foundry's Skills API does not enforce immutable versions / `default_version` promotion, or that toolbox-attached skills cannot be consumed by a non-Microsoft MCP client without a Foundry SDK — e.g. Microsoft pulls the preview, or SEP-2640 lands in a form generic MCP clients can't read. Verdict would lift to `verified` if an independent (non-Microsoft) source corroborates the versioned-API semantics.",
+      "classification": "OFFICIAL",
+      "trust": "untrusted",
+      "consumer_profile": ["own-agency"],
+      "tags": ["adversarial", "strategic", "skills", "microsoft", "mcp"],
+      "date": "2026-06-21",
+      "notes": "Extends CLM-adv-skill-format-absorbed (Microsoft adopting SKILL.md) with the concrete productisation: a server-side versioned registry + MCP-resource delivery. Verdict held at `plausible` because the versioned-API specifics are single-vendor-sourced (Microsoft only); the MCP-resource delivery path is the part corroborated by the independent SEP-2640. Strategic read for own-agency: the 'central versioned skill registry + promote-to-default' workflow is now a first-party cloud feature, not a gap a third-party build-time resolver uniquely fills."
+    }
+  ]
+}
