@@ -105,45 +105,73 @@ Accepted deviation allowed: local-only cockpit remains acceptable only for read-
 
 ### 2. Restore health trust — ITEM-034, ITEM-033, ITEM-037
 
-This is one loop slice with three sub-gates. Tone does not become meaningful until all pass.
+This is one loop slice with linked sub-gates. Tone does not become meaningful until ITEM-034 and ITEM-037 pass; ITEM-042 is tracked separately as cost/telemetry debt.
 
-#### 1A. Fix daily sync hard abort — ITEM-034
+#### 1A. Resolve daily sync deposit-contract correctness — ITEM-034
 
-Mode: Mode 2 callable + verifier.
+Mode: Mode 2 callable + verifier, with a correctness gate before live re-enable.
+
+Evidence: `docs/planning/evidence/knowledge-ops-daily-sync-repro-2026-06-22.md`.
+
+The repro showed a deeper issue than batch abort: on current main, a sandbox daily-shaped run synthesized three above-floor videos and all three failed the deposit link contract. A partition-only fix would make the job exit 0 while depositing nothing, silently starving the Learn surface.
 
 Callable candidate:
 
 ```yaml
-id: youtube-sync.deposit-contract.partition
+id: youtube-sync.deposit-contract.repair
 inputs:
-  required: [config_path, fixture_set]
+  required: [config_path, fixture_set, sandbox_repro_command]
 outputs:
   - return_tier: 3
-verifier: youtube-sync.verify-deposit-partition
+verifier: youtube-sync.verify-deposit-contract-live-sandbox
 runtime_hints:
   workdir: /home/azureuser/apps/youtube-sync
   command: .venv/bin/python -m pytest tests/test_vault_export.py tests/test_pipeline_contract.py -q
 ```
 
+Required decision before implementation:
+
+Pick and document one primary correctness path:
+
+1. **Fix synthesis** so generated notes reliably include the required `>=2` wikilinks including a semantic concept/pattern/source link.
+2. **Relax/redesign the contract** if the current link contract is stricter than useful generated notes should satisfy.
+3. **Keep the contract but add an automated drain** for rejected notes: re-synthesize with stronger link injection, retry, or process a bounded quarantine artifact through a Mode 2 callable.
+
+A quarantine/review sink with no owner, SLA, or automated drain is not acceptable; it recreates the human queue/graveyard the migration removed.
+
 Required behavior:
 
-- Replace aggregate `assert_deposit_link_contract` batch abort with per-note partition.
+- Replace aggregate `assert_deposit_link_contract` batch abort with per-note partition only after the correctness path above is chosen.
 - `deposit_ok` notes are written normally.
 - below-floor notes are `held_by_score`.
-- above-floor but under-linked notes are `contract_rejected` and sent to a quarantine/review sink, not written as normal source notes.
+- above-floor but under-linked notes are either fixed by synthesis before deposit or become `contract_rejected` with an automated drain path.
 - infrastructure/code errors still hard-fail.
-- audit/return includes `{deposited, held_by_score, contract_rejected, failed}`.
+- audit/return includes `{deposited, held_by_score, contract_rejected, failed, rejected_rate}`.
 
 Verifier gate:
 
 - fixture with one bad note and one good note exits 0;
 - good note deposits;
-- bad note is quarantined/held with reasons;
+- bad note is repaired or quarantined with machine-readable reasons and a drain path;
 - no orphan `_raw` transcript;
 - audit return records partial success;
-- live daily is not run until fixture passes.
+- current-code sandbox/no-live-mutation gate passes: when fresh above-floor videos exist, `deposited > 0` and `contract_rejected_rate < 50%` (or a stricter documented threshold);
+- live audit row is not cleared and live daily is not rerun until the sandbox gate passes.
 
-#### 1B. Clear stale tone only after 1A
+#### 1B. Transcript fallback cost signal — ITEM-042
+
+Mode: operational telemetry debt, separate from deposit-contract correctness.
+
+The repro showed Supadata returning 429 for every transcript and Apify paid fallback handling the batch. Do not bury this inside ITEM-034; it is a recurring cost/control-plane signal.
+
+Verifier gate:
+
+- classify whether Supadata 429 is quota, auth/config, provider instability, or expected limit;
+- add audit/report visibility for transcript fallback counts and rough cost exposure;
+- preserve transcript coverage while preferring the cheaper/free path when healthy;
+- do not disable Apify unless an equivalent fallback exists.
+
+#### 1C. Clear stale tone only after 1A
 
 Mode: Mode 2 operational callable.
 
@@ -157,7 +185,7 @@ Allowed actions:
 
 Not allowed: clearing the audit row while current code still fails.
 
-#### 1C. Fix duplicate cluster heuristic — ITEM-037
+#### 1D. Fix duplicate cluster heuristic — ITEM-037
 
 Mode: cockpit quality verifier + evidence map.
 
