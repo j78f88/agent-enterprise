@@ -28,6 +28,7 @@ Single source of truth for all backlog item status. Detail and context live in B
 | ITEM-025 | debt | Sprint 5 review SUGGESTIONs S3/S4/d/e | 0 | 0 | 5 | open | | | dispatch.py hardening: containment for --summary-out/--callables; distinct exit when all callables invalid; scope _resolve_python_entry sys.path insertion; requeue/recover UX |
 | ITEM-026 | debt | Sprint 5 review SUGGESTIONs S5/S6 | 0 | 0 | 5 | open | | | queue journal robustness: document tail-tolerance assumption, wrap bad seq in QueueStateError, journal compaction, directory fsync |
 | ITEM-027 | feature | ROADMAP Phase A · validation 2026-06-15 (Cluster 2 P6) | 0 | 0 | — | open | | | Secrets-hygiene guard (NEW, roadmap top pick): build-time validator that resolved + emitted MCP/agent config carry no inline secrets — extend `SecurityValidator.detect_secrets` from input-only to the output/emit path + `.gitignore`/external-manager requirement. Extends DG-6/DG-1; threats T1/T5 |
+| ITEM-028 | feature | KNOWLEDGE-OPS-MIGRATION-RUNBOOK · 2026-06-22 | 0 | 0 | — | open | | | EPIC tracking row: Knowledge Ops migration E0–E7 (plan in priv-obsidian _meta/docs/KNOWLEDGE-OPS-MIGRATION-RUNBOOK.md). Bounded agent-enterprise worker execution; Vex/Hermes owns reconciliation. E0 complete: ko-snapshot-2026-06-22 tag on vault+cockpit, archive root created, KO-002 contained (plaintext dup quarantined outside git, .hermes/.env chmod 600) — key rotation deferred by Josh as accepted-risk override, no 401 claim. Per-phase status lives in the runbook checklist. |
 
 <!-- 
 Column guide:
