@@ -31,9 +31,52 @@ Use this file as the detail artifact for ITEM-033 through ITEM-040 and ITEM-031.
 
 ## Workstream order
 
-### 0. Cockpit deploy substrate — ITEM-035
+### 0. Proper AE adopter onboarding — ITEM-041
 
-Why first: cockpit-side fixes are not shipped while `obsidian-publish` points at upstream Quartz.
+Why first: the migration used `agent-enterprise` as a reference framework, but the target Knowledge Ops estate is not yet correctly onboarded as AE adopters. Source files such as `agents/docs.body.md` are token-templated framework sources; they are not the project-local deployed artifacts Claude/agents should execute against. The loop must not rely on framework fallbacks with unresolved `{{paths.*}}` placeholders.
+
+Mode: Mode 1 adopter substrate + Mode 2 callable registry + Mode 3 project registry.
+
+Scope:
+
+- Identify the actual target projects: `obsidian-publish`, `youtube-sync`, `priv-obsidian`/Knowledge Ops, `workspace` umbrella, and `agent-enterprise` rails.
+- For each, decide supported mode level: team only, orchestration, choreography, or mixed.
+- Run/repair AE onboarding so project-local surfaces exist where expected:
+  - `.github/agents/*.agent.md` or equivalent deployed agent wrappers;
+  - `.github/instructions/*.md` or `.claude/commands/*.md` / `.claude/agents/*.md` as appropriate;
+  - project-local `skills-library/resolved/**` or generated/resolved skills when embedded;
+  - `docs/planning/BACKLOG_LEDGER.md`, `queue/inbox/`, and callable manifests where Mode 2 is expected.
+- Verify no deployed artifact contains unresolved `{{namespace.key}}` project tokens except explicitly escaped template examples.
+- Verify path references in deployed agent/skill/instruction surfaces point to files that actually exist in that project.
+
+Callable candidate:
+
+```yaml
+id: knowledge-ops.ae-adopter-bootstrap
+inputs:
+  required: [project_roots, desired_modes]
+outputs:
+  - path: docs/planning/AE_ADOPTION_REPORT.md
+  - return_tier: 3
+verifier: knowledge-ops.verify-ae-adoption
+runtime_hints:
+  tools: [git, shell]
+```
+
+Verifier gate:
+
+- every target project has an explicit mode-level decision;
+- project-local agent/skill/instruction artifacts exist for the roles the loop will call;
+- `grep -R '{{'` over deployed artifacts returns only allowed escaped examples;
+- every `{{paths.*}}`-style reference in source is resolved or absent in deployed surfaces;
+- `/ae <project> <role>` can resolve project-local artifacts without falling back to generic framework sources unless the project is intentionally not onboarded;
+- no project-local generated `resolved/` artifact is hand-edited.
+
+Accepted deviation allowed: a project may remain framework-fallback-only only if the backlog row says it is intentionally not onboarded and no Mode 2/3 automation depends on its local roles.
+
+### 1. Cockpit deploy substrate — ITEM-035
+
+Why next: cockpit-side fixes are not shipped while `obsidian-publish` points at upstream Quartz.
 
 Mode: Mode 3 project registration + deployment contract.
 
@@ -60,7 +103,7 @@ Verifier gate:
 
 Accepted deviation allowed: local-only cockpit remains acceptable only for read-only diagnostics, not for declaring cockpit fixes shipped.
 
-### 1. Restore health trust — ITEM-034, ITEM-033, ITEM-037
+### 2. Restore health trust — ITEM-034, ITEM-033, ITEM-037
 
 This is one loop slice with three sub-gates. Tone does not become meaningful until all pass.
 
@@ -131,7 +174,7 @@ Verifier gate:
 - the known archived duplicates still map to their canonical targets;
 - cockpit health tone is not driven by the old false-positive heuristic.
 
-### 2. Freshness/provenance badges — ITEM-036
+### 3. Freshness/provenance badges — ITEM-036
 
 Mode: Mode 3 drift detection applied to generated cockpit artifacts.
 
@@ -159,7 +202,7 @@ Verifier gate:
 - fixture with matching heads renders fresh;
 - no network or live sync required.
 
-### 3. Edge-based route matcher — ITEM-038
+### 4. Edge-based route matcher — ITEM-038
 
 Mode: Mode 3 harvest/promotion + project registry graph.
 
@@ -177,7 +220,7 @@ Verifier gate:
 - unrelated lexical overlap does not route;
 - idempotent by `source-ref`.
 
-### 4. Governance path coupling — ITEM-031
+### 5. Governance path coupling — ITEM-031
 
 Mode: Mode 3 pre-move impact scanner + config resolver.
 
@@ -196,7 +239,7 @@ Verifier gate:
 - generated review queue points at `_meta/docs/_governance/POLICY.md` or uses resolver;
 - pre-move checker has a fixture with path strings in config and generated markdown.
 
-### 5. Decay coverage interlock — ITEM-039
+### 6. Decay coverage interlock — ITEM-039
 
 Mode: promotion-contract safety guard.
 
@@ -213,7 +256,7 @@ Verifier gate:
 - high-coverage fixture archives only positive-negative evidence;
 - dry-run reports coverage percentage and would-archive list.
 
-### 6. Multi-phase runbook controller spike — ITEM-040
+### 7. Multi-phase runbook controller spike — ITEM-040
 
 Mode: research spike into Mode 2 + Galactic Council escalation.
 
