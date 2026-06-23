@@ -33,7 +33,4 @@ first. It is only promoted into [`sources/`](../sources/README.md) /
 
 ## Currently quarantined
 
-- `youtube-synthesis-digest.md` — the distilled 241-note corpus, produced
-  out-of-contract before this container existed. Secondary source, **down-ranked** to
-  practitioner-signal tier (see [trust-policy](../_meta/trust-policy.md)). Retro-conform
-  before any claim may cite it.
+No staged corpus is currently tracked in this public repository.

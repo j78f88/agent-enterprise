@@ -16,7 +16,7 @@ deep-research engine's raw output is NEVER the artefact. It lands in
   * write one JSON file per record named after its id;
   * regenerate the INDEX.md canonical tables between the BEGIN/END markers.
 
-It is a one-off ingestor (like tools/distill_synthesis.py), NOT part of init.py.
+It is a one-off ingestor for research bundles, NOT part of init.py.
 After running, ``scripts/check_research.py`` must be green.
 
 Usage:

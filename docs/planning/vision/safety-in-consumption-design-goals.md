@@ -230,61 +230,12 @@ rewrites**:
 **Non-trivial new pieces:** the validator-orchestration layer (DG-6), the trust-label
 propagation pass (DG-2), and the imported-skill quarantine + review flow (DG-5).
 
-## 5a. Field validation & re-baseline (241-video corpus)
+## 5a. Field validation & re-baseline
 
-Distilled from a separate synthesis corpus — 241 ranked notes / 1285 verdict-tagged
-claims across 9 channels (OpenAI, IBM, Microsoft, VS Code, Cursor/Anysphere voices,
-DeepMind, GitHub, etc.), generated 2026-06-01. Full digest:
-`docs/planning/research/youtube-synthesis-digest.md`.
-
-### What it confirms
-
-- **The thesis is corroborated, not invented.** Across the highest-scored talks, the
-  recurring *enterprise caveat* is near-identical to this doc's design goals:
-  permission scoping, secrets isolation, sandboxed execution, audit logging, dependency
-  & security scanning, deterministic CI gates, data/model governance, human
-  accountability. Sample frequencies across the 239 dual-lens notes (discriminating
-  signals; "audit/license" keyword counts are inflated by broad terms and discounted):
-  sandboxed execution **31%**, secrets isolation **31%**, permission scoping **30%**,
-  cost/runaway control **26%**, deterministic CI gates **21%**, data/model governance
-  **21%**, dependency/security scanning **18%**, human accountability **16%**.
-- **Strategic read:** the field is racing on *velocity and autonomy*; safety is named
-  almost everywhere as the **gap that blocks production**, rarely as the thing being
-  built. That is the opening — agent-enterprise's safety-in-consumption core is a
-  differentiator, not a follower's checkbox. (Explicit "prompt injection" mentions are
-  only ~7% — the corpus skews to workflow content — so we are early, not late.)
-
-### What it changes (anti-hype re-baseline)
-
-The corpus's `overhyped`-verdict claims are guardrails on what **not** to design around.
-The five that altered goals above:
-
-1. *"Hashing test output proves the agent ran the tests."* → DG-9 honest-scope edit:
-   provenance proves recording, not execution.
-2. *"Approvals + hooks + permissions are sufficient control."* → DG-1: gates are the
-   floor, not the whole; defense-in-depth + load-bearing second checkpoint.
-3. *"Define risks once, enforce across every run."* → DG-1: allow declared per-context
-   exceptions; no single policy covers every tool/tenant.
-4. *"Sandbox mode can auto-approve MCP requests."* → DG-4: sandboxing never implies
-   auto-approval.
-5. *"Context isolation no longer matters for modern models."* → DG-3: scoping still
-   matters for injection resistance.
-
-### New concrete patterns to adopt (high-score, verified recipes)
-
-- **Secrets posture in the capability manifest** — read-only secrets by default, scoped
-  write tokens only on demand, ephemeral execution (folded into DG-4).
-- **Cost/time ceilings** — `maxUsd` / `timeoutMs` / kill-switch as declared limits
-  (folded into DG-4, new threat T8).
-- **Sanitizer + sandboxed-iframe + CSP** for any generated-content rendering (DG-3).
-- **Evidence-gated state machine** — sprint/agent transitions require structured outputs
-  + evidence artifacts, not free-form prose; capture stdout/stderr/exit/cwd/git-SHA/
-  timestamp (not a `.tested` sentinel). Strengthens the existing return-tier contracts
-  and feeds DG-9 — *with* the honesty caveat that recorded ≠ executed.
-- **Worktree isolation per agent task** — emit guidance/scaffolding so agent runs use a
-  Git worktree, not the primary checkout (cheap blast-radius reduction; widely endorsed).
-- **AGENTS.md as agent constitution** — already present here; the corpus validates
-  including security rules + feature-flag policy in it explicitly.
+The previous field-validation subsection referenced a non-reproducible local
+corpus and has been removed from the public workbench. Future field validation
+must use reproducible public inputs registered through the research knowledge
+base contract before its findings can influence the roadmap.
 
 ## 6. Phased roadmap
 
@@ -370,7 +321,6 @@ Decisions; it can be deferred without blocking DG-1–DG-7.)*
 | Microsoft Agent Framework | FIDES trust labels + untrusted-wins propagation; quarantined-LLM; `ApprovalRequiredAIFunction`; fail-closed policy middleware; Decision BOM; capability minimisation (RCE post-mortem) | `microsoft/agent-framework`, `microsoft/agent-governance-toolkit`, MS Security blog on AI-agent RCE (2026-05) |
 | AWS Labs | ASH scanner-orchestration → SARIF (Bandit/Semgrep/detect-secrets/Checkov/Grype/Syft, pinned+isolated); MCP read-only-by-default + mutation-consent; Bedrock nonce-`<DATA>` separation + Plan-Verify-Execute; Sigstore/SLSA + SBOM | `awslabs/automated-security-helper`, `awslabs/mcp`, `awslabs/agent-squad`, Bedrock indirect-prompt-injection guide |
 | Cursor | Typed `permissions.json` + deny-floor; "Denylist Delusion" (allowlist-only); `imported/` quarantine namespace + review-as-code; unicode/bidi "Rules File Backdoor"; `beforeShellExecution` hooks; derived rule-activation matrix | Cursor docs (rules, agent/security, CLI permissions), Backslash & Pillar Security research |
-| YouTube-Sync corpus (241 ranked notes, 2026-06-01) | Field corroboration of the safety caveat set; anti-hype guardrails (recorded≠executed, gates≠sufficient, sandbox≠auto-approve); concrete recipes — secrets posture, cost ceilings, sandboxed-iframe+CSP, evidence-gated state machine, worktree isolation | `docs/planning/research/youtube-synthesis-digest.md` (distilled via `tools/distill_synthesis.py`) |
 
 ---
 

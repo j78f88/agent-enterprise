@@ -63,5 +63,8 @@ jobs:
       - name: Check for canonical build command in docs
         run: python scripts/check_build_command.py
 
+      - name: Check public repository boundary
+        run: python scripts/check_public_boundary.py
+
       - name: Run full test suite
         run: pytest tests/ -v

@@ -25,15 +25,6 @@ sufficient tier; a single source caps a claim at `plausible`.
 | 4 | `practitioner-signal` | Conference talks, practitioner blogs, **the YouTube corpus** | **Down-ranked** — corroborating signal only. |
 | 5 | `community` | Forums, Q&A, social posts | Lowest — a starting hint, never a citation on its own. |
 
-### YouTube corpus down-rank (explicit)
-
-The distilled 241-note corpus
-([`_staging/youtube-synthesis-digest.md`](../_staging/youtube-synthesis-digest.md)) is
-**tier 4 `practitioner-signal`**. It corroborates direction and surfaces **anti-hype
-guardrails**, but it **cannot raise a claim above `plausible` on its own** and cannot
-anchor compliance. Its `overhyped` verdicts are first-class: they record what **not** to
-design around.
-
 ## 2. Trust labels (untrusted-wins)
 
 - **`trusted`** — first-party authored / reviewed and promoted into `sources/`, `claims/`,

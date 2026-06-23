@@ -73,16 +73,12 @@ Context that shapes every decision:
    (claim carries verdict `verified|plausible|overhyped|unverified` + evidence link +
    optional control anchor). Follow protocol-v1 conventions.
 4. **`INDEX.md`** seed in the research home (currently missing) + a `_meta/charter.md`
-   and `_meta/trust-policy.md` (source hierarchy; **down-rank the YouTube corpus** to
-   practitioner-signal tier; classification handling for OFFICIAL→PROTECTED).
+   and `_meta/trust-policy.md` (source hierarchy; practitioner-signal down-ranking;
+   classification handling for OFFICIAL→PROTECTED).
 5. **Fail-closed validator** — a gate (script + test, `init.py` philosophy) over the
    research home: every claim has source+date; every decision cites claim IDs; no
    canonical doc references `_staging`; classification present. Stub is acceptable for
    v1, but the contract must be expressed.
-6. **Retro-conform the two existing artefacts** produced out-of-contract this session:
-   move `docs/planning/research/youtube-synthesis-digest.md` into `_staging/` (or
-   conform it) and treat `tools/distill_synthesis.py` as the corpus ingestor (note its
-   hard-coded external path).
 
 ## Artefact pointers (read these, do not duplicate)
 
@@ -90,9 +86,6 @@ Context that shapes every decision:
   phased roadmap (DG-1…DG-10), re-baselined against the corpus. **Owner flagged this
   was authored with an overstep — treat its goals as candidate proposals, not settled
   fact.** §8 holds open decisions.
-- `docs/planning/research/youtube-synthesis-digest.md` — distilled 241-note corpus
-  (caveat frequencies + anti-hype guardrails). Secondary source; down-ranked.
-- `tools/distill_synthesis.py` — deterministic corpus distiller.
 
 ## The research to run AFTER the container exists
 

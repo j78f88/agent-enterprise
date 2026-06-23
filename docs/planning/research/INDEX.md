@@ -158,6 +158,5 @@ _None yet. First briefs to author **after ratification** (from the build handoff
 
 | Path | Origin | Tier (if promoted) | Trust | Status |
 | --- | --- | --- | --- | --- |
-| `_staging/youtube-synthesis-digest.md` | Distilled 241-note youtube-sync corpus (out-of-contract) | `practitioner-signal` (4, down-ranked) | `untrusted` | Awaiting retro-conform before any claim may cite it. |
 | `_staging/agent-skill-segment-enterprise-readiness-research.md` | Prior-session researcher output (2026-05-28, old prose template) | TBD on conform | `untrusted` | Awaiting retro-conform into source-notes + claims. |
 | `_staging/multi-adapter-integration-testing-patterns-research.md` | Prior-session researcher output (2026-05-28, old prose template) | TBD on conform | `untrusted` | Awaiting retro-conform into source-notes + claims. |

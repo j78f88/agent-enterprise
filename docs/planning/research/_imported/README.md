@@ -22,15 +22,3 @@ document may cite an `_imported/` path as a source.
   ingestor, source `content_hash`, licence/terms, and classification.
 - Content items are `trust: untrusted`. (This README is the home contract and is exempt.)
 - Distillation into source-notes/claims is a reviewed promotion, identical to `_staging/`.
-
-## Corpus ingestor
-
-[`tools/distill_synthesis.py`](../../../../tools/distill_synthesis.py) is the deterministic
-distiller for the youtube-sync synthesis corpus.
-
-> ⚠️ **Provenance caveat:** the ingestor reads a **hard-coded external path** —
-> `D:\Cowork projects\youtube-sync\docs\synthesis-report.html` — outside this repo. That
-> source is **not version-pinned here** and is not reproducible by another consumer of
-> this template. Before the corpus may back any canonical claim, its source must be
-> captured with a `content_hash` and a recorded retrieval date in an `_imported/`
-> manifest. Treat the existing digest as **untrusted** until then.

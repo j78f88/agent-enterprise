@@ -85,12 +85,10 @@ this workbench in under one working session.
 ### Phase 5 — v1 retirement  *(done)*
 
 Completed:
-- The bannered `command centre/` folder has been removed. Personal
-  harvest/onboarding notes were relocated to
-  `D:\VS\agent-enterprise-private\command-centre-v1-personal\`
-  (see `.gitignore`); v1 ADR 0003 (scaffold-workspace) and v1 ADR
-  0004 (substrate-at-root) substance is preserved in v2's Mode 3
-  install-contract and v2 ADR 0002 respectively.
+- The bannered `command centre/` folder has been removed. Non-generic
+  harvest/onboarding notes were removed from the public workbench; v1 ADR
+  0003 (scaffold-workspace) and v1 ADR 0004 (substrate-at-root) substance
+  is preserved in v2's Mode 3 install-contract and v2 ADR 0002 respectively.
 
 Remaining (release-time):
 - Note in repo changelog pointing at the final v1 commit hash.
